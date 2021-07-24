@@ -7,7 +7,7 @@ module.exports = {
     mocha: true,
     es6: true,
   },
-  parser: 'babel-parser',
+  parser: "babel-eslint",
   extends: 'eslint:recommended',
   parserOptions: {
     ecmaVersion: 12,
