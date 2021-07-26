@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+
+//Grid
 const Grid = styled.div`
   box-sizing: border-box;
   display: flex;
@@ -67,4 +69,80 @@ const Span = styled.span`
 //   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
 // `;
 
-export { Grid, Text };
+// Button
+const Button = (props) => {
+  const {
+    onKeyPress,
+    onSubmit,
+    borderColor,
+    bgColor,
+    color,
+    margin,
+    padding,
+    width,
+    height,
+    children,
+    _onClick,
+  } = props;
+
+  const styles = {
+    onKeyPress: onKeyPress,
+    onSubmit: onSubmit,
+    borderColor: borderColor,
+    bgColor: bgColor,
+    color: color,
+    margin: margin,
+    padding: padding,
+    width: width,
+    height: height,
+  };
+
+  return (
+    <BasicBtn {...styles} onClick={_onClick}>
+      {children}
+    </BasicBtn>
+  );
+};
+
+const BasicBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  padding: ${(props) => props.padding};
+  margin: ${(props) => props.margin};
+  color: ${(props) => props.color};
+  background-color: ${({ bgColor }) => bgColor};
+  border-radius: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1em;
+`;
+
+
+// Image
+const Image = (props) => {
+  const { src } = props;
+  const styles = { src: src };
+
+  return (
+    <>
+      <ImageCircle {...styles}></ImageCircle>
+    </>
+  );
+};
+
+const ImageCircle = styled.div`
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-image: url("${(props) => props.src}");
+    background-size: cover;
+    margin-right: 10px;
+`;
+
+export { Grid, Text, Button, Image };
