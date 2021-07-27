@@ -7,7 +7,6 @@ import { Button } from "../shared/Styles";
 const SelectExercise = (props) => {
   return (
     <>
-
     </>
   );
 };
