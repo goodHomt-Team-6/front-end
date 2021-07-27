@@ -145,4 +145,65 @@ const ImageCircle = styled.div`
     margin-right: 10px;
 `;
 
-export { Grid, Text, Button, Image };
+//Input
+const Input = (props) => {
+  const {
+    bgColor,
+    searchbox,
+    boxShadow,
+    borderRadius,
+    width,
+    height,
+    value,
+    _onChange,
+    _onClick,
+    placeholder,
+    type,
+    border,
+    borderBottom,
+    margin,
+    padding, } = props;
+
+  const styles = {
+    bgColor: bgColor,
+    boxShadow: boxShadow,
+    borderRadius: borderRadius,
+    width: width,
+    height: height,
+    onChange: _onChange,
+    onClick: _onClick,
+    placeholder,
+    type,
+    value,
+    border,
+    margin,
+    borderBottom,
+    padding,
+  };
+
+  if (searchbox) {
+    return <SearchInput {...styles} />;
+  } else {
+    return <ElInput {...styles} />;
+  }
+};
+
+const SearchInput = styled.input`
+  font-size: 15px;
+  box-sizing: border-box;
+  width: ${(props) => (props.width ? props.width : "100%")};
+  height: ${(props) => (props.height ? props.height : "50px")};
+  padding: 14px 18px;
+  margin: ${(props) => props.margin};
+  &:focus,
+  &:active {
+    outline: none;
+  }
+  border-radius: ${({ borderRadius }) => borderRadius};
+`;
+
+const ElInput = styled.input`
+
+`;
+
+export { Grid, Text, Button, Image, Input };

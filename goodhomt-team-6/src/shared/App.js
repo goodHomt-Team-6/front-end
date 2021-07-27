@@ -6,6 +6,7 @@ import { history } from "../redux/configureStore";
 
 import Main from "../pages/Main";
 import Header from "../components/Header";
+import SelectExercise from "../pages/SelectExercise";
 
 const App = (props) => {
   return (
@@ -14,6 +15,7 @@ const App = (props) => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Main} />
+          <Route path="/exercise" exact component={SelectExercise} />
         </Switch>
       </ConnectedRouter>
     </>
