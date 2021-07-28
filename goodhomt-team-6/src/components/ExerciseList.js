@@ -9,6 +9,7 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CloseIcon from '@material-ui/icons/Close';
 import { List } from '@material-ui/core';
+import Logger from '../shared/Logger';
 
 // 운동리스트 컴포넌트
 const SelectExercise = (props) => {
@@ -17,7 +18,8 @@ const SelectExercise = (props) => {
   const [selected, setSelected] = useState({});
 
   const exercise = useSelector((store) => store.exercise.exercise);
-  const categoryIdTop = exercise.filter(e => e.category_id === "상체");
+  console.log(exercise);
+  // const categoryIdTop = exercise.filter(e => e.category_id === "상체");
   const myExercise = [];
 
   return (
@@ -74,7 +76,6 @@ const SelectExercise = (props) => {
       </Category>
 
 
-
       {/* 운동 카테고리별 리스트 보여주기 */}
       <ExerciseList>
         {exercise.filter(e => e.exercise.includes(searchInput)).map((e, i) =>
@@ -85,7 +86,8 @@ const SelectExercise = (props) => {
                 setSelected({ ...selected, [e.exercise]: {} });
                 // exercise.splice(exercise.filter(e => e.exercise));
                 // exercise.filter(e.exercise);
-                myExercise.push({ exerciseName: e.exercise });
+                myExercise.push({ ...selected, exerciseName: e.exercise });
+                Logger(myExercise);
               }
             }>
             <ItemWrapper>
@@ -95,6 +97,7 @@ const SelectExercise = (props) => {
           </ExerciseItem>
         )}
       </ExerciseList>
+
 
       {/* 종목 저장해주기 */}
       <SaveButtonWrapper>
