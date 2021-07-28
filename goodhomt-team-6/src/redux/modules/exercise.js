@@ -4,7 +4,6 @@ import moment from 'moment';
 import api from '../../shared/Request';
 import axios from 'axios';
 import logger from '../../shared/Logger';
-import api from "../../shared/Request";
 
 // initial state
 const initialState = {
@@ -120,7 +119,7 @@ export default handleActions(
     }),
     [ADD_EXERCISE]: (state, action) => produce(state, (draft) => {
       draft.exercise.push(action.payload.exercise);
-    })
+    }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         logger(action.payload.idx);

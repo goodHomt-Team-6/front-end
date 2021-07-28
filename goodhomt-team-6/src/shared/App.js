@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from '../redux/configureStore';
 import Main from '../pages/Main';
 import Header from '../components/Header';
-import SelectExercise from '../pages/SelectExercise';
 import FormExercise from '../pages/FormExercise';
 import ExerciseList from "../components/ExerciseList";
 
