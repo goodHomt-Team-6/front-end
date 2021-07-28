@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://3.34.140.51:8088',
+  baseURL: "http://localhost:5000",
 });
 
 // 가지고 있는 토큰 넣어주기!

@@ -1,62 +1,52 @@
 {
-    "posts": 
-        [{
-        "id": "0",
-        "road": "서울 강남구 강남대로 708",
-        "original": "서울 강남구 압구정동 386-1",
-        "latitude": "37.524592485999236",
-        "longitude": "127.0159646135124",
-        "room_type": "원룸",
-        "monthly": {
-          "deposit": 10,
-          "pay": 30
-        },
-        "yearly": {
-          "deposit": 100
-        },
-        "building_area": 13,
-        "floor": 13,
-        "moving_date": "yyyy-MM-dd",
-        "management_fee": 5,
-        "is_parking_space": true,
-        "has_pet": true,
-        "has_elevator": true,
-        "has_balcony": true,
-        "has_built_in": true,
-        "inner_type": "복층",
-        "loan_possibility": true,
-        "has_induction": false,
-        "has_microwave": true,
-        "has_air_conditioner": false,
-        "has_washer": true,
-        "has_tv": false,
-        "has_closet": false,
-        "has_bed": false,
-        "has_desk": false,
-        "has_shoe_closet": false,
-        "has_bidet": false,
-        "has_gas_range": false,
-        "has_refrigerator": false,
-        "has_door_lock": false,
-        "title": "제목",
-        "contents": "상세 설명",
-        "url": [
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2020/02/11/16/25/manarola-4840080__340.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg",
-            "https://cdn.pixabay.com/photo/2021/07/09/02/29/family-6398107_960_720.jpg"
-        ],
-        "parking_space": true
-    }],
-
-    "roomposts": {
-        "roomType" : "원룸",
-        "payType": "월세"
+  "exercises": [
+    {
+      "menu": "요가",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 1
+    },
+    {
+      "menu": "스쿼트",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 2
+    },
+    {
+      "menu": "런지",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 3
+    },
+    {
+      "menu": "레그레이즈",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 4
+    },
+    {
+      "menu": "스트레칭",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 5
+    },
+    {
+      "menu": "플랭크",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 6
+    },
+    {
+      "menu": "풀업",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 7
+    },
+    {
+      "menu": "계단오르기",
+      "cal": 140,
+      "category_id": "상체",
+      "id": 8
     }
+  ]
 }
