@@ -3,11 +3,12 @@ import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 import { connectRouter } from 'connected-react-router';
 
-import Room from './modules/room';
+import Exercise from './modules/exercise';
 
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
+  exercise: Exercise,
   router: connectRouter(history),
 });
 
