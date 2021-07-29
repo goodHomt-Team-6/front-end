@@ -5,22 +5,57 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 import { Button, Input, Text, Image } from '../shared/Styles';
 import logger from '../shared/Logger';
+import MuButton from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+import './InputExercise.css';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 
 const InputExercise = ({ isExercise, idxes }) => {
+  const alertClasses = useStyles();
+  const [alert, openAlert] = React.useState(false);
   const dispatch = useDispatch();
+  const savedSet = useSelector(
+    (state) => state.exercise.myExercise[idxes.listIdx].set,
+  );
   const [inputEditWeight, setInputEditWeight] = useState(true);
   const [inputEditCount, setInputEditCount] = useState(false);
   const editor = useSelector((state) => state.exercise.editor);
-  const [weight, setWeight] = useState(0);
-  const [count, setCount] = useState(0);
+  const [weight, setWeight] = useState(savedSet[idxes.setIdx].weight);
+  const [count, setCount] = useState(savedSet[idxes.setIdx].count);
   const [unit, setUnit] = useState(1);
+
   const completeEdit = () => {
+    if (count === 0) {
+      openAlert(true);
+      return;
+    }
     const set = {
       count: count,
       weight: weight,
     };
     dispatch(exerciseCreator.updateSet(set, idxes));
     dispatch(exerciseCreator.openEditor(false));
+  };
+
+  const closeAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    openAlert(false);
   };
 
   return (
@@ -153,6 +188,18 @@ const InputExercise = ({ isExercise, idxes }) => {
           </InputFooter>
         </InputForm>
       )}
+      <div className={alertClasses.root}>
+        <Snackbar
+          open={alert}
+          autoHideDuration={2000}
+          onClose={closeAlert}
+          style={{ bottom: '50% !important' }}
+        >
+          <Alert onClose={closeAlert} severity="error">
+            횟수를 입력해주세요!
+          </Alert>
+        </Snackbar>
+      </div>
     </InputCont>
   );
 };

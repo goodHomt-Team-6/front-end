@@ -26,13 +26,9 @@ const FormExercise = (props) => {
     // setDisabled(false);
   };
 
-  const saveData = (e) => {
-    dispatch(exerciseCreator.addSetData());
-    const target = e.currentTarget;
-  };
-
-  const clickSet = () => {
+  const clickSet = (listIdx) => {
     setIsExercise(true);
+    dispatch(exerciseCreator.addSet(listIdx));
   };
 
   const clickBreak = () => {
@@ -102,7 +98,7 @@ const FormExercise = (props) => {
                     name={`exercise_${listIdx}`}
                     defaultChecked
                   />
-                  <RadioP className="list" onClick={() => clickSet()}>
+                  <RadioP className="list" onClick={() => clickSet(listIdx)}>
                     세트
                   </RadioP>
                 </ButtonWrap>
@@ -129,9 +125,9 @@ const FormExercise = (props) => {
                 {list.set.filter((set) => set.type === 'exercise').length}
                 세트
               </Text>
-              <Text type="contents">0kg</Text>
+              <Text type="contents">{list.set[0].weight}kg</Text>
               <Text type="contents" padding="0 10px 0 0">
-                0회
+                {list.set[0].count}회
               </Text>
             </List>
           ),
@@ -152,6 +148,7 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: #f7f7fa;
   height: calc(92vh - 60px);
+  overflow-y: scroll;
 `;
 
 const List = styled.div`

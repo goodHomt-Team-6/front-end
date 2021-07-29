@@ -28,7 +28,7 @@ const initialState = {
     //     weight: 0,
     //   }]
     // }
-  ]
+  ],
 };
 
 // actions
@@ -45,7 +45,7 @@ const UPDATE_SET = 'exercise/UPDATE_SET';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
-const addSetData = createAction(ADD_SET, (idx, set) => ({ idx, set }));
+const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
@@ -127,12 +127,12 @@ export default handleActions(
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
-        logger(action.payload.idx);
-        // draft.exercises[action.payload.idx].push({
-        //   set: '1',
-        //   weight: '',
-        //   count: '',
-        // });
+        const list = draft.myExercise[action.payload.listIdx];
+        list.set.push({
+          type: 'exercise',
+          weight: 0,
+          count: 0,
+        });
       }),
     [OPEN_ROW]: (state, action) =>
       produce(state, (draft) => {
@@ -158,7 +158,7 @@ const actionCreators = {
   getExerciseAPI,
   getExerciseTypeAPI,
   addExerciseAPI,
-  addSetData,
+  addSet,
   openRow,
   addExerciseType,
   removeExerciseType,
