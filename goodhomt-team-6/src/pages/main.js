@@ -8,73 +8,155 @@ import ImportExercise from "../components/ImportExercise";
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
+
   const onMealButtonClick = () => {
     history.push('/exercise');
   };
+
   const breakfast = JSON.parse(localStorage.getItem('breakfast') || 'null');
 
   return (
-    <Wrapper>
+    <Container>
+      <Wrapper>
+        <InboxWrapper>
+          {/* 유저 프로필 */}
+          <UserWrapper>
+            <InfoBox>
+              <Image
+                src="https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg">
+              </Image>
+              <Text>OO님,
+                <br />안녕하세요:)</Text>
+            </InfoBox>
 
-      {/* 유저 프로필 */}
-      <UserWrapper>
-        <InfoBox>
-          <Image
-            src="https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg">
-          </Image>
-          <Text>안녕하세요,
-            <br />지음님</Text>
-        </InfoBox>
-
-        <DateBox>
-          <span>&lt;</span>
-          <Today>Aug 5</Today>
-          <span>&gt;</span>
-        </DateBox>
-      </UserWrapper>
-
-
-      {/* 운동 등록하기 */}
-      <RegisterWrapper>
-        <Index>운동 등록하기</Index>
-        <Button
-          width="100%"
-          height="50px"
-          _onClick={onMealButtonClick}
-        >+</Button>
-      </RegisterWrapper>
+            <DateBox>
+              <Today>7.20</Today>
+            </DateBox>
+          </UserWrapper>
 
 
-      {/* 운동 불러오기 */}
-      {breakfast ?
+          {/* 등록한 운동 보여주기 */}
+          <RegisterWrapper>
+            <Index>Today</Index>
+            <MainBox>
+              <TodayWrapper>
+                <Enrolled>0</Enrolled>
+                <span>아직 등록된 운동이 없습니다</span>
+              </TodayWrapper>
+              <TypeContainer>
+                <TypeWrapper>
+                  <span>종목</span>
+                  <span>none</span>
+                </TypeWrapper>
+                <TypeWrapper>
+                  <span>운동시간</span>
+                  <span>0m</span>
+                </TypeWrapper>
+              </TypeContainer>
+            </MainBox>
+          </RegisterWrapper>
+
+
+          {/* 운동 불러오기 */}
+          {/* {breakfast ?
         <div className="meal-menu">
           {Object.entries(breakfast).map(([name, value], i) =>
             <div key={i} className="meal-menu-entry">{name}{value.count}</div>
           )}
-        </div>
-        : <ImportExercise />
-      }
+        </div> */}
 
-    </Wrapper >
+          {/* <Index>2021.7</Index>
+            <Button
+            width="100%"
+            height="50px"
+          >+</Button> */}
+        </InboxWrapper>
+
+        <BtnWrapper>
+          <AddBtn
+            onClick={onMealButtonClick}
+          >+</AddBtn>
+        </BtnWrapper>
+
+      </Wrapper >
+    </Container>
   );
 };
 
-
 export default Main;
 
-const Wrapper = styled.div`
-      padding: 1.5rem;
-      width: 100%;
-      height: 100%;
-      `;
-
 const RegisterWrapper = styled.div`
-      height: 15rem;
-      `;
+
+`;
+
+const TodayWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  box-sizing: border-box;
+  padding: 30px;
+
+`;
+
+const TypeContainer = styled.div`
+  display: flex;
+`;
+
+const TypeWrapper = styled.div`
+  margin-top: 20px;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10px 25px;
+  &:last-child {
+    border-left: 1px solid black;  
+  }
+`;
+
+const Enrolled = styled.span`
+  font-size: 72px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  line-height: 1;
+`;
+
+const Container = styled.div`
+background-color: #F7F7FA;
+
+`;
+
+const Wrapper = styled.div`
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+`;
+
+const InboxWrapper = styled.div`
+  width: 100%;
+`;
+
+const MainBox = styled.div`
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10px 10px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.1);
+  transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
+`;
 
 const Index = styled.h2`
-      font-size: 0.9rem;
-      `;
+  font-size: 18px;
+`;
 
 const UserWrapper = styled.div`
   display: flex;
@@ -88,14 +170,31 @@ const InfoBox = styled.div`
 `;
 
 const DateBox = styled.div`
-
 `;
 
 const Today = styled.span`
-  font-size: 1rem;
+  font-size: 20px;
   margin: 0px 14px;
 `;
 
 const Text = styled.span`
-  font-size: 1rem;
+  font-size: 18px;
+`;
+
+const BtnWrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const AddBtn = styled.button`
+  position: relative;
+  bottom: 30px;
+  color: white;
+  font-size: 30px;
+  width: 72px;
+  height: 72px;
+  border: none;
+  border-radius: 50%;
+  background-color: black;
+  margin: 0px auto;
 `;

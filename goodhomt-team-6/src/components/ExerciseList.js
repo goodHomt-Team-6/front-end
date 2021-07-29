@@ -12,17 +12,24 @@ import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
 
 // 운동리스트 컴포넌트
-const SelectExercise = (props) => {
+const ExerciseList = (props) => {
   const dispatch = useDispatch();
   const [searchInput, setSerachInput] = useState('');
   const [selected, setSelected] = useState({});
+  const [clicked, isClicked] = useState(false);
 
   const exercise = useSelector((store) => store.exercise.exercise);
-  const categoryIdTop = exercise.filter((e) => e.category_id === '상체');
-  let myExercise = [];
+  const myExercise = useSelector((store) => store.exercise.myExercise);
+
+  // 로컬 스토리지에서 추가했던 종목 가져오기
+  useEffect(() => {
+    const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
+    console.log(selectedExercise);
+  });
 
   return (
     <>
+      {/* 뒤로가기 버튼 */}
       <GoBackButton
         onClick={() => {
           history.goBack();
@@ -31,6 +38,7 @@ const SelectExercise = (props) => {
         <ArrowBackIosIcon />
         <Text>Select</Text>
       </GoBackButton>
+
       {/* 선택한 운동 보여주기 */}
       {Object.keys(selected).length > 0 ? (
         <SelectedWrapper>
@@ -40,7 +48,7 @@ const SelectExercise = (props) => {
               <CloseBtn
                 src={CloseButton}
                 width="10"
-                onClick={() =>
+                onClick={() => {
                   setSelected(
                     Object.keys(selected).reduce((object, key) => {
                       if (key !== exercise) {
@@ -48,49 +56,70 @@ const SelectExercise = (props) => {
                       }
                       return object;
                     }, {}),
-                  )
+                  );
+                  dispatch(exerciseActions.removeExerciseType(exercise));
+                }
                 }
               />
             </Selected>
           ))}
         </SelectedWrapper>
       ) : null}
-      ;{/* 운동 검색 */}
+
+
+      {/* 운동 검색 */}
       <SearchInput
         value={searchInput}
         onChange={(e) => {
           setSerachInput(e.target.value);
         }}
       />
+
       {/* 운동 카테고리 */}
       <Category>
-        <PartofExercise>상체</PartofExercise>
-        <PartofExercise>하체</PartofExercise>
-        <PartofExercise>허벅지</PartofExercise>
+        <PartofExercise
+          onClick={() => {
+            isClicked(true);
+          }}
+        >상체</PartofExercise>
+        <PartofExercise
+          onClick={() => {
+            isClicked(true);
+          }}
+        >하체</PartofExercise>
+        <PartofExercise
+          onClick={() => {
+            isClicked(true);
+          }}
+        >허벅지</PartofExercise>
       </Category>
+
       {/* 운동 카테고리별 리스트 보여주기 */}
-      <ExerciseList>
+      <CategoryList>
         {exercise
           .filter((e) => e.exercise.includes(searchInput))
           .map((e, i) => (
             <ExerciseItem
               key={e.id}
               onClick={() => {
-                setSelected({ ...selected, [e.exercise]: {} });
-                // exercise.splice(exercise.filter(e => e.exercise));
-                // exercise.filter(e.exercise);
-                const byeonsu = {
-                  exerciseName: e.exercise,
-                  set: [
-                    {
+                setSelected({
+                  ...selected, [e.exercise]: {
+                    set: [{
                       type: 'exercise',
                       count: null,
                       weight: null,
-                    },
-                  ],
+                    }]
+                  }
+                });
+                const exercise = {
+                  exerciseName: e.exercise,
+                  set: [{
+                    type: 'exercise',
+                    count: null,
+                    weight: null,
+                  },],
                 };
-                myExercise.push({ exerciseName: byeonsu });
-                console.log(myExercise);
+                dispatch(exerciseActions.addExerciseType(exercise));
               }}
             >
               <ItemWrapper>
@@ -99,13 +128,15 @@ const SelectExercise = (props) => {
               </ItemWrapper>
             </ExerciseItem>
           ))}
-      </ExerciseList>
-      {/* 종목 저장해주기 */}
+      </CategoryList>
+
+      {/* 종목 저장하기 */}
       <SaveButtonWrapper>
         <SaveButton
           onClick={() => {
             localStorage.setItem('exercise', JSON.stringify(selected));
-            history.push('/');
+            console.log(selected);
+            // history.push('/');
           }}
         >
           종목 추가하기
@@ -115,11 +146,11 @@ const SelectExercise = (props) => {
   );
 };
 
-export default SelectExercise;
+export default ExerciseList;
 
 const GoBackButton = styled.div`
   display: flex;
-  margin: 25px;
+  padding: 25px;
   width: 100%;
   box-sizing: border-box;
 `;
@@ -131,9 +162,10 @@ const Text = styled.h2`
 
 const SearchInput = styled.input`
   font-size: 15px;
-  box-sizing: border-box;
-
-  width: 100%;
+  margin: 0px auto;
+  display: flex;
+  padding: 0px;
+  width: 90%;
   height: 48px;
   border-bottom: 1px solid black;
   border-top: none;
@@ -163,7 +195,7 @@ const SaveButtonWrapper = styled.div`
 
 const ItemWrapper = styled.div``;
 
-const ExerciseList = styled.ul`
+const CategoryList = styled.ul`
   padding: 0 16px;
   margin: 0;
   list-style: none;
@@ -192,19 +224,6 @@ const CalText = styled.span`
   line-height: 48px;
   margin: 0px 15px;
 `;
-
-// const ExerciseAddBtn = styled.button`
-//   width: 32px;
-//   height: 32px;
-//   font-size: 24px;
-//   background-color: ${Color.navy};
-//   border: none;
-//   border-radius: 50%;
-//   top: 20px;
-//   padding: 0;
-//   right: 0;
-//   color: white;
-// `;
 
 const SelectedWrapper = styled.div`
   height: 44px;
@@ -237,9 +256,8 @@ const CloseBtn = styled.img``;
 const Category = styled.ul`
   display: flex;
   padding: 0px;
-  /* margin: 5px 15px 30px 15px ; */
   list-style: none;
-  margin: 20px 0px 0px 0px;
+  margin: 40px 0px 0px 0px;
 `;
 
 const PartofExercise = styled.li`
@@ -251,9 +269,9 @@ const PartofExercise = styled.li`
   font-size: 1rem;
   opacity: 54%;
   color: black;
-  &:hover
-  /* &:active  */ {
+  &:hover,
+  &:active  {
     border-bottom: 1px solid black;
-    opacity: 100%;
   }
+  border-bottom: ${props => props.isClicked ? "1px solid black" : "none"}
 `;

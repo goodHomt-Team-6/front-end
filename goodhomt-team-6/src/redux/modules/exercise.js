@@ -19,40 +19,15 @@ const initialState = {
     { exercise: '계단오르기', cal: 140, category_id: '하체' },
   ],
   myExercise: [
-    {
-      exerciseName: '벤치 프레스',
-      set: [
-        {
-          type: 'exercise',
-          count: 2,
-          weight: 20,
-        },
-        {
-          type: 'exercise',
-          count: 3,
-          weight: 30,
-        },
-        {
-          type: 'break',
-          time: 60,
-        },
-      ],
-    },
-    {
-      exerciseName: '스쿼트',
-      set: [
-        {
-          type: 'exercise',
-          count: 3,
-          weight: 50,
-        },
-        {
-          type: 'break',
-          time: 60,
-        },
-      ],
-    },
-  ],
+    // {
+    //   exerciseName: '벤치 프레스',
+    //   set: [{
+    //     type: 'exercise',
+    //     count: null,
+    //     weight: null,
+    //   }]
+    // }
+  ]
 };
 
 // actions
@@ -61,6 +36,9 @@ const ADD_SET = 'exercise/ADD_SET';
 const OPEN_ROW = 'exercise/OPEN_ROW';
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
 const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
+const ADD_EXERCISE_TYPE = 'exercise/ADD_EXERCISE_TYPE';
+const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
+const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -68,6 +46,9 @@ const addSetData = createAction(ADD_SET, (idx, set) => ({ idx, set }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
+const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({ exercise }));
+const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({ exercise }));
+
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -120,6 +101,15 @@ export default handleActions(
       produce(state, (draft) => {
         draft.exercise.push(action.payload.exercise);
       }),
+    [ADD_EXERCISE_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myExercise.push(action.payload.exercise);
+      }),
+    [REMOVE_EXERCISE_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        let index = draft.myExercise.findIndex((e) => e.exerciseName === action.payload.exercise);
+        draft.myExercise.splice(index, 1);
+      }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         logger(action.payload.idx);
@@ -144,6 +134,8 @@ const actionCreators = {
   addExerciseAPI,
   addSetData,
   openRow,
+  addExerciseType,
+  removeExerciseType,
 };
 
 export { actionCreators };
