@@ -8,6 +8,7 @@ import logger from '../../shared/Logger';
 // initial state
 const initialState = {
   openedRow: null,
+  editor: false,
   exercise: [
     { exercise: '요가', cal: 140, category_id: '상체' },
     { exercise: '스쿼트', cal: 140, category_id: '하체' },
@@ -21,13 +22,20 @@ const initialState = {
   myExercise: [
     // {
     //   exerciseName: '벤치 프레스',
-    //   set: [{
-    //     type: 'exercise',
-    //     count: null,
-    //     weight: null,
-    //   }]
-    // }
-  ]
+    //   set: [
+    //     {
+    //       type: 'exercise',
+    //       count: 0,
+    //       weight: 0,
+    //     },
+    //     {
+    //       type: 'exercise',
+    //       count: 0,
+    //       weight: 0,
+    //     },
+    //   ],
+    // },
+  ],
 };
 
 // actions
@@ -39,6 +47,8 @@ const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
 const ADD_EXERCISE_TYPE = 'exercise/ADD_EXERCISE_TYPE';
 const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
 const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
+const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
+const UPDATE_SET = 'exercise/UPDATE_SET';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -46,9 +56,19 @@ const addSetData = createAction(ADD_SET, (idx, set) => ({ idx, set }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
-const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({ exercise }));
-const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({ exercise }));
-
+const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
+  exercise,
+}));
+const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({
+  exercise,
+}));
+const openEditor = createAction(OPEN_EDITOR, (open) => ({
+  open,
+}));
+const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
+  set,
+  idxes,
+}));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -107,7 +127,9 @@ export default handleActions(
       }),
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.myExercise.findIndex((e) => e.exerciseName === action.payload.exercise);
+        let index = draft.myExercise.findIndex(
+          (e) => e.exerciseName === action.payload.exercise,
+        );
         draft.myExercise.splice(index, 1);
       }),
     [ADD_SET]: (state, action) =>
@@ -123,6 +145,17 @@ export default handleActions(
       produce(state, (draft) => {
         draft.openedRow = action.payload.idx;
       }),
+    [OPEN_EDITOR]: (state, action) =>
+      produce(state, (draft) => {
+        draft.editor = action.payload.open;
+      }),
+    [UPDATE_SET]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.myExercise[action.payload.idxes.listIdx];
+        list.set[action.payload.idxes.setIdx].weight =
+          action.payload.set.weight;
+        list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
+      }),
   },
   initialState,
 );
@@ -136,6 +169,8 @@ const actionCreators = {
   openRow,
   addExerciseType,
   removeExerciseType,
+  openEditor,
+  updateSet,
 };
 
 export { actionCreators };

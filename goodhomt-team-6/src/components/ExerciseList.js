@@ -23,7 +23,7 @@ const ExerciseList = (props) => {
 
   // 로컬 스토리지에서 추가했던 종목 가져오기
   useEffect(() => {
-    const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
+    const selectedExercise = JSON.parse(localStorage.getItem('exercise'));
     console.log(selectedExercise);
   });
 
@@ -58,14 +58,12 @@ const ExerciseList = (props) => {
                     }, {}),
                   );
                   dispatch(exerciseActions.removeExerciseType(exercise));
-                }
-                }
+                }}
               />
             </Selected>
           ))}
         </SelectedWrapper>
       ) : null}
-
 
       {/* 운동 검색 */}
       <SearchInput
@@ -81,17 +79,23 @@ const ExerciseList = (props) => {
           onClick={() => {
             isClicked(true);
           }}
-        >상체</PartofExercise>
+        >
+          상체
+        </PartofExercise>
         <PartofExercise
           onClick={() => {
             isClicked(true);
           }}
-        >하체</PartofExercise>
+        >
+          하체
+        </PartofExercise>
         <PartofExercise
           onClick={() => {
             isClicked(true);
           }}
-        >허벅지</PartofExercise>
+        >
+          허벅지
+        </PartofExercise>
       </Category>
 
       {/* 운동 카테고리별 리스트 보여주기 */}
@@ -103,21 +107,26 @@ const ExerciseList = (props) => {
               key={e.id}
               onClick={() => {
                 setSelected({
-                  ...selected, [e.exercise]: {
-                    set: [{
-                      type: 'exercise',
-                      count: null,
-                      weight: null,
-                    }]
-                  }
+                  ...selected,
+                  [e.exercise]: {
+                    set: [
+                      {
+                        type: 'exercise',
+                        count: null,
+                        weight: null,
+                      },
+                    ],
+                  },
                 });
                 const exercise = {
                   exerciseName: e.exercise,
-                  set: [{
-                    type: 'exercise',
-                    count: null,
-                    weight: null,
-                  },],
+                  set: [
+                    {
+                      type: 'exercise',
+                      count: null,
+                      weight: null,
+                    },
+                  ],
                 };
                 dispatch(exerciseActions.addExerciseType(exercise));
               }}
@@ -136,7 +145,7 @@ const ExerciseList = (props) => {
           onClick={() => {
             localStorage.setItem('exercise', JSON.stringify(selected));
             console.log(selected);
-            // history.push('/');
+            history.push('/exercise/form');
           }}
         >
           종목 추가하기
@@ -270,8 +279,8 @@ const PartofExercise = styled.li`
   opacity: 54%;
   color: black;
   &:hover,
-  &:active  {
+  &:active {
     border-bottom: 1px solid black;
   }
-  border-bottom: ${props => props.isClicked ? "1px solid black" : "none"}
+  border-bottom: ${(props) => (props.isClicked ? '1px solid black' : 'none')};
 `;

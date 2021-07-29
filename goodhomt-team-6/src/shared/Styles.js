@@ -55,8 +55,9 @@ const P = styled.p`
   ${(props) => (props.bgColor ? `background-color:${props.bgColor};` : '')}
   ${(props) => (props.padding ? `padding:${props.padding};` : '')}
   ${(props) =>
-    props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1em'}
+    props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1em;'}
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
+  ${(props) => (props.clicked ? `color: #fff;` : '')}
 `;
 
 const Span = styled.span`
@@ -91,6 +92,7 @@ const Button = (props) => {
     id,
     maxWidth,
     borderRadius,
+    fontSize,
   } = props;
 
   const styles = {
@@ -105,6 +107,7 @@ const Button = (props) => {
     height: height,
     maxWidth: maxWidth,
     borderRadius: borderRadius,
+    fontSize: fontSize,
   };
 
   return (
@@ -130,7 +133,7 @@ const BasicBtn = styled.button`
   cursor: pointer;
   box-sizing: border-box;
   font-weight: 700;
-  font-size: 15px;
+  font-size: ${(props) => (props.fontSize ? props.fontSize : '15px')};
   line-height: 1em;
   max-width: ${(props) => props.maxWidth};
 `;
