@@ -63,14 +63,12 @@ const ExerciseList = (props) => {
                     }, {}),
                   );
                   dispatch(exerciseActions.removeExerciseType(exercise));
-                }
-                }
+                }}
               />
             </Selected>
           ))}
         </SelectedWrapper>
       ) : null}
-
 
       {/* 운동 검색 */}
       <SearchExercise>
@@ -92,12 +90,16 @@ const ExerciseList = (props) => {
             isClicked(true);
             dispatch(exerciseActions.getExerciseAPI());
           }}
-        >상체</PartofExercise>
+        >
+          상체
+        </PartofExercise>
         <PartofExercise
           onClick={() => {
             isClicked(true);
           }}
-        >하체</PartofExercise>
+        >
+          하체
+        </PartofExercise>
         <PartofExercise
           onClick={() => {
             isClicked(true);
@@ -295,9 +297,9 @@ const PartofExercise = styled.li`
   opacity: 54%;
   color: black;
   &:hover,
-  &:active  {
+  &:active {
     border-bottom: 1px solid black;
     cursor: pointer;
   }
-  border-bottom: ${props => props.isClicked ? "1px solid black" : "none"}
+  border-bottom: ${(props) => (props.isClicked ? '1px solid black' : 'none')};
 `;

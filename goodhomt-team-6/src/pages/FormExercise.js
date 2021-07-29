@@ -8,6 +8,7 @@ import PlusButton from '../img/plus-button.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
 import InputExercise from './InputExercise';
+import { history } from '../redux/configureStore';
 
 const FormExercise = (props) => {
   const dispatch = useDispatch();
@@ -15,8 +16,8 @@ const FormExercise = (props) => {
   const lists = useSelector((state) => state.exercise.myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
-  const [editWeight, setEditWeight] = useState(false);
-  const [editCount, setEditCount] = useState(false);
+  const editor = useSelector((state) => state.exercise.editor);
+  const [idxes, updateIdxes] = useState(null);
   // const [disabled, setDisabled] = useState(true);
 
   const openRow = (e) => {
@@ -40,7 +41,11 @@ const FormExercise = (props) => {
 
   return (
     <React.Fragment>
-      <Header>
+      <Header
+        onClick={() => {
+          history.goBack();
+        }}
+      >
         <Title>
           &#60; <PageName>Select</PageName>
           <Paging>2/2</Paging>
@@ -48,60 +53,71 @@ const FormExercise = (props) => {
       </Header>
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <Container>
-        {lists.map((list, idx) =>
-          idx === parseInt(openedRow) ? (
-            <OpenList id={idx} key={idx}>
+        {lists.map((list, listIdx) =>
+          listIdx === parseInt(openedRow) ? (
+            <OpenList id={listIdx} key={listIdx}>
               <Text type="contents" width="100%" padding="20px 0 0 20px">
                 {list.exerciseName}
               </Text>
-              <DataRow>
-                <Text
-                  type="contents"
-                  fontSize="1.3em"
-                  minWidth="80px"
-                  color="#848484"
+              {list.set.map((set, setIdx) => (
+                <DataRow
+                  key={setIdx}
+                  onClick={() => {
+                    dispatch(exerciseCreator.openEditor(true));
+                    updateIdxes({ listIdx: listIdx, setIdx: setIdx });
+                  }}
                 >
-                  {isExercise ? `1세트` : '휴식'}
-                </Text>
-                <Text
-                  type="contents"
-                  fontSize="1.3em"
-                  minWidth="80px"
-                  textAlign="center"
-                  color="#848484"
-                  onClick={() => setEditWeight(isExercise)}
-                >
-                  {isExercise ? '0Kg' : '0분'}
-                </Text>
-                <Text
-                  type="contents"
-                  fontSize="1.3em"
-                  minWidth="80px"
-                  textAlign="right"
-                  color="#848484"
-                >
-                  {isExercise ? '0회' : '0초'}
-                </Text>
-              </DataRow>
+                  <Text
+                    type="contents"
+                    fontSize="1.3em"
+                    minWidth="80px"
+                    color="#848484"
+                  >
+                    {isExercise ? `${setIdx + 1}세트` : '휴식'}
+                  </Text>
+                  <Text
+                    type="contents"
+                    fontSize="1.3em"
+                    minWidth="80px"
+                    textAlign="center"
+                    color="#848484"
+                  >
+                    {isExercise ? `${set.weight}Kg` : '0분'}
+                  </Text>
+                  <Text
+                    type="contents"
+                    fontSize="1.3em"
+                    minWidth="80px"
+                    textAlign="right"
+                    color="#848484"
+                  >
+                    {isExercise ? `${set.count}회` : '0초'}
+                  </Text>
+                </DataRow>
+              ))}
               <ButtonCont>
                 <ButtonWrap>
                   <RadioInput
                     type="radio"
-                    name={`exercise_${idx}`}
+                    name={`exercise_${listIdx}`}
                     defaultChecked
                   />
-                  <RadioP onClick={() => clickSet()}>세트</RadioP>
+                  <RadioP className="list" onClick={() => clickSet()}>
+                    세트
+                  </RadioP>
                 </ButtonWrap>
-                <ButtonWrap>
-                  <RadioInput type="radio" name={`exercise_${idx}`} />
-                  <RadioP onClick={() => clickBreak()}>휴식</RadioP>
-                </ButtonWrap>
+                {/* <ButtonWrap>
+                  <RadioInput type="radio" name={`exercise_${listIdx}`} />
+                  <RadioP className="list" onClick={() => clickBreak()}>
+                    휴식
+                  </RadioP>
+                </ButtonWrap> */}
               </ButtonCont>
             </OpenList>
           ) : (
             <List
-              id={idx}
-              key={idx}
+              id={listIdx}
+              key={listIdx}
               onClick={(e) => {
                 openRow(e);
               }}
@@ -122,7 +138,9 @@ const FormExercise = (props) => {
         )}
       </Container>
       <Footer>설정 완료</Footer>
-      <InputExercise editWeight editCount></InputExercise>
+      {editor && (
+        <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
+      )}
     </React.Fragment>
   );
 };

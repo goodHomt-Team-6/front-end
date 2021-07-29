@@ -1,5 +1,11 @@
-input[type="radio"]:checked + p {
+input[type="radio"]:checked + p.list {
   color: rgb(255, 255, 255);
   border-color: #000;
   background-color: #000;
+}
+
+input[type="radio"]:checked + p.input {
+  color: #000;
+  border-color: #E5E5E7;
+  background-color: #E5E5E7;
 }
