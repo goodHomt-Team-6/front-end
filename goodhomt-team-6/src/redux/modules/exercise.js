@@ -23,8 +23,8 @@ const initialState = {
     //   exerciseName: '벤치 프레스',
     //   set: [{
     //     type: 'exercise',
-    //     count: null,
-    //     weight: null,
+    //     count: 0,
+    //     weight: 0,
     //   }]
     // }
   ]
@@ -57,7 +57,6 @@ const getExerciseAPI = () => {
       .get('/exercises')
       .then((response) => {
         dispatch(getExercise(response.data));
-        console.log(response.data);
       })
       .catch((error) => {
         console.log('운동 가져오기 실패', error);
@@ -96,6 +95,7 @@ export default handleActions(
     [GET_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
         draft.exercise = action.payload.exercise;
+        console.log(draft.exercise);
       }),
     [ADD_EXERCISE]: (state, action) =>
       produce(state, (draft) => {

@@ -22,10 +22,11 @@ const ExerciseList = (props) => {
   const exercise = useSelector((store) => store.exercise.exercise);
   const myExercise = useSelector((store) => store.exercise.myExercise);
 
-  // 로컬 스토리지에서 추가했던 종목 가져오기
   useEffect(() => {
-    const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
-  });
+    // dispatch(exerciseActions.getExerciseAPI());
+    // console.log(exercise);
+    // const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
+  }, []);
 
   return (
     <>
@@ -85,10 +86,11 @@ const ExerciseList = (props) => {
       </SearchExercise>
 
       {/* 운동 카테고리 */}
-      <Category>
+      {/* <Category>
         <PartofExercise
           onClick={() => {
             isClicked(true);
+            dispatch(exerciseActions.getExerciseAPI());
           }}
         >상체</PartofExercise>
         <PartofExercise
@@ -101,13 +103,13 @@ const ExerciseList = (props) => {
             isClicked(true);
           }}
         >허벅지</PartofExercise>
-      </Category>
+      </Category> */}
 
       {/* 운동 카테고리별 리스트 보여주기 */}
       <CategoryList>
         {exercise
           .filter((e) => e.exercise.includes(searchInput))
-          .map((e, i) => (
+          .map(e => (
             <ExerciseItem
               key={e.id}
               onClick={() => {
@@ -115,8 +117,8 @@ const ExerciseList = (props) => {
                   ...selected, [e.exercise]: {
                     set: [{
                       type: 'exercise',
-                      count: null,
-                      weight: null,
+                      count: 0,
+                      weight: 0,
                     }]
                   }
                 });
@@ -124,8 +126,8 @@ const ExerciseList = (props) => {
                   exerciseName: e.exercise,
                   set: [{
                     type: 'exercise',
-                    count: null,
-                    weight: null,
+                    count: 0,
+                    weight: 0,
                   },],
                 };
                 dispatch(exerciseActions.addExerciseType(exercise));
@@ -145,7 +147,7 @@ const ExerciseList = (props) => {
           onClick={() => {
             localStorage.setItem('exercise', JSON.stringify(selected));
             console.log(selected);
-            // history.push('/');
+            history.push('/exercise/form');
           }}
         >
           종목 추가하기
@@ -214,7 +216,8 @@ const SaveButtonWrapper = styled.div`
   bottom: 0px;
 `;
 
-const ItemWrapper = styled.div``;
+const ItemWrapper = styled.div`
+`;
 
 const CategoryList = styled.ul`
   padding: 0 16px;
@@ -272,7 +275,8 @@ const ExerciseName = styled.span`
   margin-right: 5px;
 `;
 
-const CloseBtn = styled.img``;
+const CloseBtn = styled.img`
+`;
 
 const Category = styled.ul`
   display: flex;
@@ -293,6 +297,7 @@ const PartofExercise = styled.li`
   &:hover,
   &:active  {
     border-bottom: 1px solid black;
+    cursor: pointer;
   }
   border-bottom: ${props => props.isClicked ? "1px solid black" : "none"}
 `;

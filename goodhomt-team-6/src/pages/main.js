@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button, Image } from "../shared/Styles";
 import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
+import profileImage from '../img/profile-image.svg';
 
 import ImportExercise from "../components/ImportExercise";
 
@@ -22,8 +23,8 @@ const Main = (props) => {
           {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
-              <Image
-                src="https://mean0images.s3.ap-northeast-2.amazonaws.com/4.jpeg">
+              <Image width="40px" height="40px" margin="0px 15px 0px 0px"
+                src={profileImage}>
               </Image>
               <Text>OO님,
                 <br />안녕하세요:)</Text>
