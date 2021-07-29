@@ -10,6 +10,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CloseIcon from '@material-ui/icons/Close';
 import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
+import searchIcon from '../img/search-icon.svg';
 
 // 운동리스트 컴포넌트
 const ExerciseList = (props) => {
@@ -21,11 +22,11 @@ const ExerciseList = (props) => {
   const exercise = useSelector((store) => store.exercise.exercise);
   const myExercise = useSelector((store) => store.exercise.myExercise);
 
-  // 로컬 스토리지에서 추가했던 종목 가져오기
   useEffect(() => {
-    const selectedExercise = JSON.parse(localStorage.getItem('exercise'));
-    console.log(selectedExercise);
-  });
+    // dispatch(exerciseActions.getExerciseAPI());
+    // console.log(exercise);
+    // const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
+  }, []);
 
   return (
     <>
@@ -37,6 +38,7 @@ const ExerciseList = (props) => {
       >
         <ArrowBackIosIcon />
         <Text>Select</Text>
+        <PageText>1/2</PageText>
       </GoBackButton>
 
       {/* 선택한 운동 보여주기 */}
@@ -49,6 +51,9 @@ const ExerciseList = (props) => {
                 src={CloseButton}
                 width="10"
                 onClick={() => {
+                  console.log(Object.keys(selected));
+                  console.log(Object.entries(selected));
+                  console.log(selected);
                   setSelected(
                     Object.keys(selected).reduce((object, key) => {
                       if (key !== exercise) {
@@ -66,18 +71,24 @@ const ExerciseList = (props) => {
       ) : null}
 
       {/* 운동 검색 */}
-      <SearchInput
-        value={searchInput}
-        onChange={(e) => {
-          setSerachInput(e.target.value);
-        }}
-      />
+      <SearchExercise>
+        <SearchInput
+          value={searchInput}
+          onChange={(e) => {
+            setSerachInput(e.target.value);
+          }}
+        />
+        <SearchButton
+          src={searchIcon}
+        />
+      </SearchExercise>
 
       {/* 운동 카테고리 */}
-      <Category>
+      {/* <Category>
         <PartofExercise
           onClick={() => {
             isClicked(true);
+            dispatch(exerciseActions.getExerciseAPI());
           }}
         >
           상체
@@ -93,40 +104,33 @@ const ExerciseList = (props) => {
           onClick={() => {
             isClicked(true);
           }}
-        >
-          허벅지
-        </PartofExercise>
-      </Category>
+        >허벅지</PartofExercise>
+      </Category> */}
 
       {/* 운동 카테고리별 리스트 보여주기 */}
       <CategoryList>
         {exercise
           .filter((e) => e.exercise.includes(searchInput))
-          .map((e, i) => (
+          .map(e => (
             <ExerciseItem
               key={e.id}
               onClick={() => {
                 setSelected({
-                  ...selected,
-                  [e.exercise]: {
-                    set: [
-                      {
-                        type: 'exercise',
-                        count: null,
-                        weight: null,
-                      },
-                    ],
-                  },
+                  ...selected, [e.exercise]: {
+                    set: [{
+                      type: 'exercise',
+                      count: 0,
+                      weight: 0,
+                    }]
+                  }
                 });
                 const exercise = {
                   exerciseName: e.exercise,
-                  set: [
-                    {
-                      type: 'exercise',
-                      count: null,
-                      weight: null,
-                    },
-                  ],
+                  set: [{
+                    type: 'exercise',
+                    count: 0,
+                    weight: 0,
+                  },],
                 };
                 dispatch(exerciseActions.addExerciseType(exercise));
               }}
@@ -165,25 +169,37 @@ const GoBackButton = styled.div`
 `;
 
 const Text = styled.h2`
-  margin: 0px;
-  font-size: 15px;
+  margin: 0px 5px 0px 0px;
+  font-size: 24px;
+`;
+
+const PageText = styled.span`
+  font-size: 14px;
+  line-height: 2.5;
+`;
+
+const SearchExercise = styled.div`
+  display: flex;
+  border-bottom: 1px solid black;
+  width: 90%;
+  margin: 0px auto;
 `;
 
 const SearchInput = styled.input`
   font-size: 15px;
-  margin: 0px auto;
-  display: flex;
   padding: 0px;
-  width: 90%;
+  width: 100%;
   height: 48px;
-  border-bottom: 1px solid black;
-  border-top: none;
-  border-right: none;
-  border-left: none;
+  border: none;
   &:focus,
   &:active {
     outline: none;
   }
+`;
+
+const SearchButton = styled.img`
+  width: 30px;
+  height: 30px;
 `;
 
 const SaveButton = styled.button`
@@ -202,7 +218,8 @@ const SaveButtonWrapper = styled.div`
   bottom: 0px;
 `;
 
-const ItemWrapper = styled.div``;
+const ItemWrapper = styled.div`
+`;
 
 const CategoryList = styled.ul`
   padding: 0 16px;
@@ -260,7 +277,8 @@ const ExerciseName = styled.span`
   margin-right: 5px;
 `;
 
-const CloseBtn = styled.img``;
+const CloseBtn = styled.img`
+`;
 
 const Category = styled.ul`
   display: flex;
@@ -281,6 +299,7 @@ const PartofExercise = styled.li`
   &:hover,
   &:active {
     border-bottom: 1px solid black;
+    cursor: pointer;
   }
   border-bottom: ${(props) => (props.isClicked ? '1px solid black' : 'none')};
 `;
