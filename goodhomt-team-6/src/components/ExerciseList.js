@@ -10,6 +10,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CloseIcon from '@material-ui/icons/Close';
 import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
+import searchIcon from '../img/search-icon.svg';
 
 // 운동리스트 컴포넌트
 const ExerciseList = (props) => {
@@ -24,7 +25,6 @@ const ExerciseList = (props) => {
   // 로컬 스토리지에서 추가했던 종목 가져오기
   useEffect(() => {
     const selectedExercise = JSON.parse(localStorage.getItem("exercise"));
-    console.log(selectedExercise);
   });
 
   return (
@@ -37,6 +37,7 @@ const ExerciseList = (props) => {
       >
         <ArrowBackIosIcon />
         <Text>Select</Text>
+        <PageText>1/2</PageText>
       </GoBackButton>
 
       {/* 선택한 운동 보여주기 */}
@@ -49,6 +50,9 @@ const ExerciseList = (props) => {
                 src={CloseButton}
                 width="10"
                 onClick={() => {
+                  console.log(Object.keys(selected));
+                  console.log(Object.entries(selected));
+                  console.log(selected);
                   setSelected(
                     Object.keys(selected).reduce((object, key) => {
                       if (key !== exercise) {
@@ -68,12 +72,17 @@ const ExerciseList = (props) => {
 
 
       {/* 운동 검색 */}
-      <SearchInput
-        value={searchInput}
-        onChange={(e) => {
-          setSerachInput(e.target.value);
-        }}
-      />
+      <SearchExercise>
+        <SearchInput
+          value={searchInput}
+          onChange={(e) => {
+            setSerachInput(e.target.value);
+          }}
+        />
+        <SearchButton
+          src={searchIcon}
+        />
+      </SearchExercise>
 
       {/* 운동 카테고리 */}
       <Category>
@@ -156,25 +165,37 @@ const GoBackButton = styled.div`
 `;
 
 const Text = styled.h2`
-  margin: 0px;
-  font-size: 15px;
+  margin: 0px 5px 0px 0px;
+  font-size: 24px;
+`;
+
+const PageText = styled.span`
+  font-size: 14px;
+  line-height: 2.5;
+`;
+
+const SearchExercise = styled.div`
+  display: flex;
+  border-bottom: 1px solid black;
+  width: 90%;
+  margin: 0px auto;
 `;
 
 const SearchInput = styled.input`
   font-size: 15px;
-  margin: 0px auto;
-  display: flex;
   padding: 0px;
-  width: 90%;
+  width: 100%;
   height: 48px;
-  border-bottom: 1px solid black;
-  border-top: none;
-  border-right: none;
-  border-left: none;
+  border: none;
   &:focus,
   &:active {
     outline: none;
   }
+`;
+
+const SearchButton = styled.img`
+  width: 30px;
+  height: 30px;
 `;
 
 const SaveButton = styled.button`
