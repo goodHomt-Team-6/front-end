@@ -10,14 +10,14 @@ const initialState = {
   openedRow: null,
   editor: false,
   exercise: [
-    { exercise: '요가', cal: 140, category_id: '상체' },
-    { exercise: '스쿼트', cal: 140, category_id: '하체' },
-    { exercise: '런지', cal: 140, category_id: '하체' },
-    { exercise: '레그레이즈', cal: 140, category_id: '하체' },
-    { exercise: '스트레칭', cal: 140, category_id: '상체' },
-    { exercise: '플랭크', cal: 140, category_id: '상체' },
-    { exercise: '풀업', cal: 140, category_id: '상체' },
-    { exercise: '계단오르기', cal: 140, category_id: '하체' },
+    // { exercise: '요가', cal: 140, categoryId: '1', categoryName: '상체' },
+    // { exercise: '스쿼트', cal: 140, categoryId: '1', categoryName: '상체' },
+    // { exercise: '런지', cal: 140, categoryId: '1', categoryName: '상체' },
+    // { exercise: '레그레이즈', cal: 140, categoryId: '2', categoryName: '하체' },
+    // { exercise: '스트레칭', cal: 140, categoryId: '2', categoryName: '하체' },
+    // { exercise: '플랭크', cal: 140, categoryId: '2', categoryName: '하체' },
+    // { exercise: '풀업', cal: 140, categoryId: '2', categoryName: '하체' },
+    // { exercise: '계단오르기', cal: 140, categoryId: '2', categoryName: '하체' },
   ],
   myExercise: [
     // {
@@ -29,6 +29,7 @@ const initialState = {
     //   }]
     // }
   ],
+  categoryTitle: [{ title: "전체" }, { title: "상체" }, { title: "하체" }]
 };
 
 // actions

@@ -6,7 +6,8 @@ import { history } from '../redux/configureStore';
 import Main from '../pages/Main';
 import Header from '../components/Header';
 import FormExercise from '../pages/FormExercise';
-import ExerciseList from "../components/ExerciseList";
+import ExerciseListUp from "../components/ExerciseListUp";
+import ExerciseCategory from '../elements/ExerciseCategory';
 
 const App = (props) => {
   return (
@@ -15,7 +16,7 @@ const App = (props) => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Main} />
-          <Route path="/exercise" exact component={ExerciseList} />
+          <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
         </Switch>
       </ConnectedRouter>
