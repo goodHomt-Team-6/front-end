@@ -42,9 +42,11 @@ const Text = (props) => {
 
 const H1 = styled.h1`
   margin: 0px;
-  font-size: 1.5em;
+  ${(props) =>
+    props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1.5em;'}
   text-align: center;
   ${(props) => (props.bold ? `font-weight: bold;` : '')}
+  ${(props) => (props.margin ? `margin:${props.margin};` : '')}
 `;
 
 const P = styled.p`
