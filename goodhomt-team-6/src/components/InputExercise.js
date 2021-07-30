@@ -62,7 +62,7 @@ const InputExercise = ({ isExercise, idxes }) => {
     <InputCont>
       <DataRow>
         <Text type="contents" fontSize="1.3em" minWidth="80px" color="#848484">
-          {isExercise ? `1세트` : '휴식'}
+          {isExercise ? `${savedSet[idxes.setIdx].setCount}세트` : '휴식'}
         </Text>
         <Text
           type="contents"

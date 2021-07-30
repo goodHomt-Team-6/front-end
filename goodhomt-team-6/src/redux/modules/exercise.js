@@ -22,18 +22,26 @@ const initialState = {
   myExercise: [
     // {
     //   exerciseName: '벤치 프레스',
-    //   set: [{
-    //     type: 'exercise',
-    //     count: 0,
-    //     weight: 0,
-    //   }]
-    // }
+    //   set: [
+    //     {
+    //       type: 'exercise',
+    //       count: 0,
+    //       weight: 0,
+    //       setCount: 1,
+    //     },
+    //   ],
+    // },
   ],
+<<<<<<< Updated upstream
+=======
+  categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
+>>>>>>> Stashed changes
 };
 
 // actions
 const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
+const ADD_BREAK = 'exercise/ADD_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
 const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
@@ -42,10 +50,12 @@ const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
 const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
+const DELETE_SET = 'exercise/DELETE_SET';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
+const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
@@ -62,6 +72,9 @@ const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
   set,
   idxes,
 }));
+const deleteSet = createAction(DELETE_SET, (idxes) => ({
+  idxes,
+}));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -69,7 +82,7 @@ const getExerciseAPI = () => {
     api
       .get('/exercises')
       .then((response) => {
-        dispatch(getExercise(response.data));
+        dispatch(getExercise(response.data.result));
       })
       .catch((error) => {
         console.log('운동 가져오기 실패', error);
@@ -81,10 +94,9 @@ const getExerciseAPI = () => {
 const getExerciseTypeAPI = (category_id) => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/exercises/${category_id}')
+      .get(`/exercises/${category_id}`)
       .then((response) => {
-        dispatch(getExercise(response.data));
-        console.log(response.data);
+        dispatch(getExercise(response.data.result));
       })
       .catch((error) => {
         console.log('운동 카테고리별 가져오기 실패', error);
@@ -128,10 +140,24 @@ export default handleActions(
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.myExercise[action.payload.listIdx];
+        const setCount = list.set.reduce(
+          (cnt, elem) => cnt + ('exercise' === elem.type),
+          1,
+        );
         list.set.push({
           type: 'exercise',
           weight: 0,
           count: 0,
+          setCount: setCount,
+        });
+      }),
+    [ADD_BREAK]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.myExercise[action.payload.listIdx];
+        list.set.push({
+          type: 'break',
+          minutes: 0,
+          seconds: 0,
         });
       }),
     [OPEN_ROW]: (state, action) =>
@@ -149,6 +175,21 @@ export default handleActions(
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
+    [DELETE_SET]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myExercise[action.payload.idxes.listIdx].set = draft.myExercise[
+          action.payload.idxes.listIdx
+        ].set.filter((elem, idx) => {
+          return idx != action.payload.idxes.setIdx;
+        });
+        let count = 1;
+        draft.myExercise[action.payload.idxes.listIdx].set.map((set, idx) => {
+          if (set.type === 'exercise') {
+            set.setCount = count;
+            count += 1;
+          }
+        });
+      }),
   },
   initialState,
 );
@@ -159,11 +200,13 @@ const actionCreators = {
   getExerciseTypeAPI,
   addExerciseAPI,
   addSet,
+  addBreak,
   openRow,
   addExerciseType,
   removeExerciseType,
   openEditor,
   updateSet,
+  deleteSet,
 };
 
 export { actionCreators };

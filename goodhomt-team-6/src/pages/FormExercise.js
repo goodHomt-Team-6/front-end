@@ -7,8 +7,10 @@ import { Button, Input, Text, Image } from '../shared/Styles';
 import PlusButton from '../img/plus-button.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
-import InputExercise from './InputExercise';
+import InputExercise from '../components/InputExercise';
 import { history } from '../redux/configureStore';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import closeButton from '../img/close-button.svg';
 
 const FormExercise = (props) => {
   const dispatch = useDispatch();
@@ -18,12 +20,14 @@ const FormExercise = (props) => {
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
   const [idxes, updateIdxes] = useState(null);
-  // const [disabled, setDisabled] = useState(true);
 
   const openRow = (e) => {
     const target = e.currentTarget.id;
     dispatch(exerciseCreator.openRow(target));
-    // setDisabled(false);
+  };
+
+  const closeRow = () => {
+    dispatch(exerciseCreator.openRow(null));
   };
 
   const clickSet = (listIdx) => {
@@ -31,28 +35,38 @@ const FormExercise = (props) => {
     dispatch(exerciseCreator.addSet(listIdx));
   };
 
-  const clickBreak = () => {
+  const clickBreak = (listIdx) => {
     setIsExercise(false);
+    dispatch(exerciseCreator.addBreak(listIdx));
   };
 
   return (
     <React.Fragment>
-      <Header
+      {/* 뒤로가기 버튼 */}
+      <GoBackButton
         onClick={() => {
           history.goBack();
         }}
       >
-        <Title>
-          &#60; <PageName>Select</PageName>
-          <Paging>2/2</Paging>
-        </Title>
-      </Header>
+        <ArrowBackIosIcon />
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
+          Select
+        </Text>
+        <PageText>2/2</PageText>
+      </GoBackButton>
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <Container>
         {lists.map((list, listIdx) =>
           listIdx === parseInt(openedRow) ? (
             <OpenList id={listIdx} key={listIdx}>
-              <Text type="contents" width="100%" padding="20px 0 0 20px">
+              <Text
+                type="contents"
+                width="100%"
+                padding="20px 0 0 20px"
+                onClick={() => {
+                  closeRow();
+                }}
+              >
                 {list.exerciseName}
               </Text>
               {list.set.map((set, setIdx) => (
@@ -63,13 +77,28 @@ const FormExercise = (props) => {
                     updateIdxes({ listIdx: listIdx, setIdx: setIdx });
                   }}
                 >
+                  {list.set.length != 1 && (
+                    <img
+                      src={closeButton}
+                      width="13"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dispatch(
+                          exerciseCreator.deleteSet({
+                            listIdx: listIdx,
+                            setIdx: setIdx,
+                          }),
+                        );
+                      }}
+                    />
+                  )}
                   <Text
                     type="contents"
                     fontSize="1.3em"
                     minWidth="80px"
                     color="#848484"
                   >
-                    {isExercise ? `${setIdx + 1}세트` : '휴식'}
+                    {set.type === 'exercise' ? `${set.setCount}세트` : '휴식'}
                   </Text>
                   <Text
                     type="contents"
@@ -78,7 +107,9 @@ const FormExercise = (props) => {
                     textAlign="center"
                     color="#848484"
                   >
-                    {isExercise ? `${set.weight}Kg` : '0분'}
+                    {set.type === 'exercise'
+                      ? `${set.weight}Kg`
+                      : `${set.minutes}분`}
                   </Text>
                   <Text
                     type="contents"
@@ -87,7 +118,9 @@ const FormExercise = (props) => {
                     textAlign="right"
                     color="#848484"
                   >
-                    {isExercise ? `${set.count}회` : '0초'}
+                    {set.type === 'exercise'
+                      ? `${set.count}회`
+                      : `${set.seconds}초`}
                   </Text>
                 </DataRow>
               ))}
@@ -102,12 +135,12 @@ const FormExercise = (props) => {
                     세트
                   </RadioP>
                 </ButtonWrap>
-                {/* <ButtonWrap>
+                <ButtonWrap>
                   <RadioInput type="radio" name={`exercise_${listIdx}`} />
-                  <RadioP className="list" onClick={() => clickBreak()}>
+                  <RadioP className="list" onClick={() => clickBreak(listIdx)}>
                     휴식
                   </RadioP>
-                </ButtonWrap> */}
+                </ButtonWrap>
               </ButtonCont>
             </OpenList>
           ) : (
@@ -147,7 +180,7 @@ const Container = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(92vh - 60px);
+  height: calc(100vh - 145px);
   overflow-y: scroll;
 `;
 
@@ -222,27 +255,14 @@ const RadioP = styled.p`
   user-select: none;
 `;
 
-const Header = styled.div`
-  height: 8vh;
-`;
-
-const Title = styled.h1`
-  height: 100%;
-  margin: 0 0 0 10px;
-  font-size: 15px;
-  color: ${Color.navy};
+const GoBackButton = styled.div`
   display: flex;
-  justify-content: start;
-  align-items: center;
+  padding: 25px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
-const Paging = styled.span`
-  color: #727273;
-  font-size: 11px;
-  padding-top: 4px;
-`;
-
-const PageName = styled.span`
-  font-size: 16px;
-  margin: 0 5px;
+const PageText = styled.span`
+  font-size: 14px;
+  line-height: 2.5;
 `;
