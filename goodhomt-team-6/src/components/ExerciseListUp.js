@@ -18,15 +18,30 @@ const ExerciseListUp = (props) => {
   const dispatch = useDispatch();
   const [searchInput, setSerachInput] = useState('');
   const [selected, setSelected] = useState({});
+  const [clicked, isClicked] = useState(false);
 
-  const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const exercise = useSelector((store) => store.exercise.exercise);
+  const categoryNames = useSelector((store) => store.exercise.categoryNames);
+
+  // 전체조회를 위한 데이터 가공
+  const newnewArr = [];
+  const newArr = exercise.forEach(element => { newnewArr.push(element.exerciseList); });
+  const AllExercise = newnewArr.reduce((a, e) => a.concat(e), []);
+
+  // 내가 등록한 운동 불러오기
   const myExercise = useSelector((store) => store.exercise.myExercise);
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
-    console.log("디스패치되었음");
   }, []);
+
+  // 카테고리 아이디 찾기 (동적으로 가져와야함)
+  // const searchCategory = categoryNames.filter(item => item.id === 2);
+  // const searchArr = [];
+  // const hey = searchCategory.forEach(element => { searchArr.push(element.exerciseList); });
+
+  // 각 카테고리의 아이템만 가져오기
+  const categoryItems = useSelector((store) => store.exercise.categoryItems);
 
   return (
     <>
@@ -82,58 +97,101 @@ const ExerciseListUp = (props) => {
 
       {/* 운동 카테고리 */}
       <Category>
-        {categoryTitle
-          .map(e => (
-            <CategoryItem key={e.id}
+        <CategoryItem
+          onClick={() => {
+            isClicked(false);
+          }}>
+          전체
+        </CategoryItem>
+        {categoryNames
+          .map((e, idx) => (
+            <CategoryItem
+              key={idx}
               onClick={() => {
-                dispatch(exerciseActions.getExerciseTypeAPI());
-              }}>
-              {e.title}
+                dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
+                isClicked(true);
+              }}
+            >
+              {e.categoryName}
             </CategoryItem>
           ))}
+
       </Category>
 
       {/* 운동 카테고리별 리스트 보여주기 */}
-      <CategoryList>
-        {exercise
-          .filter((e) => e.exercise.includes(searchInput))
-          .map(e => (
-            <ExerciseItem
-              key={e.id}
-              onClick={() => {
-                setSelected({
-                  ...selected, [e.exercise]: {
+      {clicked ?
+        <CategoryList>
+          {categoryItems.exerciseList && // 뷰를 먼저 그리고 useEffect가 작동하는데 없어서 안된거
+            categoryItems.exerciseList
+              // .filter((e) => e.exercise.includes(searchInput))
+              .map(e => (
+                <ExerciseItem
+                  key={e.id}
+                  onClick={() => {
+                    setSelected({
+                      ...selected, [e.exerciseName]: {
+                        set: [{
+                          type: 'exercise',
+                          count: 0,
+                          weight: 0,
+                        }]
+                      }
+                    });
+                    const exercise = {
+                      exerciseName: e.exerciseName,
+                      set: [{
+                        type: 'exercise',
+                        count: 0,
+                        weight: 0,
+                      },],
+                    };
+                    // 리덕스에 추가하기
+                    dispatch(exerciseActions.addExerciseType(exercise));
+                  }}
+                >
+                  <ItemWrapper >
+                    {e.exerciseName}
+                  </ItemWrapper>
+                </ExerciseItem>
+              ))}
+        </CategoryList>
+        :
+        // 운동 전체 리스트 보여주기
+        <CategoryList>
+          {AllExercise
+            .map((e, idx) => (
+              <ExerciseItem
+                key={idx}
+                onClick={() => {
+                  setSelected({
+                    ...selected, [e.exerciseName]: {
+                      set: [{
+                        type: 'exercise',
+                        count: 0,
+                        weight: 0,
+                      }]
+                    }
+                  });
+                  const exercise = {
+                    exerciseName: e.exerciseName,
                     set: [{
                       type: 'exercise',
                       count: 0,
                       weight: 0,
-                    }]
-                  }
-                });
-                const exercise = {
-                  exerciseName: e.exercise,
-                  set: [{
-                    type: 'exercise',
-                    count: 0,
-                    weight: 0,
-                  },],
-                };
-                // 화면 목록에서 제거하기
-
-                // 리덕스에 추가하기
-                dispatch(exerciseActions.addExerciseType(exercise));
-              }}
-            >
-              <ItemWrapper>
-                {e.exercise}
-                <CalText>{e.cal}kcal</CalText>
-              </ItemWrapper>
-            </ExerciseItem>
-          )
-          )}
-      </CategoryList>
-
-
+                    },],
+                  };
+                  // 리덕스에 추가하기
+                  dispatch(exerciseActions.addExerciseType(exercise));
+                }}
+              >
+                <ItemWrapper>
+                  {e.exerciseName}
+                </ItemWrapper>
+              </ExerciseItem>
+            ))
+          }
+        </CategoryList>
+      }
 
       {/* 종목 저장하기 */}
       <SaveButtonWrapper>
@@ -220,12 +278,6 @@ const ExerciseItem = styled.li`
 const ItemWrapper = styled.div`
 `;
 
-const CalText = styled.span`
-  font-size: 9px;
-  color: #465678;
-  line-height: 48px;
-  margin: 0px 15px;
-`;
 
 const SelectedWrapper = styled.div`
   height: 44px;

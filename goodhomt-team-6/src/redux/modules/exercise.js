@@ -9,16 +9,9 @@ import logger from '../../shared/Logger';
 const initialState = {
   openedRow: null,
   editor: false,
-  exercise: [
-    // { exercise: '요가', cal: 140, categoryId: '1', categoryName: '상체' },
-    // { exercise: '스쿼트', cal: 140, categoryId: '1', categoryName: '상체' },
-    // { exercise: '런지', cal: 140, categoryId: '1', categoryName: '상체' },
-    // { exercise: '레그레이즈', cal: 140, categoryId: '2', categoryName: '하체' },
-    // { exercise: '스트레칭', cal: 140, categoryId: '2', categoryName: '하체' },
-    // { exercise: '플랭크', cal: 140, categoryId: '2', categoryName: '하체' },
-    // { exercise: '풀업', cal: 140, categoryId: '2', categoryName: '하체' },
-    // { exercise: '계단오르기', cal: 140, categoryId: '2', categoryName: '하체' },
-  ],
+  exercise: [],
+  categoryNames: [],
+  categoryItems: [],
   myExercise: [
     // {
     //   exerciseName: '벤치 프레스',
@@ -28,8 +21,7 @@ const initialState = {
     //     weight: 0,
     //   }]
     // }
-  ],
-  categoryTitle: [{ title: "전체" }, { title: "상체" }, { title: "하체" }]
+  ]
 };
 
 // actions
@@ -49,28 +41,20 @@ const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
+const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({ categoryItems }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
-const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
-  exercise,
-}));
-const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({
-  exercise,
-}));
-const openEditor = createAction(OPEN_EDITOR, (open) => ({
-  open,
-}));
-const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
-  set,
-  idxes,
-}));
+const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({ exercise, }));
+const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({ exercise, }));
+const openEditor = createAction(OPEN_EDITOR, (open) => ({ open, }));
+const updateSet = createAction(UPDATE_SET, (set, idxes) => ({ set, idxes, }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/exercises')
+      .get(`/exercises`)
       .then((response) => {
-        dispatch(getExercise(response.data));
+        dispatch(getExercise(response.data.result));
       })
       .catch((error) => {
         console.log('운동 가져오기 실패', error);
@@ -79,13 +63,19 @@ const getExerciseAPI = () => {
 };
 
 // 운동 카테고리별 가져오기
-const getExerciseTypeAPI = (category_id) => {
+const getExerciseTypeAPI = (id) => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/exercises/${category_id}')
+      .get(`/exercises/${id}`)
       .then((response) => {
-        dispatch(getExercise(response.data));
-        console.log(response.data);
+        const subExercise = response.data.result;
+        const newnewArr = [];
+        const newArr = subExercise.forEach(element => { newnewArr.push(element.exerciseList); });
+        // dispatch(getExerciseType(newnewArr[0]));
+        dispatch(getExerciseType(response.data.result[0]));
+        console.log(response.data.result[0]);
+        // dispatch(getExerciseType(newnewArr));
+
       })
       .catch((error) => {
         console.log('운동 카테고리별 가져오기 실패', error);
@@ -109,7 +99,7 @@ export default handleActions(
     [GET_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
         draft.exercise = action.payload.exercise;
-        console.log(draft.exercise);
+        draft.categoryNames = action.payload.exercise;
       }),
     [ADD_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
@@ -118,6 +108,10 @@ export default handleActions(
     [ADD_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         draft.myExercise.push(action.payload.exercise);
+      }),
+    [GET_EXERCISE_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.categoryItems = action.payload.categoryItems;
       }),
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
