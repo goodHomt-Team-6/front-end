@@ -12,16 +12,8 @@ const initialState = {
   exercise: [],
   categoryNames: [],
   categoryItems: [],
-  myExercise: [
-    // {
-    //   exerciseName: '벤치 프레스',
-    //   set: [{
-    //     type: 'exercise',
-    //     count: 0,
-    //     weight: 0,
-    //   }]
-    // }
-  ]
+  myExercise: [],
+  selectedItems: [],
 };
 
 // actions
@@ -33,6 +25,11 @@ const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
 const ADD_EXERCISE_TYPE = 'exercise/ADD_EXERCISE_TYPE';
 const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
 const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
+const REMOVE_EXERCISE_LIST = 'exercise/REMOVE_EXERCISE_LIST';
+
+const ADD_EXERCISE_ITEM = 'exercise/ADD_EXERCISE_ITEM';
+const REMOVE_EXERCISE_ITEM = 'exercise/REMOVE_EXERCISE_ITEM';
+
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
 
@@ -45,6 +42,12 @@ const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({ ca
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({ exercise, }));
 const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({ exercise, }));
+
+const removeExerciseList = createAction(REMOVE_EXERCISE_LIST, (categoryItems) => ({ categoryItems, }));
+
+const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
+const removeExerciseItem = createAction(REMOVE_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
+
 const openEditor = createAction(OPEN_EDITOR, (open) => ({ open, }));
 const updateSet = createAction(UPDATE_SET, (set, idxes) => ({ set, idxes, }));
 
@@ -71,11 +74,7 @@ const getExerciseTypeAPI = (id) => {
         const subExercise = response.data.result;
         const newnewArr = [];
         const newArr = subExercise.forEach(element => { newnewArr.push(element.exerciseList); });
-        // dispatch(getExerciseType(newnewArr[0]));
         dispatch(getExerciseType(response.data.result[0]));
-        console.log(response.data.result[0]);
-        // dispatch(getExerciseType(newnewArr));
-
       })
       .catch((error) => {
         console.log('운동 카테고리별 가져오기 실패', error);
@@ -112,6 +111,7 @@ export default handleActions(
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         draft.categoryItems = action.payload.categoryItems;
+        // 여기서 위에 있으면 걸러주기
       }),
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
@@ -120,6 +120,22 @@ export default handleActions(
         );
         draft.myExercise.splice(index, 1);
       }),
+    // 하위 항목 클릭시 화면에서 제거
+    [REMOVE_EXERCISE_LIST]: (state, action) =>
+      produce(state, (draft) => {
+        let index = draft.categoryItems.exerciseList.findIndex((item) => item.id === action.payload.categoryItems.id);
+        draft.categoryItems.exerciseList.splice(index, 1);
+      }),
+    // 하위 항목 클릭시 화면 상단에 추가
+    [ADD_EXERCISE_ITEM]: (state, action) => produce(state, (draft) => {
+      draft.selectedItems.push(action.payload.selectedItems);
+    }),
+    // 화면 상단에서 삭제
+    [REMOVE_EXERCISE_ITEM]: (state, action) => produce(state, (draft) => {
+      let index = draft.selectedItems.findIndex((item) => item.id === action.payload.selectedItems.id);
+      let testArr = draft.selectedItems.splice(index, 1);
+      draft.selectedItems;
+    }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.myExercise[action.payload.listIdx];
@@ -157,6 +173,9 @@ const actionCreators = {
   openRow,
   addExerciseType,
   removeExerciseType,
+  removeExerciseList,
+  addExerciseItem,
+  removeExerciseItem,
   openEditor,
   updateSet,
 };
