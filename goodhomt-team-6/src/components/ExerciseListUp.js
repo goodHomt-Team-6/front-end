@@ -17,14 +17,11 @@ import ExerciseCategory from '../elements/ExerciseCategory';
 const ExerciseListUp = (props) => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
-  const [selected, setSelected] = useState([]);
   const [clicked, isClicked] = useState(false);
 
   const exercise = useSelector((store) => store.exercise.exercise);
   const categoryNames = useSelector((store) => store.exercise.categoryNames);
-  // 각 카테고리 아이템만 가져오기
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
-  // 내가 선택한 아이템 가져오기
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
 
   // 전체조회를 위한 데이터 가공
@@ -32,21 +29,9 @@ const ExerciseListUp = (props) => {
   const newArr = exercise.forEach(element => { newnewArr.push(element.exerciseList); });
   let AllExercise = newnewArr.reduce((a, e) => a.concat(e), []);
 
-  // 내가 등록한 운동 불러오기
-  const myExercise = useSelector((store) => store.exercise.myExercise);
-
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
   }, []);
-
-  // // 항목 클릭시 목록에서 제거하는 함수
-  // const removeItem = (id) => {
-  //   console.log(id); // 각 하위항목의 id를 가지고와서
-  //   const index = AllExercise.findIndex((item) => item.id === id);
-  //   const newArr = AllExercise.splice(index, 1);
-  //   console.log(AllExercise);
-  //   return AllExercise; // 여기서 제거된 목록을 가지고 다시 화면에 뿌려져야함
-  // };
 
   return (
     <>
@@ -54,8 +39,7 @@ const ExerciseListUp = (props) => {
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}
-      >
+        }}>
         <ArrowBackIosIcon />
         <Text>Select</Text>
         <PageText>1/2</PageText>
@@ -86,8 +70,7 @@ const ExerciseListUp = (props) => {
           value={searchInput}
           onChange={(e) => {
             setSearchInput(e.target.value);
-          }}
-        />
+          }} />
         <SearchButton
           src={searchIcon}
         />
@@ -102,14 +85,13 @@ const ExerciseListUp = (props) => {
           전체
         </CategoryItem>
         {categoryNames
-          .map((e, idx) => (
+          .map((e, i) => (
             <CategoryItem
-              key={idx}
+              key={i}
               onClick={() => {
                 dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
                 isClicked(true);
-              }}
-            >
+              }}>
               {e.categoryName}
             </CategoryItem>
           ))}
@@ -125,7 +107,6 @@ const ExerciseListUp = (props) => {
                 <ExerciseItem
                   key={e.id}
                   onClick={() => {
-                    // setSelected([e, ...selected]);
                     const exercise = {
                       exerciseName: e.exerciseName,
                       set: [{
@@ -135,10 +116,9 @@ const ExerciseListUp = (props) => {
                       },],
                     };
                     dispatch(exerciseActions.addExerciseType(exercise)); // 나의 운동에 추가
-                    dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
+                    // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
                     dispatch(exerciseActions.addExerciseItem(e)); // 화면상단에 추가하기위해 리덕스에 추가
-                  }}
-                >
+                  }}>
                   <ItemWrapper >
                     {e.exerciseName}
                   </ItemWrapper>
@@ -150,19 +130,10 @@ const ExerciseListUp = (props) => {
         <CategoryList>
           {AllExercise
             .filter((e) => e.exerciseName.includes(searchInput))
-            .map((e, idx) => (
+            .map((e, i) => (
               <ExerciseItem
-                key={idx}
+                key={i}
                 onClick={() => {
-                  setSelected({
-                    ...selected, [e.exerciseName]: {
-                      set: [{
-                        type: 'exercise',
-                        count: 0,
-                        weight: 0,
-                      }]
-                    }
-                  });
                   const exercise = {
                     exerciseName: e.exerciseName,
                     set: [{
@@ -171,11 +142,9 @@ const ExerciseListUp = (props) => {
                       weight: 0,
                     },],
                   };
-                  // 리덕스에 추가하기
                   dispatch(exerciseActions.addExerciseType(exercise));
-                  // removeItem(e.id);
-                }}
-              >
+                  dispatch(exerciseActions.addExerciseItem(e));
+                }}>
                 <ItemWrapper>
                   {e.exerciseName}
                 </ItemWrapper>
@@ -189,11 +158,8 @@ const ExerciseListUp = (props) => {
       <SaveButtonWrapper>
         <SaveButton
           onClick={() => {
-            localStorage.setItem('exercise', JSON.stringify(selected));
-            console.log(selected);
             history.push('/exercise/form');
-          }}
-        >
+          }}>
           종목 추가하기
         </SaveButton>
       </SaveButtonWrapper>
@@ -269,7 +235,6 @@ const ExerciseItem = styled.li`
 
 const ItemWrapper = styled.div`
 `;
-
 
 const SelectedWrapper = styled.div`
   height: 44px;

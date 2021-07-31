@@ -111,7 +111,9 @@ export default handleActions(
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         draft.categoryItems = action.payload.categoryItems;
-        // 여기서 위에 있으면 걸러주기
+        // 여기서 위에 있으면 걸러주기 (filter이용) 상체 클릭했을때 위에 있는 요소면 빼고 가져온다. 
+        // draft.categoryItems = action.payload.categoryItems.exerciseList.filter(item => !draft.selectedItems.includes(item));
+        // console.log(draft.categoryItems);
       }),
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
@@ -127,15 +129,17 @@ export default handleActions(
         draft.categoryItems.exerciseList.splice(index, 1);
       }),
     // 하위 항목 클릭시 화면 상단에 추가
-    [ADD_EXERCISE_ITEM]: (state, action) => produce(state, (draft) => {
-      draft.selectedItems.push(action.payload.selectedItems);
-    }),
+    [ADD_EXERCISE_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedItems.push(action.payload.selectedItems);
+      }),
     // 화면 상단에서 삭제
-    [REMOVE_EXERCISE_ITEM]: (state, action) => produce(state, (draft) => {
-      let index = draft.selectedItems.findIndex((item) => item.id === action.payload.selectedItems.id);
-      let testArr = draft.selectedItems.splice(index, 1);
-      draft.selectedItems;
-    }),
+    [REMOVE_EXERCISE_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        let index = draft.selectedItems.findIndex((item) => item.id === action.payload.selectedItems.id);
+        let testArr = draft.selectedItems.splice(index, 1);
+        draft.selectedItems;
+      }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.myExercise[action.payload.listIdx];
