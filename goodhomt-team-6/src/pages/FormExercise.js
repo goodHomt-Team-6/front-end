@@ -63,6 +63,7 @@ const FormExercise = (props) => {
                 type="contents"
                 width="100%"
                 padding="20px 0 0 20px"
+                margin="0"
                 onClick={() => {
                   closeRow();
                 }}
@@ -75,6 +76,9 @@ const FormExercise = (props) => {
                   onClick={() => {
                     dispatch(exerciseCreator.openEditor(true));
                     updateIdxes({ listIdx: listIdx, setIdx: setIdx });
+                    set.type === 'exercise'
+                      ? setIsExercise(true)
+                      : setIsExercise(false);
                   }}
                 >
                   {list.set.length != 1 && (
