@@ -20,17 +20,22 @@ const initialState = {
     // { exercise: '계단오르기', cal: 140, categoryId: '2', categoryName: '하체' },
   ],
   myExercise: [
-    // {
-    //   exerciseName: '벤치 프레스',
-    //   set: [
-    //     {
-    //       type: 'exercise',
-    //       count: 0,
-    //       weight: 0,
-    //       setCount: 1,
-    //     },
-    //   ],
-    // },
+    {
+      exerciseName: '벤치 프레스',
+      set: [
+        {
+          type: 'exercise',
+          count: 0,
+          weight: 0,
+          setCount: 1,
+        },
+        {
+          type: 'break',
+          minutes: 0,
+          seconds: 0,
+        },
+      ],
+    },
   ],
   categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
 };
@@ -47,6 +52,7 @@ const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
 const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
+const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
 // action creators
@@ -67,6 +73,10 @@ const openEditor = createAction(OPEN_EDITOR, (open) => ({
 }));
 const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
   set,
+  idxes,
+}));
+const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
+  time,
   idxes,
 }));
 const deleteSet = createAction(DELETE_SET, (idxes) => ({
@@ -172,6 +182,14 @@ export default handleActions(
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
+    [UPDATE_TIME]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.myExercise[action.payload.idxes.listIdx];
+        list.set[action.payload.idxes.setIdx] = {
+          ...list.set[action.payload.idxes.setIdx],
+          ...action.payload.time,
+        };
+      }),
     [DELETE_SET]: (state, action) =>
       produce(state, (draft) => {
         draft.myExercise[action.payload.idxes.listIdx].set = draft.myExercise[
@@ -204,6 +222,7 @@ const actionCreators = {
   openEditor,
   updateSet,
   deleteSet,
+  updateTime,
 };
 
 export { actionCreators };
