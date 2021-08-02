@@ -5,12 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 import { Button, Input, Text, Image } from '../shared/Styles';
 import PlusButton from '../img/plus-button.svg';
+import PurePlusButtonGrey from '../img/pure-plus-button-grey.svg';
+import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
+import ReArrangementGrey from '../img/re-arrangement-grey.svg';
+import ReArrangementBlack from '../img/re-arrangement-black.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
 import InputExercise from '../components/InputExercise';
 import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
+import FormExerciseDnd from '../components/FormExerciseDnd';
 
 const FormExercise = (props) => {
   const dispatch = useDispatch();
@@ -20,6 +25,7 @@ const FormExercise = (props) => {
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
   const [idxes, updateIdxes] = useState(null);
+  const [reArrangement, setReArrangement] = useState(false);
 
   const openRow = (e) => {
     const target = e.currentTarget.id;
@@ -55,121 +61,172 @@ const FormExercise = (props) => {
         <PageText>2/2</PageText>
       </GoBackButton>
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
-      <Container>
-        {lists.map((list, listIdx) =>
-          listIdx === parseInt(openedRow) ? (
-            <OpenList id={listIdx} key={listIdx}>
-              <Text
-                type="contents"
-                width="100%"
-                padding="20px 0 0 20px"
-                margin="0"
-                onClick={() => {
-                  closeRow();
-                }}
-              >
-                {list.exerciseName}
-              </Text>
-              {list.set.map((set, setIdx) => (
-                <DataRow
-                  key={setIdx}
+      <OptionCont>
+        {openedRow ? (
+          <>
+            <Image
+              src={PurePlusButtonGrey}
+              width="20px"
+              height="20px"
+              borderRadius="0"
+              margin="0 15px 0 0"
+            ></Image>
+            <Image
+              src={ReArrangementGrey}
+              width="20px"
+              height="20px"
+              borderRadius="0"
+              margin="0 20px 0 0"
+            ></Image>
+          </>
+        ) : (
+          <>
+            <Image
+              src={PurePlusButtonBlack}
+              width="20px"
+              height="20px"
+              borderRadius="0"
+              margin="0 15px 0 0"
+              _onClick={() => {
+                history.push('/exercise');
+              }}
+            ></Image>
+            <Image
+              src={ReArrangementBlack}
+              width="20px"
+              height="20px"
+              borderRadius="0"
+              margin="0 20px 0 0"
+              _onClick={() => {
+                setReArrangement(!reArrangement);
+              }}
+            ></Image>
+          </>
+        )}
+      </OptionCont>
+      {!reArrangement ? (
+        <Container>
+          {lists.map((list, listIdx) =>
+            listIdx === parseInt(openedRow) ? (
+              <OpenList id={listIdx} key={listIdx}>
+                <Text
+                  type="contents"
+                  width="100%"
+                  padding="20px 0 0 20px"
+                  margin="0"
                   onClick={() => {
-                    dispatch(exerciseCreator.openEditor(true));
-                    updateIdxes({ listIdx: listIdx, setIdx: setIdx });
-                    set.type === 'exercise'
-                      ? setIsExercise(true)
-                      : setIsExercise(false);
+                    closeRow();
                   }}
                 >
-                  {list.set.length != 1 && (
-                    <img
-                      src={closeButton}
-                      width="13"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        dispatch(
-                          exerciseCreator.deleteSet({
-                            listIdx: listIdx,
-                            setIdx: setIdx,
-                          }),
-                        );
-                      }}
+                  {list.exerciseName}
+                </Text>
+                {list.set.map((set, setIdx) => (
+                  <DataRow
+                    key={setIdx}
+                    onClick={() => {
+                      dispatch(exerciseCreator.openEditor(true));
+                      updateIdxes({ listIdx: listIdx, setIdx: setIdx });
+                      set.type === 'exercise'
+                        ? setIsExercise(true)
+                        : setIsExercise(false);
+                    }}
+                  >
+                    {list.set.length != 1 && (
+                      <img
+                        src={closeButton}
+                        width="13"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(
+                            exerciseCreator.deleteSet({
+                              listIdx: listIdx,
+                              setIdx: setIdx,
+                            }),
+                          );
+                        }}
+                      />
+                    )}
+                    <Text
+                      type="contents"
+                      fontSize="1.3em"
+                      minWidth="80px"
+                      color="#848484"
+                    >
+                      {set.type === 'exercise' ? `${set.setCount}세트` : '휴식'}
+                    </Text>
+                    <Text
+                      type="contents"
+                      fontSize="1.3em"
+                      minWidth="80px"
+                      textAlign="center"
+                      color="#848484"
+                    >
+                      {set.type === 'exercise'
+                        ? `${set.weight}Kg`
+                        : `${set.minutes}분`}
+                    </Text>
+                    <Text
+                      type="contents"
+                      fontSize="1.3em"
+                      minWidth="80px"
+                      textAlign="right"
+                      color="#848484"
+                    >
+                      {set.type === 'exercise'
+                        ? `${set.count}회`
+                        : `${set.seconds}초`}
+                    </Text>
+                  </DataRow>
+                ))}
+                <ButtonCont>
+                  <ButtonWrap>
+                    <RadioInput
+                      type="radio"
+                      name={`exercise_${listIdx}`}
+                      defaultChecked
                     />
-                  )}
-                  <Text
-                    type="contents"
-                    fontSize="1.3em"
-                    minWidth="80px"
-                    color="#848484"
-                  >
-                    {set.type === 'exercise' ? `${set.setCount}세트` : '휴식'}
-                  </Text>
-                  <Text
-                    type="contents"
-                    fontSize="1.3em"
-                    minWidth="80px"
-                    textAlign="center"
-                    color="#848484"
-                  >
-                    {set.type === 'exercise'
-                      ? `${set.weight}Kg`
-                      : `${set.minutes}분`}
-                  </Text>
-                  <Text
-                    type="contents"
-                    fontSize="1.3em"
-                    minWidth="80px"
-                    textAlign="right"
-                    color="#848484"
-                  >
-                    {set.type === 'exercise'
-                      ? `${set.count}회`
-                      : `${set.seconds}초`}
-                  </Text>
-                </DataRow>
-              ))}
-              <ButtonCont>
-                <ButtonWrap>
-                  <RadioInput
-                    type="radio"
-                    name={`exercise_${listIdx}`}
-                    defaultChecked
-                  />
-                  <RadioP className="list" onClick={() => clickSet(listIdx)}>
-                    세트
-                  </RadioP>
-                </ButtonWrap>
-                <ButtonWrap>
-                  <RadioInput type="radio" name={`exercise_${listIdx}`} />
-                  <RadioP className="list" onClick={() => clickBreak(listIdx)}>
-                    휴식
-                  </RadioP>
-                </ButtonWrap>
-              </ButtonCont>
-            </OpenList>
-          ) : (
-            <List
-              id={listIdx}
-              key={listIdx}
-              onClick={(e) => {
-                openRow(e);
-              }}
-            >
-              <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                {list.exerciseName}
-              </Text>
-              <Text type="contents">
-                {list.set.filter((set) => set.type === 'exercise').length}
-                세트
-              </Text>
-              <Text type="contents">{list.set[0].weight}kg</Text>
-              <Text type="contents" padding="0 10px 0 0">
-                {list.set[0].count}회
-              </Text>
-            </List>
-          ),
-        )}
-      </Container>
+                    <RadioP className="list" onClick={() => clickSet(listIdx)}>
+                      세트
+                    </RadioP>
+                  </ButtonWrap>
+                  <ButtonWrap>
+                    <RadioInput type="radio" name={`exercise_${listIdx}`} />
+                    <RadioP
+                      className="list"
+                      onClick={() => clickBreak(listIdx)}
+                    >
+                      휴식
+                    </RadioP>
+                  </ButtonWrap>
+                </ButtonCont>
+              </OpenList>
+            ) : (
+              <List
+                id={listIdx}
+                key={listIdx}
+                onClick={(e) => {
+                  openRow(e);
+                }}
+              >
+                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  {list.exerciseName}
+                </Text>
+                <Text type="contents">
+                  {list.set.filter((set) => set.type === 'exercise').length}
+                  세트
+                </Text>
+                <Text type="contents">{list.set[0].weight}kg</Text>
+                <Text type="contents" padding="0 10px 0 0">
+                  {list.set[0].count}회
+                </Text>
+              </List>
+            ),
+          )}
+        </Container>
+      ) : (
+        <FormExerciseDnd></FormExerciseDnd>
+      )}
+
       <Footer>설정 완료</Footer>
       {editor && (
         <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
@@ -184,7 +241,7 @@ const Container = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 145px);
+  height: calc(100vh - 175px);
   overflow-y: scroll;
 `;
 
@@ -269,4 +326,11 @@ const GoBackButton = styled.div`
 const PageText = styled.span`
   font-size: 14px;
   line-height: 2.5;
+`;
+
+const OptionCont = styled.div`
+  background-color: #f7f7fa;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0 0;
 `;
