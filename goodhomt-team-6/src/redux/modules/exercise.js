@@ -14,23 +14,25 @@ const initialState = {
   categoryItems: [],
   selectedItems: [],
   handleClick: false,
+  openModal: false,
+  routineName: null,
   myExercise: [
-    {
-      exerciseName: '벤치 프레스',
-      set: [
-        {
-          type: 'exercise',
-          count: 0,
-          weight: 0,
-          setCount: 1,
-        },
-        {
-          type: 'break',
-          minutes: 0,
-          seconds: 0,
-        },
-      ],
-    },
+    // {
+    //   exerciseName: '벤치 프레스',
+    //   set: [
+    //     {
+    //       type: 'exercise',
+    //       count: 0,
+    //       weight: 0,
+    //       setCount: 1,
+    //     },
+    //     {
+    //       type: 'break',
+    //       minutes: 0,
+    //       seconds: 0,
+    //     },
+    //   ],
+    // },
   ],
   categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
 };
@@ -56,7 +58,9 @@ const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
 const HANDLECLICK = 'exercise/HANDLECLICK';
-const REARRANGEMYEXECISE = 'exercise/REARRANGEMYEXECISE';
+const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
+const OPEN_MODAL = 'exercise/OPEN_MODAL';
+const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -102,8 +106,14 @@ const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
 const deleteSet = createAction(DELETE_SET, (idxes) => ({
   idxes,
 }));
-const reArrangeMyExercise = createAction(REARRANGEMYEXECISE, (lists) => ({
+const reArrangeMyExercise = createAction(REARRANGE_MY_EXERCISE, (lists) => ({
   lists,
+}));
+const openModal = createAction(OPEN_MODAL, (value) => ({
+  value,
+}));
+const setRoutineName = createAction(SET_ROUTINE_NAME, (routineName) => ({
+  routineName,
 }));
 
 // 운동 전체 가져오기
@@ -140,12 +150,9 @@ const getExerciseTypeAPI = (id) => {
 };
 
 // 운동루틴 등록하기
-const addExerciseAPI = () => {
+const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api.post('/routines').then((response) => {
-      dispatch(addExercise(response.data));
-      console.log('루틴 등록 성공');
-    });
+    api.post('/routines').then((response) => {});
   };
 };
 
@@ -267,9 +274,17 @@ export default handleActions(
           }
         });
       }),
-    [REARRANGEMYEXECISE]: (state, action) =>
+    [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
         draft.myExercise = action.payload.lists;
+      }),
+    [OPEN_MODAL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.openModal = action.payload.value;
+      }),
+    [SET_ROUTINE_NAME]: (state, action) =>
+      produce(state, (draft) => {
+        draft.routineName = action.payload.routineName;
       }),
   },
   initialState,
@@ -279,7 +294,7 @@ export default handleActions(
 const actionCreators = {
   getExerciseAPI,
   getExerciseTypeAPI,
-  addExerciseAPI,
+  addRoutineAPI,
   addSet,
   addBreak,
   openRow,
@@ -294,6 +309,8 @@ const actionCreators = {
   updateTime,
   handleClick,
   reArrangeMyExercise,
+  openModal,
+  setRoutineName,
 };
 
 export { actionCreators };
