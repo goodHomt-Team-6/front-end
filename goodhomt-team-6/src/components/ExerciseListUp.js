@@ -12,6 +12,7 @@ import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
 import searchIcon from '../img/search-icon.svg';
 import ExerciseCategory from '../elements/ExerciseCategory';
+import { Opacity } from '@material-ui/icons';
 
 // 운동리스트 컴포넌트
 const ExerciseListUp = (props) => {
@@ -23,6 +24,8 @@ const ExerciseListUp = (props) => {
   const categoryNames = useSelector((store) => store.exercise.categoryNames);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
+  const myExercise = useSelector((store) => store.exercise.myExercise);
+  const handleClick = useSelector((store) => store.exercise.handleClick);
 
   // 전체조회를 위한 데이터 가공
   const newnewArr = [];
@@ -32,6 +35,13 @@ const ExerciseListUp = (props) => {
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
   }, []);
+
+  useEffect(() => {
+    if (myExercise.length > 0) {
+      dispatch(exerciseActions.handleClick(true));
+      return;
+    }
+  }, [myExercise]);
 
   return (
     <>
@@ -103,7 +113,7 @@ const ExerciseListUp = (props) => {
           {categoryItems.exerciseList &&
             categoryItems.exerciseList
               .filter((e) => e.exerciseName.includes(searchInput))
-              .map(e => (
+              .map((e) => (
                 <ExerciseItem
                   key={e.id}
                   onClick={() => {
@@ -118,6 +128,7 @@ const ExerciseListUp = (props) => {
                     dispatch(exerciseActions.addExerciseType(exercise)); // 나의 운동에 추가
                     // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
                     dispatch(exerciseActions.addExerciseItem(e)); // 화면상단에 추가하기위해 리덕스에 추가
+                    dispatch(exerciseActions.handleClick(true));
                   }}>
                   <ItemWrapper >
                     {e.exerciseName}
@@ -154,7 +165,7 @@ const ExerciseListUp = (props) => {
         </CategoryList>
       }
 
-      {/* 종목 저장하기 */}
+      {/* 종목 추가하기 */}
       <SaveButtonWrapper>
         <SaveButton
           onClick={() => {
@@ -312,12 +323,14 @@ const CategoryTop = styled.li`
 
 const SaveButton = styled.button`
   background-color: black;
+  opacity: ${(props) => props.handleClick ? `100%` : `30%`};
   height: 86px;
   width: 100%;
   border: none;
   font-size: 20px;
   color: white;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const SaveButtonWrapper = styled.div`

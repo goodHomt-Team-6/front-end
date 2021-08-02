@@ -14,6 +14,7 @@ const initialState = {
   categoryItems: [],
   myExercise: [],
   selectedItems: [],
+  handleClick: false,
 };
 
 // actions
@@ -33,6 +34,8 @@ const REMOVE_EXERCISE_ITEM = 'exercise/REMOVE_EXERCISE_ITEM';
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
 
+const HANDLECLICK = 'exercise/HANDLECLICK';
+
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
@@ -50,6 +53,8 @@ const removeExerciseItem = createAction(REMOVE_EXERCISE_ITEM, (selectedItems) =>
 
 const openEditor = createAction(OPEN_EDITOR, (open) => ({ open, }));
 const updateSet = createAction(UPDATE_SET, (set, idxes) => ({ set, idxes, }));
+
+const handleClick = createAction(HANDLECLICK, (handleClick) => ({ handleClick }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -164,6 +169,10 @@ export default handleActions(
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
+    [HANDLECLICK]: (state, action) =>
+      produce(state, (draft) => {
+        draft.handleClick = action.payload.handleClick;
+      })
   },
   initialState,
 );
@@ -182,6 +191,7 @@ const actionCreators = {
   removeExerciseItem,
   openEditor,
   updateSet,
+  handleClick,
 };
 
 export { actionCreators };
