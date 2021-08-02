@@ -13,24 +13,24 @@ const initialState = {
   categoryNames: [],
   categoryItems: [],
   selectedItems: [],
-  handleClick: false,
+  selectButtonHandle: false,
   myExercise: [
-    {
-      exerciseName: '벤치 프레스',
-      set: [
-        {
-          type: 'exercise',
-          count: 0,
-          weight: 0,
-          setCount: 1,
-        },
-        {
-          type: 'break',
-          minutes: 0,
-          seconds: 0,
-        },
-      ],
-    },
+    // {
+    //   exerciseName: '벤치 프레스',
+    //   set: [
+    //     {
+    //       type: 'exercise',
+    //       count: 0,
+    //       weight: 0,
+    //       setCount: 1,
+    //     },
+    //     {
+    //       type: 'break',
+    //       minutes: 0,
+    //       seconds: 0,
+    //     },
+    //   ],
+    // },
   ],
   categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
 };
@@ -55,7 +55,7 @@ const UPDATE_SET = 'exercise/UPDATE_SET';
 const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
-const HANDLECLICK = 'exercise/HANDLECLICK';
+const SELECT_BUTTON_HANDLE = 'exercise/SELECT_BUTTON_HANDLE';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -68,7 +68,7 @@ const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
 const removeExerciseList = createAction(REMOVE_EXERCISE_LIST, (categoryItems) => ({ categoryItems, }));
 const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
 const removeExerciseItem = createAction(REMOVE_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
-const handleClick = createAction(HANDLECLICK, (handleClick) => ({ handleClick }));
+const selectButtonHandle = createAction(SELECT_BUTTON_HANDLE, (handleClick) => ({ handleClick }));
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
 }));
@@ -180,9 +180,9 @@ export default handleActions(
         draft.selectedItems;
       }),
     // 버튼 활성화, 비활성화
-    [HANDLECLICK]: (state, action) =>
+    [SELECT_BUTTON_HANDLE]: (state, action) =>
       produce(state, (draft) => {
-        draft.handleClick = action.payload.handleClick;
+        draft.selectButtonHandle = action.payload.selectButtonHandle;
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
@@ -266,7 +266,7 @@ const actionCreators = {
   updateSet,
   deleteSet,
   updateTime,
-  handleClick,
+  selectButtonHandle,
 };
 
 export { actionCreators };

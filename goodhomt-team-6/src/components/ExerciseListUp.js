@@ -25,7 +25,7 @@ const ExerciseListUp = (props) => {
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
   const myExercise = useSelector((store) => store.exercise.myExercise);
-  const handleClick = useSelector((store) => store.exercise.handleClick);
+  const selectButtonHandle = useSelector((store) => store.exercise.handleClick);
 
   // 전체조회를 위한 데이터 가공
   const newnewArr = [];
@@ -38,7 +38,10 @@ const ExerciseListUp = (props) => {
 
   useEffect(() => {
     if (myExercise.length > 0) {
-      dispatch(exerciseActions.handleClick(true));
+      dispatch(exerciseActions.selectButtonHandle(true));
+      return;
+    } else {
+      dispatch(exerciseActions.selectButtonHandle(false));
       return;
     }
   }, [myExercise]);
@@ -123,12 +126,13 @@ const ExerciseListUp = (props) => {
                         type: 'exercise',
                         count: 0,
                         weight: 0,
+                        setCount: 1,
                       },],
                     };
                     dispatch(exerciseActions.addExerciseType(exercise)); // 나의 운동에 추가
                     // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
                     dispatch(exerciseActions.addExerciseItem(e)); // 화면상단에 추가하기위해 리덕스에 추가
-                    dispatch(exerciseActions.handleClick(true));
+                    dispatch(exerciseActions.selectButtonHandle(true));
                   }}>
                   <ItemWrapper >
                     {e.exerciseName}
@@ -151,6 +155,7 @@ const ExerciseListUp = (props) => {
                       type: 'exercise',
                       count: 0,
                       weight: 0,
+                      setCount: 1,
                     },],
                   };
                   dispatch(exerciseActions.addExerciseType(exercise));
@@ -168,6 +173,7 @@ const ExerciseListUp = (props) => {
       {/* 종목 추가하기 */}
       <SaveButtonWrapper>
         <SaveButton
+          selectButtonHandle={selectButtonHandle}
           onClick={() => {
             history.push('/exercise/form');
           }}>
@@ -322,8 +328,7 @@ const CategoryTop = styled.li`
 `;
 
 const SaveButton = styled.button`
-  background-color: black;
-  opacity: ${(props) => props.handleClick ? `100%` : `30%`};
+  background-color: ${(props) => props.selectButtonHandle ? `black` : `gray`};
   height: 86px;
   width: 100%;
   border: none;

@@ -7,7 +7,7 @@ import Main from '../pages/Main';
 import Header from '../components/Header';
 import FormExercise from '../pages/FormExercise';
 import ExerciseListUp from "../components/ExerciseListUp";
-import ExerciseCategory from '../elements/ExerciseCategory';
+import Login from '../pages/Login';
 
 const App = (props) => {
   return (
@@ -16,6 +16,7 @@ const App = (props) => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Main} />
+          <Route path="/login" exact component={Login} />
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
         </Switch>

@@ -10,7 +10,7 @@ import ImportExercise from "../components/ImportExercise";
 // 메인 페이지 컴포넌트
 const Main = (props) => {
 
-  const onMealButtonClick = () => {
+  const goExerciseSelect = () => {
     history.push('/exercise');
   };
 
@@ -75,7 +75,7 @@ const Main = (props) => {
 
         <BtnWrapper>
           <AddBtn
-            onClick={onMealButtonClick}
+            onClick={goExerciseSelect}
           >+</AddBtn>
         </BtnWrapper>
 
@@ -87,7 +87,6 @@ const Main = (props) => {
 export default Main;
 
 const RegisterWrapper = styled.div`
-
 `;
 
 const TodayWrapper = styled.div`

@@ -6,41 +6,62 @@ import axios from "axios";
 
 // initialState
 const initialState = {
-  mylist: [],
+  user: null,
+  is_login: false,
 };
 
 // actions
-const GET_MYEXERCISE = "GET_MYEXERCISE";
+const GET_USER = "user/GET_USER";
+const LOG_OUT = "user/LOG_OUT";
 
 // action creators
-const getMyExercise = createAction(GET_MYEXERCISE, (mylist) => ({ mylist }));
+const getUser = createAction(GET_USER, (user) => ({ user }));
+const logOut = createAction(LOG_OUT, (user) => ({ user }));
 
-// 내가 등록한 운동 루틴 가져오기
-const getMyExerciseAPI = () => {
+const getUserAPI = () => {
   return function (dispatch, getState, { history }) {
-    axios
-      .get("/exercises")
+    api
+      .get(`/auth/kakao`)
       .then((response) => {
-        dispatch(getMyExercise(response.data));
+        dispatch(getUser(
+          {
+            name: response.data.name,
+            image: response.data.imageUrl,
+          }
+        ));
       })
       .catch((error) => {
-        console.log("나의 운동 루틴 가져오기 실패", error);
+        console.log("유저 정보 가져오기 실패");
       });
   };
 };
 
+const logOutAPI = () => {
+  return function (dispatch, getState, { history }) {
+    dispatch(logOut());
+  }
+}
+
 // reducer
 export default handleActions(
   {
-    [GET_MYEXERCISE]: (state, action) => produce(state, (draft) => {
-      draft.mylist = action.payload.mylist;
-    })
+    [GET_USER]: (state, action) => produce(state, (draft) => {
+      draft.user = action.payload.user;
+      draft.is_login = true;
+    }),
+    [LOG_OUT]: (state, action) => produce(state, (draft) => {
+      draft.user = null;
+      draft.is_login = false;
+    }
   }, initialState
 );
 
 // actionsCreator export 
 const actionCreators = {
-  getMyExerciseAPI,
+  getUser,
+  getUserAPI,
+  logOut,
+  logOutAPI,
 };
 
 export { actionCreators };
