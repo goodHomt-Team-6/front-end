@@ -10,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import './InputExercise.css';
+import SimpleSlider from './TimePicker';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -37,17 +38,21 @@ const InputExercise = ({ isExercise, idxes }) => {
   const [weight, setWeight] = useState(savedSet[idxes.setIdx].weight);
   const [count, setCount] = useState(savedSet[idxes.setIdx].count);
   const [unit, setUnit] = useState(1);
+  const minutes = savedSet[idxes.setIdx].minutes;
+  const seconds = savedSet[idxes.setIdx].seconds;
 
   const completeEdit = () => {
     if (count === 0) {
       openAlert(true);
       return;
     }
-    const set = {
-      count: count,
-      weight: weight,
-    };
-    dispatch(exerciseCreator.updateSet(set, idxes));
+    if (isExercise) {
+      const set = {
+        count: count,
+        weight: weight,
+      };
+      dispatch(exerciseCreator.updateSet(set, idxes));
+    }
     dispatch(exerciseCreator.openEditor(false));
   };
 
@@ -62,7 +67,7 @@ const InputExercise = ({ isExercise, idxes }) => {
     <InputCont>
       <DataRow>
         <Text type="contents" fontSize="1.3em" minWidth="80px" color="#848484">
-          {isExercise ? `1세트` : '휴식'}
+          {isExercise ? `${savedSet[idxes.setIdx].setCount}세트` : '휴식'}
         </Text>
         <Text
           type="contents"
@@ -78,7 +83,7 @@ const InputExercise = ({ isExercise, idxes }) => {
             }
           }}
         >
-          {isExercise ? `${weight}Kg` : '0분'}
+          {isExercise ? `${weight}Kg` : `${minutes}분`}
         </Text>
         <Text
           type="contents"
@@ -94,7 +99,7 @@ const InputExercise = ({ isExercise, idxes }) => {
             }
           }}
         >
-          {isExercise ? `${count}회` : '0초'}
+          {isExercise ? `${count}회` : `${seconds}초`}
         </Text>
       </DataRow>
       {(inputEditWeight || inputEditCount) && (
@@ -117,75 +122,85 @@ const InputExercise = ({ isExercise, idxes }) => {
               완료
             </Submit>
           </InputHeader>
-          <InputBody>
-            <Button
-              height="48px"
-              width="48px"
-              fontSize="24px"
-              bgColor="#E5E5E7"
-              _onClick={() => {
-                if (inputEditWeight) {
-                  if (parseInt(weight / unit) === 0) {
-                    setWeight(0);
-                  } else {
-                    setWeight(weight - unit);
-                  }
-                } else if (inputEditCount) {
-                  if (parseInt(count / unit) === 0) {
-                    setCount(0);
-                  } else {
-                    setCount(count - unit);
-                  }
-                }
-              }}
-            >
-              -
-            </Button>
-            <Text type="contents" fontSize="28px">
-              {inputEditWeight && `${weight}kg`}
-              {inputEditCount && `${count}회`}
-            </Text>
-            <Button
-              height="48px"
-              width="48px"
-              fontSize="24px"
-              bgColor="#E5E5E7"
-              _onClick={() => {
-                if (inputEditWeight) {
-                  setWeight(weight + unit);
-                } else if (inputEditCount) {
-                  setCount(count + unit);
-                }
-              }}
-            >
-              +
-            </Button>
-          </InputBody>
-          <InputFooter>
-            <ButtonCont>
-              <ButtonWrap>
-                <RadioInput type="radio" name={'inputButton'} defaultChecked />
-                <RadioP className="input" onClick={() => setUnit(1)}>
-                  {inputEditWeight && `1kg`}
-                  {inputEditCount && `1회`}
-                </RadioP>
-              </ButtonWrap>
-              <ButtonWrap>
-                <RadioInput type="radio" name={'inputButton'} />
-                <RadioP className="input" onClick={() => setUnit(5)}>
-                  {inputEditWeight && `5kg`}
-                  {inputEditCount && `5회`}
-                </RadioP>
-              </ButtonWrap>
-              <ButtonWrap>
-                <RadioInput type="radio" name={'inputButton'} />
-                <RadioP className="input" onClick={() => setUnit(10)}>
-                  {inputEditWeight && `10kg`}
-                  {inputEditCount && `10회`}
-                </RadioP>
-              </ButtonWrap>
-            </ButtonCont>
-          </InputFooter>
+          {isExercise ? (
+            <>
+              <InputBody>
+                <Button
+                  height="48px"
+                  width="48px"
+                  fontSize="24px"
+                  bgColor="#E5E5E7"
+                  _onClick={() => {
+                    if (inputEditWeight) {
+                      if (parseInt(weight / unit) === 0) {
+                        setWeight(0);
+                      } else {
+                        setWeight(weight - unit);
+                      }
+                    } else if (inputEditCount) {
+                      if (parseInt(count / unit) === 0) {
+                        setCount(0);
+                      } else {
+                        setCount(count - unit);
+                      }
+                    }
+                  }}
+                >
+                  -
+                </Button>
+                <Text type="contents" fontSize="28px">
+                  {inputEditWeight && `${weight}kg`}
+                  {inputEditCount && `${count}회`}
+                </Text>
+                <Button
+                  height="48px"
+                  width="48px"
+                  fontSize="24px"
+                  bgColor="#E5E5E7"
+                  _onClick={() => {
+                    if (inputEditWeight) {
+                      setWeight(weight + unit);
+                    } else if (inputEditCount) {
+                      setCount(count + unit);
+                    }
+                  }}
+                >
+                  +
+                </Button>
+              </InputBody>
+              <InputFooter>
+                <ButtonCont>
+                  <ButtonWrap>
+                    <RadioInput
+                      type="radio"
+                      name={'inputButton'}
+                      defaultChecked
+                    />
+                    <RadioP className="input" onClick={() => setUnit(1)}>
+                      {inputEditWeight && `1kg`}
+                      {inputEditCount && `1회`}
+                    </RadioP>
+                  </ButtonWrap>
+                  <ButtonWrap>
+                    <RadioInput type="radio" name={'inputButton'} />
+                    <RadioP className="input" onClick={() => setUnit(5)}>
+                      {inputEditWeight && `5kg`}
+                      {inputEditCount && `5회`}
+                    </RadioP>
+                  </ButtonWrap>
+                  <ButtonWrap>
+                    <RadioInput type="radio" name={'inputButton'} />
+                    <RadioP className="input" onClick={() => setUnit(10)}>
+                      {inputEditWeight && `10kg`}
+                      {inputEditCount && `10회`}
+                    </RadioP>
+                  </ButtonWrap>
+                </ButtonCont>
+              </InputFooter>
+            </>
+          ) : (
+            <SimpleSlider idxes={idxes} />
+          )}
         </InputForm>
       )}
       <div className={alertClasses.root}>
@@ -305,3 +320,5 @@ const RadioP = styled.p`
   user-select: none;
   font-weight: 500;
 `;
+
+const Picker = styled.div``;

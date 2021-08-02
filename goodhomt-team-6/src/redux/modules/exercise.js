@@ -12,14 +12,33 @@ const initialState = {
   exercise: [],
   categoryNames: [],
   categoryItems: [],
-  myExercise: [],
   selectedItems: [],
   handleClick: false,
+  myExercise: [
+    {
+      exerciseName: '벤치 프레스',
+      set: [
+        {
+          type: 'exercise',
+          count: 0,
+          weight: 0,
+          setCount: 1,
+        },
+        {
+          type: 'break',
+          minutes: 0,
+          seconds: 0,
+        },
+      ],
+    },
+  ],
+  categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
 };
 
 // actions
 const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
+const ADD_BREAK = 'exercise/ADD_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
 const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
@@ -33,28 +52,43 @@ const REMOVE_EXERCISE_ITEM = 'exercise/REMOVE_EXERCISE_ITEM';
 
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
+const UPDATE_TIME = 'exercise/UPDATE_TIME';
+const DELETE_SET = 'exercise/DELETE_SET';
 
 const HANDLECLICK = 'exercise/HANDLECLICK';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
+const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({ categoryItems }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
-const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({ exercise, }));
-const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({ exercise, }));
-
 const removeExerciseList = createAction(REMOVE_EXERCISE_LIST, (categoryItems) => ({ categoryItems, }));
-
 const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
 const removeExerciseItem = createAction(REMOVE_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
-
-const openEditor = createAction(OPEN_EDITOR, (open) => ({ open, }));
-const updateSet = createAction(UPDATE_SET, (set, idxes) => ({ set, idxes, }));
-
 const handleClick = createAction(HANDLECLICK, (handleClick) => ({ handleClick }));
+const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
+  exercise,
+}));
+const removeExerciseType = createAction(REMOVE_EXERCISE_TYPE, (exercise) => ({
+  exercise,
+}));
+const openEditor = createAction(OPEN_EDITOR, (open) => ({
+  open,
+}));
+const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
+  set,
+  idxes,
+}));
+const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
+  time,
+  idxes,
+}));
+const deleteSet = createAction(DELETE_SET, (idxes) => ({
+  idxes,
+}));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -145,13 +179,32 @@ export default handleActions(
         let testArr = draft.selectedItems.splice(index, 1);
         draft.selectedItems;
       }),
+    // 버튼 활성화, 비활성화
+    [HANDLECLICK]: (state, action) =>
+      produce(state, (draft) => {
+        draft.handleClick = action.payload.handleClick;
+      }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.myExercise[action.payload.listIdx];
+        const setCount = list.set.reduce(
+          (cnt, elem) => cnt + ('exercise' === elem.type),
+          1,
+        );
         list.set.push({
           type: 'exercise',
           weight: 0,
           count: 0,
+          setCount: setCount,
+        });
+      }),
+    [ADD_BREAK]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.myExercise[action.payload.listIdx];
+        list.set.push({
+          type: 'break',
+          minutes: 0,
+          seconds: 0,
         });
       }),
     [OPEN_ROW]: (state, action) =>
@@ -169,10 +222,29 @@ export default handleActions(
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
-    [HANDLECLICK]: (state, action) =>
+    [UPDATE_TIME]: (state, action) =>
       produce(state, (draft) => {
-        draft.handleClick = action.payload.handleClick;
-      })
+        const list = draft.myExercise[action.payload.idxes.listIdx];
+        list.set[action.payload.idxes.setIdx] = {
+          ...list.set[action.payload.idxes.setIdx],
+          ...action.payload.time,
+        };
+      }),
+    [DELETE_SET]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myExercise[action.payload.idxes.listIdx].set = draft.myExercise[
+          action.payload.idxes.listIdx
+        ].set.filter((elem, idx) => {
+          return idx != action.payload.idxes.setIdx;
+        });
+        let count = 1;
+        draft.myExercise[action.payload.idxes.listIdx].set.map((set, idx) => {
+          if (set.type === 'exercise') {
+            set.setCount = count;
+            count += 1;
+          }
+        });
+      }),
   },
   initialState,
 );
@@ -183,6 +255,7 @@ const actionCreators = {
   getExerciseTypeAPI,
   addExerciseAPI,
   addSet,
+  addBreak,
   openRow,
   addExerciseType,
   removeExerciseType,
@@ -191,6 +264,8 @@ const actionCreators = {
   removeExerciseItem,
   openEditor,
   updateSet,
+  deleteSet,
+  updateTime,
   handleClick,
 };
 
