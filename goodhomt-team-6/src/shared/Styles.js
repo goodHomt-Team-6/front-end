@@ -165,7 +165,7 @@ const ImageCircle = styled.div`
 `;
 
 //Input
-const Input = (props) => {
+const Input = forwardRef((props, ref) => {
   const {
     bgColor,
     searchbox,
@@ -182,6 +182,7 @@ const Input = (props) => {
     borderBottom,
     margin,
     padding,
+    attention,
   } = props;
 
   const styles = {
@@ -202,11 +203,15 @@ const Input = (props) => {
   };
 
   if (searchbox) {
-    return <SearchInput {...styles} />;
+    if (attention) {
+      return <SearchInput {...styles} className="vibrate-1" ref={ref} />;
+    } else {
+      return <SearchInput {...styles} />;
+    }
   } else {
     return <ElInput {...styles} />;
   }
-};
+});
 
 const SearchInput = styled.input`
   font-size: 15px;
@@ -220,6 +225,7 @@ const SearchInput = styled.input`
     outline: none;
   }
   border-radius: ${({ borderRadius }) => borderRadius};
+  border: ${({ border }) => border};
 `;
 
 const ElInput = styled.input``;
