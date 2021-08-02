@@ -18,6 +18,36 @@ const LOG_OUT = "user/LOG_OUT";
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 
+const kakaoLogin = (code) => {
+  return async function (dispatch, getState, { history }) {
+
+    try {
+      const result = await axios({
+        method: "GET",
+        url: "http://54.180.158.188/auth/kakao",
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+    // api
+    //   .get(`/auth/kakao`)
+    //   .then((response) => {
+    //     console.log("카카오톡 소셜 로그인 성공");
+    //     console.log(response); // 토큰 넘어옴
+    //     const ACCESS_TOKEN = response.data.accessToken;
+    //     localStorage.setItem("token", ACCESS_TOKEN); // 에시로 로컬에 저장, 쿠키로 변경하기
+    //     history.replace("/");
+    //   })
+    //   .catch((error) => {
+    //     console.error('error!!!!!!', error);
+    //     console.log("카카오 소셜 로그인 실패", error);
+    //     window.alert("로그인에 실패하였습니다");
+    //     history.replace("/login");
+    //   });
+  };
+};
+
 const getUserAPI = () => {
   return function (dispatch, getState, { history }) {
     api
@@ -39,8 +69,8 @@ const getUserAPI = () => {
 const logOutAPI = () => {
   return function (dispatch, getState, { history }) {
     dispatch(logOut());
-  }
-}
+  };
+};
 
 // reducer
 export default handleActions(
@@ -52,12 +82,13 @@ export default handleActions(
     [LOG_OUT]: (state, action) => produce(state, (draft) => {
       draft.user = null;
       draft.is_login = false;
-    }
+    })
   }, initialState
 );
 
 // actionsCreator export 
 const actionCreators = {
+  kakaoLogin,
   getUser,
   getUserAPI,
   logOut,

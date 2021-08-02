@@ -3,42 +3,44 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
 import { Scope } from '@babel/traverse';
+import axios from "axios";
+
 
 import KakaoLogin from 'react-kakao-login';
 import { KAKAO_AUTH_URL } from '../shared/Auth';
 
 const Login = (props) => {
-
-  const jsKey = "068735ef1f3f529391f322045e26fa87";
-
-  // 카카오 로그인 성공시
-  const handleKakaoSuccess = () => {
+  const login = async () => {
+    console.log('들어오나!!!!');
+    try {
+      const result = await axios({
+        method: "GET",
+        url: "http://54.180.158.188/auth/kakao",
+        withCredentials: true,
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  // 카카오 로그인 실패시
-  const handleKakaoFail = () => {
-  };
-
   return (
     <>
       <LoginWrapper>
         <KakaoBtn
-          onClick={() => {
-            window.location.href = KAKAO_AUTH_URL;
-          }}
+          onClick={() => login()
+            //   async () => {
+            //   // window.location.href = KAKAO_AUTH_URL;
+            //   // history.push('/auth/kakao');
+
+
+
+
+            // }
+          }
         >
           카카오톡 로그인
         </KakaoBtn>
       </LoginWrapper>
-
-      {/* <KakaoLogin
-        jsKey={jsKey}
-        onSuccess={handleKakaoSuccess}
-        onFailure={handleKakaoFail}
-        getProfile="true"
-        buttonText="카카오톡 로그인"
-      /> */}
-
     </>
   );
 };

@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import FormExercise from '../pages/FormExercise';
 import ExerciseListUp from "../components/ExerciseListUp";
 import Login from '../pages/Login';
+import RedirectHandler from './RedirectHandler';
 
 const App = (props) => {
   return (
@@ -17,6 +18,7 @@ const App = (props) => {
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
+          <Route path="/auth/kakao" component={RedirectHandler} />
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
         </Switch>
