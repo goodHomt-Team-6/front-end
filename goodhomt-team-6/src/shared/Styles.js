@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
 //Grid
@@ -141,21 +141,24 @@ const BasicBtn = styled.button`
 `;
 
 // Image
-const Image = (props) => {
-  const { src, width, height, margin } = props;
-  const styles = { src: src, width: width, height: height, margin: margin };
+const Image = forwardRef((props, ref) => {
+  const { src, width, height, margin, borderRadius, _onClick } = props;
+  const styles = {
+    src: src,
+    width: width,
+    height: height,
+    margin: margin,
+    borderRadius: borderRadius,
+  };
 
-  return (
-    <>
-      <ImageCircle {...styles}></ImageCircle>
-    </>
-  );
-};
+  return <ImageCircle {...styles} onClick={_onClick} ref={ref}></ImageCircle>;
+});
 
 const ImageCircle = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  border-radius: 50%;
+  border-radius: ${(props) =>
+    props.borderRadius ? props.borderRadius : '50%'};
   background-image: url('${(props) => props.src}');
   background-size: cover;
   margin: ${(props) => props.margin};

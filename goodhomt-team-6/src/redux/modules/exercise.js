@@ -56,6 +56,7 @@ const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
 const SELECT_BUTTON_HANDLE = 'exercise/SELECT_BUTTON_HANDLE';
+const REARRANGEMYEXECISE = 'exercise/REARRANGEMYEXECISE';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -63,12 +64,24 @@ const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
-const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({ categoryItems }));
+const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({
+  categoryItems,
+}));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
-const removeExerciseList = createAction(REMOVE_EXERCISE_LIST, (categoryItems) => ({ categoryItems, }));
-const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
-const removeExerciseItem = createAction(REMOVE_EXERCISE_ITEM, (selectedItems) => ({ selectedItems, }));
-const selectButtonHandle = createAction(SELECT_BUTTON_HANDLE, (handleClick) => ({ handleClick }));
+const removeExerciseList = createAction(
+  REMOVE_EXERCISE_LIST,
+  (categoryItems) => ({ categoryItems }),
+);
+const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({
+  selectedItems,
+}));
+const removeExerciseItem = createAction(
+  REMOVE_EXERCISE_ITEM,
+  (selectedItems) => ({ selectedItems }),
+);
+const selectButtonHandle = createAction(SELECT_BUTTON_HANDLE, (handleClick) => ({
+  handleClick
+}));
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
 }));
@@ -88,6 +101,9 @@ const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
 }));
 const deleteSet = createAction(DELETE_SET, (idxes) => ({
   idxes,
+}));
+const reArrangeMyExercise = createAction(REARRANGEMYEXECISE, (lists) => ({
+  lists,
 }));
 
 // 운동 전체 가져오기
@@ -112,7 +128,9 @@ const getExerciseTypeAPI = (id) => {
       .then((response) => {
         const subExercise = response.data.result;
         const newnewArr = [];
-        const newArr = subExercise.forEach(element => { newnewArr.push(element.exerciseList); });
+        const newArr = subExercise.forEach((element) => {
+          newnewArr.push(element.exerciseList);
+        });
         dispatch(getExerciseType(response.data.result[0]));
       })
       .catch((error) => {
@@ -150,7 +168,7 @@ export default handleActions(
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         draft.categoryItems = action.payload.categoryItems;
-        // 여기서 위에 있으면 걸러주기 (filter이용) 상체 클릭했을때 위에 있는 요소면 빼고 가져온다. 
+        // 여기서 위에 있으면 걸러주기 (filter이용) 상체 클릭했을때 위에 있는 요소면 빼고 가져온다.
         // draft.categoryItems = action.payload.categoryItems.exerciseList.filter(item => !draft.selectedItems.includes(item));
         // console.log(draft.categoryItems);
       }),
@@ -164,7 +182,9 @@ export default handleActions(
     // 하위 항목 클릭시 화면에서 제거
     [REMOVE_EXERCISE_LIST]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.categoryItems.exerciseList.findIndex((item) => item.id === action.payload.categoryItems.id);
+        let index = draft.categoryItems.exerciseList.findIndex(
+          (item) => item.id === action.payload.categoryItems.id,
+        );
         draft.categoryItems.exerciseList.splice(index, 1);
       }),
     // 하위 항목 클릭시 화면 상단에 추가
@@ -175,7 +195,9 @@ export default handleActions(
     // 화면 상단에서 삭제
     [REMOVE_EXERCISE_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.selectedItems.findIndex((item) => item.id === action.payload.selectedItems.id);
+        let index = draft.selectedItems.findIndex(
+          (item) => item.id === action.payload.selectedItems.id,
+        );
         let testArr = draft.selectedItems.splice(index, 1);
         draft.selectedItems;
       }),
@@ -245,6 +267,10 @@ export default handleActions(
           }
         });
       }),
+    [REARRANGEMYEXECISE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myExercise = action.payload.lists;
+      }),
   },
   initialState,
 );
@@ -267,6 +293,7 @@ const actionCreators = {
   deleteSet,
   updateTime,
   selectButtonHandle,
+  reArrangeMyExercise,
 };
 
 export { actionCreators };
