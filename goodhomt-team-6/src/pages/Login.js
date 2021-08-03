@@ -2,20 +2,19 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
-import { KAKAO_AUTH_URL } from '../shared/Auth';
+import { KAKAO_AUTH_URL } from '../shared/OAuth';
+import kakaoLoginButton from '../img/kakao_login_medium_narrow.png';
 
 const Login = (props) => {
-
   return (
     <>
       <LoginWrapper>
-        <KakaoBtn
+        <img
+          src={kakaoLoginButton}
           onClick={() => {
             window.location.href = KAKAO_AUTH_URL;
           }}
-        >
-          카카오톡 로그인
-        </KakaoBtn>
+        />
       </LoginWrapper>
     </>
   );
@@ -28,17 +27,4 @@ const LoginWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-`;
-
-const KakaoBtn = styled.button`
-  width: 190px;
-  height: 44px;
-  color: #783c00;
-  background-color: #FFEB00;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
 `;
