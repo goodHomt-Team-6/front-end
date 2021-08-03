@@ -3,7 +3,7 @@ import Color from '../shared/Color';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
-import { Button, Input, Text, Image } from '../shared/Styles';
+import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
 import PlusButton from '../img/plus-button.svg';
 import PurePlusButtonGrey from '../img/pure-plus-button-grey.svg';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
@@ -99,7 +99,7 @@ const FormExercise = (props) => {
           history.goBack();
         }}
       >
-        <ArrowBackIosIcon />
+        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
           Select
         </Text>
@@ -273,11 +273,11 @@ const FormExercise = (props) => {
       )}
 
       {editCompletion ? (
-        <Footer onClick={() => dispatch(exerciseCreator.openModal(true))}>
+        <FooterButton onClick={() => dispatch(exerciseCreator.openModal(true))}>
           설정 완료
-        </Footer>
+        </FooterButton>
       ) : (
-        <Footer disabled>설정 완료</Footer>
+        <FooterButton disabled>설정 완료</FooterButton>
       )}
 
       {editor && (
@@ -314,14 +314,6 @@ const OpenList = styled.div`
   &:first-child {
     margin-top: 0;
   }
-`;
-
-const Footer = styled.div`
-  background-color: ${(props) => (props.disabled ? `#9E9EA0;` : '#000')};
-  color: #fff;
-  text-align: center;
-  line-height: 60px;
-  font-weight: bold;
 `;
 
 const DataRow = styled.div`
@@ -374,6 +366,7 @@ const GoBackButton = styled.div`
   padding: 25px;
   width: 100%;
   box-sizing: border-box;
+  align-items: baseline;
 `;
 
 const PageText = styled.span`
