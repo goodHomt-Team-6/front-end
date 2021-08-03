@@ -61,6 +61,7 @@ const SELECT_BUTTON_HANDLE = 'exercise/SELECT_BUTTON_HANDLE';
 const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
 const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
+const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -83,9 +84,12 @@ const removeExerciseItem = createAction(
   REMOVE_EXERCISE_ITEM,
   (selectedItems) => ({ selectedItems }),
 );
-const selectButtonHandle = createAction(SELECT_BUTTON_HANDLE, (handleClick) => ({
-  handleClick
-}));
+const selectButtonHandle = createAction(
+  SELECT_BUTTON_HANDLE,
+  (handleClick) => ({
+    handleClick,
+  }),
+);
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
 }));
@@ -115,6 +119,10 @@ const openModal = createAction(OPEN_MODAL, (value) => ({
 const setRoutineName = createAction(SET_ROUTINE_NAME, (routineName) => ({
   routineName,
 }));
+const initializeSectedItems = createAction(
+  INITIALIZE_SELECTED_ITEMS,
+  () => ({}),
+);
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -152,7 +160,12 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api.post('/routines').then((response) => { });
+    api.post('/routines', routine).then((response) => {
+      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+      dispatch(reArrangeMyExercise([]));
+      dispatch(initializeSectedItems());
+      history.replace('/');
+    });
   };
 };
 
@@ -285,6 +298,10 @@ export default handleActions(
     [SET_ROUTINE_NAME]: (state, action) =>
       produce(state, (draft) => {
         draft.routineName = action.payload.routineName;
+      }),
+    [INITIALIZE_SELECTED_ITEMS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedItems = [];
       }),
   },
   initialState,
