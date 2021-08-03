@@ -5,37 +5,35 @@ import { history } from '../redux/configureStore';
 import { Scope } from '@babel/traverse';
 import axios from "axios";
 
-
 import KakaoLogin from 'react-kakao-login';
 import { KAKAO_AUTH_URL } from '../shared/Auth';
 
 const Login = (props) => {
-  const login = async () => {
-    console.log('들어오나!!!!');
-    try {
-      const result = await axios({
-        method: "GET",
-        url: "http://54.180.158.188/auth/kakao",
-        withCredentials: true,
-      });
-      console.log(result);
-    } catch (error) {
-      console.error(error);
-    }
+
+  const restApiKey = "fe8defc9630879409bb174f39d6ed814";
+
+
+  const oAuthLoginHandler = (resData) => {
+    console.log(resData);
   };
+
   return (
     <>
+      {/* <KakaoLogin
+        token={restApiKey}
+        buttonText="kakao"
+        onSuccess={oAuthLoginHandler}
+        onFail={oAuthLoginHandler}
+      >
+        카카오로 로그인
+      </KakaoLogin> */}
+
       <LoginWrapper>
         <KakaoBtn
-          onClick={() => login()
-            //   async () => {
-            //   // window.location.href = KAKAO_AUTH_URL;
-            //   // history.push('/auth/kakao');
-
-
-
-
-            // }
+          onClick={() => {
+            window.location.href = KAKAO_AUTH_URL;
+            // history.push('/auth/kakao');
+          }
           }
         >
           카카오톡 로그인
