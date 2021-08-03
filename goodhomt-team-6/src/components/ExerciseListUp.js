@@ -11,7 +11,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
 import searchIcon from '../img/search-icon.svg';
-import ExerciseCategory from '../elements/ExerciseCategory';
 import { Opacity } from '@material-ui/icons';
 
 // 운동리스트 컴포넌트
@@ -19,13 +18,13 @@ const ExerciseListUp = (props) => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
   const [clicked, isClicked] = useState(false);
+  const [selected, isSelected] = useState(false);
 
   const exercise = useSelector((store) => store.exercise.exercise);
   const categoryNames = useSelector((store) => store.exercise.categoryNames);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
   const myExercise = useSelector((store) => store.exercise.myExercise);
-  const selectButtonHandle = useSelector((store) => store.exercise.handleClick);
 
   // 전체조회를 위한 데이터 가공
   const newnewArr = [];
@@ -40,11 +39,9 @@ const ExerciseListUp = (props) => {
 
   useEffect(() => {
     if (myExercise.length > 0) {
-      dispatch(exerciseActions.selectButtonHandle(true));
-      return;
+      isSelected(true);
     } else {
-      dispatch(exerciseActions.selectButtonHandle(false));
-      return;
+      isSelected(false);
     }
   }, [myExercise]);
 
@@ -134,10 +131,9 @@ const ExerciseListUp = (props) => {
                         },
                       ],
                     };
-                    dispatch(exerciseActions.addExerciseType(exercise)); // 나의 운동에 추가
+                    dispatch(exerciseActions.addExerciseType(exercise));
                     // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
-                    dispatch(exerciseActions.addExerciseItem(e)); // 화면상단에 추가하기위해 리덕스에 추가
-                    dispatch(exerciseActions.selectButtonHandle(true));
+                    dispatch(exerciseActions.addExerciseItem(e));
                   }}
                 >
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>
@@ -175,14 +171,17 @@ const ExerciseListUp = (props) => {
       )}
 
       {/* 종목 추가하기 */}
-      <FooterButton
-        selectButtonHandle={selectButtonHandle}
-        onClick={() => {
-          history.push('/exercise/form');
-        }}
-      >
-        종목 추가하기
-      </FooterButton>
+      {selected ? (
+        <FooterButton
+          onClick={() =>
+            history.push('/exercise/form')}>
+          종목 추가하기
+        </FooterButton>
+      ) : (
+        <FooterButton disabled>
+          종목 추가하기
+        </FooterButton>
+      )}
     </>
   );
 };

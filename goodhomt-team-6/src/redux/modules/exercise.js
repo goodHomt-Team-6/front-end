@@ -13,7 +13,6 @@ const initialState = {
   categoryNames: [],
   categoryItems: [],
   selectedItems: [],
-  selectButtonHandle: false,
   openModal: false,
   routineName: null,
   myExercise: [
@@ -57,7 +56,6 @@ const UPDATE_SET = 'exercise/UPDATE_SET';
 const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
-const SELECT_BUTTON_HANDLE = 'exercise/SELECT_BUTTON_HANDLE';
 const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
 const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
@@ -83,12 +81,6 @@ const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({
 const removeExerciseItem = createAction(
   REMOVE_EXERCISE_ITEM,
   (selectedItems) => ({ selectedItems }),
-);
-const selectButtonHandle = createAction(
-  SELECT_BUTTON_HANDLE,
-  (handleClick) => ({
-    handleClick,
-  }),
 );
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
@@ -221,11 +213,6 @@ export default handleActions(
         let testArr = draft.selectedItems.splice(index, 1);
         draft.selectedItems;
       }),
-    // 버튼 활성화, 비활성화
-    [SELECT_BUTTON_HANDLE]: (state, action) =>
-      produce(state, (draft) => {
-        draft.selectButtonHandle = action.payload.selectButtonHandle;
-      }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.myExercise[action.payload.listIdx];
@@ -324,7 +311,6 @@ const actionCreators = {
   updateSet,
   deleteSet,
   updateTime,
-  selectButtonHandle,
   reArrangeMyExercise,
   openModal,
   setRoutineName,
