@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Image } from "../shared/Styles";
+import { Button, Image } from '../shared/Styles';
 import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
 import profileImage from '../img/profile-image.svg';
 
-import ImportExercise from "../components/ImportExercise";
+import ImportExercise from '../components/ImportExercise';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
-
   const goExerciseSelect = () => {
     history.push('/exercise');
   };
@@ -23,18 +22,23 @@ const Main = (props) => {
           {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
-              <Image width="40px" height="40px" margin="0px 15px 0px 0px"
-                src={profileImage}>
-              </Image>
-              <Text>OO님,
-                <br />안녕하세요:)</Text>
+              <Image
+                width="40px"
+                height="40px"
+                margin="0px 15px 0px 0px"
+                src={profileImage}
+              ></Image>
+              <Text>
+                OO님,
+                <br />
+                안녕하세요:)
+              </Text>
             </InfoBox>
 
             <DateBox>
               <Today>7.20</Today>
             </DateBox>
           </UserWrapper>
-
 
           {/* 등록한 운동 보여주기 */}
           <RegisterWrapper>
@@ -57,7 +61,6 @@ const Main = (props) => {
             </MainBox>
           </RegisterWrapper>
 
-
           {/* 운동 불러오기 */}
           {/* {breakfast ?
         <div className="meal-menu">
@@ -74,20 +77,16 @@ const Main = (props) => {
         </InboxWrapper>
 
         <BtnWrapper>
-          <AddBtn
-            onClick={goExerciseSelect}
-          >+</AddBtn>
+          <AddBtn onClick={goExerciseSelect}>+</AddBtn>
         </BtnWrapper>
-
-      </Wrapper >
+      </Wrapper>
     </Container>
   );
 };
 
 export default Main;
 
-const RegisterWrapper = styled.div`
-`;
+const RegisterWrapper = styled.div``;
 
 const TodayWrapper = styled.div`
   display: flex;
@@ -97,7 +96,6 @@ const TodayWrapper = styled.div`
   border-bottom: 1px solid black;
   box-sizing: border-box;
   padding: 30px;
-
 `;
 
 const TypeContainer = styled.div`
@@ -112,7 +110,7 @@ const TypeWrapper = styled.div`
   box-sizing: border-box;
   padding: 10px 25px;
   &:last-child {
-    border-left: 1px solid black;  
+    border-left: 1px solid black;
   }
 `;
 
@@ -124,8 +122,7 @@ const Enrolled = styled.span`
 `;
 
 const Container = styled.div`
-background-color: #F7F7FA;
-
+  background-color: #f7f7fa;
 `;
 
 const Wrapper = styled.div`
@@ -169,8 +166,7 @@ const InfoBox = styled.div`
   margin-bottom: 2rem;
 `;
 
-const DateBox = styled.div`
-`;
+const DateBox = styled.div``;
 
 const Today = styled.span`
   font-size: 20px;

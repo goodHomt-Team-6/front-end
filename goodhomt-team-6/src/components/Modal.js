@@ -8,6 +8,7 @@ import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 import { Button, Input } from '../shared/Styles';
 import './Modal.css';
 import { history } from '../redux/configureStore';
+import logger from '../shared/Logger';
 
 const modalView = ({ classes }) => {
   const dispatch = useDispatch();
@@ -38,9 +39,6 @@ const modalView = ({ classes }) => {
       myExercise: myExercise,
     };
     dispatch(exerciseCreator.addRoutineAPI(routine));
-    // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-    dispatch(exerciseCreator.reArrangeMyExercise([]));
-    history.replace('/');
   };
 
   return (
