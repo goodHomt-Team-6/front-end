@@ -2,40 +2,17 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
-import { Scope } from '@babel/traverse';
-import axios from "axios";
-
-import KakaoLogin from 'react-kakao-login';
 import { KAKAO_AUTH_URL } from '../shared/Auth';
 
 const Login = (props) => {
 
-  const restApiKey = "6c4b5d8827b24d1ee8c8aca8ef6ce05d";
-
-
-  const oAuthLoginHandler = (resData) => {
-    console.log(resData);
-  };
-
   return (
     <>
-      {/* <LoginWrapper>
-        <KakaoLogin
-          token={restApiKey}
-          buttonText="kakao"
-          onSuccess={oAuthLoginHandler}
-          onFail={oAuthLoginHandler}
-        >
-          카카오 로그인
-        </KakaoLogin>
-      </LoginWrapper> */}
-
       <LoginWrapper>
         <KakaoBtn
           onClick={() => {
             window.location.href = KAKAO_AUTH_URL;
-          }
-          }
+          }}
         >
           카카오톡 로그인
         </KakaoBtn>

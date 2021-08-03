@@ -5,15 +5,11 @@ import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
 import profileImage from '../img/profile-image.svg';
 
-import ImportExercise from '../components/ImportExercise';
-
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const goExerciseSelect = () => {
     history.push('/exercise');
   };
-
-  const breakfast = JSON.parse(localStorage.getItem('breakfast') || 'null');
 
   return (
     <Container>

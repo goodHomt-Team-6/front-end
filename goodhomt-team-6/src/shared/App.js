@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router-dom';
@@ -8,9 +8,27 @@ import Header from '../components/Header';
 import FormExercise from '../pages/FormExercise';
 import ExerciseListUp from "../components/ExerciseListUp";
 import Login from '../pages/Login';
-import RedirectHandler from './RedirectHandler';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCookie } from './Cookie';
 
 const App = (props) => {
+
+  useEffect(() => {
+    // const dispatch = useDispatch();
+    // let is_login = useSelector((store) => store.user.is_login);
+
+    const is_token = window.location.href.includes("token");
+    if (is_token) {
+      let token = window.location.href.split('/')[3].split('=')[1];
+      console.log(token);
+      setCookie("token", token);
+      window.location.replace('/');
+      // is_login = true;
+    }
+    return;
+  }, []);
+
+
   return (
     <>
       {/* <Header /> */}
@@ -18,7 +36,6 @@ const App = (props) => {
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
-          {/* <Route path="/auth/kakao" component={RedirectHandler} /> */}
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
         </Switch>
