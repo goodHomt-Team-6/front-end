@@ -230,4 +230,12 @@ const SearchInput = styled.input`
 
 const ElInput = styled.input``;
 
-export { Grid, Text, Button, Image, Input };
+const FooterButton = styled.div`
+  background-color: ${(props) => (props.disabled ? `#9E9EA0;` : '#000')};
+  color: #fff;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+`;
+
+export { Grid, Text, Button, Image, Input, FooterButton };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import { Button } from '../shared/Styles';
+import { Button, FooterButton } from '../shared/Styles';
 import CloseButton from '../img/close-button.svg';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,7 +29,9 @@ const ExerciseListUp = (props) => {
 
   // 전체조회를 위한 데이터 가공
   const newnewArr = [];
-  const newArr = exercise.forEach(element => { newnewArr.push(element.exerciseList); });
+  const newArr = exercise.forEach((element) => {
+    newnewArr.push(element.exerciseList);
+  });
   let AllExercise = newnewArr.reduce((a, e) => a.concat(e), []);
 
   useEffect(() => {
@@ -52,14 +54,15 @@ const ExerciseListUp = (props) => {
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}>
-        <ArrowBackIosIcon />
+        }}
+      >
+        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text>Select</Text>
         <PageText>1/2</PageText>
       </GoBackButton>
 
       {/* 선택한 운동 보여주기 */}
-      {selectedItems &&
+      {selectedItems && (
         <SelectedWrapper>
           {selectedItems.map((e, i) => (
             <Selected key={i}>
@@ -75,7 +78,7 @@ const ExerciseListUp = (props) => {
             </Selected>
           ))}
         </SelectedWrapper>
-      }
+      )}
 
       {/* 운동 검색 */}
       <SearchExercise>
@@ -83,10 +86,9 @@ const ExerciseListUp = (props) => {
           value={searchInput}
           onChange={(e) => {
             setSearchInput(e.target.value);
-          }} />
-        <SearchButton
-          src={searchIcon}
+          }}
         />
+        <SearchButton src={searchIcon} />
       </SearchExercise>
 
       {/* 운동 카테고리 */}
@@ -94,24 +96,25 @@ const ExerciseListUp = (props) => {
         <CategoryItem
           onClick={() => {
             isClicked(false);
-          }}>
+          }}
+        >
           전체
         </CategoryItem>
-        {categoryNames
-          .map((e, i) => (
-            <CategoryItem
-              key={i}
-              onClick={() => {
-                dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
-                isClicked(true);
-              }}>
-              {e.categoryName}
-            </CategoryItem>
-          ))}
+        {categoryNames.map((e, i) => (
+          <CategoryItem
+            key={i}
+            onClick={() => {
+              dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
+              isClicked(true);
+            }}
+          >
+            {e.categoryName}
+          </CategoryItem>
+        ))}
       </Category>
 
       {/* 운동 카테고리별 리스트 보여주기 */}
-      {clicked ?
+      {clicked ? (
         <CategoryList>
           {categoryItems.exerciseList &&
             categoryItems.exerciseList
@@ -122,64 +125,64 @@ const ExerciseListUp = (props) => {
                   onClick={() => {
                     const exercise = {
                       exerciseName: e.exerciseName,
-                      set: [{
-                        type: 'exercise',
-                        count: 0,
-                        weight: 0,
-                        setCount: 1,
-                      },],
+                      set: [
+                        {
+                          type: 'exercise',
+                          count: 0,
+                          weight: 0,
+                          setCount: 1,
+                        },
+                      ],
                     };
                     dispatch(exerciseActions.addExerciseType(exercise)); // 나의 운동에 추가
                     // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
                     dispatch(exerciseActions.addExerciseItem(e)); // 화면상단에 추가하기위해 리덕스에 추가
                     dispatch(exerciseActions.selectButtonHandle(true));
-                  }}>
-                  <ItemWrapper >
-                    {e.exerciseName}
-                  </ItemWrapper>
+                  }}
+                >
+                  <ItemWrapper>{e.exerciseName}</ItemWrapper>
                 </ExerciseItem>
               ))}
         </CategoryList>
-        :
+      ) : (
         // 운동 전체 리스트 보여주기
         <CategoryList>
-          {AllExercise
-            .filter((e) => e.exerciseName.includes(searchInput))
-            .map((e, i) => (
+          {AllExercise.filter((e) => e.exerciseName.includes(searchInput)).map(
+            (e, i) => (
               <ExerciseItem
                 key={i}
                 onClick={() => {
                   const exercise = {
                     exerciseName: e.exerciseName,
-                    set: [{
-                      type: 'exercise',
-                      count: 0,
-                      weight: 0,
-                      setCount: 1,
-                    },],
+                    set: [
+                      {
+                        type: 'exercise',
+                        count: 0,
+                        weight: 0,
+                        setCount: 1,
+                      },
+                    ],
                   };
                   dispatch(exerciseActions.addExerciseType(exercise));
                   dispatch(exerciseActions.addExerciseItem(e));
-                }}>
-                <ItemWrapper>
-                  {e.exerciseName}
-                </ItemWrapper>
+                }}
+              >
+                <ItemWrapper>{e.exerciseName}</ItemWrapper>
               </ExerciseItem>
-            ))
-          }
+            ),
+          )}
         </CategoryList>
-      }
+      )}
 
       {/* 종목 추가하기 */}
-      <SaveButtonWrapper>
-        <SaveButton
-          selectButtonHandle={selectButtonHandle}
-          onClick={() => {
-            history.push('/exercise/form');
-          }}>
-          종목 추가하기
-        </SaveButton>
-      </SaveButtonWrapper>
+      <FooterButton
+        selectButtonHandle={selectButtonHandle}
+        onClick={() => {
+          history.push('/exercise/form');
+        }}
+      >
+        종목 추가하기
+      </FooterButton>
     </>
   );
 };
@@ -191,6 +194,7 @@ const GoBackButton = styled.div`
   padding: 25px;
   width: 100%;
   box-sizing: border-box;
+  align-items: baseline;
 `;
 
 const Text = styled.h2`
@@ -232,6 +236,8 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
+  height: calc(100vh - 314px);
+  overflow-y: scroll;
 `;
 
 const ExerciseItem = styled.li`
@@ -250,8 +256,7 @@ const ExerciseItem = styled.li`
   }
 `;
 
-const ItemWrapper = styled.div`
-`;
+const ItemWrapper = styled.div``;
 
 const SelectedWrapper = styled.div`
   height: 44px;
@@ -280,9 +285,9 @@ const ExerciseName = styled.span`
 `;
 
 const CloseBtn = styled.img`
-&:hover {
-  cursor: pointer;
-}
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Category = styled.ul`
@@ -325,21 +330,4 @@ const CategoryTop = styled.li`
     background-color: ${Color.gray};
   }
   border-bottom: 1px solid black;
-`;
-
-const SaveButton = styled.button`
-  background-color: ${(props) => props.selectButtonHandle ? `black` : `gray`};
-  height: 86px;
-  width: 100%;
-  border: none;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-`;
-
-const SaveButtonWrapper = styled.div`
-  width: 100%;
-  position: fixed;
-  bottom: 0px;
 `;
