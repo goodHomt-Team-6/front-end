@@ -1,8 +1,14 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
+import { getCookie, setCookie, deleteCookie } from "../../shared/Cookie";
 import api from "../../shared/Request";
 import axios from "axios";
+
+axios.defaults.baseURL = "http://54.180.158.188";
+axios.defaults.headers.common["Authorization"] = `Bearer ${getCookie(
+  "is_login"
+)}`;
 
 // initialState
 const initialState = {
@@ -25,8 +31,8 @@ const kakaoLogin = (code) => {
       .then((response) => {
         console.log("카카오톡 소셜 로그인 성공");
         console.log(response); // 토큰 넘어옴
-        const ACCESS_TOKEN = response.data.accessToken;
-        localStorage.setItem("token", ACCESS_TOKEN); // 에시로 로컬에 저장
+        const ACCESS_TOKEN = response.data.token;
+        setCookie("token", ACCESS_TOKEN);
         history.replace("/");
       })
       .catch((error) => {

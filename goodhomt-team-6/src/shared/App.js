@@ -18,7 +18,7 @@ const App = (props) => {
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
-          <Route path="/auth/kakao" component={RedirectHandler} />
+          {/* <Route path="/auth/kakao" component={RedirectHandler} /> */}
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
         </Switch>
