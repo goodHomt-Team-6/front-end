@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import Color from '../shared/Color';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,24 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
 import FormExerciseDnd from '../components/FormExerciseDnd';
 
+// material-ui 모달
+import { makeStyles } from '@material-ui/core/styles';
+import ModalView from '../components/Modal';
+
+const modalStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
 const FormExercise = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
@@ -26,6 +44,33 @@ const FormExercise = (props) => {
   const editor = useSelector((state) => state.exercise.editor);
   const [idxes, updateIdxes] = useState(null);
   const [reArrangement, setReArrangement] = useState(false);
+
+  // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
+  const [editCompletion, setEditCompletion] = useState(false);
+  const [checkCompletion, setCheckCompletion] = useState(false);
+  useEffect(() => {
+    if (lists) {
+      for (let list in lists) {
+        if (lists[list].set[0].count === 0) {
+          setCheckCompletion(false);
+          return;
+        } else {
+          setCheckCompletion(true);
+        }
+      }
+    }
+  });
+  useEffect(() => {
+    setEditCompletion(checkCompletion);
+  }, [checkCompletion]);
+
+  // material-ui 모달
+  const classes = modalStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const switchModal = (value) => {
+    setOpen(value);
+  };
 
   const openRow = (e) => {
     const target = e.currentTarget.id;
@@ -227,10 +272,18 @@ const FormExercise = (props) => {
         <FormExerciseDnd></FormExerciseDnd>
       )}
 
-      <Footer>설정 완료</Footer>
+      {editCompletion ? (
+        <Footer onClick={() => dispatch(exerciseCreator.openModal(true))}>
+          설정 완료
+        </Footer>
+      ) : (
+        <Footer disabled>설정 완료</Footer>
+      )}
+
       {editor && (
         <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
       )}
+      <ModalView classes={classes} switchModal={switchModal} open={open} />
     </React.Fragment>
   );
 };
