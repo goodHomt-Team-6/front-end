@@ -12,38 +12,44 @@ const initialState = {
   categoryItems: [],
   selectedItems: [],
   openModal: false,
-  routineName: null,
-  myExercise: [
-    // {
-    //   exerciseName: '벤치 프레스',
-    //   set: [
-    //     {
-    //       type: 'exercise',
-    //       count: 0,
-    //       weight: 0,
-    //       setCount: 1,
-    //     },
-    //     {
-    //       type: 'break',
-    //       minutes: 0,
-    //       seconds: 0,
-    //     },
-    //   ],
-    // },
-  ],
+  routine: {
+    routineTime: 0,
+    rating: null,
+    is_bookmarked: false,
+    is_completed: false,
+    routineName: null,
+    myExercise: [
+      // {
+      //   exerciseName: '벤치 프레스',
+      //   set: [
+      //     {
+      //       type: 'exercise',
+      //       count: 0,
+      //       weight: 0,
+      //       setCount: 1,
+      //     },
+      //     {
+      //       type: 'break',
+      //       minutes: 0,
+      //       seconds: 0,
+      //     },
+      //   ],
+      // },
+    ],
+  },
   categoryTitle: [
     {
       id: 1,
-      categoryName: '상체'
+      categoryName: '상체',
     },
     {
       id: 2,
-      categoryName: '하체'
+      categoryName: '하체',
     },
     {
       id: 3,
-      categoryName: '기타'
-    }
+      categoryName: '기타',
+    },
   ],
 };
 
@@ -143,6 +149,7 @@ const getExerciseTypeAPI = (id) => {
     api
       .get(`/exercises/${id}`)
       .then((response) => {
+        logger(response.data);
         dispatch(getExerciseType(response.data.result[0]));
       })
       .catch((error) => {
@@ -154,14 +161,12 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api
-      .post('/routines', routine)
-      .then((response) => {
-        // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-        dispatch(reArrangeMyExercise([]));
-        dispatch(initializeSectedItems());
-        history.replace('/');
-      });
+    api.post('/routines', routine).then((response) => {
+      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+      dispatch(reArrangeMyExercise([]));
+      dispatch(initializeSectedItems());
+      history.replace('/');
+    });
   };
 };
 
@@ -172,12 +177,15 @@ export default handleActions(
       produce(state, (draft) => {
         if (state.selectedItems.length === 0) {
           draft.exercise = action.payload.exercise;
-        }
-        else if (state.exercise) {
+        } else if (state.exercise) {
           // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
           let currentExerciseItems = action.payload.exercise;
           let currentSelectedItems = state.selectedItems;
-          let leftOverExerciseItems = _.differenceBy(currentExerciseItems, currentSelectedItems, "id");
+          let leftOverExerciseItems = _.differenceBy(
+            currentExerciseItems,
+            currentSelectedItems,
+            'id',
+          );
           draft.exercise = leftOverExerciseItems;
         }
       }),
@@ -189,28 +197,32 @@ export default handleActions(
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         if (state.selectedItems.length === 0) {
+          // 여기서 action.payload.categoryItems 이 값이 undefined라 에러가 뜨네요 수정 부탁드립니다~ 수정하시고 이 주석 지워주세요
           draft.categoryItems = action.payload.categoryItems.exerciseList;
-        }
-        else if (state.categoryItems) {
+        } else if (state.categoryItems) {
           // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
           let currentCategoryItems = action.payload.categoryItems.exerciseList;
           let currentSelectedItems = state.selectedItems;
-          let leftOverCategoryItems = _.differenceBy(currentCategoryItems, currentSelectedItems, "id");
+          let leftOverCategoryItems = _.differenceBy(
+            currentCategoryItems,
+            currentSelectedItems,
+            'id',
+          );
           draft.categoryItems = leftOverCategoryItems;
         }
       }),
     // 내가 선택한 종목에 추가
     [ADD_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        draft.myExercise.push(action.payload.exercise);
+        draft.routine.myExercise.push(action.payload.exercise);
       }),
     // 내가 선택한 종목에서 제거
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.myExercise.findIndex(
+        let index = draft.routine.myExercise.findIndex(
           (e) => e.exerciseName === action.payload.exercise,
         );
-        draft.myExercise.splice(index, 1);
+        draft.routine.myExercise.splice(index, 1);
       }),
     // 화면 상단에 추가
     [ADD_SELECTED_ITEM]: (state, action) =>
@@ -228,7 +240,7 @@ export default handleActions(
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.myExercise[action.payload.listIdx];
+        const list = draft.routine.myExercise[action.payload.listIdx];
         const setCount = list.set.reduce(
           (cnt, elem) => cnt + ('exercise' === elem.type),
           1,
@@ -242,7 +254,7 @@ export default handleActions(
       }),
     [ADD_BREAK]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.myExercise[action.payload.listIdx];
+        const list = draft.routine.myExercise[action.payload.listIdx];
         list.set.push({
           type: 'break',
           minutes: 0,
@@ -259,14 +271,14 @@ export default handleActions(
       }),
     [UPDATE_SET]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.myExercise[action.payload.idxes.listIdx];
+        const list = draft.routine.myExercise[action.payload.idxes.listIdx];
         list.set[action.payload.idxes.setIdx].weight =
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
     [UPDATE_TIME]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.myExercise[action.payload.idxes.listIdx];
+        const list = draft.routine.myExercise[action.payload.idxes.listIdx];
         list.set[action.payload.idxes.setIdx] = {
           ...list.set[action.payload.idxes.setIdx],
           ...action.payload.time,
@@ -274,22 +286,25 @@ export default handleActions(
       }),
     [DELETE_SET]: (state, action) =>
       produce(state, (draft) => {
-        draft.myExercise[action.payload.idxes.listIdx].set = draft.myExercise[
-          action.payload.idxes.listIdx
-        ].set.filter((elem, idx) => {
-          return idx != action.payload.idxes.setIdx;
-        });
+        draft.routine.myExercise[action.payload.idxes.listIdx].set =
+          draft.routine.myExercise[action.payload.idxes.listIdx].set.filter(
+            (elem, idx) => {
+              return idx != action.payload.idxes.setIdx;
+            },
+          );
         let count = 1;
-        draft.myExercise[action.payload.idxes.listIdx].set.map((set, idx) => {
-          if (set.type === 'exercise') {
-            set.setCount = count;
-            count += 1;
-          }
-        });
+        draft.routine.myExercise[action.payload.idxes.listIdx].set.map(
+          (set, idx) => {
+            if (set.type === 'exercise') {
+              set.setCount = count;
+              count += 1;
+            }
+          },
+        );
       }),
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.myExercise = action.payload.lists;
+        draft.routine.myExercise = action.payload.lists;
       }),
     [OPEN_MODAL]: (state, action) =>
       produce(state, (draft) => {
