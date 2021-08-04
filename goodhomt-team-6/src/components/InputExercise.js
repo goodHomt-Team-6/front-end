@@ -30,7 +30,7 @@ const InputExercise = ({ isExercise, idxes }) => {
   const [alert, openAlert] = React.useState(false);
   const dispatch = useDispatch();
   const savedSet = useSelector(
-    (state) => state.exercise.myExercise[idxes.listIdx].set,
+    (state) => state.exercise.routine.myExercise[idxes.listIdx].set,
   );
   const [inputEditWeight, setInputEditWeight] = useState(true);
   const [inputEditCount, setInputEditCount] = useState(false);

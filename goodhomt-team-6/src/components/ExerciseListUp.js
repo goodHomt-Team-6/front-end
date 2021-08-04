@@ -25,7 +25,7 @@ const ExerciseListUp = (props) => {
   const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
-  const myExercise = useSelector((store) => store.exercise.myExercise);
+  const myExercise = useSelector((store) => store.exercise.routine.myExercise);
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
@@ -46,7 +46,8 @@ const ExerciseListUp = (props) => {
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}>
+        }}
+      >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text>Select</Text>
         <PageText>1/2</PageText>
@@ -64,7 +65,8 @@ const ExerciseListUp = (props) => {
                 onClick={() => {
                   dispatch(exerciseActions.removeSelectedItem(e));
                   dispatch(exerciseActions.removeExerciseType(e));
-                }} />
+                }}
+              />
             </Selected>
           ))}
         </SelectedWrapper>
@@ -76,7 +78,8 @@ const ExerciseListUp = (props) => {
           value={searchInput}
           onChange={(e) => {
             setSearchInput(e.target.value);
-          }} />
+          }}
+        />
         <SearchButton src={searchIcon} />
       </SearchWrapper>
 
@@ -85,7 +88,8 @@ const ExerciseListUp = (props) => {
         <CategoryItem
           onClick={() => {
             isClicked(false);
-          }}>
+          }}
+        >
           전체
         </CategoryItem>
         {categoryTitle.map((e, i) => (
@@ -95,7 +99,8 @@ const ExerciseListUp = (props) => {
               dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
               setCategoryItem(e.id);
               isClicked(true);
-            }}>
+            }}
+          >
             {e.categoryName}
           </CategoryItem>
         ))}
@@ -135,44 +140,39 @@ const ExerciseListUp = (props) => {
         <CategoryList>
           {exerciseAll
             .filter((e) => e.exerciseName.includes(searchInput))
-            .map(
-              (e, i) => (
-                <ExerciseItem
-                  key={i}
-                  onClick={() => {
-                    const exercise = {
-                      exerciseName: e.exerciseName,
-                      set: [
-                        {
-                          type: 'exercise',
-                          count: 0,
-                          weight: 0,
-                          setCount: 1,
-                        },
-                      ],
-                    };
-                    dispatch(exerciseActions.addExerciseType(exercise));
-                    dispatch(exerciseActions.addSelectedItem(e));
-                  }}>
-                  <ItemWrapper>{e.exerciseName}</ItemWrapper>
-                </ExerciseItem>
-              ),
-            )}
+            .map((e, i) => (
+              <ExerciseItem
+                key={i}
+                onClick={() => {
+                  const exercise = {
+                    exerciseName: e.exerciseName,
+                    set: [
+                      {
+                        type: 'exercise',
+                        count: 0,
+                        weight: 0,
+                        setCount: 1,
+                      },
+                    ],
+                  };
+                  dispatch(exerciseActions.addExerciseType(exercise));
+                  dispatch(exerciseActions.addSelectedItem(e));
+                }}
+              >
+                <ItemWrapper>{e.exerciseName}</ItemWrapper>
+              </ExerciseItem>
+            ))}
         </CategoryList>
       )}
 
       {/* 종목 추가하기 */}
       <FooterButtonWrapper>
         {selected ? (
-          <FooterButton
-            onClick={() =>
-              history.push('/exercise/form')}>
+          <FooterButton onClick={() => history.push('/exercise/form')}>
             종목 추가하기
           </FooterButton>
         ) : (
-          <FooterButton disabled >
-            종목 추가하기
-          </FooterButton>
+          <FooterButton disabled>종목 추가하기</FooterButton>
         )}
       </FooterButtonWrapper>
     </>
@@ -255,7 +255,9 @@ const SelectedWrapper = styled.div`
   height: auto;
   overflow-x: scroll;
   -ms-overflow-style: none;
-  ::-webkit-scrollbar { display: none; }
+  ::-webkit-scrollbar {
+    display: none;
+  }
   white-space: nowrap;
   box-sizing: border-box;
   margin: 15px 16px;
