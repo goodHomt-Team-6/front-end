@@ -1,16 +1,14 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
-import moment from 'moment';
 import api from '../../shared/Request';
-import axios from 'axios';
 import logger from '../../shared/Logger';
+import _ from 'lodash';
 
 // initial state
 const initialState = {
   openedRow: null,
   editor: false,
   exercise: [],
-  categoryNames: [],
   categoryItems: [],
   selectedItems: [],
   openModal: false,
@@ -33,7 +31,20 @@ const initialState = {
     //   ],
     // },
   ],
-  categoryTitle: [{ title: '전체' }, { title: '상체' }, { title: '하체' }],
+  categoryTitle: [
+    {
+      id: 1,
+      categoryName: '상체'
+    },
+    {
+      id: 2,
+      categoryName: '하체'
+    },
+    {
+      id: 3,
+      categoryName: '기타'
+    }
+  ],
 };
 
 // actions
@@ -41,15 +52,15 @@ const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
 const ADD_BREAK = 'exercise/ADD_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
+
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
 const ADD_EXERCISE = 'exercise/ADD_EXERCISE';
 const ADD_EXERCISE_TYPE = 'exercise/ADD_EXERCISE_TYPE';
 const REMOVE_EXERCISE_TYPE = 'exercise/REMOVE_EXERCISE_TYPE';
 const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
-const REMOVE_EXERCISE_LIST = 'exercise/REMOVE_EXERCISE_LIST';
 
-const ADD_EXERCISE_ITEM = 'exercise/ADD_EXERCISE_ITEM';
-const REMOVE_EXERCISE_ITEM = 'exercise/REMOVE_EXERCISE_ITEM';
+const ADD_SELECTED_ITEM = 'exercise/ADD_SELECTED_ITEM';
+const REMOVE_SELECTED_ITEM = 'exercise/REMOVE_SELECTED_ITEM';
 
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
@@ -71,15 +82,11 @@ const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({
   categoryItems,
 }));
 const addExercise = createAction(ADD_EXERCISE, (exercise) => ({ exercise }));
-const removeExerciseList = createAction(
-  REMOVE_EXERCISE_LIST,
-  (categoryItems) => ({ categoryItems }),
-);
-const addExerciseItem = createAction(ADD_EXERCISE_ITEM, (selectedItems) => ({
+const addSelectedItem = createAction(ADD_SELECTED_ITEM, (selectedItems) => ({
   selectedItems,
 }));
-const removeExerciseItem = createAction(
-  REMOVE_EXERCISE_ITEM,
+const removeSelectedItem = createAction(
+  REMOVE_SELECTED_ITEM,
   (selectedItems) => ({ selectedItems }),
 );
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
@@ -125,7 +132,7 @@ const getExerciseAPI = () => {
         dispatch(getExercise(response.data.result));
       })
       .catch((error) => {
-        console.log('운동 가져오기 실패', error);
+        logger('운동 가져오기 실패', error);
       });
   };
 };
@@ -136,15 +143,10 @@ const getExerciseTypeAPI = (id) => {
     api
       .get(`/exercises/${id}`)
       .then((response) => {
-        const subExercise = response.data.result;
-        const newnewArr = [];
-        const newArr = subExercise.forEach((element) => {
-          newnewArr.push(element.exerciseList);
-        });
         dispatch(getExerciseType(response.data.result[0]));
       })
       .catch((error) => {
-        console.log('운동 카테고리별 가져오기 실패', error);
+        logger('운동 카테고리별 가져오기 실패', error);
       });
   };
 };
@@ -152,12 +154,14 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api.post('/routines', routine).then((response) => {
-      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-      dispatch(reArrangeMyExercise([]));
-      dispatch(initializeSectedItems());
-      history.replace('/');
-    });
+    api
+      .post('/routines', routine)
+      .then((response) => {
+        // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+        dispatch(reArrangeMyExercise([]));
+        dispatch(initializeSectedItems());
+        history.replace('/');
+      });
   };
 };
 
@@ -166,24 +170,41 @@ export default handleActions(
   {
     [GET_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.exercise = action.payload.exercise;
-        draft.categoryNames = action.payload.exercise;
+        if (state.selectedItems.length === 0) {
+          draft.exercise = action.payload.exercise;
+        }
+        else if (state.exercise) {
+          // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
+          let currentExerciseItems = action.payload.exercise;
+          let currentSelectedItems = state.selectedItems;
+          let leftOverExerciseItems = _.differenceBy(currentExerciseItems, currentSelectedItems, "id");
+          draft.exercise = leftOverExerciseItems;
+        }
       }),
     [ADD_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
         draft.exercise.push(action.payload.exercise);
       }),
+
+    [GET_EXERCISE_TYPE]: (state, action) =>
+      produce(state, (draft) => {
+        if (state.selectedItems.length === 0) {
+          draft.categoryItems = action.payload.categoryItems.exerciseList;
+        }
+        else if (state.categoryItems) {
+          // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
+          let currentCategoryItems = action.payload.categoryItems.exerciseList;
+          let currentSelectedItems = state.selectedItems;
+          let leftOverCategoryItems = _.differenceBy(currentCategoryItems, currentSelectedItems, "id");
+          draft.categoryItems = leftOverCategoryItems;
+        }
+      }),
+    // 내가 선택한 종목에 추가
     [ADD_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         draft.myExercise.push(action.payload.exercise);
       }),
-    [GET_EXERCISE_TYPE]: (state, action) =>
-      produce(state, (draft) => {
-        draft.categoryItems = action.payload.categoryItems;
-        // 여기서 위에 있으면 걸러주기 (filter이용) 상체 클릭했을때 위에 있는 요소면 빼고 가져온다.
-        // draft.categoryItems = action.payload.categoryItems.exerciseList.filter(item => !draft.selectedItems.includes(item));
-        // console.log(draft.categoryItems);
-      }),
+    // 내가 선택한 종목에서 제거
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         let index = draft.myExercise.findIndex(
@@ -191,21 +212,13 @@ export default handleActions(
         );
         draft.myExercise.splice(index, 1);
       }),
-    // 하위 항목 클릭시 화면에서 제거
-    [REMOVE_EXERCISE_LIST]: (state, action) =>
-      produce(state, (draft) => {
-        let index = draft.categoryItems.exerciseList.findIndex(
-          (item) => item.id === action.payload.categoryItems.id,
-        );
-        draft.categoryItems.exerciseList.splice(index, 1);
-      }),
-    // 하위 항목 클릭시 화면 상단에 추가
-    [ADD_EXERCISE_ITEM]: (state, action) =>
+    // 화면 상단에 추가
+    [ADD_SELECTED_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.selectedItems.push(action.payload.selectedItems);
       }),
     // 화면 상단에서 삭제
-    [REMOVE_EXERCISE_ITEM]: (state, action) =>
+    [REMOVE_SELECTED_ITEM]: (state, action) =>
       produce(state, (draft) => {
         let index = draft.selectedItems.findIndex(
           (item) => item.id === action.payload.selectedItems.id,
@@ -304,9 +317,8 @@ const actionCreators = {
   openRow,
   addExerciseType,
   removeExerciseType,
-  removeExerciseList,
-  addExerciseItem,
-  removeExerciseItem,
+  addSelectedItem,
+  removeSelectedItem,
   openEditor,
   updateSet,
   deleteSet,

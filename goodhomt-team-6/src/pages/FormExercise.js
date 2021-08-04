@@ -97,8 +97,7 @@ const FormExercise = (props) => {
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}
-      >
+        }}>
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
           Select
@@ -363,8 +362,8 @@ const RadioP = styled.p`
 
 const GoBackButton = styled.div`
   display: flex;
-  padding: 25px;
-  width: 100%;
+  margin: 25px;
+  /* width: 100%; */
   box-sizing: border-box;
   align-items: baseline;
 `;

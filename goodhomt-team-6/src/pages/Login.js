@@ -12,8 +12,7 @@ const Login = (props) => {
         <KakaoBtn
           onClick={() => {
             window.location.href = KAKAO_AUTH_URL;
-          }}
-        >
+          }}>
           카카오톡 로그인
         </KakaoBtn>
       </LoginWrapper>

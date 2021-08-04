@@ -19,23 +19,18 @@ const ExerciseListUp = (props) => {
   const [searchInput, setSearchInput] = useState('');
   const [clicked, isClicked] = useState(false);
   const [selected, isSelected] = useState(false);
+  const [clickedCategoryItem, setCategoryItem] = useState(null);
 
-  const exercise = useSelector((store) => store.exercise.exercise);
-  const categoryNames = useSelector((store) => store.exercise.categoryNames);
+  const exerciseAll = useSelector((store) => store.exercise.exercise);
+  const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
   const myExercise = useSelector((store) => store.exercise.myExercise);
 
-  // 전체조회를 위한 데이터 가공
-  const newnewArr = [];
-  const newArr = exercise.forEach((element) => {
-    newnewArr.push(element.exerciseList);
-  });
-  let AllExercise = newnewArr.reduce((a, e) => a.concat(e), []);
-
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
-  }, []);
+    dispatch(exerciseActions.getExerciseTypeAPI(clickedCategoryItem));
+  }, [selectedItems]);
 
   useEffect(() => {
     if (myExercise.length > 0) {
@@ -47,12 +42,11 @@ const ExerciseListUp = (props) => {
 
   return (
     <>
-      {/* 뒤로가기 버튼 */}
+      {/* 뒤로가기 */}
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}
-      >
+        }}>
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text>Select</Text>
         <PageText>1/2</PageText>
@@ -68,43 +62,40 @@ const ExerciseListUp = (props) => {
                 src={CloseButton}
                 width="10"
                 onClick={() => {
-                  dispatch(exerciseActions.removeExerciseItem(e));
+                  dispatch(exerciseActions.removeSelectedItem(e));
                   dispatch(exerciseActions.removeExerciseType(e));
-                }}
-              />
+                }} />
             </Selected>
           ))}
         </SelectedWrapper>
       )}
 
       {/* 운동 검색 */}
-      <SearchExercise>
+      <SearchWrapper>
         <SearchInput
           value={searchInput}
           onChange={(e) => {
             setSearchInput(e.target.value);
-          }}
-        />
+          }} />
         <SearchButton src={searchIcon} />
-      </SearchExercise>
+      </SearchWrapper>
 
       {/* 운동 카테고리 */}
       <Category>
         <CategoryItem
           onClick={() => {
             isClicked(false);
-          }}
-        >
+          }}>
           전체
         </CategoryItem>
-        {categoryNames.map((e, i) => (
+        {categoryTitle.map((e, i) => (
           <CategoryItem
             key={i}
             onClick={() => {
               dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
+              setCategoryItem(e.id);
               isClicked(true);
-            }}
-          >
+            }}>
             {e.categoryName}
           </CategoryItem>
         ))}
@@ -113,8 +104,8 @@ const ExerciseListUp = (props) => {
       {/* 운동 카테고리별 리스트 보여주기 */}
       {clicked ? (
         <CategoryList>
-          {categoryItems.exerciseList &&
-            categoryItems.exerciseList
+          {categoryItems &&
+            categoryItems
               .filter((e) => e.exerciseName.includes(searchInput))
               .map((e) => (
                 <ExerciseItem
@@ -132,8 +123,7 @@ const ExerciseListUp = (props) => {
                       ],
                     };
                     dispatch(exerciseActions.addExerciseType(exercise));
-                    // dispatch(exerciseActions.removeExerciseList(e)); // 운동 리스트에서 삭제
-                    dispatch(exerciseActions.addExerciseItem(e));
+                    dispatch(exerciseActions.addSelectedItem(e));
                   }}
                 >
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>
@@ -143,45 +133,48 @@ const ExerciseListUp = (props) => {
       ) : (
         // 운동 전체 리스트 보여주기
         <CategoryList>
-          {AllExercise.filter((e) => e.exerciseName.includes(searchInput)).map(
-            (e, i) => (
-              <ExerciseItem
-                key={i}
-                onClick={() => {
-                  const exercise = {
-                    exerciseName: e.exerciseName,
-                    set: [
-                      {
-                        type: 'exercise',
-                        count: 0,
-                        weight: 0,
-                        setCount: 1,
-                      },
-                    ],
-                  };
-                  dispatch(exerciseActions.addExerciseType(exercise));
-                  dispatch(exerciseActions.addExerciseItem(e));
-                }}
-              >
-                <ItemWrapper>{e.exerciseName}</ItemWrapper>
-              </ExerciseItem>
-            ),
-          )}
+          {exerciseAll
+            .filter((e) => e.exerciseName.includes(searchInput))
+            .map(
+              (e, i) => (
+                <ExerciseItem
+                  key={i}
+                  onClick={() => {
+                    const exercise = {
+                      exerciseName: e.exerciseName,
+                      set: [
+                        {
+                          type: 'exercise',
+                          count: 0,
+                          weight: 0,
+                          setCount: 1,
+                        },
+                      ],
+                    };
+                    dispatch(exerciseActions.addExerciseType(exercise));
+                    dispatch(exerciseActions.addSelectedItem(e));
+                  }}>
+                  <ItemWrapper>{e.exerciseName}</ItemWrapper>
+                </ExerciseItem>
+              ),
+            )}
         </CategoryList>
       )}
 
       {/* 종목 추가하기 */}
-      {selected ? (
-        <FooterButton
-          onClick={() =>
-            history.push('/exercise/form')}>
-          종목 추가하기
-        </FooterButton>
-      ) : (
-        <FooterButton disabled>
-          종목 추가하기
-        </FooterButton>
-      )}
+      <FooterButtonWrapper>
+        {selected ? (
+          <FooterButton
+            onClick={() =>
+              history.push('/exercise/form')}>
+            종목 추가하기
+          </FooterButton>
+        ) : (
+          <FooterButton disabled >
+            종목 추가하기
+          </FooterButton>
+        )}
+      </FooterButtonWrapper>
     </>
   );
 };
@@ -190,8 +183,8 @@ export default ExerciseListUp;
 
 const GoBackButton = styled.div`
   display: flex;
-  padding: 25px;
-  width: 100%;
+  margin: 25px;
+  /* width: 100%; */
   box-sizing: border-box;
   align-items: baseline;
 `;
@@ -206,8 +199,9 @@ const PageText = styled.span`
   line-height: 2.5;
 `;
 
-const SearchExercise = styled.div`
+const SearchWrapper = styled.div`
   display: flex;
+  align-items: center;
   border-bottom: 1px solid black;
   width: 90%;
   margin: 0px auto;
@@ -226,28 +220,28 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 `;
 
 const CategoryList = styled.ul`
-  padding: 0 16px;
+  width: 100%;
+  padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
   height: calc(100vh - 314px);
-  overflow-y: scroll;
+  overflow-x: scroll;
 `;
 
 const ExerciseItem = styled.li`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
   height: 48px;
   border-bottom: 1px solid ${Color.lightGray};
   line-height: 48px;
-  padding: 10px;
+  padding: 10px 18px;
   font-size: 1rem;
   &:hover,
   &:active {
@@ -258,12 +252,13 @@ const ExerciseItem = styled.li`
 const ItemWrapper = styled.div``;
 
 const SelectedWrapper = styled.div`
-  height: 44px;
-  overflow: scroll;
+  height: auto;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar { display: none; }
   white-space: nowrap;
   box-sizing: border-box;
-  margin: 0 16px;
-  padding-top: 4px;
+  margin: 15px 16px;
   display: flex;
 `;
 
@@ -294,7 +289,7 @@ const Category = styled.ul`
   padding: 0px;
   list-style: none;
   margin: 40px 0px 0px 0px;
-  overflow: scroll;
+  overflow-x: scroll;
   white-space: nowrap;
 `;
 
@@ -310,23 +305,13 @@ const CategoryItem = styled.li`
   &:hover,
   &:active {
     cursor: pointer;
+    color: ${Color.navy};
   }
   border-bottom: 1px solid black;
 `;
 
-const CategoryTop = styled.li`
-  list-style: none;
-  padding-bottom: 15px;
-  width: 33.3%;
-  text-align: center;
-  color: ${Color.navy};
-  font-size: 1rem;
-  opacity: 54%;
-  color: black;
-  &:hover,
-  &:active {
-    cursor: pointer;
-    background-color: ${Color.gray};
-  }
-  border-bottom: 1px solid black;
+const FooterButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 `;

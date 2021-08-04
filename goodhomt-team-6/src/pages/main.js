@@ -4,6 +4,7 @@ import { Button, Image } from '../shared/Styles';
 import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
 import profileImage from '../img/profile-image.svg';
+import formerRoutine from '../img/former_routine_button.svg';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
@@ -56,6 +57,21 @@ const Main = (props) => {
               </TypeContainer>
             </MainBox>
           </RegisterWrapper>
+
+
+          <FormerRoutineWrapper>
+            <FormerRoutineIcon
+              width="25px"
+              height="25px"
+              margin="0px 15px 0px 0px"
+              src={formerRoutine}
+            />
+            <GetFormerRoutine>
+              이전 루틴 불러오기
+            </GetFormerRoutine>
+          </FormerRoutineWrapper>
+
+
 
           {/* 운동 불러오기 */}
           {/* {breakfast ?
@@ -189,4 +205,26 @@ const AddBtn = styled.button`
   border-radius: 50%;
   background-color: black;
   margin: 0px auto;
+`;
+
+const FormerRoutineWrapper = styled.div`
+
+`;
+
+const FormerRoutineIcon = styled.img`
+  
+`;
+
+const GetFormerRoutine = styled.div`
+  border-style: none;
+  display: flex;
+  box-sizing: border-box;
+  height: 56px;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  padding: 35px 0px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.1);
 `;
