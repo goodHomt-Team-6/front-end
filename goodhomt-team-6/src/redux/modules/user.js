@@ -15,7 +15,7 @@ const cookies = new Cookies();
 
 // initialState
 const initialState = {
-  // user: {nickname: nickname, userImg: img},
+  user: { nickname: null, userImg: null },
   // is_login: false,
 };
 
