@@ -1,16 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button, Image } from '../shared/Styles';
+import Color from '../shared/Color';
 import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
+import NavBar from '../components/NavBar';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
-  const goExerciseSelect = () => {
-    history.push('/exercise');
-  };
 
   return (
     <Container>
@@ -59,7 +58,11 @@ const Main = (props) => {
           </RegisterWrapper>
 
 
-          <FormerRoutineWrapper>
+          <FormerRoutineWrapper
+            onClick={() => {
+              history.push('/mylastroutines');
+            }}
+          >
             <FormerRoutineIcon
               width="25px"
               height="25px"
@@ -73,25 +76,28 @@ const Main = (props) => {
 
 
 
-          {/* 운동 불러오기 */}
-          {/* {breakfast ?
+          {/* 운동 불러오기
+          {breakfast ?
         <div className="meal-menu">
           {Object.entries(breakfast).map(([name, value], i) =>
             <div key={i} className="meal-menu-entry">{name}{value.count}</div>
           )}
-        </div> */}
+        </div>
 
-          {/* <Index>2021.7</Index>
+          <Index>2021.7</Index>
             <Button
             width="100%"
             height="50px"
-          >+</Button> */}
-        </InboxWrapper>
+          >+</Button>  */}
 
-        <BtnWrapper>
-          <AddBtn onClick={goExerciseSelect}>+</AddBtn>
-        </BtnWrapper>
+        </InboxWrapper>
       </Wrapper>
+
+      {/* 고정 하단바 */}
+      <NavBarWrapper>
+        <NavBar />
+      </NavBarWrapper>
+
     </Container>
   );
 };
@@ -148,6 +154,9 @@ const Wrapper = styled.div`
 
 const InboxWrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  
 `;
 
 const MainBox = styled.div`
@@ -189,30 +198,15 @@ const Text = styled.span`
   font-size: 18px;
 `;
 
-const BtnWrapper = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const AddBtn = styled.button`
-  position: relative;
-  bottom: 30px;
-  color: white;
-  font-size: 30px;
-  width: 72px;
-  height: 72px;
-  border: none;
-  border-radius: 50%;
-  background-color: black;
-  margin: 0px auto;
-`;
-
 const FormerRoutineWrapper = styled.div`
-
+  position: relative;
+  margin: 20px 0px;
 `;
 
 const FormerRoutineIcon = styled.img`
-  
+  position: absolute;
+  top: 22px;
+  left: 30px;
 `;
 
 const GetFormerRoutine = styled.div`
@@ -224,7 +218,13 @@ const GetFormerRoutine = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50px;
-  padding: 35px 0px;
+  padding: 30px 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
     inset 0px 1px 0px rgba(255, 255, 255, 0.1);
+`;
+
+const NavBarWrapper = styled.div`
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 `;

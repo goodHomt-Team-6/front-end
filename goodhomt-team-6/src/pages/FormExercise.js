@@ -273,7 +273,14 @@ const FormExercise = (props) => {
       )}
 
       {editCompletion ? (
-        <FooterButton onClick={() => dispatch(exerciseCreator.openModal(true))}>
+        <FooterButton
+          onClick={() => {
+            const routine = {
+              myExercise: lists,
+            };
+            dispatch(exerciseCreator.addRoutineAPI(routine));
+          }}
+        >
           설정 완료
         </FooterButton>
       ) : (

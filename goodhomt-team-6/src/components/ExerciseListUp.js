@@ -29,7 +29,12 @@ const ExerciseListUp = (props) => {
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
-    dispatch(exerciseActions.getExerciseTypeAPI(clickedCategoryItem));
+  }, [selectedItems]);
+
+  useEffect(() => {
+    if (clickedCategoryItem !== null) {
+      dispatch(exerciseActions.getExerciseTypeAPI(clickedCategoryItem));
+    }
   }, [selectedItems]);
 
   useEffect(() => {
@@ -232,6 +237,7 @@ const CategoryList = styled.ul`
   box-sizing: border-box;
   height: calc(100vh - 314px);
   overflow-x: scroll;
+  background-color: #F7F7FA;
 `;
 
 const ExerciseItem = styled.li`

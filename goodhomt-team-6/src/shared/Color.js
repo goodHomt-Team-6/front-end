@@ -6,6 +6,9 @@ const Color = {
   clickedGray: "#C4C4C4",
   lightGray: "#CCCCCC",
   navy: "#2F2E41",
+
+  bgIvory: "#F7F7FA",
+  mainBlue: "#4A40FF"
 };
 
 export default Color;

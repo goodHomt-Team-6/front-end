@@ -11,6 +11,7 @@ import KakaoLanding from '../pages/KakaoLanding';
 import { actionCreators as userAction } from '../redux/modules/user';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
+import MyLastRoutines from '../pages/MyLastRoutines';
 
 const cookie = new Cookies();
 
@@ -28,6 +29,7 @@ const App = (props) => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Main} />
+          <Route path="/mylastroutines" exact component={MyLastRoutines} />
           <Route path="/login" exact component={Login} />
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />
