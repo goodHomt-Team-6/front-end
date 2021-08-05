@@ -14,11 +14,10 @@ import moment from 'moment';
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
+  const is_login = useSelector((store) => store.user.is_login);
+  console.log(is_login);
 
   const TodayDate = moment().format('MM.DD');
-  console.log(TodayDate);
-
-
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
 
@@ -39,12 +38,16 @@ const Main = (props) => {
                 <Text>
                   {userName} 님,
                   <br />
-                  안녕하세요:)
+                  안녕하세요 :)
                 </Text>
               )}
             </InfoBox>
 
             <DateBox>
+              {is_login ? null : <LoginBtn onClick={() => {
+                history.push('/login');
+              }}>Login</LoginBtn>}
+
               <Today>{TodayDate}</Today>
             </DateBox>
           </UserWrapper>
@@ -200,6 +203,15 @@ const DateBox = styled.div``;
 const Today = styled.span`
   font-size: 17px;
   margin: 0px;
+`;
+
+const LoginBtn = styled.button`
+  margin-right: 9px;
+  border-style: none;
+  background-color: black;
+  color: white;
+  border-radius: 19px;
+  padding: 8px 15px;
 `;
 
 const Text = styled.span`

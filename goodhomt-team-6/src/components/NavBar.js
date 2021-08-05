@@ -23,7 +23,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/exercise');
+            history.push('/');
           }}>
           <IconImage src={Calendar} />
           <Title>Calendar</Title>
@@ -40,7 +40,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/exercise');
+            history.push('/');
           }}>
           <IconImage src={Community} />
           <Title>Community</Title>
@@ -48,7 +48,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/exercise');
+            history.push('/');
           }}>
           <IconImage src={MyPage} />
           <Title>Mypage</Title>
