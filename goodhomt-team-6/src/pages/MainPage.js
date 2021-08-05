@@ -33,11 +33,13 @@ const Main = (props) => {
                 margin="0px 15px 0px 0px"
                 src={profileImage}
               ></Image>
-              <Text>
-                {userName}님,
-                <br />
-                안녕하세요:)
-              </Text>
+              {userName && (
+                <Text>
+                  {userName}님,
+                  <br />
+                  안녕하세요:)
+                </Text>
+              )}
             </InfoBox>
 
             <DateBox>
