@@ -8,17 +8,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import NavBar from '../components/NavBar';
+import { actionCreators as userActions } from '../redux/modules/user';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
-
-  // 유저 이름 가져오기
-  // useEffect(() => {
-  //   dispatch()
-  // });
-
-  const userName = useSelector((store) => store.user.username);
 
   return (
     <Container>
@@ -31,10 +25,11 @@ const Main = (props) => {
                 width="40px"
                 height="40px"
                 margin="0px 15px 0px 0px"
-                src={profileImage}
+
               ></Image>
               <Text>
-                {userName}님,
+
+                님,
                 <br />
                 안녕하세요:)
               </Text>
@@ -110,6 +105,22 @@ const Main = (props) => {
 
 export default Main;
 
+
+const Container = styled.div`
+  background-color: #f7f7fa;
+  overflow: scroll;
+`;
+
+const Wrapper = styled.div`
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  overflow: scroll;
+`;
+
 const RegisterWrapper = styled.div``;
 
 const TodayWrapper = styled.div`
@@ -145,24 +156,10 @@ const Enrolled = styled.span`
   line-height: 1;
 `;
 
-const Container = styled.div`
-  background-color: #f7f7fa;
-`;
-
-const Wrapper = styled.div`
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100vh;
-`;
-
 const InboxWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  
 `;
 
 const MainBox = styled.div`

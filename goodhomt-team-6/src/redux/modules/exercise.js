@@ -177,7 +177,6 @@ export default handleActions(
       produce(state, (draft) => {
         if (state.selectedItems.length === 0) {
           draft.exercise = action.payload.exercise;
-          console.log(draft.exercise);
         } else if (state.exercise) {
           // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
           let currentExerciseItems = action.payload.exercise;

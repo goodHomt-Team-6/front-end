@@ -55,7 +55,7 @@ const kakaoLoginAPI = (code) => {
             // 만료기한은 어떻게 잡아야할지...
             cookies.set('homt6_access_token', accessToken, { path: '/' });
             cookies.set('homt6_refresh_token', refreshToken, { path: '/' });
-            history.replace('/');
+            history.push('/');
           })
           .catch((err) => {
             logger('서버로 토큰 전송 실패', err);
@@ -146,6 +146,7 @@ const actionCreators = {
   logIn,
   getUser,
   logOut,
+  checkLogin,
   logOutAPI,
   kakaoLoginAPI,
   kakaoLogOut,
