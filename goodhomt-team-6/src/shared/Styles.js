@@ -236,6 +236,7 @@ const FooterButton = styled.div`
   text-align: center;
   line-height: 60px;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 export { Grid, Text, Button, Image, Input, FooterButton };

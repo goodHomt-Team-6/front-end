@@ -8,7 +8,7 @@ import FormExercise from '../pages/FormExercise';
 import ExerciseListUp from '../components/ExerciseListUp';
 import Login from '../pages/Login';
 import KakaoLanding from '../pages/KakaoLanding';
-import MyLastRoutines from '../pages/MyLastRoutines';
+import MyPastRoutines from '../pages/MyPastRoutines';
 
 const App = (props) => {
   return (
@@ -16,7 +16,7 @@ const App = (props) => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Main} />
-          <Route path="/mylastroutines" exact component={MyLastRoutines} />
+          <Route path="/mypastroutines" exact component={MyPastRoutines} />
           <Route path="/login" exact component={Login} />
           <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/exercise/form" exact component={FormExercise} />

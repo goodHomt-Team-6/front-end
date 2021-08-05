@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Image } from '../shared/Styles';
 import Color from '../shared/Color';
 import plusButton from '../img/plus-button.svg';
 import { history } from '../redux/configureStore';
+import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import NavBar from '../components/NavBar';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
+  const dispatch = useDispatch();
+
+  // 유저 이름 가져오기
+  // useEffect(() => {
+  //   dispatch()
+  // });
+
+  const userName = useSelector((store) => store.user.username);
 
   return (
     <Container>
@@ -25,7 +34,7 @@ const Main = (props) => {
                 src={profileImage}
               ></Image>
               <Text>
-                OO님,
+                {userName}님,
                 <br />
                 안녕하세요:)
               </Text>
@@ -57,15 +66,14 @@ const Main = (props) => {
             </MainBox>
           </RegisterWrapper>
 
-
           <FormerRoutineWrapper
             onClick={() => {
-              history.push('/mylastroutines');
+              history.push('/mypastroutines');
             }}
           >
             <FormerRoutineIcon
-              width="25px"
-              height="25px"
+              width="24px"
+              height="24px"
               margin="0px 15px 0px 0px"
               src={formerRoutine}
             />
@@ -73,8 +81,6 @@ const Main = (props) => {
               이전 루틴 불러오기
             </GetFormerRoutine>
           </FormerRoutineWrapper>
-
-
 
           {/* 운동 불러오기
           {breakfast ?
@@ -205,7 +211,7 @@ const FormerRoutineWrapper = styled.div`
 
 const FormerRoutineIcon = styled.img`
   position: absolute;
-  top: 22px;
+  top: 18px;
   left: 30px;
 `;
 

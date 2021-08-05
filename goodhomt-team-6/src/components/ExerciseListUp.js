@@ -173,11 +173,16 @@ const ExerciseListUp = (props) => {
       {/* 종목 추가하기 */}
       <FooterButtonWrapper>
         {selected ? (
-          <FooterButton onClick={() => history.push('/exercise/form')}>
-            종목 추가하기
+          <FooterButton
+            onClick={() =>
+              history.push('/exercise/form')}
+          >종목 추가하기
           </FooterButton>
         ) : (
-          <FooterButton disabled>종목 추가하기</FooterButton>
+          <FooterButton
+            disabled
+          >종목 추가하기
+          </FooterButton>
         )}
       </FooterButtonWrapper>
     </>
