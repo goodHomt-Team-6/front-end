@@ -13,7 +13,7 @@ import logger from '../shared/Logger';
 const modalView = ({ classes }) => {
   const dispatch = useDispatch();
   const openModal = useSelector((state) => state.exercise.openModal);
-  const myExercise = useSelector((state) => state.exercise.myExercise);
+  const myExercise = useSelector((state) => state.exercise.routine.myExercise);
   const closeModal = () => {
     dispatch(exerciseCreator.openModal(false));
   };

@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
-import { KAKAO_AUTH_URL } from '../shared/OAuth';
+import { KAKAO_AUTH_URL, KAKAO_LOGOUT_URL } from '../shared/OAuth';
 import kakaoLoginButton from '../img/kakao_login_medium_narrow.png';
+import { actionCreators as userCreator } from '../redux/modules/user';
 
 const Login = (props) => {
+  const dispatch = useDispatch();
+
   return (
     <>
       <LoginWrapper>
@@ -15,6 +18,13 @@ const Login = (props) => {
             window.location.href = KAKAO_AUTH_URL;
           }}
         />
+        <div
+          onClick={() => {
+            dispatch(userCreator.kakaoLogOut());
+          }}
+        >
+          로그아웃 (사용 불가)
+        </div>
       </LoginWrapper>
     </>
   );

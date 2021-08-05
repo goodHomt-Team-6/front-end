@@ -38,7 +38,7 @@ const modalStyles = makeStyles((theme) => ({
 const FormExercise = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
-  const lists = useSelector((state) => state.exercise.myExercise);
+  const lists = useSelector((state) => state.exercise.routine.myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
@@ -97,7 +97,8 @@ const FormExercise = (props) => {
       <GoBackButton
         onClick={() => {
           history.goBack();
-        }}>
+        }}
+      >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
         <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
           Select
