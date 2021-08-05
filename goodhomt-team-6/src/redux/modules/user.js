@@ -87,7 +87,7 @@ const getUpdatedAccessTokenAPI = () => {
         cookies.set('homt6_access_token', accessToken, { path: '/' });
         cookies.set('homt6_refresh_token', refreshToken, { path: '/' });
 
-        dispatch(checkLogin(accessToken));
+        dispatch(checkLogin(cookies.get('homt6_access_token')));
       })
       .catch((err) => {
         logger('갱신된 토큰 반환 실패', err);
@@ -133,9 +133,11 @@ export default handleActions(
       }),
     [CHECK_LOGIN]: (state, action) =>
       produce(state, (draft) => {
-        const decoded = jwt_decode(action.payload.token);
-        draft.is_login = true;
-        draft.user = { nickname: decoded.nickname, userImg: decoded.img };
+        if (action.payload.token != 'undefined') {
+          const decoded = jwt_decode(action.payload.token);
+          draft.is_login = true;
+          draft.user = { nickname: decoded.nickname, userImg: decoded.img };
+        }
       }),
   },
   initialState,

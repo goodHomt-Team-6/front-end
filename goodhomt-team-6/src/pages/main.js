@@ -14,6 +14,13 @@ import { actionCreators as userActions } from '../redux/modules/user';
 const Main = (props) => {
   const dispatch = useDispatch();
 
+  // 유저 이름 가져오기
+  // useEffect(() => {
+  //   dispatch()
+  // });
+
+  const userName = useSelector((store) => store.user.user.nickname);
+
   return (
     <Container>
       <Wrapper>
@@ -72,9 +79,7 @@ const Main = (props) => {
               margin="0px 15px 0px 0px"
               src={formerRoutine}
             />
-            <GetFormerRoutine>
-              이전 루틴 불러오기
-            </GetFormerRoutine>
+            <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
           </FormerRoutineWrapper>
 
           {/* 운동 불러오기
@@ -90,7 +95,6 @@ const Main = (props) => {
             width="100%"
             height="50px"
           >+</Button>  */}
-
         </InboxWrapper>
       </Wrapper>
 
@@ -98,7 +102,6 @@ const Main = (props) => {
       <NavBarWrapper>
         <NavBar />
       </NavBarWrapper>
-
     </Container>
   );
 };
