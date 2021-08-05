@@ -9,15 +9,15 @@ import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
+import moment from 'moment';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
 
-  // 유저 이름 가져오기
-  // useEffect(() => {
-  //   dispatch()
-  // });
+  const TodayDate = moment().format('MM.DD');
+  console.log(TodayDate);
+
 
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
@@ -45,7 +45,7 @@ const Main = (props) => {
             </InfoBox>
 
             <DateBox>
-              <Today>7.20</Today>
+              <Today>{TodayDate}</Today>
             </DateBox>
           </UserWrapper>
 
@@ -198,8 +198,8 @@ const InfoBox = styled.div`
 const DateBox = styled.div``;
 
 const Today = styled.span`
-  font-size: 20px;
-  margin: 0px 14px;
+  font-size: 17px;
+  margin: 0px;
 `;
 
 const Text = styled.span`
