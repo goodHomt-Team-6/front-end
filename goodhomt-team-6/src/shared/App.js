@@ -12,17 +12,18 @@ import { actionCreators as userAction } from '../redux/modules/user';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import MyPastRoutines from '../pages/MyPastRoutines';
+import logger from './Logger';
 
 const cookie = new Cookies();
 
 const App = (props) => {
   const dispatch = useDispatch();
 
-  if (cookie.get('homt6_is_login')) {
-    useEffect(() => {
+  useEffect(() => {
+    if (cookie.get('homt6_is_login')) {
       dispatch(userAction.getUpdatedAccessTokenAPI());
-    });
-  }
+    }
+  });
 
   return (
     <>
