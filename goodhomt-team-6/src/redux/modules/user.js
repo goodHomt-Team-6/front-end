@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { history } from '../configureStore';
 import logger from '../../shared/Logger';
+import profileImage from '../../img/profile-image.svg';
 import {
   CLIENT_ID,
   REDIRECT_URI,
@@ -15,7 +16,7 @@ const cookies = new Cookies();
 
 // initialState
 const initialState = {
-  // user: {nickname: nickname, userImg: img},
+  user: { nickname: "굿홈트", userImg: profileImage },
   // is_login: false,
 };
 

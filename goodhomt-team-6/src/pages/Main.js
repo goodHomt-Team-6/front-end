@@ -20,7 +20,6 @@ const Main = (props) => {
   // });
 
   const userName = useSelector((store) => store.user.user.nickname);
-  const userImg = useSelector((store) => store.user.user.userImg);
 
   return (
     <Container>
@@ -33,15 +32,14 @@ const Main = (props) => {
                 width="40px"
                 height="40px"
                 margin="0px 15px 0px 0px"
-                src={userImg}
+
               ></Image>
-              {userName && (
-                <Text>
-                  {userName} 님,
-                  <br />
-                  안녕하세요:)
-                </Text>
-              )}
+              <Text>
+                {userName}
+                님,
+                <br />
+                안녕하세요:)
+              </Text>
             </InfoBox>
 
             <DateBox>
