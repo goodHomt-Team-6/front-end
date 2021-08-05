@@ -29,7 +29,12 @@ const ExerciseListUp = (props) => {
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
-    dispatch(exerciseActions.getExerciseTypeAPI(clickedCategoryItem));
+  }, [selectedItems]);
+
+  useEffect(() => {
+    if (clickedCategoryItem !== null) {
+      dispatch(exerciseActions.getExerciseTypeAPI(clickedCategoryItem));
+    }
   }, [selectedItems]);
 
   useEffect(() => {

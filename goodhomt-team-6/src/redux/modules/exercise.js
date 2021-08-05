@@ -198,7 +198,6 @@ export default handleActions(
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         if (state.selectedItems.length === 0) {
-          // 여기서 action.payload.categoryItems 이 값이 undefined라 에러가 뜨네요 수정 부탁드립니다~ 수정하시고 이 주석 지워주세요
           draft.categoryItems = action.payload.categoryItems.exerciseList;
         } else if (state.categoryItems) {
           // 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기

@@ -60,7 +60,7 @@ const Main = (props) => {
 
           <FormerRoutineWrapper
             onClick={() => {
-              history.push('/myroutinelist');
+              history.push('/mylastroutines');
             }}
           >
             <FormerRoutineIcon
