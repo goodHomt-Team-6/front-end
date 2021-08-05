@@ -65,6 +65,8 @@ export default function FormExerciseDnd() {
                 )}
               </Draggable>
             ))}
+
+            {/* 가장 위로 위치를 변경할때 필요한 높이를 확보해준다고 한다. */}
             {provided.placeholder}
           </Container>
         )}
