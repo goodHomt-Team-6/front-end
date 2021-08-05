@@ -9,7 +9,7 @@ import ExerciseListUp from '../components/ExerciseListUp';
 import Login from '../pages/Login';
 import KakaoLanding from '../pages/KakaoLanding';
 import { actionCreators as userAction } from '../redux/modules/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import MyPastRoutines from '../pages/MyPastRoutines';
 import logger from './Logger';
@@ -18,12 +18,13 @@ const cookie = new Cookies();
 
 const App = (props) => {
   const dispatch = useDispatch();
+  const exerciseState = useSelector((state) => state.exercise);
 
   useEffect(() => {
     if (cookie.get('homt6_is_login')) {
       dispatch(userAction.getUpdatedAccessTokenAPI());
     }
-  });
+  }, [exerciseState]);
 
   return (
     <>
