@@ -33,7 +33,9 @@ const NavBar = (props) => {
           onClick={() => {
             history.push('/exercise');
           }}>
-          +
+          <AddBtnText>
+            +
+          </AddBtnText>
         </AddBtn>
 
         <RouteBox
@@ -99,4 +101,11 @@ const AddBtn = styled.button`
   background-color: ${Color.mainBlue};
   margin: 0px 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AddBtnText = styled.span`
+
 `;
