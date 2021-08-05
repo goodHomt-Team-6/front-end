@@ -8,9 +8,22 @@ import FormExercise from '../pages/FormExercise';
 import ExerciseListUp from '../components/ExerciseListUp';
 import Login from '../pages/Login';
 import KakaoLanding from '../pages/KakaoLanding';
+import { actionCreators as userAction } from '../redux/modules/user';
+import { useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 import MyPastRoutines from '../pages/MyPastRoutines';
 
+const cookie = new Cookies();
+
 const App = (props) => {
+  const dispatch = useDispatch();
+
+  if (cookie.get('homt6_is_login')) {
+    useEffect(() => {
+      dispatch(userAction.getUpdatedAccessTokenAPI());
+    });
+  }
+
   return (
     <>
       <ConnectedRouter history={history}>

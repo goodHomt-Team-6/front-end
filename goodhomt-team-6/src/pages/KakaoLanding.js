@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { actionCreators as userCreator } from '../redux/modules/user';
+import { actionCreators as userAction } from '../redux/modules/user';
 // import Spinner from './Spinner';
 
 const KakaoLanding = (props) => {
@@ -10,7 +10,7 @@ const KakaoLanding = (props) => {
   let code = new URL(window.location.href).searchParams.get('code');
 
   React.useEffect(async () => {
-    await dispatch(userCreator.kakaoLogin(code));
+    await dispatch(userAction.kakaoLoginAPI(code));
   }, []);
 
   // React.useEffect(() => {

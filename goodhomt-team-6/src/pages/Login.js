@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
 import { KAKAO_AUTH_URL, KAKAO_LOGOUT_URL } from '../shared/OAuth';
 import kakaoLoginButton from '../img/kakao_login_medium_narrow.png';
-import { actionCreators as userCreator } from '../redux/modules/user';
+import { actionCreators as userAction } from '../redux/modules/user';
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Login = (props) => {
         />
         <div
           onClick={() => {
-            dispatch(userCreator.kakaoLogOut());
+            dispatch(userAction.kakaoLogOut());
           }}
         >
           로그아웃 (사용 불가)
