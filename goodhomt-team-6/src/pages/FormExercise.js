@@ -35,6 +35,8 @@ const modalStyles = makeStyles((theme) => ({
   },
 }));
 
+const innerHeight = window.innerHeight - 175;
+
 const FormExercise = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
@@ -301,7 +303,7 @@ const Container = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 175px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 
