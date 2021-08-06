@@ -15,7 +15,6 @@ import moment from 'moment';
 const Main = (props) => {
   const dispatch = useDispatch();
   const is_login = useSelector((store) => store.user.is_login);
-  console.log(is_login);
 
   const TodayDate = moment().format('MM.DD');
   const userName = useSelector((store) => store.user.user.nickname);
@@ -44,9 +43,15 @@ const Main = (props) => {
             </InfoBox>
 
             <DateBox>
-              {is_login ? null : <LoginBtn onClick={() => {
-                history.push('/login');
-              }}>Login</LoginBtn>}
+              {is_login ? null : (
+                <LoginBtn
+                  onClick={() => {
+                    history.push('/login');
+                  }}
+                >
+                  Login
+                </LoginBtn>
+              )}
 
               <Today>{TodayDate}</Today>
             </DateBox>
@@ -112,7 +117,6 @@ const Main = (props) => {
 };
 
 export default Main;
-
 
 const Container = styled.div`
   background-color: #f7f7fa;
