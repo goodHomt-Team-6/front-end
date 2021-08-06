@@ -9,17 +9,28 @@ import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import moment from 'moment';
+import logger from '../shared/Logger';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
   const is_login = useSelector((store) => store.user.is_login);
-  console.log(is_login);
 
   const TodayDate = moment().format('MM.DD');
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
+  const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
+  const myExercise = useSelector((store) => store.exercise.routine.myExercise);
+  console.log(myTodayRoutine);
+  console.log(myExercise);
+
+  useEffect(() => {
+    if (is_login && myExercise) {
+      dispatch(exerciseActions.getMyTodayRoutineAPI());
+    }
+  }, []);
 
   return (
     <Container>
@@ -73,25 +84,33 @@ const Main = (props) => {
             </MainBox>
           </RegisterWrapper>
 
-          <FormerRoutineWrapper
-            onClick={() => {
-              history.push('/mypastroutines');
-            }}
-          >
-            <FormerRoutineIcon
-              width="24px"
-              height="24px"
-              margin="0px 15px 0px 0px"
-              src={formerRoutine}
-            />
-            <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
-          </FormerRoutineWrapper>
+          {/* 이전 루틴 불러오기 */}
+          {myTodayRoutine.length !== 0 ?
+            null :
+            <FormerRoutineWrapper
+              onClick={() => {
+                history.push('/mypastroutines');
+              }}
+            >
+              <FormerRoutineIcon
+                width="24px"
+                height="24px"
+                margin="0px 15px 0px 0px"
+                src={formerRoutine}
+              />
+              <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
+            </FormerRoutineWrapper>}
+
 
           {/* 운동 불러오기
           {breakfast ?
-        <div className="meal-menu">
+        <div>
           {Object.entries(breakfast).map(([name, value], i) =>
-            <div key={i} className="meal-menu-entry">{name}{value.count}</div>
+            <div 
+            key={i} 
+            >
+            {name}{value.count}
+            </div>
           )}
         </div>
 
@@ -212,6 +231,7 @@ const LoginBtn = styled.button`
   color: white;
   border-radius: 19px;
   padding: 8px 15px;
+  cursor: pointer;
 `;
 
 const Text = styled.span`

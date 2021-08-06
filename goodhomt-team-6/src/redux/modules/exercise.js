@@ -51,6 +51,7 @@ const initialState = {
       categoryName: '기타',
     },
   ],
+  myTodayRoutine: []
 };
 
 // actions
@@ -77,6 +78,8 @@ const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
 const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
 const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
+
+const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -128,6 +131,7 @@ const initializeSectedItems = createAction(
   INITIALIZE_SELECTED_ITEMS,
   () => ({}),
 );
+const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ GET_MY_TODAY_ROUTINE }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -161,12 +165,71 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api.post('/routines', routine).then((response) => {
-      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-      dispatch(reArrangeMyExercise([]));
-      dispatch(initializeSectedItems());
-      history.replace('/');
-    });
+    api
+      .post('/routines', routine)
+      .then((response) => {
+        // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+        dispatch(reArrangeMyExercise([]));
+        dispatch(initializeSectedItems());
+        history.replace('/');
+      });
+  };
+};
+
+// 나의 오늘 루틴 가져오기
+const getMyTodayRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines')
+      .then((response) => {
+        dispatch(getMyTodayRoutine());
+        logger('나의 오늘 루틴 가져오기 성공', response.data);
+      })
+      .catch((error) => {
+        logger('나의 오늘 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 나의 하루 전 루틴 가져오기
+const getDayAgoRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines?sorting=day')
+      .then((response) => {
+        logger('나의 하루 전 루틴 가져오기 성공', response.data);
+      })
+      .catch((error) => {
+        logger('나의 하루 전 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 나의 일주일 전 루틴 가져오기
+const getWeekAgoRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines?sorting=week')
+      .then((response) => {
+        logger('나의 일주일 전 루틴 가져오기 성공', response.data);
+      })
+      .catch((error) => {
+        logger('나의 일주일 전 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 나의 한달 전 루틴 가져오기
+const getMonthAgoRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines?sorting=month')
+      .then((response) => {
+        logger('나의 한달 전 루틴 가져오기 성공', response.data);
+      })
+      .catch((error) => {
+        logger('나의 한달 전 루틴 가져오기 실패', error);
+      });
   };
 };
 
@@ -317,6 +380,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.selectedItems = [];
       }),
+    [GET_MY_TODAY_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myTodayRoutine = action.payload.myTodayRoutine;
+      })
   },
   initialState,
 );
@@ -326,6 +393,10 @@ const actionCreators = {
   getExerciseAPI,
   getExerciseTypeAPI,
   addRoutineAPI,
+  getMyTodayRoutineAPI,
+  getDayAgoRoutineAPI,
+  getWeekAgoRoutineAPI,
+  getMonthAgoRoutineAPI,
   addSet,
   addBreak,
   openRow,
