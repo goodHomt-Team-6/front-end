@@ -16,7 +16,7 @@ const cookies = new Cookies();
 
 // initialState
 const initialState = {
-  user: { nickname: "굿홈트", userImg: profileImage },
+  user: { nickname: '굿홈트', userImg: profileImage },
   // is_login: false,
 };
 
@@ -56,7 +56,9 @@ const kakaoLoginAPI = (code) => {
             // 만료기한은 어떻게 잡아야할지...
             cookies.set('homt6_access_token', accessToken, { path: '/' });
             cookies.set('homt6_refresh_token', refreshToken, { path: '/' });
-            history.push('/');
+            // 이전 페이지로 push 해줘야함
+            history.push(sessionStorage.getItem('redirect_url'));
+            sessionStorage.removeItem('redirect_url');
           })
           .catch((err) => {
             logger('서버로 토큰 전송 실패', err);
@@ -72,6 +74,7 @@ const kakaoLoginAPI = (code) => {
   };
 };
 
+// access token이 만료되도 payload를 보는데 문제가 없어서 프론트에서 갱신된 토큰을 받아올 필요가 없어짐...
 const getUpdatedAccessTokenAPI = () => {
   return function (dispatch, getState, { history }) {
     api
