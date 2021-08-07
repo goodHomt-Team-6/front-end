@@ -18,6 +18,7 @@ import RoutineItem from '../components/RoutineItem';
 const Main = (props) => {
   const dispatch = useDispatch();
   const is_login = useSelector((store) => store.user.is_login);
+
   const todayDate = moment().format('MM.DD');
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
@@ -60,9 +61,16 @@ const Main = (props) => {
 
             {/* 임시 로그인 버튼, 오늘 날짜 */}
             <DateBox>
-              {is_login ? null : <LoginBtn onClick={() => {
-                history.push('/login');
-              }}>Login</LoginBtn>}
+              {is_login ? null : (
+                <LoginBtn
+                  onClick={() => {
+                    history.push('/login');
+                  }}
+                >
+                  Login
+                </LoginBtn>
+              )}
+
               <Today>{todayDate}</Today>
             </DateBox>
           </UserWrapper>

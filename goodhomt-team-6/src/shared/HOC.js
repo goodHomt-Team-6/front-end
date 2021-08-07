@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
-
+import logger from './Logger';
 
 export default (SpecialComponent, option, adminRoute = null) => {
   /* 
@@ -12,10 +12,17 @@ export default (SpecialComponent, option, adminRoute = null) => {
 
   const AuthenticateCheck = (props) => {
     const is_login = useSelector((store) => store.user.is_login);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-      if (!is_login && option) {
-        history.push('/login');
+      if (option != null) {
+        if (!is_login && option) {
+          sessionStorage.setItem('redirect_url', document.location.pathname);
+          history.push('/login');
+        } else if (is_login && option === false) {
+          history.goBack();
+          return;
+        }
       }
     }, []);
 
