@@ -12,6 +12,7 @@ import { actionCreators as userAction } from '../redux/modules/user';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import MyPastRoutines from '../pages/MyPastRoutines';
+import RoutineDetail from '../pages/RoutineDetail';
 import logger from './Logger';
 import HOC from './HOC';
 import { truncate } from 'fs';
@@ -39,6 +40,7 @@ const App = (props) => {
           />
           <Route path="/login" exact component={HOC(Login, false)} />
           <Route path="/exercise" exact component={HOC(ExerciseListUp, true)} />
+          <Route path="/editroutine" exact component={RoutineDetail} />
           <Route
             path="/exercise/form"
             exact

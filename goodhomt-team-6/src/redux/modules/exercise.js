@@ -11,6 +11,7 @@ const initialState = {
   exercise: [],
   categoryItems: [],
   selectedItems: [],
+  is_selected: false,
   openModal: false,
   selectPeriod: null,
   routine: {
@@ -83,6 +84,8 @@ const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
 const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
 const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
+const IS_SELECTED = 'exercise/IS_SELECTED';
+const GET_SELECTED_ITEM = 'exercise/GET_SELECTED_ITEM';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -134,9 +137,11 @@ const initializeSectedItems = createAction(
   INITIALIZE_SELECTED_ITEMS,
   () => ({}),
 );
+const is_selected = createAction(IS_SELECTED, (is_selected) => ({ is_selected }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
+const getSelectedItem = createAction(GET_SELECTED_ITEM, (selectedItem) => ({ selectedItem }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -252,6 +257,22 @@ const getMonthAgoRoutineAPI = () => {
       })
       .catch((error) => {
         logger('나의 한달 전 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 루틴 상세 가져오기
+const getRoutineDetailAPI = (id) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get(`/routines/${id}`)
+      .then((response) => {
+        dispatch(getMyRoutine(response.data.result));
+        console.log(response.data.result);
+        logger('루틴 상세 가져오기 성공');
+      })
+      .catch((error) => {
+        logger('루틴 상세 가져오기 실패', error);
       });
   };
 };
@@ -416,6 +437,14 @@ export default handleActions(
     [SELECT_PERIOD]: (state, action) =>
       produce(state, (draft) => {
         draft.selectPeriod = action.payload.selectPeriod;
+      }),
+    [IS_SELECTED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.is_selected = action.payload.is_selected;
+      }),
+    [GET_SELECTED_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedItem = action.payload.selectedItem;
       })
   },
   initialState,
@@ -431,6 +460,7 @@ const actionCreators = {
   getDayAgoRoutineAPI,
   getWeekAgoRoutineAPI,
   getMonthAgoRoutineAPI,
+  getRoutineDetailAPI,
   addSet,
   addBreak,
   openRow,
@@ -446,7 +476,10 @@ const actionCreators = {
   openModal,
   setRoutineName,
   selectPeriod,
+  getMyRoutine,
   getMyTodayRoutine,
+  is_selected,
+  getSelectedItem,
 };
 
 

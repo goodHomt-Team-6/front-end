@@ -98,6 +98,9 @@ const Main = (props) => {
           </RegisterWrapper>
 
           {/* 이전 루틴 불러오기 */}
+          {/* {myTodayRoutine ?
+            null
+            : */}
           <FormerRoutineWrapper
             onClick={() => {
               history.push('/mypastroutines');
@@ -111,6 +114,8 @@ const Main = (props) => {
             />
             <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
           </FormerRoutineWrapper>
+          {/* } */}
+
 
 
           {/* 나의 오늘 운동 루틴 가져오기 */}

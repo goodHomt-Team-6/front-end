@@ -10,6 +10,8 @@ import RoutineItem from '../components/RoutineItem';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
+import logger from '../shared/Logger';
+import { history } from '../redux/configureStore';
 
 const cookies = new Cookies();
 
@@ -17,10 +19,10 @@ const cookies = new Cookies();
 const MyPastRoutines = (props) => {
   const dispatch = useDispatch();
   const [bookmarked, setBookmarked] = useState(false);
-  const [selected, setSelected] = useState(false);
 
   const myRoutines = useSelector((store) => store.exercise.routine);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
+  const is_selected = useSelector((store) => store.exercise.is_selected);
 
   useEffect(() => {
     dispatch(exerciseActions.getAllRoutineAPI());
@@ -88,11 +90,12 @@ const MyPastRoutines = (props) => {
 
       {/* 불러오기 버튼 */}
       <FooterButtonWrapper>
-        {selected ? (
+        {is_selected ? (
           <FooterButton
-            onClick={() =>
-              history.push('/')}
-          >불러오기
+            onClick={() => {
+              history.push('/editroutine');
+            }}>
+            불러오기
           </FooterButton>
         ) : (
           <FooterButton
@@ -101,7 +104,6 @@ const MyPastRoutines = (props) => {
           </FooterButton>
         )}
       </FooterButtonWrapper>
-
     </>
   );
 };
@@ -131,6 +133,6 @@ const CategoryList = styled.ul`
   margin: 0px;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 314px);
-  overflow-x: scroll;
+  height: calc(100vh - 199px);
+  overflow-y: scroll;
 `;
