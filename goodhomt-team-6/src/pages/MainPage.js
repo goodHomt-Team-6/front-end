@@ -22,18 +22,12 @@ const Main = (props) => {
   const todayDate = moment().format('MM.DD');
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
-  const myRoutine = useSelector((store) => store.exercise.routine);
+  const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
   const getDate = moment().format('YYYYMMDD');
-
-  console.log(myRoutine);
 
   // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
-    if (myRoutine.myExercise.length > 0) {
-      dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
-      console.log("디스패치가 되나?");
-      return;
-    }
+    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
   }, []);
 
   return (
@@ -80,11 +74,11 @@ const Main = (props) => {
             <Index>Today</Index>
             <MainBox>
               <TodayWrapper>
-                {myRoutine.myExercise.length !== 0 ?
+                {myTodayRoutine ?
                   <Enrolled>1</Enrolled>
                   : <Enrolled>0</Enrolled>
                 }
-                {myRoutine ?
+                {myTodayRoutine ?
                   <span>오늘의 운동을 시작해보세요!</span>
                   : <span>아직 등록된 운동이 없습니다</span>
                 }
@@ -92,8 +86,8 @@ const Main = (props) => {
               <TypeContainer>
                 <TypeWrapper>
                   <span>종목</span>
-                  {myRoutine &&
-                    <span>{myRoutine.routineName}</span>}
+                  {myTodayRoutine &&
+                    <span>{myTodayRoutine[0].routineName}</span>}
                 </TypeWrapper>
                 <TypeWrapper>
                   <span>운동시간</span>
@@ -121,9 +115,11 @@ const Main = (props) => {
 
           {/* 나의 오늘 운동 루틴 가져오기 */}
           <CategoryList>
-            {/* {myTodayRoutine &&
-              <RoutineItem {...myTodayRoutine} />
-            } */}
+            {myTodayRoutine &&
+              myTodayRoutine.map((routine, idx) => (
+                <RoutineItem key={idx} {...routine} />
+              ))
+            }
           </CategoryList>
 
         </InboxWrapper>

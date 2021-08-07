@@ -52,7 +52,7 @@ const initialState = {
       categoryName: '기타',
     },
   ],
-  myTodayRoutine: [],
+  myTodayRoutine: null,
 };
 
 // actions
@@ -81,6 +81,7 @@ const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
 const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 
 const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
+const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
 const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
 
 // action creators
@@ -134,6 +135,7 @@ const initializeSectedItems = createAction(
   () => ({}),
 );
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
+const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
 
 // 운동 전체 가져오기
@@ -185,9 +187,8 @@ const getMyTodayRoutineAPI = (todayDate) => {
     api
       .get(`/routines?date=${todayDate}`)
       .then((response) => {
-        dispatch(getMyRoutine(response.data.result));
+        dispatch(getMyTodayRoutine(response.data.result));
         logger('나의 오늘 루틴 가져오기 성공');
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 오늘 루틴 가져오기 실패', error);
@@ -203,7 +204,6 @@ const getAllRoutineAPI = () => {
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
         logger('나의 전체 기간 루틴 가져오기 성공', response.data.result);
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 전체 기간 루틴 가져오기 실패', error);
@@ -219,7 +219,6 @@ const getDayAgoRoutineAPI = () => {
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
         logger('나의 하루 전 루틴 가져오기 성공', response.data);
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 하루 전 루틴 가져오기 실패', error);
@@ -235,7 +234,6 @@ const getWeekAgoRoutineAPI = () => {
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
         logger('나의 일주일 전 루틴 가져오기 성공', response.data);
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 일주일 전 루틴 가져오기 실패', error);
@@ -251,7 +249,6 @@ const getMonthAgoRoutineAPI = () => {
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
         logger('나의 한달 전 루틴 가져오기 성공', response.data);
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 한달 전 루틴 가져오기 실패', error);
@@ -411,6 +408,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.routine = action.payload.routine;
       }),
+    [GET_MY_TODAY_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myTodayRoutine = action.payload.myTodayRoutine;
+      }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>
       produce(state, (draft) => {
@@ -445,6 +446,8 @@ const actionCreators = {
   openModal,
   setRoutineName,
   selectPeriod,
+  getMyTodayRoutine,
 };
+
 
 export { actionCreators };

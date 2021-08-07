@@ -13,7 +13,7 @@ const GoBackHeader = (props) => {
     <>
       <GoBackButton
         onClick={() => {
-          history.replace('/');
+          history.goBack();
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />

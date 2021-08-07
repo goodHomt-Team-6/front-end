@@ -14,8 +14,6 @@ const RoutineItem = (props) => {
   const [selected, setSelected] = useState(false);
   const myRoutine = useSelector((store) => store.exercise.routine);
 
-  console.log(myRoutine);
-
   return (
     <>
       <ExerciseItem
