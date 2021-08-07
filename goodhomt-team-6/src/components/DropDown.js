@@ -4,8 +4,11 @@ import Color from '../shared/Color';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { useDispatch } from 'react-redux';
 
 const DropDown = (props) => {
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectName, setSelectName] = useState('전체 기간');
@@ -17,21 +20,29 @@ const DropDown = (props) => {
   const allHandleClose = () => {
     setAnchorEl(null);
     setSelectName('전체 기간');
+    dispatch(exerciseActions.selectPeriod(selectName));
   };
 
   const dayAgoHandleClose = () => {
     setAnchorEl(null);
     setSelectName('하루 전');
+    dispatch(exerciseActions.selectPeriod(selectName));
+    dispatch(exerciseActions.getDayAgoRoutineAPI());
   };
 
   const weekAgoHandleClose = () => {
     setAnchorEl(null);
     setSelectName('일주일 전');
+    dispatch(exerciseActions.selectPeriod(selectName));
+    dispatch(exerciseActions.getWeekAgoRoutineAPI());
   };
 
   const monthAgoHandleClose = () => {
     setAnchorEl(null);
     setSelectName('한 달 전');
+    dispatch(exerciseActions.selectPeriod(selectName));
+    dispatch(exerciseActions.getMonthAgoRoutineAPI());
+
   };
 
   const handleClose = () => {

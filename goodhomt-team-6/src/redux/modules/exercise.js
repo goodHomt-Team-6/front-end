@@ -12,6 +12,7 @@ const initialState = {
   categoryItems: [],
   selectedItems: [],
   openModal: false,
+  selectPeriod: null,
   routine: {
     routineTime: 0,
     rating: null,
@@ -51,7 +52,7 @@ const initialState = {
       categoryName: '기타',
     },
   ],
-  myTodayRoutine: []
+  myTodayRoutine: [],
 };
 
 // actions
@@ -79,7 +80,8 @@ const OPEN_MODAL = 'exercise/OPEN_MODAL';
 const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
 const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 
-const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
+const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
+const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -131,7 +133,8 @@ const initializeSectedItems = createAction(
   INITIALIZE_SELECTED_ITEMS,
   () => ({}),
 );
-const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ GET_MY_TODAY_ROUTINE }));
+const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
+const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -177,13 +180,14 @@ const addRoutineAPI = (routine) => {
 };
 
 // 나의 오늘 루틴 가져오기
-const getMyTodayRoutineAPI = () => {
+const getMyTodayRoutineAPI = (todayDate) => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/routines')
+      .get(`/routines?date=${todayDate}`)
       .then((response) => {
-        dispatch(getMyTodayRoutine());
-        logger('나의 오늘 루틴 가져오기 성공', response.data);
+        dispatch(getMyRoutine(response.data.result));
+        logger('나의 오늘 루틴 가져오기 성공');
+        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 오늘 루틴 가져오기 실패', error);
@@ -191,13 +195,31 @@ const getMyTodayRoutineAPI = () => {
   };
 };
 
-// 나의 하루 전 루틴 가져오기
+// 나의 전체기간 루틴 가져오기 (이전목록불러오기)
+const getAllRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines')
+      .then((response) => {
+        dispatch(getMyRoutine(response.data.result));
+        logger('나의 전체 기간 루틴 가져오기 성공', response.data.result);
+        console.log(response.data.result);
+      })
+      .catch((error) => {
+        logger('나의 전체 기간 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 나의 하루 전 루틴 가져오기 (이전목록불러오기)
 const getDayAgoRoutineAPI = () => {
   return function (dispatch, getState, { history }) {
     api
       .get('/routines?sorting=day')
       .then((response) => {
+        dispatch(getMyRoutine(response.data.result));
         logger('나의 하루 전 루틴 가져오기 성공', response.data);
+        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 하루 전 루틴 가져오기 실패', error);
@@ -205,13 +227,15 @@ const getDayAgoRoutineAPI = () => {
   };
 };
 
-// 나의 일주일 전 루틴 가져오기
+// 나의 일주일 전 루틴 가져오기 (이전목록불러오기)
 const getWeekAgoRoutineAPI = () => {
   return function (dispatch, getState, { history }) {
     api
       .get('/routines?sorting=week')
       .then((response) => {
+        dispatch(getMyRoutine(response.data.result));
         logger('나의 일주일 전 루틴 가져오기 성공', response.data);
+        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 일주일 전 루틴 가져오기 실패', error);
@@ -219,13 +243,15 @@ const getWeekAgoRoutineAPI = () => {
   };
 };
 
-// 나의 한달 전 루틴 가져오기
+// 나의 한달 전 루틴 가져오기 (이전목록불러오기)
 const getMonthAgoRoutineAPI = () => {
   return function (dispatch, getState, { history }) {
     api
       .get('/routines?sorting=month')
       .then((response) => {
+        dispatch(getMyRoutine(response.data.result));
         logger('나의 한달 전 루틴 가져오기 성공', response.data);
+        console.log(response.data.result);
       })
       .catch((error) => {
         logger('나의 한달 전 루틴 가져오기 실패', error);
@@ -380,9 +406,15 @@ export default handleActions(
       produce(state, (draft) => {
         draft.selectedItems = [];
       }),
-    [GET_MY_TODAY_ROUTINE]: (state, action) =>
+    // 루틴 가져오기
+    [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        draft.myTodayRoutine = action.payload.myTodayRoutine;
+        draft.routine = action.payload.routine;
+      }),
+    // 기간 선택하기
+    [SELECT_PERIOD]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectPeriod = action.payload.selectPeriod;
       })
   },
   initialState,
@@ -394,6 +426,7 @@ const actionCreators = {
   getExerciseTypeAPI,
   addRoutineAPI,
   getMyTodayRoutineAPI,
+  getAllRoutineAPI,
   getDayAgoRoutineAPI,
   getWeekAgoRoutineAPI,
   getMonthAgoRoutineAPI,
@@ -411,6 +444,7 @@ const actionCreators = {
   reArrangeMyExercise,
   openModal,
   setRoutineName,
+  selectPeriod,
 };
 
 export { actionCreators };

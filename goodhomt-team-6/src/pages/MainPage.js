@@ -12,23 +12,26 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import moment from 'moment';
 import logger from '../shared/Logger';
+import RoutineItem from '../components/RoutineItem';
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
   const is_login = useSelector((store) => store.user.is_login);
-
-  const TodayDate = moment().format('MM.DD');
+  const todayDate = moment().format('MM.DD');
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
-  const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
-  const myExercise = useSelector((store) => store.exercise.routine.myExercise);
-  console.log(myTodayRoutine);
-  console.log(myExercise);
+  const myRoutine = useSelector((store) => store.exercise.routine);
+  const getDate = moment().format('YYYYMMDD');
 
+  console.log(myRoutine);
+
+  // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
-    if (is_login && myExercise) {
-      dispatch(exerciseActions.getMyTodayRoutineAPI());
+    if (myRoutine.myExercise.length > 0) {
+      dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+      console.log("디스패치가 되나?");
+      return;
     }
   }, []);
 
@@ -36,6 +39,7 @@ const Main = (props) => {
     <Container>
       <Wrapper>
         <InboxWrapper>
+
           {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
@@ -54,12 +58,12 @@ const Main = (props) => {
               )}
             </InfoBox>
 
+            {/* 임시 로그인 버튼, 오늘 날짜 */}
             <DateBox>
               {is_login ? null : <LoginBtn onClick={() => {
                 history.push('/login');
               }}>Login</LoginBtn>}
-
-              <Today>{TodayDate}</Today>
+              <Today>{todayDate}</Today>
             </DateBox>
           </UserWrapper>
 
@@ -68,13 +72,20 @@ const Main = (props) => {
             <Index>Today</Index>
             <MainBox>
               <TodayWrapper>
-                <Enrolled>0</Enrolled>
-                <span>아직 등록된 운동이 없습니다</span>
+                {myRoutine.myExercise.length !== 0 ?
+                  <Enrolled>1</Enrolled>
+                  : <Enrolled>0</Enrolled>
+                }
+                {myRoutine ?
+                  <span>오늘의 운동을 시작해보세요!</span>
+                  : <span>아직 등록된 운동이 없습니다</span>
+                }
               </TodayWrapper>
               <TypeContainer>
                 <TypeWrapper>
                   <span>종목</span>
-                  <span>none</span>
+                  {myRoutine &&
+                    <span>{myRoutine.routineName}</span>}
                 </TypeWrapper>
                 <TypeWrapper>
                   <span>운동시간</span>
@@ -85,40 +96,28 @@ const Main = (props) => {
           </RegisterWrapper>
 
           {/* 이전 루틴 불러오기 */}
-          {myTodayRoutine.length !== 0 ?
-            null :
-            <FormerRoutineWrapper
-              onClick={() => {
-                history.push('/mypastroutines');
-              }}
-            >
-              <FormerRoutineIcon
-                width="24px"
-                height="24px"
-                margin="0px 15px 0px 0px"
-                src={formerRoutine}
-              />
-              <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
-            </FormerRoutineWrapper>}
+          <FormerRoutineWrapper
+            onClick={() => {
+              history.push('/mypastroutines');
+            }}
+          >
+            <FormerRoutineIcon
+              width="24px"
+              height="24px"
+              margin="0px 15px 0px 0px"
+              src={formerRoutine}
+            />
+            <GetFormerRoutine>이전 루틴 불러오기</GetFormerRoutine>
+          </FormerRoutineWrapper>
 
 
-          {/* 운동 불러오기
-          {breakfast ?
-        <div>
-          {Object.entries(breakfast).map(([name, value], i) =>
-            <div 
-            key={i} 
-            >
-            {name}{value.count}
-            </div>
-          )}
-        </div>
+          {/* 나의 오늘 운동 루틴 가져오기 */}
+          <CategoryList>
+            {/* {myTodayRoutine &&
+              <RoutineItem {...myTodayRoutine} />
+            } */}
+          </CategoryList>
 
-          <Index>2021.7</Index>
-            <Button
-            width="100%"
-            height="50px"
-          >+</Button>  */}
         </InboxWrapper>
       </Wrapper>
 
@@ -131,7 +130,6 @@ const Main = (props) => {
 };
 
 export default Main;
-
 
 const Container = styled.div`
   background-color: #f7f7fa;
@@ -267,4 +265,14 @@ const NavBarWrapper = styled.div`
   position: fixed;
   bottom: 0px;
   width: 100%;
+`;
+
+const CategoryList = styled.ul`
+  /* width: 100%; */
+  padding: 0px;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+  height: calc(100vh - 314px);
+  overflow-x: scroll;
 `;

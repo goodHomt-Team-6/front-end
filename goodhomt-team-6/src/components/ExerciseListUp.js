@@ -38,10 +38,12 @@ const ExerciseListUp = (props) => {
   }, [selectedItems]);
 
   useEffect(() => {
-    if (myExercise.length > 0) {
+    if (myExercise && myExercise.length > 0) {
       isSelected(true);
+      return;
     } else {
       isSelected(false);
+      return;
     }
   }, [myExercise]);
 
