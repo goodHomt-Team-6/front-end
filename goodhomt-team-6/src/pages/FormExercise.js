@@ -109,47 +109,26 @@ const FormExercise = (props) => {
       </GoBackButton>
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <OptionCont>
-        {openedRow ? (
-          <>
-            <Image
-              src={PurePlusButtonGrey}
-              width="20px"
-              height="20px"
-              borderRadius="0"
-              margin="0 15px 0 0"
-            ></Image>
-            <Image
-              src={ReArrangementGrey}
-              width="20px"
-              height="20px"
-              borderRadius="0"
-              margin="0 20px 0 0"
-            ></Image>
-          </>
-        ) : (
-          <>
-            <Image
-              src={PurePlusButtonBlack}
-              width="20px"
-              height="20px"
-              borderRadius="0"
-              margin="0 15px 0 0"
-              _onClick={() => {
-                history.push('/exercise');
-              }}
-            ></Image>
-            <Image
-              src={ReArrangementBlack}
-              width="20px"
-              height="20px"
-              borderRadius="0"
-              margin="0 20px 0 0"
-              _onClick={() => {
-                setReArrangement(!reArrangement);
-              }}
-            ></Image>
-          </>
-        )}
+        <Image
+          src={PurePlusButtonBlack}
+          width="20px"
+          height="20px"
+          borderRadius="0"
+          margin="0 15px 0 0"
+          _onClick={() => {
+            history.push('/exercise');
+          }}
+        ></Image>
+        <Image
+          src={ReArrangementBlack}
+          width="20px"
+          height="20px"
+          borderRadius="0"
+          margin="0 20px 0 0"
+          _onClick={() => {
+            setReArrangement(!reArrangement);
+          }}
+        ></Image>
       </OptionCont>
       {!reArrangement ? (
         <Container>
