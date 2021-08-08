@@ -74,11 +74,11 @@ const Main = (props) => {
             <Index>Today</Index>
             <MainBox>
               <TodayWrapper>
-                {myTodayRoutine ?
+                {myTodayRoutine && myTodayRoutine.length > 0 ?
                   <Enrolled>1</Enrolled>
                   : <Enrolled>0</Enrolled>
                 }
-                {myTodayRoutine ?
+                {myTodayRoutine && myTodayRoutine.length > 0 ?
                   <span>오늘의 운동을 시작해보세요!</span>
                   : <span>아직 등록된 운동이 없습니다</span>
                 }
@@ -86,8 +86,9 @@ const Main = (props) => {
               <TypeContainer>
                 <TypeWrapper>
                   <span>종목</span>
-                  {myTodayRoutine &&
-                    <span>{myTodayRoutine[0].routineName}</span>}
+                  {myTodayRoutine && myTodayRoutine.length > 0 ?
+                    <span>{myTodayRoutine[0].routineName}</span>
+                    : null}
                 </TypeWrapper>
                 <TypeWrapper>
                   <span>운동시간</span>
@@ -248,6 +249,7 @@ const Text = styled.span`
 const FormerRoutineWrapper = styled.div`
   position: relative;
   margin: 20px 0px;
+  cursor: pointer;
 `;
 
 const FormerRoutineIcon = styled.img`

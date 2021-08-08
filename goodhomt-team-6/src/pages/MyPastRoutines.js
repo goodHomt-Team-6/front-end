@@ -23,10 +23,15 @@ const MyPastRoutines = (props) => {
   const myRoutines = useSelector((store) => store.exercise.routine);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
   const is_selected = useSelector((store) => store.exercise.is_selected);
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   useEffect(() => {
     dispatch(exerciseActions.getAllRoutineAPI());
   }, []);
+
+  useEffect(() => {
+    dispatch(exerciseActions.getSelectedPrevItem);
+  }, [selectedPrevItem]);
 
   useEffect(() => {
     if (selectPeriod === "전체 기간") {

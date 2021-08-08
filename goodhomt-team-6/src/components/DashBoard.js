@@ -5,19 +5,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // 대시보드 컴포넌트
 const DashBoard = (props) => {
-  const selectedItems = useSelector((store) => store.exercise.selectedItems);
-  console.log(selectedItems);
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   return (
     <>
       <MainBox>
         <TodayWrapper>
-          <Enrolled>{selectedItems[0].myExercise.length}</Enrolled>
+          <Enrolled>{selectedPrevItem[0].myExercise.length}</Enrolled>
+          <span>{selectedPrevItem[0].routineName}</span>
         </TodayWrapper>
         <TypeContainer>
           <TypeWrapper>
             <span>종목</span>
-            <span>{selectedItems[0].routineName}</span>
+            <span>{selectedPrevItem[0].routineName}</span>
           </TypeWrapper>
           <TypeWrapper>
             <span>운동시간</span>

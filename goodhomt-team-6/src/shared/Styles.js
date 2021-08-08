@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
+import Color from './Color';
 
 //Grid
 const Grid = styled.div`
@@ -228,7 +229,19 @@ const SearchInput = styled.input`
   border: ${({ border }) => border};
 `;
 
-const ElInput = styled.input``;
+const ElInput = styled.input`
+  width: 90%;
+  height: 30px;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1.5px solid ${Color.lightGray};
+  :active{
+    outline: none;
+  }
+`;
 
 const FooterButton = styled.div`
   background-color: ${(props) => (props.disabled ? `#9E9EA0;` : '#000')};

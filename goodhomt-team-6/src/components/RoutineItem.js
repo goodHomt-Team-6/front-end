@@ -13,32 +13,35 @@ const cookies = new Cookies();
 const RoutineItem = (props) => {
   const dispatch = useDispatch();
   const { routineName, createdAt, id, myExercise } = props;
+  const [clicked, isClicked] = useState(false);
 
-  const [selected, setSelected] = useState(false);
-  const selectedItem = useSelector((store) => store.exercise.selectedItem);
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const is_selected = useSelector((store) => store.exercise.is_selected);
   const myRoutine = useSelector((store) => store.exercise.routine);
+
+  // useEffect될때 selectedPrevItem인거만 찾아서 background 컬러 바꿔주기
 
   return (
     <>
       <ExerciseItem
-        selected={selected}
+        clicked={clicked}
         onClick={() => {
           const routine = {
             createdAt: createdAt,
             id: id,
             routineName: routineName,
-            myExercise: myExercise
+            myExercise: myExercise,
           };
 
-          if (selected) {
-            setSelected(false);
-            dispatch(exerciseActions.removeSelectedItem(routine));
+          if (is_selected) {
+            dispatch(exerciseActions.removeSelectedPrevItem(routine));
             dispatch(exerciseActions.is_selected(false));
+            isClicked(false);
           }
           else {
-            setSelected(true);
-            dispatch(exerciseActions.addSelectedItem(routine));
+            dispatch(exerciseActions.addSelectedPrevItem(routine));
             dispatch(exerciseActions.is_selected(true));
+            isClicked(true);
           }
         }}
       >
@@ -48,7 +51,9 @@ const RoutineItem = (props) => {
         {myRoutine &&
           <RoutineInfo>
             <RoutineName>{routineName}</RoutineName>
-            <WorkoutDate>{createdAt.substring(0, 10)}</WorkoutDate>
+            {createdAt &&
+              <WorkoutDate>{createdAt.substring(0, 10)}</WorkoutDate>
+            }
           </RoutineInfo>
         }
       </ExerciseItem>
@@ -74,7 +79,7 @@ const ExerciseItem = styled.li`
     background-color: #c4c4c4;
     cursor: pointer;
   }
-  background-color: ${(props) => (props.selected ? `#c4c4c4` : `none`)};
+  background-color: ${(props) => (props.clicked ? `#c4c4c4` : `none`)};
 `;
 
 const TimeBox = styled.div`

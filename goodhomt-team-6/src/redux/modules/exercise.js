@@ -11,6 +11,7 @@ const initialState = {
   exercise: [],
   categoryItems: [],
   selectedItems: [],
+  selectedPrevItem: [],
   is_selected: false,
   openModal: false,
   selectPeriod: null,
@@ -85,7 +86,9 @@ const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
 const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
 const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
 const IS_SELECTED = 'exercise/IS_SELECTED';
-const GET_SELECTED_ITEM = 'exercise/GET_SELECTED_ITEM';
+const ADD_SELECTED_PREV_ITEM = 'exercise/ADD_SELECTED_PREV_ITEM';
+const REMOVE_SELECTED_PREV_ITEM = 'exercise/REMOVE_SELECTED_PREV_ITEM';
+const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
@@ -141,7 +144,9 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({ is_selected })
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
-const getSelectedItem = createAction(GET_SELECTED_ITEM, (selectedItem) => ({ selectedItem }));
+const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
+const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
+const getSelectedPrevItem = createAction(GET_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -428,6 +433,7 @@ export default handleActions(
     [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine = action.payload.routine;
+        // 찾아서 뿌려야한다.
       }),
     [GET_MY_TODAY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
@@ -442,9 +448,19 @@ export default handleActions(
       produce(state, (draft) => {
         draft.is_selected = action.payload.is_selected;
       }),
-    [GET_SELECTED_ITEM]: (state, action) =>
+    [ADD_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.selectedItem = action.payload.selectedItem;
+        draft.selectedPrevItem.push(action.payload.selectedPrevItem);
+      }),
+    [REMOVE_SELECTED_PREV_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedPrevItem.pop(action.payload.selectedPrevItem);
+      }),
+    [GET_SELECTED_PREV_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedPrevItem = action.payload.selectedPrevItem;
+        console.log(draft.selectedPrevItem);
+        console.log("나의 선택된 이전 루틴 불러오기 성공");
       })
   },
   initialState,
@@ -479,7 +495,9 @@ const actionCreators = {
   getMyRoutine,
   getMyTodayRoutine,
   is_selected,
-  getSelectedItem,
+  addSelectedPrevItem,
+  removeSelectedPrevItem,
+  getSelectedPrevItem,
 };
 
 
