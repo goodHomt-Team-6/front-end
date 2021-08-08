@@ -42,7 +42,12 @@ const InputExercise = ({ isExercise, idxes }) => {
   const seconds = savedSet[idxes.setIdx].seconds;
 
   const completeEdit = () => {
-    if (count === 0) {
+    if (inputEditWeight && count === 0) {
+      setInputEditCount(true);
+      setInputEditWeight(false);
+      return;
+    } else if (inputEditCount && count === 0) {
+      // 횟수 입력 안했을때 경고창 띄우기
       openAlert(true);
       return;
     }
