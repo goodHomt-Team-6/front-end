@@ -180,14 +180,12 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api
-      .post('/routines', routine)
-      .then((response) => {
-        // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-        dispatch(reArrangeMyExercise([]));
-        dispatch(initializeSectedItems());
-        history.replace('/');
-      });
+    api.post('/routines', routine).then((response) => {
+      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+      dispatch(reArrangeMyExercise([]));
+      dispatch(initializeSectedItems());
+      history.replace('/');
+    });
   };
 };
 
@@ -356,10 +354,11 @@ export default handleActions(
           (cnt, elem) => cnt + ('exercise' === elem.type),
           1,
         );
+        logger(state);
         list.set.push({
           type: 'exercise',
-          weight: 0,
-          count: 0,
+          weight: list.set[0].weight,
+          count: list.set[0].count,
           setCount: setCount,
         });
       }),
@@ -499,6 +498,5 @@ const actionCreators = {
   removeSelectedPrevItem,
   getSelectedPrevItem,
 };
-
 
 export { actionCreators };
