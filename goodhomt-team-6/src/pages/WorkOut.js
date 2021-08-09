@@ -7,11 +7,16 @@ import StopWatch from '../img/stopwatch.svg';
 import TimeStop from '../img/time_stop.svg';
 import TimeStart from '../img/time_start.svg';
 import { useDispatch, useSelector } from 'react-redux';
+import Check from '../img/check.svg';
+import CompletedCheck from '../img/completed_check.svg';
+import logger from '../shared/Logger';
 
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
   const [time, setTime] = useState(0);
   const routine = useSelector((state) => state.exercise.routine[0]);
+  const [currentExerciseIdx, setcurrentExerciseIdx] = useState(0);
+  const [currentSetIdx, setcurrentSetIdx] = useState(0);
 
   useEffect(() => {
     // if 문 안에 있는 interval 들을 밖에서 호출해서 연결시켜줌.
@@ -26,6 +31,15 @@ const WorkOut = (props) => {
     }
     return () => clearInterval(interval);
   }, [timeStop]);
+
+  const completeSet = (length) => {
+    setcurrentSetIdx((prev) => prev + 1);
+    // 세트 체크를 모두 완료하면 다음 종목으로 넘어가야함.
+    if (currentSetIdx == length - 1) {
+      setcurrentExerciseIdx((prev) => prev + 1);
+      setcurrentSetIdx(0);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -74,7 +88,7 @@ const WorkOut = (props) => {
               :{time % 60 < 10 ? `0${time % 60}` : time % 60}
             </Text>
           )}
-          <IconCont>
+          <PlayIconCont>
             {timeStop ? (
               <Image
                 src={TimeStart}
@@ -94,9 +108,93 @@ const WorkOut = (props) => {
                 }}
               ></Image>
             )}
-          </IconCont>
+          </PlayIconCont>
         </TimeCont>
-        <ListCont></ListCont>
+        <ListCont>
+          {routine.myExercise.map((list, listIdx) => (
+            <React.Fragment key={listIdx}>
+              {listIdx === currentExerciseIdx ? (
+                <List>
+                  <ListHead>{listIdx + 1}</ListHead>
+                  <ListBody>{list.exerciseName}</ListBody>
+                </List>
+              ) : listIdx < currentExerciseIdx ? (
+                <List bgColor="#ECECF3">
+                  <ListHead>{listIdx + 1}</ListHead>
+                  <ListBody>
+                    {list.exerciseName}
+                    <ListCheck>
+                      <Image src={Check} width="24px" height="24px" />
+                    </ListCheck>
+                  </ListBody>
+                </List>
+              ) : (
+                <List bgColor="#ECECF3">
+                  <ListHead>{listIdx + 1}</ListHead>
+                  <ListBody>{list.exerciseName}</ListBody>
+                </List>
+              )}
+              {listIdx === currentExerciseIdx &&
+                list.Sets.map((set, setIdx) =>
+                  set.type === 'exercise' ? (
+                    <ExerciseList key={setIdx}>
+                      <ListHead>SET{set.setCount}</ListHead>
+                      <ExerciseListBody>
+                        {set.weight}kg - {set.count}회
+                        {currentSetIdx === setIdx ? (
+                          <ListCheckBlack
+                            onClick={() => {
+                              completeSet(list.Sets.length);
+                            }}
+                          >
+                            <Image
+                              src={CompletedCheck}
+                              width="24px"
+                              height="24px"
+                            />
+                          </ListCheckBlack>
+                        ) : (
+                          currentSetIdx > setIdx && (
+                            <ListCheck>
+                              <Image src={Check} width="24px" height="24px" />
+                            </ListCheck>
+                          )
+                        )}
+                      </ExerciseListBody>
+                    </ExerciseList>
+                  ) : (
+                    <ExerciseList key={setIdx}>
+                      <ListHead>휴식</ListHead>
+                      <ExerciseListBody>
+                        {set.minutes > 0
+                          ? `${set.minutes}분 ${set.seconds}초`
+                          : `${set.seconds}초`}
+                        {currentSetIdx === setIdx ? (
+                          <ListCheckBlack
+                            onClick={() => {
+                              completeSet(list.Sets.length);
+                            }}
+                          >
+                            <Image
+                              src={CompletedCheck}
+                              width="24px"
+                              height="24px"
+                            />
+                          </ListCheckBlack>
+                        ) : (
+                          currentSetIdx > setIdx && (
+                            <ListCheck>
+                              <Image src={Check} width="24px" height="24px" />
+                            </ListCheck>
+                          )
+                        )}
+                      </ExerciseListBody>
+                    </ExerciseList>
+                  ),
+                )}
+            </React.Fragment>
+          ))}
+        </ListCont>
       </Container>
     </React.Fragment>
   );
@@ -128,12 +226,67 @@ const TimeCont = styled.div`
   align-items: center;
 `;
 
-const ListCont = styled.div`
-  height: 60vh;
-`;
-
-const IconCont = styled.div`
+const PlayIconCont = styled.div`
   display: flex;
   align-self: flex-end;
   margin-right: 10px;
+`;
+
+const ListCont = styled.div`
+  height: 60vh;
+  overflow-y: scroll;
+`;
+
+const List = styled.div`
+  display: flex;
+  font-size: 16px;
+  line-height: 80px;
+  border-bottom: 1px solid #9e9ea0;
+  ${(props) => (props.bgColor ? `background-color: ${props.bgColor};` : '')}
+`;
+
+const ListHead = styled.div`
+  padding: 0 20px;
+  font-weight: 600;
+  width: 54px;
+`;
+
+const ListBody = styled.div`
+  padding-left: 35px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const ListCheck = styled.div`
+  margin-right: 40px;
+  display: flex;
+  align-self: center;
+`;
+
+const ListCheckBlack = styled.div`
+  margin-right: 15px;
+  display: flex;
+  align-self: center;
+  background-color: #000;
+  width: 83px;
+  height: 44px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 22px;
+`;
+
+const ExerciseList = styled.div`
+  display: flex;
+  font-size: 16px;
+  line-height: 100px;
+  border-bottom: 1px solid #9e9ea0;
+  align-items: baseline;
+`;
+
+const ExerciseListBody = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-left: 35px;
+  width: 100%;
 `;
