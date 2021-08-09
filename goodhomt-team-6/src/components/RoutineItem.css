@@ -1,0 +1,15 @@
+input[type="radio"]:checked + label {
+  color: #000;
+  border-color: #c4c4c4;
+  background-color: #c4c4c4;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #c4c4c4;
+}
+
+.opacity {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+}

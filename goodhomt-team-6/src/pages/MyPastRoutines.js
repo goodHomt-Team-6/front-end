@@ -12,21 +12,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import logger from '../shared/Logger';
 import { history } from '../redux/configureStore';
-
-const cookies = new Cookies();
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 // 이전 목록 불러오기 페이지 컴포넌트
 const MyPastRoutines = (props) => {
   const dispatch = useDispatch();
   const [bookmarked, setBookmarked] = useState(false);
+  // 선택한거 리덕스에 넣기 위한 작업
+  const [clicked, setClicked] = useState([]);
 
   const myRoutines = useSelector((store) => store.exercise.routine);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
-  const is_selected = useSelector((store) => store.exercise.is_selected);
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   useEffect(() => {
     dispatch(exerciseActions.getAllRoutineAPI());
+    dispatch(exerciseActions.getSelectedPrevItem);
   }, []);
 
   useEffect(() => {
@@ -36,22 +37,21 @@ const MyPastRoutines = (props) => {
   useEffect(() => {
     if (selectPeriod === "전체 기간") {
       dispatch(exerciseActions.getAllRoutineAPI());
-      return;
+      // return;
     }
     if (selectPeriod === "하루 전") {
       dispatch(exerciseActions.getDayAgoRoutineAPI());
-      return;
+      // return;
     }
     if (selectPeriod === "일주일 전") {
       dispatch(exerciseActions.getWeekAgoRoutineAPI());
-      return;
+      // return;
     }
     if (selectPeriod === "한달 전") {
       dispatch(exerciseActions.getMonthAgoRoutineAPI());
-      return;
+      // return;
     }
   }, [selectPeriod]);
-
 
   const ClickedBookmark = () => {
     setBookmarked(true);
@@ -63,9 +63,14 @@ const MyPastRoutines = (props) => {
 
   return (
     <>
-      <GoBackHeader>
-        Main
-      </GoBackHeader>
+      <GoBackButton
+        onClick={() => {
+          history.replace('/');
+        }}
+      >
+        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
+        <RoutineText>Main</RoutineText>
+      </GoBackButton>
 
       {/* 드롭다운 박스 */}
       <DropdownWrapper>
@@ -88,16 +93,51 @@ const MyPastRoutines = (props) => {
       <CategoryList>
         {myRoutines && myRoutines.length > 0 ?
           myRoutines.map((routine, idx) => (
-            <RoutineItem key={idx} {...routine} />
+            <div key={idx} {...routine}>
+              <RadioInput
+                id={routine.createdAt}
+                className="opacity"
+                type="radio"
+                name={'inputButton'}
+                value={routine.id}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  const selected = myRoutines.filter((m) => m.id == value);
+                  const toObject = selected[0];
+                  setClicked(toObject);
+                }}
+              />
+              <RadioBox
+                htmlFor={routine.createdAt}
+                className="list"
+                value={routine.id}
+              // onClick={() => {
+              //   const selected = myRoutines.filter((m) => m.id == routine.id);
+              // }}
+              >
+                <TimeBox>
+                  <Time>30:00</Time>
+                </TimeBox>
+                {myRoutines &&
+                  <RoutineInfo>
+                    <RoutineName>{routine.routineName}</RoutineName>
+                    {routine.createdAt &&
+                      <WorkoutDate>{routine.createdAt.substring(0, 10)}</WorkoutDate>
+                    }
+                  </RoutineInfo>
+                }
+              </RadioBox>
+            </div>
           )) : null
         }
       </CategoryList>
 
       {/* 불러오기 버튼 */}
       <FooterButtonWrapper>
-        {is_selected ? (
+        {clicked.length !== 0 ? (
           <FooterButton
             onClick={() => {
+              dispatch(exerciseActions.addSelectedPrevItem(clicked));
               history.push('/editroutine');
             }}>
             불러오기
@@ -140,4 +180,68 @@ const CategoryList = styled.ul`
   box-sizing: border-box;
   height: calc(100vh - 199px);
   overflow-y: scroll;
+`;
+
+const RadioBox = styled.label`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid ${Color.lightGray};
+  line-height: 48px;
+  margin: 0px;
+  padding: 32px 1.5rem;
+  font-size: 1rem;
+  &:hover,
+  &:active {
+    background-color: #c4c4c4;
+    cursor: pointer;
+  }
+`;
+
+const RadioInput = styled.input`
+`;
+
+const TimeBox = styled.div`
+  background-color: black;
+  width: 72px;
+  height: 44px;
+  border-radius: 22px;
+  color: white;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`;
+
+const Time = styled.span`
+  line-height: 45px;
+`;
+
+const RoutineInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const RoutineName = styled.span`
+  font-size: 14px;
+  line-height: 24px;
+`;
+
+const WorkoutDate = styled.span`
+  font-size: 14px;
+  line-height: 24px;
+`;
+
+const GoBackButton = styled.div`
+  display: flex;
+  margin: 25px;
+  /* width: 100%; */
+  box-sizing: border-box;
+  align-items: baseline;
+`;
+
+const RoutineText = styled.h2`
+  margin: 0px 5px 0px 0px;
+  font-size: 24px;
 `;

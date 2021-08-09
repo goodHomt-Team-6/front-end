@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useDispatch } from 'react-redux';
 
+// 이전 목록 기간 선택 드롭다운 컴포넌트
 const DropDown = (props) => {
   const dispatch = useDispatch();
 
@@ -67,8 +68,7 @@ const DropDown = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem
-          onClick={allHandleClose}>전체 기간</MenuItem>
+        <MenuItem onClick={allHandleClose}>전체 기간</MenuItem>
         <MenuItem onClick={dayAgoHandleClose}>하루 전</MenuItem>
         <MenuItem onClick={weekAgoHandleClose}>일주일 전</MenuItem>
         <MenuItem onClick={monthAgoHandleClose}>한 달 전</MenuItem>
@@ -80,5 +80,4 @@ const DropDown = (props) => {
 export default DropDown;
 
 const ButtonWrapper = styled.div`
-
 `;

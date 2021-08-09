@@ -9,8 +9,11 @@ import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import DashBoard from '../components/DashBoard';
-import Modal from '@material-ui/core/Modal';
 import BookmarkModal from '../components/BookmarkModal';
+import logger from '../shared/Logger';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { history } from '../redux/configureStore';
+
 
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
@@ -18,12 +21,18 @@ const RoutineDetail = (props) => {
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem[0].id;
   const myRoutine = useSelector((store) => store.exercise.routine);
+  const isBookmarked = myRoutine[0].isBookmarked;
+  const routineName = myRoutine[0].routineName;
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    dispatch(exerciseActions.getRoutineDetailAPI(id));
-  }, []);
+    if (selectedPrevItem.length !== 0) {
+      dispatch(exerciseActions.getRoutineDetailAPI(id));
+    }
+  }, [routineName]);
+
+  console.log(myRoutine);
 
   const openModal = () => {
     setShowModal(true);
@@ -33,9 +42,16 @@ const RoutineDetail = (props) => {
     <>
       {/* 뒤로가기 */}
       <HeaderWrapper>
-        <GoBackHeader>
-          Routine
-        </GoBackHeader>
+        <GoBackButton
+          onClick={() => {
+            dispatch(exerciseActions.removeSelectedPrevItem(selectedPrevItem));
+            history.replace('/mypastroutines');
+          }}
+        >
+          <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
+          <RoutineText>Routine</RoutineText>
+        </GoBackButton>
+
         <IconWrapper>
           <IconImg src={EditIcon} />
 
@@ -57,9 +73,7 @@ const RoutineDetail = (props) => {
           {myRoutine &&
             myRoutine[0].myExercise.map((e, listIdx) => (
               <List key={listIdx}>
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                  {e.exerciseName}
-                </Text>
+                <Text type="contents" minWidth="80px" padding="0 0 0 10px">{e.exerciseName}</Text>
                 <Text type="contents"> {e.Sets[0].setCount}세트</Text>
                 <Text type="contents">{e.Sets[0].weight}kg</Text>
                 <Text type="contents" padding="0 10px 0 0">{e.Sets[0].count}회</Text>
@@ -71,7 +85,8 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              history.push('/editroutine');
+              logger('운동시작버튼 클릭');
+              // history.push('/editroutine');
             }}
           >
             운동시작
@@ -87,6 +102,7 @@ export default RoutineDetail;
 const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  background-color: ${Color.bgIvory};
 `;
 
 const IconWrapper = styled.div`
@@ -143,5 +159,23 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+`;
+
+const GoBackButton = styled.div`
+  display: flex;
+  margin: 25px;
+  /* width: 100%; */
+  box-sizing: border-box;
+  align-items: baseline;
+`;
+
+const RoutineText = styled.h2`
+  margin: 0px 5px 0px 0px;
+  font-size: 24px;
+`;
+
+const PageText = styled.span`
+  font-size: 14px;
+  line-height: 2.5;
 `;
 

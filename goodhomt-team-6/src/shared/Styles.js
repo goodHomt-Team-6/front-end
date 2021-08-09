@@ -230,6 +230,8 @@ const SearchInput = styled.input`
 `;
 
 const ElInput = styled.input`
+  font-size: 18px;
+  font-weight: 500;
   width: 90%;
   height: 30px;
   padding: 10px;
@@ -238,7 +240,7 @@ const ElInput = styled.input`
   border-left: none;
   border-right: none;
   border-bottom: 1.5px solid ${Color.lightGray};
-  :active{
+  :focus {
     outline: none;
   }
 `;

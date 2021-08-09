@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Color from '../shared/Color';
 import { useDispatch, useSelector } from 'react-redux';
-
+import BookmarkSolid from '../img/bookmark_solid.svg';
 
 // 대시보드 컴포넌트
 const DashBoard = (props) => {
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const myRoutine = useSelector((store) => store.exercise.routine);
+  const isBookmarked = myRoutine[0].isBookmarked;
 
   return (
     <>
       <MainBox>
         <TodayWrapper>
           <Enrolled>{selectedPrevItem[0].myExercise.length}</Enrolled>
-          <span>{selectedPrevItem[0].routineName}</span>
+          <Wrapper>
+            {myRoutine && isBookmarked ? <IconImg src={BookmarkSolid} /> : null}
+            <span>{myRoutine[0].routineName}</span>
+          </Wrapper>
         </TodayWrapper>
         <TypeContainer>
           <TypeWrapper>
-            <span>종목</span>
-            <span>{selectedPrevItem[0].routineName}</span>
+            <Span>종목</Span>
+            <TextItem>{myRoutine[0].routineName}</TextItem>
           </TypeWrapper>
+          <Div />
           <TypeWrapper>
-            <span>운동시간</span>
-            <span>0m</span>
+            <Span>운동시간</Span>
+            <TextItem>0m</TextItem>
           </TypeWrapper>
         </TypeContainer>
       </MainBox>
@@ -32,17 +39,14 @@ const DashBoard = (props) => {
 export default DashBoard;
 
 const MainBox = styled.div`
-  margin: 0px 1.5rem;
-  border-radius: 10px;
+  padding: 0px 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: white;
   box-sizing: border-box;
-  padding: 10px 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
-    inset 0px 1px 0px rgba(255, 255, 255, 0.1);
-  transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
+
+  border-bottom: 2px solid black;
+  width: 100%;
 `;
 
 const TodayWrapper = styled.div`
@@ -50,30 +54,60 @@ const TodayWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid black;
   box-sizing: border-box;
-  padding: 30px;
+  /* padding: 30px; */
 `;
 
 const Enrolled = styled.span`
   font-size: 72px;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 10px;
   line-height: 1;
+  color: ${Color.mainBlue};
+`;
+
+const Span = styled.span`
+  color: black;
+  opacity: 54%;
+  font-size: 14px;
+  font-weight: 600;
+
+`;
+
+const TextItem = styled.span`
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+
+`;
+
+const Div = styled.div`
+  border-left: 1px solid gray;
+  padding: 10px;
+  margin-left: 20px;
 `;
 
 const TypeContainer = styled.div`
   display: flex;
+  height: 30px;
+  margin: 38px 0px;
 `;
 
 const TypeWrapper = styled.div`
-  margin-top: 20px;
   width: 50%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   box-sizing: border-box;
-  padding: 10px 25px;
-  &:last-child {
-    border-left: 1px solid black;
-  }
+  height: 30px;
+`;
+
+const IconImg = styled.img`
+  cursor: pointer;
+  height: 20px;
+  margin-right: 5px;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
 `;

@@ -3,18 +3,28 @@ import styled from 'styled-components';
 import Color from '../shared/Color';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { history } from '../redux/configureStore';
 import { FooterButton, Input } from '../shared/Styles';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 
 // 북마크 버튼 클릭시 모달 생성 컴포넌트
 const BookmarkModal = ({ setShowModal }) => {
+  const dispatch = useDispatch();
   const modalRef = useRef();
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const [routineRename, setRoutineRename] = useState(selectedPrevItem[0].routineName);
+
   const closeModal = (e) => {
     if (e.target === modalRef.current) {
       setShowModal(false);
     }
+  };
+
+  const reArrangeDetial = {
+    id: selectedPrevItem[0].id,
+    isBookmarked: true,
+    routineName: routineRename
   };
 
   return (
@@ -40,9 +50,23 @@ const BookmarkModal = ({ setShowModal }) => {
             </TextWrapper>
             <WhiteDiv />
           </RoutineBasicInfo>
-          <Input>스쿼트 외2</Input>
+          <Input
+            placeholder={selectedPrevItem[0].routineName}
+            value={routineRename}
+            _onChange={(e) => {
+              setRoutineRename(e.target.value);
+            }} />
           <Text>저장할 루틴의 이름을 입력해주세요.</Text>
-          <SaveButton onClick={() => setShowModal(false)}>저장</SaveButton>
+
+          {/* 저장버튼 */}
+          <SaveButton
+            onClick={() => {
+              dispatch(exerciseActions.reArrangeRoutineDetailAPI(reArrangeDetial));
+              setShowModal(false);
+            }
+            }>
+            저장
+          </SaveButton>
         </Inner>
       </ModalInner>
     </ModalWrapper>
@@ -60,23 +84,28 @@ const ModalWrapper = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 100;
   overflow: auto;
   outline: 0;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
 `;
 
 const ModalInner = styled.div`
+  z-index: 1000;
   box-sizing: border-box;
   position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
-  width: 70%;
+  width: 76%;
   height: 40%;
   max-width: 480px;
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-  padding: 40px 10px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const BookmarkIcon = styled.img`
@@ -86,17 +115,19 @@ const BookmarkIcon = styled.img`
 const Inner = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   height: 90%;
-  margin-top: 10px;
+  width: 95%;
+  margin: 15px auto 0px;
 `;
 
 const RoutineBasicInfo = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  align-items: center;
 `;
 
 const TextWrapper = styled.div`
@@ -113,6 +144,7 @@ const TextWrapper = styled.div`
 
 const Div = styled.div`
   border-right: 1px solid black;
+  height: 22px;
 `;
 
 const WhiteDiv = styled.div`
@@ -120,11 +152,15 @@ const WhiteDiv = styled.div`
 `;
 
 const Text = styled.span`
-  color: gray;
-  font-size: 12px;
+  color: black;
+  opacity: 54%;
+  font-size: 10px;
+  font-weight: 600;
+  margin-bottom: 3px;
 `;
 
 const TextValue = styled.span`
+  font-size: 14px;
 `;
 
 const SaveButton = styled.button`
@@ -135,8 +171,10 @@ const SaveButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   border: none;
+  height: 40px;
   width: 100%;
   border-radius: 50px;
   margin-top: 20px;
+  line-height: 1;
 `;
 

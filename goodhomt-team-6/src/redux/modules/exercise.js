@@ -280,6 +280,22 @@ const getRoutineDetailAPI = (id) => {
   };
 };
 
+// 루틴 상세설정 - 북마크, 루틴이름 변경
+const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch('/routines/bookmark', reArrangeDetial)
+      .then((response) => {
+        logger('북마크 설정, 루틴 이름 변경 성공', response);
+        // response로 id라도 내려줘야 dispatch할 수 있을 것 같다!
+        // dispatch(getRoutineDetailAPI());
+      })
+      .catch((error) => {
+        logger('북마크 설정, 루틴 이름 변경 실패', error);
+      });
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -431,8 +447,8 @@ export default handleActions(
     // 루틴 가져오기
     [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action.payload.routine);
         draft.routine = action.payload.routine;
-        // 찾아서 뿌려야한다.
       }),
     [GET_MY_TODAY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
@@ -454,6 +470,7 @@ export default handleActions(
     [REMOVE_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.selectedPrevItem.pop(action.payload.selectedPrevItem);
+        console.log(draft.selectedPrevItem);
       }),
     [GET_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
@@ -476,6 +493,7 @@ const actionCreators = {
   getWeekAgoRoutineAPI,
   getMonthAgoRoutineAPI,
   getRoutineDetailAPI,
+  reArrangeRoutineDetailAPI,
   addSet,
   addBreak,
   openRow,

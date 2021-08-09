@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import './RoutineItem.css';
 
 const cookies = new Cookies();
 
@@ -15,34 +16,67 @@ const RoutineItem = (props) => {
   const { routineName, createdAt, id, myExercise } = props;
   const [clicked, isClicked] = useState(false);
 
+  const myRoutines = useSelector((store) => store.exercise.routine);
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const is_selected = useSelector((store) => store.exercise.is_selected);
   const myRoutine = useSelector((store) => store.exercise.routine);
 
-  // useEffect될때 selectedPrevItem인거만 찾아서 background 컬러 바꿔주기
+  // useEffect(() => {
+  //   dispatch(exerciseActions.is_selected);
+  // }, [is_selected]);
 
   return (
-    <>
-      <ExerciseItem
+
+    <
+      // clicked={clicked}
+      // onClick={() => {
+      //   const routine = {
+      //     createdAt: createdAt,
+      //     id: id,
+      //     routineName: routineName,
+      //     myExercise: myExercise,
+      //   };
+
+      //   if (clicked) {
+      //     dispatch(exerciseActions.removeSelectedPrevItem(routine));
+      //     // dispatch(exerciseActions.is_selected(false));
+      //     isClicked(false);
+      //   }
+      //   else {
+      //     dispatch(exerciseActions.addSelectedPrevItem(routine));
+      //     // dispatch(exerciseActions.is_selected(true));
+      //     isClicked(true);
+      //   }
+      // }}
+      >
+
+      <RadioInput
+        className="opacity"
+        type="radio"
+        name={'inputButton'}
+        value={id}
+        onChange={(e) => {
+          const { value } = e.target;
+          const selected = myRoutines.filter((m) => m.id == value);
+          console.log(selected); // 이 셀렉티드를 어떻게 저장해두지?
+
+          // const routine = {
+          //   createdAt: createdAt,
+          //   id: id,
+          //   routineName: routineName,
+          //   myExercise: myExercise,
+          // };
+          // dispatch(exerciseActions.addSelectedPrevItem(routine));
+
+        }}
+      />
+      <RadioBox
+        className="list"
+        value={id}
         clicked={clicked}
         onClick={() => {
-          const routine = {
-            createdAt: createdAt,
-            id: id,
-            routineName: routineName,
-            myExercise: myExercise,
-          };
-
-          if (is_selected) {
-            dispatch(exerciseActions.removeSelectedPrevItem(routine));
-            dispatch(exerciseActions.is_selected(false));
-            isClicked(false);
-          }
-          else {
-            dispatch(exerciseActions.addSelectedPrevItem(routine));
-            dispatch(exerciseActions.is_selected(true));
-            isClicked(true);
-          }
+          const selected = myRoutines.filter((m) => m.id == id);
+          console.log(selected);
         }}
       >
         <TimeBox>
@@ -56,21 +90,22 @@ const RoutineItem = (props) => {
             }
           </RoutineInfo>
         }
-      </ExerciseItem>
-    </>
+      </RadioBox>
+
+    </ >
+
   );
 };
 
 export default RoutineItem;
 
-const ExerciseItem = styled.li`
+const RadioBox = styled.label`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   height: 48px;
   border-bottom: 1px solid ${Color.lightGray};
   line-height: 48px;
-  /* width: 100%; */
   margin: 0px;
   padding: 32px 1.5rem;
   font-size: 1rem;
@@ -79,7 +114,32 @@ const ExerciseItem = styled.li`
     background-color: #c4c4c4;
     cursor: pointer;
   }
-  background-color: ${(props) => (props.clicked ? `#c4c4c4` : `none`)};
+`;
+
+const RadioInput = styled.input`
+  /* width: 0px;
+  height: 0px;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  left: 0px; */
+`;
+
+const ExerciseItem = styled.li`
+  /* display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid ${Color.lightGray};
+  line-height: 48px;
+  margin: 0px;
+  padding: 32px 1.5rem;
+  font-size: 1rem;
+  &:hover,
+  &:active {
+    background-color: #c4c4c4;
+    cursor: pointer;
+  } */
 `;
 
 const TimeBox = styled.div`
