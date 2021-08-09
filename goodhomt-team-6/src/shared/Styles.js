@@ -61,6 +61,7 @@ const P = styled.p`
     props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1em;'}
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
   ${(props) => (props.clicked ? `color: #fff;` : '')}
+  ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
 `;
 
 const Span = styled.span`
@@ -238,7 +239,7 @@ const ElInput = styled.input`
   border-left: none;
   border-right: none;
   border-bottom: 1.5px solid ${Color.lightGray};
-  :active{
+  :active {
     outline: none;
   }
 `;
