@@ -11,11 +11,14 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import DashBoard from '../components/DashBoard';
 import Modal from '@material-ui/core/Modal';
 import BookmarkModal from '../components/BookmarkModal';
+import { history } from '../redux/configureStore';
 
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem[0].id;
   const myRoutine = useSelector((store) => store.exercise.routine);
 
@@ -33,16 +36,12 @@ const RoutineDetail = (props) => {
     <>
       {/* 뒤로가기 */}
       <HeaderWrapper>
-        <GoBackHeader>
-          Routine
-        </GoBackHeader>
+        <GoBackHeader>Routine</GoBackHeader>
         <IconWrapper>
           <IconImg src={EditIcon} />
 
           {/* 북마크 모달 */}
-          <IconImg src={BookmarkLine}
-            onClick={openModal}
-          />
+          <IconImg src={BookmarkLine} onClick={openModal} />
         </IconWrapper>
       </HeaderWrapper>
 
@@ -62,7 +61,9 @@ const RoutineDetail = (props) => {
                 </Text>
                 <Text type="contents"> {e.Sets[0].setCount}세트</Text>
                 <Text type="contents">{e.Sets[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">{e.Sets[0].count}회</Text>
+                <Text type="contents" padding="0 10px 0 0">
+                  {e.Sets[0].count}회
+                </Text>
               </List>
             ))}
         </Container>
@@ -71,7 +72,7 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              history.push('/editroutine');
+              history.push('/workout');
             }}
           >
             운동시작
@@ -144,4 +145,3 @@ const List = styled.div`
     margin-top: 0;
   }
 `;
-
