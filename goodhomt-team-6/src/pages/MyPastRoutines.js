@@ -179,7 +179,7 @@ const CategoryList = styled.ul`
   margin: 0px;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 199px);
+  height: calc(100vh - 192px);
   overflow-y: scroll;
 `;
 

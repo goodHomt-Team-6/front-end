@@ -21,6 +21,8 @@ const BookmarkModal = ({ setShowModal }) => {
     }
   };
 
+  console.log(selectedPrevItem);
+
   const reArrangeDetail = {
     id: selectedPrevItem[0].id,
     isBookmarked: true,
@@ -41,7 +43,9 @@ const BookmarkModal = ({ setShowModal }) => {
             <Div />
             <TextWrapper>
               <Text>날짜</Text>
-              <TextValue>07.26</TextValue>
+              {selectedPrevItem &&
+                <TextValue>{selectedPrevItem[0].createdAt.substring(5, 10)}</TextValue>
+              }
             </TextWrapper>
             <Div />
             <TextWrapper>

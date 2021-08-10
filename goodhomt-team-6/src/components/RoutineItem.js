@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import './RoutineItem.css';
+import { history } from '../redux/configureStore';
 
 const cookies = new Cookies();
 
@@ -77,6 +78,7 @@ const RoutineItem = (props) => {
         onClick={() => {
           const selected = myRoutines.filter((m) => m.id == id);
           console.log(selected);
+          // history.push('/workout');
         }}
       >
         <TimeBox>
@@ -92,7 +94,6 @@ const RoutineItem = (props) => {
         }
       </RadioBox>
     </>
-
   );
 };
 
@@ -106,7 +107,7 @@ const RadioBox = styled.label`
   border-bottom: 1px solid ${Color.lightGray};
   line-height: 48px;
   margin: 0px;
-  padding: 32px 1.5rem;
+  padding: 28px 1.5rem;
   font-size: 1rem;
   &:hover,
   &:active {

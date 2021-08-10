@@ -145,7 +145,8 @@ const Main = (props) => {
           <CategoryList>
             {myTodayRoutine &&
               myTodayRoutine.map((routine, idx) => (
-                <RoutineItem key={idx} {...routine} />
+                <RoutineItem key={idx} {...routine}
+                />
               ))
             }
           </CategoryList>
