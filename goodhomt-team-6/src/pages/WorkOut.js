@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Check from '../img/check.svg';
 import CompletedCheck from '../img/completed_check.svg';
 import logger from '../shared/Logger';
+import ProgressBarCont from '../components/ProgressBarCont';
 
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
@@ -18,6 +19,7 @@ const WorkOut = (props) => {
   const [currentExerciseIdx, setcurrentExerciseIdx] = useState(0);
   const [currentSetIdx, setcurrentSetIdx] = useState(0);
 
+  // 스톱워치
   useEffect(() => {
     // if 문 안에 있는 interval 들을 밖에서 호출해서 연결시켜줌.
     let interval = null;
@@ -29,7 +31,9 @@ const WorkOut = (props) => {
     } else {
       clearInterval(interval);
     }
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [timeStop]);
 
   const completeSet = (length) => {
@@ -39,6 +43,14 @@ const WorkOut = (props) => {
       setcurrentExerciseIdx((prev) => prev + 1);
       setcurrentSetIdx(0);
     }
+  };
+
+  // 휴식 시간 재기
+  // 휴식이 시작되고 휴식 시간이 끝나면 자동으로 다음 세트로 넘어감
+  const handleBreakTime = (setLength, breakTime) => {
+    setTimeout(() => {
+      completeSet(setLength);
+    }, (breakTime + 1) * 1000);
   };
 
   return (
@@ -163,29 +175,49 @@ const WorkOut = (props) => {
                       </ExerciseListBody>
                     </ExerciseList>
                   ) : (
-                    <ExerciseList key={setIdx}>
+                    <ExerciseList key={setIdx} style={{ position: 'relative' }}>
                       <ListHead>휴식</ListHead>
                       <ExerciseListBody>
-                        {set.minutes > 0
-                          ? `${set.minutes}분 ${set.seconds}초`
-                          : `${set.seconds}초`}
+                        {set.seconds < 10
+                          ? `0${set.minutes}:0${set.seconds}`
+                          : `0${set.minutes}:${set.seconds}`}
+                        {currentSetIdx === setIdx &&
+                          handleBreakTime(
+                            list.Sets.length,
+                            set.minutes * 60 + set.seconds,
+                          )}
                         {currentSetIdx === setIdx ? (
-                          <ListCheckBlack
-                            onClick={() => {
-                              completeSet(list.Sets.length);
-                            }}
-                          >
-                            <Image
-                              src={CompletedCheck}
-                              width="24px"
-                              height="24px"
+                          <>
+                            <ListCheckBlack
+                              onClick={() => {
+                                completeSet(list.Sets.length);
+                              }}
+                            >
+                              <Image
+                                src={CompletedCheck}
+                                width="24px"
+                                height="24px"
+                              />
+                            </ListCheckBlack>
+                            <ProgressBarCont
+                              currentSetIdx={currentSetIdx}
+                              setIdx={setIdx}
+                              minutes={set.minutes}
+                              seconds={set.seconds}
                             />
-                          </ListCheckBlack>
+                          </>
                         ) : (
                           currentSetIdx > setIdx && (
-                            <ListCheck>
-                              <Image src={Check} width="24px" height="24px" />
-                            </ListCheck>
+                            <>
+                              <ListCheck>
+                                <Image src={Check} width="24px" height="24px" />
+                              </ListCheck>
+                              {/* <ProgressBarCont
+                                currentSetIdx={currentSetIdx}
+                                setIdx={setIdx}
+                                disabled
+                              /> */}
+                            </>
                           )
                         )}
                       </ExerciseListBody>
