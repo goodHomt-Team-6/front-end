@@ -71,14 +71,12 @@ const Span = styled.span`
   opacity: 54%;
   font-size: 14px;
   font-weight: 600;
-
 `;
 
 const TextItem = styled.span`
   color: black;
   font-size: 14px;
   font-weight: 600;
-
 `;
 
 const Div = styled.div`

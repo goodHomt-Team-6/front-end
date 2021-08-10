@@ -12,6 +12,7 @@ import ReArrangementBlack from '../img/re-arrangement-black.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
 import InputExercise from '../components/InputExercise';
+import EditInputRoutine from '../components/EditInputRoutine';
 import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
@@ -37,10 +38,11 @@ const modalStyles = makeStyles((theme) => ({
 
 const innerHeight = window.innerHeight - 175;
 
-const FormExercise = (props) => {
+// 루틴 수정하기 페이지 컴포넌트
+const EditRoutine = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
-  const lists = useSelector((state) => state.exercise.routine.myExercise);
+  const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
@@ -53,6 +55,7 @@ const FormExercise = (props) => {
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
+
   useEffect(() => {
     if (lists) {
       for (let list in lists) {
@@ -65,9 +68,14 @@ const FormExercise = (props) => {
       }
     }
   });
+
   useEffect(() => {
     setEditCompletion(checkCompletion);
   }, [checkCompletion]);
+
+  // useEffect(() => {
+  //   dispatch(exerciseCreator.getMyRoutine());
+  // }, []);
 
   // material-ui 모달
   const classes = modalStyles();
@@ -88,34 +96,36 @@ const FormExercise = (props) => {
 
   const clickSet = (listIdx) => {
     setIsExercise(true);
-    dispatch(exerciseCreator.addSet(listIdx));
+    dispatch(exerciseCreator.addDetailSet(listIdx));
   };
 
   const clickBreak = (listIdx) => {
     setIsExercise(false);
-    dispatch(exerciseCreator.addBreak(listIdx));
+    dispatch(exerciseCreator.addDetailBreak(listIdx));
   };
 
   return (
-    <React.Fragment>
+    <>
       {/* 뒤로가기 버튼 */}
+
       <GoBackButton
         onClick={() => {
           history.goBack();
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
-          Select
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+          Routine
         </Text>
-        <PageText>2/2</PageText>
+        <PageText></PageText>
       </GoBackButton>
+
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <OptionCont>
         <Image
           src={PurePlusButtonBlack}
-          width="20px"
-          height="20px"
+          width="15px"
+          height="15px"
           borderRadius="0"
           margin="0 15px 0 0"
           _onClick={() => {
@@ -124,8 +134,8 @@ const FormExercise = (props) => {
         ></Image>
         <Image
           src={ReArrangementBlack}
-          width="20px"
-          height="20px"
+          width="18px"
+          height="18px"
           borderRadius="0"
           margin="0 20px 0 0"
           _onClick={() => {
@@ -133,6 +143,7 @@ const FormExercise = (props) => {
           }}
         ></Image>
       </OptionCont>
+
       {!reArrangement ? (
         <Container>
           {lists.map((list, listIdx) =>
@@ -167,7 +178,7 @@ const FormExercise = (props) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           dispatch(
-                            exerciseCreator.deleteSet({
+                            exerciseCreator.deleteDetailSet({
                               listIdx: listIdx,
                               setIdx: setIdx,
                             }),
@@ -249,12 +260,13 @@ const FormExercise = (props) => {
                   {list.set[0].count}회
                 </Text>
               </List>
-            ),
+
+            )
           )}
         </Container>
       ) : (
         <FormExerciseDnd></FormExerciseDnd>
-      )}
+      )};
 
       {editCompletion ? (
         <FooterButton
@@ -263,111 +275,118 @@ const FormExercise = (props) => {
               myExercise: lists,
             };
             dispatch(exerciseCreator.addRoutineAPI(routine));
-          }}
-        >
+          }}>
           설정 완료
         </FooterButton>
       ) : (
-        <FooterButton disabled>설정 완료</FooterButton>
+        <FooterButton disabled>
+          설정 완료
+        </FooterButton>
       )}
 
       {editor && (
-        <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
+        <EditInputRoutine isExercise={isExercise} idxes={idxes}></EditInputRoutine>
       )}
       <ModalView classes={classes} switchModal={switchModal} open={open} />
-    </React.Fragment>
+    </>
   );
 };
 
-export default FormExercise;
+export default EditRoutine;
 
 const Container = styled.div`
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f7f7fa;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
-`;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #f7f7fa;
+      height: ${innerHeight}px;
+      overflow-y: scroll;
+      `;
 
 const List = styled.div`
-  display: flex;
-  justify-content: space-between;
-  background-color: #fff;
-  margin-top: 20px;
-  &:first-child {
-    margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      background-color: #fff;
+      margin-top: 20px;
+      &:first-child {
+        margin-top: 0;
   }
-`;
+      `;
 
 const OpenList = styled.div`
-  background-color: #fff;
-  margin-top: 20px;
-  &:first-child {
-    margin-top: 0;
+      background-color: #fff;
+      margin-top: 20px;
+      &:first-child {
+        margin-top: 0;
   }
-`;
+      `;
+
+
 
 const DataRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #000;
-  margin: 0 20px;
-`;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #000;
+      margin: 0 20px;
+      `;
 
 const ButtonCont = styled.div`
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-`;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      `;
 
 const ButtonWrap = styled.label`
-  display: block;
-  position: relative;
-  cursor: pointer;
-  width: 47%;
-`;
+      display: block;
+      position: relative;
+      cursor: pointer;
+      width: 47%;
+      `;
 
 const RadioInput = styled.input`
-  width: 0px;
-  height: 0px;
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-`;
+      width: 0px;
+      height: 0px;
+      opacity: 0;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      `;
 
 const RadioP = styled.p`
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  height: 46px;
-  padding: 0px 15px;
-  color: rgb(102, 102, 102);
-  font-size: 14px;
-  border: 1px solid rgb(217, 217, 217);
-  border-radius: 25px;
-  background-color: rgb(255, 255, 255);
-  user-select: none;
-`;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      height: 46px;
+      padding: 0px 15px;
+      color: rgb(102, 102, 102);
+      font-size: 14px;
+      border: 1px solid rgb(217, 217, 217);
+      border-radius: 25px;
+      background-color: rgb(255, 255, 255);
+      user-select: none;
+      `;
 
 const GoBackButton = styled.div`
-  display: flex;
-  margin: 25px;
-  /* width: 100%; */
-  box-sizing: border-box;
-  align-items: baseline;
-`;
+      display: flex;
+      width: auto;
+      justify-content: flex-start;
+      padding: 25px;
+      /* width: 100%; */
+      box-sizing: border-box;
+      align-items: baseline;
+      background-color: #f7f7fa;
+      `;
 
 const PageText = styled.span`
-  font-size: 14px;
-  line-height: 2.5;
-`;
+      font-size: 14px;
+      line-height: 2.5;
+      `;
 
 const OptionCont = styled.div`
-  background-color: #f7f7fa;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 0 0;
-`;
+      background-color: #f7f7fa;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 0 0;
+      align-items: center;
+      `;

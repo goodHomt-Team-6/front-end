@@ -60,7 +60,9 @@ const initialState = {
 // actions
 const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
+const ADD_DETAIL_SET = 'exercise/ADD_DETAIL_SET';
 const ADD_BREAK = 'exercise/ADD_BREAK';
+const ADD_DETAIL_BREAK = 'exercise/ADD_DETAIL_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
 
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
@@ -74,8 +76,10 @@ const REMOVE_SELECTED_ITEM = 'exercise/REMOVE_SELECTED_ITEM';
 
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
+const UPDATE_DETAIL_SET = 'exercise/UPDATE_DETAIL_SET';
 const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
+const DELETE_DETAIL_SET = 'exercise/DELETE_DETAIL_SET';
 
 const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
@@ -93,7 +97,9 @@ const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
+const addDetailSet = createAction(ADD_DETAIL_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
+const addDetailBreak = createAction(ADD_DETAIL_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({
@@ -120,11 +126,18 @@ const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
   set,
   idxes,
 }));
+const updateDetailSet = createAction(UPDATE_DETAIL_SET, (set, idxes) => ({
+  set,
+  idxes,
+}));
 const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
   time,
   idxes,
 }));
 const deleteSet = createAction(DELETE_SET, (idxes) => ({
+  idxes,
+}));
+const deleteDetailSet = createAction(DELETE_DETAIL_SET, (idxes) => ({
   idxes,
 }));
 const reArrangeMyExercise = createAction(REARRANGE_MY_EXERCISE, (lists) => ({
@@ -264,6 +277,21 @@ const getMonthAgoRoutineAPI = () => {
   };
 };
 
+// 북마크된 루틴목록 가져오기 (이전목록불러오기)
+const getBookmarkRoutineAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get('/routines?sorting=bookmark')
+      .then((response) => {
+        // dispatch(getMyRoutine(response.data.result));
+        logger('북마크된 루틴 목록 가져오기 성공');
+      })
+      .catch((error) => {
+        logger('북마크된 루틴 목록 가져오기 실패', error);
+      });
+  };
+};
+
 // 루틴 상세 가져오기
 const getRoutineDetailAPI = (id) => {
   return function (dispatch, getState, { history }) {
@@ -271,7 +299,6 @@ const getRoutineDetailAPI = (id) => {
       .get(`/routines/${id}`)
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
-        console.log(response.data.result);
         logger('루틴 상세 가져오기 성공');
       })
       .catch((error) => {
@@ -286,9 +313,9 @@ const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
     api
       .patch('/routines/bookmark', reArrangeDetial)
       .then((response) => {
-        logger('북마크 설정, 루틴 이름 변경 성공', response);
-        // response로 id라도 내려줘야 dispatch할 수 있을 것 같다!
-        // dispatch(getRoutineDetailAPI());
+        logger('북마크 설정, 루틴 이름 변경 성공');
+        console.log(response);
+        dispatch(getRoutineDetailAPI(response.data.routineId));
       })
       .catch((error) => {
         logger('북마크 설정, 루틴 이름 변경 실패', error);
@@ -378,9 +405,34 @@ export default handleActions(
           setCount: setCount,
         });
       }),
+    // 이전 루틴 불러오기 상세 - 업데이트
+    [ADD_DETAIL_SET]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.routine[0].myExercise[action.payload.listIdx];
+        const setCount = list.set.reduce(
+          (cnt, elem) => cnt + ('exercise' === elem.type),
+          1,
+        );
+        logger(state);
+        list.set.push({
+          type: 'exercise',
+          weight: list.set[0].weight,
+          count: list.set[0].count,
+          setCount: setCount,
+        });
+      }),
     [ADD_BREAK]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.routine.myExercise[action.payload.listIdx];
+        list.set.push({
+          type: 'break',
+          minutes: 0,
+          seconds: 0,
+        });
+      }),
+    [ADD_DETAIL_BREAK]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.routine[0].myExercise[action.payload.listIdx];
         list.set.push({
           type: 'break',
           minutes: 0,
@@ -398,6 +450,14 @@ export default handleActions(
     [UPDATE_SET]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.routine.myExercise[action.payload.idxes.listIdx];
+        list.set[action.payload.idxes.setIdx].weight =
+          action.payload.set.weight;
+        list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
+      }),
+    // 이전 루틴 불러오기 상세 - 수정
+    [UPDATE_DETAIL_SET]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.routine[0].myExercise[action.payload.idxes.listIdx];
         list.set[action.payload.idxes.setIdx].weight =
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
@@ -420,6 +480,24 @@ export default handleActions(
           );
         let count = 1;
         draft.routine.myExercise[action.payload.idxes.listIdx].set.map(
+          (set, idx) => {
+            if (set.type === 'exercise') {
+              set.setCount = count;
+              count += 1;
+            }
+          },
+        );
+      }),
+    [DELETE_DETAIL_SET]: (state, action) =>
+      produce(state, (draft) => {
+        draft.routine[0].myExercise[action.payload.idxes.listIdx].set =
+          draft.routine[0].myExercise[action.payload.idxes.listIdx].set.filter(
+            (elem, idx) => {
+              return idx != action.payload.idxes.setIdx;
+            },
+          );
+        let count = 1;
+        draft.routine[0].myExercise[action.payload.idxes.listIdx].set.map(
           (set, idx) => {
             if (set.type === 'exercise') {
               set.setCount = count;
@@ -494,8 +572,11 @@ const actionCreators = {
   getMonthAgoRoutineAPI,
   getRoutineDetailAPI,
   reArrangeRoutineDetailAPI,
+  getBookmarkRoutineAPI,
   addSet,
+  addDetailSet,
   addBreak,
+  addDetailBreak,
   openRow,
   addExerciseType,
   removeExerciseType,
@@ -503,7 +584,9 @@ const actionCreators = {
   removeSelectedItem,
   openEditor,
   updateSet,
+  updateDetailSet,
   deleteSet,
+  deleteDetailSet,
   updateTime,
   reArrangeMyExercise,
   openModal,

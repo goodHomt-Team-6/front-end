@@ -55,6 +55,7 @@ const MyPastRoutines = (props) => {
 
   const ClickedBookmark = () => {
     setBookmarked(true);
+    dispatch(exerciseActions.getBookmarkRoutineAPI());
   };
 
   const unClickedBookmark = () => {
@@ -138,7 +139,7 @@ const MyPastRoutines = (props) => {
           <FooterButton
             onClick={() => {
               dispatch(exerciseActions.addSelectedPrevItem(clicked));
-              history.push('/editroutine');
+              history.push('/routinedetail');
             }}>
             불러오기
           </FooterButton>

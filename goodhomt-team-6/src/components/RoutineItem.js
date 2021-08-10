@@ -58,7 +58,7 @@ const RoutineItem = (props) => {
         onChange={(e) => {
           const { value } = e.target;
           const selected = myRoutines.filter((m) => m.id == value);
-          console.log(selected); // 이 셀렉티드를 어떻게 저장해두지?
+          console.log(selected);
 
           // const routine = {
           //   createdAt: createdAt,
@@ -91,8 +91,7 @@ const RoutineItem = (props) => {
           </RoutineInfo>
         }
       </RadioBox>
-
-    </ >
+    </>
 
   );
 };

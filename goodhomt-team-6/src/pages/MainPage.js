@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Image } from '../shared/Styles';
 import Color from '../shared/Color';
 import plusButton from '../img/plus-button.svg';
+import playButton from '../img/play_button.svg';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
@@ -25,9 +26,14 @@ const Main = (props) => {
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
   const getDate = moment().format('YYYYMMDD');
 
+  const [todayRoutine, isTodayRoutine] = useState(false);
+
   // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
     dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    if (myTodayRoutine) {
+      isTodayRoutine(true);
+    }
   }, []);
 
   return (
@@ -72,30 +78,46 @@ const Main = (props) => {
           {/* 등록한 운동 보여주기 */}
           <RegisterWrapper>
             <Index>Today</Index>
-            <MainBox>
-              <TodayWrapper>
-                {myTodayRoutine && myTodayRoutine.length > 0 ?
+            {myTodayRoutine ?
+              (<TodayMainBox todayRoutine={todayRoutine}>
+                <TodayWrapper>
                   <Enrolled>1</Enrolled>
-                  : <Enrolled>0</Enrolled>
-                }
-                {myTodayRoutine && myTodayRoutine.length > 0 ?
-                  <span>오늘의 운동을 시작해보세요!</span>
-                  : <span>아직 등록된 운동이 없습니다</span>
-                }
-              </TodayWrapper>
-              <TypeContainer>
-                <TypeWrapper>
-                  <span>종목</span>
-                  {myTodayRoutine && myTodayRoutine.length > 0 ?
-                    <span>{myTodayRoutine[0].routineName}</span>
-                    : null}
-                </TypeWrapper>
-                <TypeWrapper>
-                  <span>운동시간</span>
-                  <span>0m</span>
-                </TypeWrapper>
-              </TypeContainer>
-            </MainBox>
+                  <TextItem>
+                    <PlayBtnIcon src={playButton} />
+                    오늘의 운동을 시작해보세요!</TextItem>
+                </TodayWrapper>
+                <TypeContainer todayRoutine={todayRoutine}>
+                  <TypeWrapper>
+                    <Span>종목</Span>
+                    <TextItem>{myTodayRoutine[0].routineName}</TextItem>
+                  </TypeWrapper>
+                  <Div />
+                  <TypeWrapper>
+                    <Span>운동시간</Span>
+                    <TextItem>0m</TextItem>
+                  </TypeWrapper>
+                </TypeContainer>
+              </TodayMainBox>
+              ) : (
+                <MainBox>
+                  <TodayWrapper>
+                    <Enrolled>0</Enrolled>
+                    <TextItem>아직 등록된 운동이 없습니다</TextItem>
+                  </TodayWrapper>
+                  <TypeContainer todayRoutine={todayRoutine}>
+                    <TypeWrapper>
+                      <Span>종목</Span>
+                      <TextItem>0kg</TextItem>
+                    </TypeWrapper>
+                    <Div />
+                    <TypeWrapper>
+                      <Span>운동시간</Span>
+                      <TextItem>0m</TextItem>
+                    </TypeWrapper>
+                  </TypeContainer>
+                </MainBox>
+              )
+            }
           </RegisterWrapper>
 
           {/* 이전 루틴 불러오기 */}
@@ -166,22 +188,30 @@ const TodayWrapper = styled.div`
   border-bottom: 1px solid black;
   box-sizing: border-box;
   padding: 30px;
+  width: 100%;
 `;
 
 const TypeContainer = styled.div`
   display: flex;
+  height: 30px;
+  margin: 24px 0px;
+  /* padding: 0px 15px; */
+  padding: ${(props) => props.todayRoutine ? '0px 15px' : '0px'};
+`;
+
+const Div = styled.div`
+  border-left: 1px solid gray;
+  padding: 10px;
+  margin-left: 20px;
 `;
 
 const TypeWrapper = styled.div`
-  margin-top: 20px;
   width: 50%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   box-sizing: border-box;
-  padding: 10px 25px;
-  &:last-child {
-    border-left: 1px solid black;
-  }
+  height: 30px;
 `;
 
 const Enrolled = styled.span`
@@ -198,16 +228,20 @@ const InboxWrapper = styled.div`
 `;
 
 const MainBox = styled.div`
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 10px 10px;
-  background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
-    inset 0px 1px 0px rgba(255, 255, 255, 0.1);
-  transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
+`;
+
+const TodayMainBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: ${(props) => props.todayRoutine ? '10px' : 'none'};
+  background-color: ${(props) => props.todayRoutine ? 'white' : 'none'};
+  box-shadow: ${(props) => props.todayRoutine ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
 `;
 
 const Index = styled.h2`
@@ -258,6 +292,11 @@ const FormerRoutineIcon = styled.img`
   left: 30px;
 `;
 
+const PlayBtnIcon = styled.img`
+  width: 15px;
+  margin-right: 5px;
+`;
+
 const GetFormerRoutine = styled.div`
   border-style: none;
   display: flex;
@@ -286,4 +325,17 @@ const CategoryList = styled.ul`
   box-sizing: border-box;
   height: calc(100vh - 314px);
   overflow-x: scroll;
+`;
+
+const Span = styled.span`
+  color: black;
+  opacity: 54%;
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const TextItem = styled.span`
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
 `;

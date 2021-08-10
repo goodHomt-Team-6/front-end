@@ -10,7 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import './InputExercise.css';
-import SimpleSlider from './TimePicker';
+import SimpleSlider from './TimePickerEdit';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -25,16 +25,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputExercise = ({ isExercise, idxes }) => {
+const EditInputRoutine = ({ isExercise, idxes }) => {
   const alertClasses = useStyles();
   const [alert, openAlert] = React.useState(false);
   const dispatch = useDispatch();
 
   console.log(idxes);
 
-
   const savedSet = useSelector(
-    (state) => state.exercise.routine.myExercise[idxes.listIdx].set,
+    (state) => state.exercise.routine[0].myExercise[idxes.listIdx].set,
   );
   const [inputEditWeight, setInputEditWeight] = useState(true);
   const [inputEditCount, setInputEditCount] = useState(false);
@@ -60,7 +59,8 @@ const InputExercise = ({ isExercise, idxes }) => {
         count: count,
         weight: weight,
       };
-      dispatch(exerciseCreator.updateSet(set, idxes));
+      console.log(set);
+      dispatch(exerciseCreator.updateDetailSet(set, idxes));
     }
     dispatch(exerciseCreator.openEditor(false));
   };
@@ -228,7 +228,7 @@ const InputExercise = ({ isExercise, idxes }) => {
   );
 };
 
-export default InputExercise;
+export default EditInputRoutine;
 
 const InputCont = styled.div`
   position: fixed;

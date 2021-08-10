@@ -21,7 +21,7 @@ const BookmarkModal = ({ setShowModal }) => {
     }
   };
 
-  const reArrangeDetial = {
+  const reArrangeDetail = {
     id: selectedPrevItem[0].id,
     isBookmarked: true,
     routineName: routineRename
@@ -61,7 +61,7 @@ const BookmarkModal = ({ setShowModal }) => {
           {/* 저장버튼 */}
           <SaveButton
             onClick={() => {
-              dispatch(exerciseActions.reArrangeRoutineDetailAPI(reArrangeDetial));
+              dispatch(exerciseActions.reArrangeRoutineDetailAPI(reArrangeDetail));
               setShowModal(false);
             }
             }>
@@ -78,7 +78,6 @@ export default BookmarkModal;
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
-  /* display: ${(props) => (props.visible ? 'block' : 'none')}; */
   position: fixed;
   top: 0;
   right: 0;

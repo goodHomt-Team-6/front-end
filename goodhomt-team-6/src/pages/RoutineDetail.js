@@ -32,12 +32,6 @@ const RoutineDetail = (props) => {
     }
   }, [routineName]);
 
-  console.log(myRoutine);
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
   return (
     <>
       {/* 뒤로가기 */}
@@ -52,13 +46,19 @@ const RoutineDetail = (props) => {
           <RoutineText>Routine</RoutineText>
         </GoBackButton>
 
+        {/* 루틴  수정 */}
         <IconWrapper>
-          <IconImg src={EditIcon} />
+          <IconImg src={EditIcon}
+            onClick={() => {
+              history.push('/editroutine');
+            }}
+          />
 
           {/* 북마크 모달 */}
           <IconImg src={BookmarkLine}
-            onClick={openModal}
-          />
+            onClick={() => {
+              setShowModal(true);
+            }} />
         </IconWrapper>
       </HeaderWrapper>
 
@@ -74,9 +74,9 @@ const RoutineDetail = (props) => {
             myRoutine[0].myExercise.map((e, listIdx) => (
               <List key={listIdx}>
                 <Text type="contents" minWidth="80px" padding="0 0 0 10px">{e.exerciseName}</Text>
-                <Text type="contents"> {e.Sets[0].setCount}세트</Text>
-                <Text type="contents">{e.Sets[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">{e.Sets[0].count}회</Text>
+                <Text type="contents"> {e.set[0].setCount}세트</Text>
+                <Text type="contents">{e.set[0].weight}kg</Text>
+                <Text type="contents" padding="0 10px 0 0">{e.set[0].count}회</Text>
               </List>
             ))}
         </Container>

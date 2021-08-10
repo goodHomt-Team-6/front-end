@@ -61,6 +61,7 @@ const P = styled.p`
     props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1em;'}
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
   ${(props) => (props.clicked ? `color: #fff;` : '')}
+  ${(props) => (props.fontWeight ? `font-weight:${props.fontWeight};` : '')}
 `;
 
 const Span = styled.span`
@@ -69,14 +70,6 @@ const Span = styled.span`
   color: #888;
   font-family: 'PoppinsR';
 `;
-
-// input 스타일!
-// const InputC = styled.input`
-//   width: ${(props) => (props.width ? props.width : "100%")};
-//   border: ${(props) => (props.border ? props.border : "none;")};
-//   padding: 2px 4px;
-//   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
-// `;
 
 // Button
 const Button = (props) => {
@@ -252,6 +245,9 @@ const FooterButton = styled.div`
   line-height: 60px;
   font-weight: bold;
   cursor: pointer;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 `;
 
 export { Grid, Text, Button, Image, Input, FooterButton };
