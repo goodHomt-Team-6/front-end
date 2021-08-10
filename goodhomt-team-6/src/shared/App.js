@@ -34,28 +34,30 @@ const App = (props) => {
     <>
       <ConnectedRouter history={history}>
         <Switch>
-          <Route path="/" exact component={HOC(MainPage, null)} />
-          <Route
-            path="/mypastroutines"
-            exact
-            component={HOC(MyPastRoutines, true)}
-          />
-          <Route path="/login" exact component={HOC(Login, false)} />
-          <Route path="/exercise" exact component={HOC(ExerciseListUp, true)} />
-          <Route path="/routinedetail" exact component={RoutineDetail} />
-          <Route path="/editroutine" exact component={EditRoutine} />
-          <Route
-            path="/exercise/form"
-            exact
-            component={HOC(FormExercise, truncate)}
-          />
-          {/* 카카오 로그인 후 랜딩되는 redirect uri */}
-          <Route
-            path="/oauth/callback/kakao"
-            exact
-            component={HOC(KakaoLanding, false)}
-          />
-          <Route path="/workout" exact component={HOC(WorkOut, true)} />
+          <>
+            <Route path="/" exact component={HOC(MainPage, null)} />
+            <Route
+              path="/mypastroutines"
+              exact
+              component={HOC(MyPastRoutines, true)}
+            />
+            <Route path="/login" exact component={HOC(Login, false)} />
+            <Route path="/exercise" exact component={HOC(ExerciseListUp, true)} />
+            <Route path="/routinedetail" exact component={RoutineDetail} />
+            <Route path="/editroutine" exact component={EditRoutine} />
+            <Route
+              path="/exercise/form"
+              exact
+              component={HOC(FormExercise, truncate)}
+            />
+            {/* 카카오 로그인 후 랜딩되는 redirect uri */}
+            <Route
+              path="/oauth/callback/kakao"
+              exact
+              component={HOC(KakaoLanding, false)}
+            />
+            <Route path="/workout" exact component={HOC(WorkOut, true)} />
+          </>
         </Switch>
       </ConnectedRouter>
     </>

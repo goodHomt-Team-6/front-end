@@ -283,7 +283,7 @@ const getBookmarkRoutineAPI = () => {
     api
       .get('/routines?sorting=bookmark')
       .then((response) => {
-        // dispatch(getMyRoutine(response.data.result));
+        dispatch(getMyRoutine(response.data.result));
         logger('북마크된 루틴 목록 가져오기 성공');
       })
       .catch((error) => {
@@ -344,9 +344,10 @@ export default handleActions(
       }),
     [ADD_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.exercise.push(action.payload.exercise);
+        if (draft.exercise) {
+          draft.exercise.push(action.payload.exercise);
+        }
       }),
-
     [GET_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         if (state.selectedItems.length === 0) {

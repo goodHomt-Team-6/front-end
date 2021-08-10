@@ -18,12 +18,9 @@ import { history } from '../redux/configureStore';
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector(
-    (store) => store.exercise.selectedPrevItem,
-  );
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem[0].id;
   const myRoutine = useSelector((store) => store.exercise.routine);
-  const isBookmarked = myRoutine[0].isBookmarked;
   const routineName = myRoutine[0].routineName;
 
   const [showModal, setShowModal] = useState(false);
@@ -45,8 +42,12 @@ const RoutineDetail = (props) => {
           }}
         >
           <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-          <RoutineText>Routine</RoutineText>
+          <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+            Routine
+          </Text>
+          <PageText></PageText>
         </GoBackButton>
+
 
         {/* 루틴  수정 */}
         <IconWrapper>
@@ -163,20 +164,23 @@ const List = styled.div`
 `;
 
 const GoBackButton = styled.div`
-  display: flex;
-  margin: 25px;
-  /* width: 100%; */
-  box-sizing: border-box;
-  align-items: baseline;
+      display: flex;
+      width: auto;
+      justify-content: flex-start;
+      padding: 25px;
+      /* width: 100%; */
+      box-sizing: border-box;
+      align-items: baseline;
+      background-color: #f7f7fa;
 `;
 
 const RoutineText = styled.h2`
   margin: 0px 5px 0px 0px;
-  font-size: 24px;
+  font-size: 14px;
 `;
 
 const PageText = styled.span`
-  font-size: 14px;
-  line-height: 2.5;
+      font-size: 14px;
+      line-height: 2.5;
 `;
 

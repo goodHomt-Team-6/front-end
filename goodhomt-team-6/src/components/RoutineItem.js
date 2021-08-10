@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import './RoutineItem.css';
 import { history } from '../redux/configureStore';
+import RemoveBtn from '../img/remove_button.svg';
 
 const cookies = new Cookies();
 
@@ -78,7 +79,6 @@ const RoutineItem = (props) => {
         onClick={() => {
           const selected = myRoutines.filter((m) => m.id == id);
           console.log(selected);
-          // history.push('/workout');
         }}
       >
         <TimeBox>
@@ -86,12 +86,16 @@ const RoutineItem = (props) => {
         </TimeBox>
         {myRoutine &&
           <RoutineInfo>
-            <RoutineName>{routineName}</RoutineName>
-            {createdAt &&
-              <WorkoutDate>{createdAt.substring(0, 10)}</WorkoutDate>
-            }
+            <DivBox>
+              <RoutineName>{routineName}</RoutineName>
+              {createdAt &&
+                <WorkoutDate>{createdAt.substring(5, 7)}.{createdAt.substring(8, 10)}</WorkoutDate>
+              }
+            </DivBox>
+            <RemoveButton src={RemoveBtn}></RemoveButton>
           </RoutineInfo>
         }
+
       </RadioBox>
     </>
   );
@@ -107,7 +111,7 @@ const RadioBox = styled.label`
   border-bottom: 1px solid ${Color.lightGray};
   line-height: 48px;
   margin: 0px;
-  padding: 28px 1.5rem;
+  padding: 28px 0px;
   font-size: 1rem;
   &:hover,
   &:active {
@@ -144,11 +148,11 @@ const ExerciseItem = styled.li`
 
 const TimeBox = styled.div`
   background-color: black;
-  width: 72px;
+  width: 25%;
   height: 44px;
   border-radius: 22px;
   color: white;
-  margin-right: 30px;
+  margin-right: 15px;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -160,7 +164,8 @@ const Time = styled.span`
 
 const RoutineInfo = styled.div`
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
 `;
 
 const RoutineName = styled.span`
@@ -171,5 +176,14 @@ const RoutineName = styled.span`
 const WorkoutDate = styled.span`
   font-size: 14px;
   line-height: 24px;
+`;
+
+const RemoveButton = styled.img`
+  width: 24px;
+`;
+
+const DivBox = styled.div`
+  display: flex;
+  flex-direction: column;
   
 `;

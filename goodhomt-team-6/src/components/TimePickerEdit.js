@@ -80,7 +80,6 @@ class SimpleSlider extends React.Component {
         ].minutes,
         true,
       );
-      console.log(this.props);
     }
 
     if (
@@ -94,7 +93,6 @@ class SimpleSlider extends React.Component {
         ].seconds,
         true,
       );
-      console.log(this.props);
     }
   }
 
