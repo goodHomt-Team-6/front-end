@@ -18,7 +18,9 @@ import { history } from '../redux/configureStore';
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem[0].id;
   const myRoutine = useSelector((store) => store.exercise.routine);
   const isBookmarked = myRoutine[0].isBookmarked;
@@ -85,8 +87,7 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              logger('운동시작버튼 클릭');
-              // history.push('/editroutine');
+              history.push('/workout');
             }}
           >
             운동시작

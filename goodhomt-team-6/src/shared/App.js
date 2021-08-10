@@ -17,6 +17,7 @@ import EditRoutine from '../pages/EditRoutine';
 import logger from './Logger';
 import HOC from './HOC';
 import { truncate } from 'fs';
+import WorkOut from '../pages/WorkOut';
 
 const cookie = new Cookies();
 
@@ -54,13 +55,7 @@ const App = (props) => {
             exact
             component={HOC(KakaoLanding, false)}
           />
-
-          {/* <Route path="/" exact component={MainPage} />
-          <Route path="/mypastroutines" exact component={MyPastRoutines} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/exercise" exact component={ExerciseListUp} />
-          <Route path="/exercise/form" exact component={FormExercise} />
-          <Route path="/oauth/callback/kakao" component={KakaoLanding} /> */}
+          <Route path="/workout" exact component={HOC(WorkOut, true)} />
         </Switch>
       </ConnectedRouter>
     </>
