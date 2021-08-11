@@ -144,7 +144,9 @@ const initializeSectedItems = createAction(
   INITIALIZE_SELECTED_ITEMS,
   () => ({}),
 );
-const is_selected = createAction(IS_SELECTED, (is_selected) => ({ is_selected }));
+const is_selected = createAction(IS_SELECTED, (is_selected) => ({
+  is_selected,
+}));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
@@ -316,6 +318,20 @@ const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
       })
       .catch((error) => {
         logger('북마크 설정, 루틴 이름 변경 실패', error);
+      });
+  };
+};
+
+// 운동 완료 결과 모달 - 기록하기 버튼
+const recordResultAPI = (result) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch('/routines/result', result)
+      .then((response) => {
+        history.replace('/');
+      })
+      .catch((error) => {
+        logger('운동 완료 결과 모달 - 기록하기 버튼 실패', error);
       });
   };
 };
@@ -521,6 +537,7 @@ const actionCreators = {
   getRoutineDetailAPI,
   reArrangeRoutineDetailAPI,
   getBookmarkRoutineAPI,
+  recordResultAPI,
   addSet,
   addBreak,
   openRow,
