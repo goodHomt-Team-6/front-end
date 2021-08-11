@@ -48,6 +48,7 @@ const H1 = styled.h1`
   text-align: center;
   ${(props) => (props.bold ? `font-weight: bold;` : '')}
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
+  ${(props) => (props.fontWeight ? `font-weight:${props.fontWeight};` : '')}
 `;
 
 const P = styled.p`

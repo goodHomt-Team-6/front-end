@@ -63,7 +63,7 @@ const WorkOut = (props) => {
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
+        <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
           Workout
         </Text>
       </GoBackButton>

@@ -215,7 +215,7 @@ const ModalInner = styled.div`
   position: relative;
   background-color: #f7f7fa;
   width: 76%;
-  height: 80%;
+  height: 55%;
   max-width: 480px;
   top: 50%;
   transform: translateY(-50%);
@@ -282,6 +282,7 @@ const SaveButton = styled.button`
   border-radius: 50px;
   margin-top: 20px;
   line-height: 1;
+  padding: 8px 0px;
 `;
 
 const RoutineRatingIcon = styled.div`
@@ -299,6 +300,7 @@ const RoutineRatingText = styled.div`
   width: 100%;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 
 const PurpleAcc = styled.div`

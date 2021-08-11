@@ -40,10 +40,9 @@ const RoutineDetail = (props) => {
           }}
         >
           <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-          <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+          <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
             Routine
           </Text>
-          <PageText></PageText>
         </GoBackButton>
 
 
@@ -162,23 +161,19 @@ const List = styled.div`
 `;
 
 const GoBackButton = styled.div`
-      display: flex;
-      width: auto;
-      justify-content: flex-start;
-      padding: 25px;
-      /* width: 100%; */
-      box-sizing: border-box;
-      align-items: baseline;
-      background-color: #f7f7fa;
+  display: flex;
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
+  /* width: 100%; */
+  box-sizing: border-box;
+  align-items: baseline;
+  background-color: #f7f7fa;
 `;
 
 const RoutineText = styled.h2`
   margin: 0px 5px 0px 0px;
   font-size: 14px;
-`;
-
-const PageText = styled.span`
-      font-size: 14px;
-      line-height: 2.5;
+  font-weight: 500;
 `;
 

@@ -86,23 +86,30 @@ const Main = (props) => {
             <Index>Today</Index>
             {myTodayRoutine && myTodayRoutine.length !== 0 ?
               <TodayMainBox>
-                <TodayWrapper>
-                  <Enrolled>{myTodayRoutine.length}</Enrolled>
-                  <DashBoardDiv>
-                    {myTodayRoutine[0].isCompleted ?
-                      null : <PlayBtnIcon src={playButton} />
-                    }
-                    {myTodayRoutine[0].isCompleted ? (
+                {myTodayRoutine[0].isCompleted ? (
+                  <TodayWrapper>
+                    <Enrolled>{myTodayRoutine.length}</Enrolled>
+                    <DashBoardDiv>
                       <TextItem>
                         오늘의 운동을 완료했습니다!
                       </TextItem>
-                    ) : (
+                    </DashBoardDiv>
+                  </TodayWrapper>
+                ) : (
+                  <TodayWrapper
+                    onClick={() => {
+                      history.push('/workout');
+                    }}>
+                    <Enrolled>{myTodayRoutine.length}</Enrolled>
+                    <DashBoardDiv>
+                      <PlayBtnIcon src={playButton} />
                       <TextItem>
                         오늘의 운동을 시작해보세요!
                       </TextItem>
-                    )}
-                  </DashBoardDiv>
-                </TodayWrapper>
+                    </DashBoardDiv>
+                  </TodayWrapper>
+                )}
+
                 <TodayTypeContainer>
                   <TypeWrapper>
                     <Span>종목</Span>
@@ -244,89 +251,89 @@ const Main = (props) => {
 export default Main;
 
 const Container = styled.div`
-      background-color: #f7f7fa;
-      overflow-y: scroll;
-      `;
+  background-color: #f7f7fa;
+  overflow-y: scroll;
+`;
 
 const Wrapper = styled.div`
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      height: 100%;
-      overflow: scroll;
-      `;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  overflow: scroll;
+`;
 
 const RegisterWrapper = styled.div``;
 
 const TodayWrapper = styled.div`
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-bottom: 1px solid black;
-      box-sizing: border-box;
-      padding: 30px;
-      width: 100%;
-      `;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  box-sizing: border-box;
+  padding: 30px;
+  width: 100%;
+`;
 
 const TypeContainer = styled.div`
-      display: flex;
-      height: 30px;
-      margin: 24px 0px;
-      padding: 0px;
-      `;
+  display: flex;
+  height: 30px;
+  margin: 24px 0px;
+  padding: 0px;
+`;
 
 const TodayTypeContainer = styled.div`
-      display: flex;
-      height: 30px;
-      margin: 24px 0px;
-      padding: 0px 15px;
-      `;
+  display: flex;
+  height: 30px;
+  margin: 24px 0px;
+  padding: 0px 15px;
+`;
 
 const Div = styled.div`
-      border-left: 1px solid gray;
-      padding: 10px;
-      margin-left: 20px;
-      `;
+  border-left: 1px solid gray;
+  padding: 10px;
+  margin-left: 20px;
+`;
 
 const TypeWrapper = styled.div`
-      width: 50%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-sizing: border-box;
-      height: 30px;
-      `;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  height: 30px;
+`;
 
 const Enrolled = styled.span`
-      font-size: 72px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      line-height: 1;
-      color: ${Color.mainBlue};
-      `;
+  font-size: 72px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1;
+  color: ${Color.mainBlue};
+`;
 
 const EnrolledZero = styled.span`
-      font-size: 72px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      line-height: 1;
-      `;
+  font-size: 72px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1;
+`;
 
 const InboxWrapper = styled.div`
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      `;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
 const MainBox = styled.div`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      `;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+`;
 
 const TodayMainBox = styled.div`
   display: flex;
