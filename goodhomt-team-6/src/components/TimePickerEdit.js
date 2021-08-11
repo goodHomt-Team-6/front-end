@@ -26,12 +26,12 @@ const seconds = () => {
 };
 
 const mapStateToProps = (state) => ({
-  myExercise: state.exercise.routine.myExercise,
+  myExercise: state.exercise.routine[0].myExercise,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   updateTime: (time, idxes) => {
-    dispatch(exerciseCreator.updateTime(time, idxes));
+    dispatch(exerciseCreator.updateDetailTime(time, idxes));
   },
 });
 

@@ -60,9 +60,7 @@ const initialState = {
 // actions
 const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
-const ADD_DETAIL_SET = 'exercise/ADD_DETAIL_SET';
 const ADD_BREAK = 'exercise/ADD_BREAK';
-const ADD_DETAIL_BREAK = 'exercise/ADD_DETAIL_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
 
 const GET_EXERCISE = 'exercise/GET_EXERCISE';
@@ -76,10 +74,14 @@ const REMOVE_SELECTED_ITEM = 'exercise/REMOVE_SELECTED_ITEM';
 
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
-const UPDATE_DETAIL_SET = 'exercise/UPDATE_DETAIL_SET';
 const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
+
+const ADD_DETAIL_SET = 'exercise/ADD_DETAIL_SET';
+const ADD_DETAIL_BREAK = 'exercise/ADD_DETAIL_BREAK';
+const UPDATE_DETAIL_SET = 'exercise/UPDATE_DETAIL_SET';
 const DELETE_DETAIL_SET = 'exercise/DELETE_DETAIL_SET';
+const UPDATE_DETAIL_TIME = 'exercise/UPDATE_DETAIL_TIME';
 
 const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
@@ -131,6 +133,10 @@ const updateDetailSet = createAction(UPDATE_DETAIL_SET, (set, idxes) => ({
   idxes,
 }));
 const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
+  time,
+  idxes,
+}));
+const updateDetailTime = createAction(UPDATE_DETAIL_TIME, (time, idxes) => ({
   time,
   idxes,
 }));
@@ -471,6 +477,14 @@ export default handleActions(
           ...action.payload.time,
         };
       }),
+    [UPDATE_DETAIL_TIME]: (state, action) =>
+      produce(state, (draft) => {
+        const list = draft.routine[0].myExercise[action.payload.idxes.listIdx];
+        list.set[action.payload.idxes.setIdx] = {
+          ...list.set[action.payload.idxes.setIdx],
+          ...action.payload.time,
+        };
+      }),
     [DELETE_SET]: (state, action) =>
       produce(state, (draft) => {
         draft.routine.myExercise[action.payload.idxes.listIdx].set =
@@ -589,6 +603,7 @@ const actionCreators = {
   deleteSet,
   deleteDetailSet,
   updateTime,
+  updateDetailTime,
   reArrangeMyExercise,
   openModal,
   setRoutineName,
