@@ -183,15 +183,16 @@ const WorkOut = (props) => {
                           : `0${set.minutes}:${set.seconds}`}
                         {currentSetIdx === setIdx &&
                           handleBreakTime(
-                            list.Sets.length,
+                            list.sett.length,
                             set.minutes * 60 + set.seconds,
                           )}
                         {currentSetIdx === setIdx ? (
                           <>
                             <ListCheckBlack
-                              onClick={() => {
-                                completeSet(list.Sets.length);
-                              }}
+                            // 일단은 휴식에서 체크 버튼 클릭을 통해 휴식을 끝내는 동작은 뺴놓자.
+                            // onClick={() => {
+                            //   completeSet(list.set.length);
+                            // }}
                             >
                               <Image
                                 src={CompletedCheck}
