@@ -29,15 +29,6 @@ const NavBar = (props) => {
           <Title>Calendar</Title>
         </RouteBox>
 
-        <AddBtn
-          onClick={() => {
-            history.push('/exercise');
-          }}>
-          <AddBtnText>
-            +
-          </AddBtnText>
-        </AddBtn>
-
         <RouteBox
           onClick={() => {
             history.push('/community');
@@ -87,25 +78,4 @@ const Title = styled.span`
   font-size: 9px;
   padding-top: 8px; 
   opacity: 60%;
-`;
-
-const AddBtn = styled.button`
-  position: relative;
-  bottom: 30px;
-  color: white;
-  font-size: 30px;
-  width: 72px;
-  height: 72px;
-  border: 3px solid ${Color.bgIvory};
-  border-radius: 50%;
-  background-color: ${Color.mainBlue};
-  margin: 0px 5px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const AddBtnText = styled.span`
-
 `;

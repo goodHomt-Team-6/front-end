@@ -21,8 +21,6 @@ const BookmarkModal = ({ setShowModal }) => {
     }
   };
 
-  console.log(selectedPrevItem);
-
   const reArrangeDetail = {
     id: selectedPrevItem[0].id,
     isBookmarked: true,
@@ -44,7 +42,7 @@ const BookmarkModal = ({ setShowModal }) => {
             <TextWrapper>
               <Text>날짜</Text>
               {selectedPrevItem &&
-                <TextValue>{selectedPrevItem[0].createdAt.substring(5, 10)}</TextValue>
+                <TextValue>{selectedPrevItem[0].createdAt.substring(5, 7)}.{selectedPrevItem[0].createdAt.substring(8, 10)}</TextValue>
               }
             </TextWrapper>
             <Div />
@@ -134,15 +132,11 @@ const RoutineBasicInfo = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  /* border-right: 1px solid black;
-  :last-child{
-    border-right: none;
-  } */
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40px;
+  width: 45px;
 `;
 
 const Div = styled.div`

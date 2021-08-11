@@ -5,7 +5,7 @@ import GoBackHeader from '../components/GoBackHeader';
 import DropDown from '../components/DropDown';
 import BookmarkLine from '../img/bookmark_line.svg';
 import BookmarkSolid from '../img/bookmark_solid.svg';
-import { FooterButton } from '../shared/Styles';
+import { FooterButton, Text } from '../shared/Styles';
 import RoutineItem from '../components/RoutineItem';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import Cookies from 'universal-cookie';
 import logger from '../shared/Logger';
 import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import MoreBtn from '../img/more_button.svg';
 
 // 이전 목록 불러오기 페이지 컴포넌트
 const MyPastRoutines = (props) => {
@@ -31,27 +32,14 @@ const MyPastRoutines = (props) => {
   }, []);
 
   useEffect(() => {
-    dispatch(exerciseActions.getSelectedPrevItem);
-  }, [selectedPrevItem]);
-
-  useEffect(() => {
-    if (selectPeriod === "전체 기간") {
-      dispatch(exerciseActions.getAllRoutineAPI());
-      // return;
-    }
-    if (selectPeriod === "하루 전") {
-      dispatch(exerciseActions.getDayAgoRoutineAPI());
-      // return;
-    }
-    if (selectPeriod === "일주일 전") {
-      dispatch(exerciseActions.getWeekAgoRoutineAPI());
-      // return;
-    }
-    if (selectPeriod === "한달 전") {
-      dispatch(exerciseActions.getMonthAgoRoutineAPI());
-      // return;
+    if (myRoutines && myRoutines.length > 0) {
+      dispatch(exerciseActions.getMyRoutine());
     }
   }, [selectPeriod]);
+
+  useEffect(() => {
+    dispatch(exerciseActions.getSelectedPrevItem);
+  }, [selectedPrevItem]);
 
   const ClickedBookmark = () => {
     setBookmarked(true);
@@ -60,6 +48,7 @@ const MyPastRoutines = (props) => {
 
   const unClickedBookmark = () => {
     setBookmarked(false);
+    dispatch(exerciseActions.getAllRoutineAPI());
   };
 
   return (
@@ -70,13 +59,17 @@ const MyPastRoutines = (props) => {
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <RoutineText>Main</RoutineText>
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+          Main
+        </Text>
       </GoBackButton>
 
       {/* 드롭다운 박스 */}
       <DropdownWrapper>
-        <DropDown />
-
+        <DivBox>
+          <DropDown />
+          <MoreIcon src={MoreBtn} />
+        </DivBox>
         {/* 북마크 */}
         {bookmarked ?
           <BookmarkImg
@@ -121,7 +114,11 @@ const MyPastRoutines = (props) => {
                 </TimeBox>
                 {myRoutines &&
                   <RoutineInfo>
-                    <RoutineName>{routine.routineName}</RoutineName>
+                    <InfoBox>
+                      {routine.isBookmarked &&
+                        <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>}
+                      <RoutineName>{routine.routineName}</RoutineName>
+                    </InfoBox>
                     {routine.createdAt &&
                       <WorkoutDate>{routine.createdAt.substring(0, 10)}</WorkoutDate>
                     }
@@ -157,11 +154,12 @@ const MyPastRoutines = (props) => {
 export default MyPastRoutines;
 
 const DropdownWrapper = styled.div`
-  margin: 0px 1.5rem;
+  padding: 0px 1.5rem;
   padding-bottom: 10px;
   border-bottom: 1px solid ${Color.clickedGray};
   display: flex;
   justify-content: space-between;
+  background-color: ${Color.bgIvory};
 `;
 
 const BookmarkImg = styled.img`
@@ -179,8 +177,10 @@ const CategoryList = styled.ul`
   margin: 0px;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 192px);
+  height: calc(100vh - 180px);
   overflow-y: scroll;
+  background-color: ${Color.bgIvory};
+
 `;
 
 const RadioBox = styled.label`
@@ -235,14 +235,33 @@ const WorkoutDate = styled.span`
 `;
 
 const GoBackButton = styled.div`
-  display: flex;
-  margin: 25px;
-  /* width: 100%; */
-  box-sizing: border-box;
-  align-items: baseline;
+      display: flex;
+      width: auto;
+      justify-content: flex-start;
+      padding: 25px;
+      /* width: 100%; */
+      box-sizing: border-box;
+      align-items: baseline;
+      background-color: ${Color.bgIvory};
 `;
 
 const RoutineText = styled.h2`
   margin: 0px 5px 0px 0px;
   font-size: 24px;
+`;
+
+const BookmarkIcon = styled.img`
+  width: 17px;
+  margin-right: 3px;
+`;
+
+const InfoBox = styled.div`
+  display: flex;
+`;
+
+const MoreIcon = styled.img`
+`;
+
+const DivBox = styled.div`
+  display: flex;
 `;

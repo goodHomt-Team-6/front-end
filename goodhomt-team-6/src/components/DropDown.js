@@ -14,36 +14,37 @@ const DropDown = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectName, setSelectName] = useState('전체 기간');
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
   };
 
   const allHandleClose = () => {
-    setAnchorEl(null);
     setSelectName('전체 기간');
     dispatch(exerciseActions.selectPeriod(selectName));
+    dispatch(exerciseActions.getAllRoutineAPI());
+    setAnchorEl(null);
   };
 
   const dayAgoHandleClose = () => {
-    setAnchorEl(null);
     setSelectName('하루 전');
     dispatch(exerciseActions.selectPeriod(selectName));
     dispatch(exerciseActions.getDayAgoRoutineAPI());
+    dispatch(exerciseActions.getDayAgoRoutineAPI());
+    setAnchorEl(null);
   };
 
   const weekAgoHandleClose = () => {
-    setAnchorEl(null);
     setSelectName('일주일 전');
     dispatch(exerciseActions.selectPeriod(selectName));
     dispatch(exerciseActions.getWeekAgoRoutineAPI());
+    setAnchorEl(null);
   };
 
   const monthAgoHandleClose = () => {
-    setAnchorEl(null);
     setSelectName('한 달 전');
     dispatch(exerciseActions.selectPeriod(selectName));
     dispatch(exerciseActions.getMonthAgoRoutineAPI());
-
+    setAnchorEl(null);
   };
 
   const handleClose = () => {
