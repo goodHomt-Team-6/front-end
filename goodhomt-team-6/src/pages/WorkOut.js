@@ -183,7 +183,7 @@ const WorkOut = (props) => {
                           : `0${set.minutes}:${set.seconds}`}
                         {currentSetIdx === setIdx &&
                           handleBreakTime(
-                            list.sett.length,
+                            list.set.length,
                             set.minutes * 60 + set.seconds,
                           )}
                         {currentSetIdx === setIdx ? (
