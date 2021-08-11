@@ -89,7 +89,7 @@ const Main = (props) => {
                 <TypeContainer todayRoutine={todayRoutine}>
                   <TypeWrapper>
                     <Span>종목</Span>
-                    <TextItem>{myTodayRoutine[0].routineName}</TextItem>
+                    <TextItem>{myTodayRoutine[0]?.routineName}</TextItem>
                   </TypeWrapper>
                   <Div />
                   <TypeWrapper>
