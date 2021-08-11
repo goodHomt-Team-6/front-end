@@ -99,7 +99,9 @@ const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const addDetailSet = createAction(ADD_DETAIL_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
-const addDetailBreak = createAction(ADD_DETAIL_BREAK, (listIdx) => ({ listIdx }));
+const addDetailBreak = createAction(ADD_DETAIL_BREAK, (listIdx) => ({
+  listIdx,
+}));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({
@@ -153,13 +155,29 @@ const initializeSectedItems = createAction(
   INITIALIZE_SELECTED_ITEMS,
   () => ({}),
 );
-const is_selected = createAction(IS_SELECTED, (is_selected) => ({ is_selected }));
+const is_selected = createAction(IS_SELECTED, (is_selected) => ({
+  is_selected,
+}));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
-const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
-const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
-const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
-const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
-const getSelectedPrevItem = createAction(GET_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
+const getMyTodayRoutine = createAction(
+  GET_MY_TODAY_ROUTINE,
+  (myTodayRoutine) => ({ myTodayRoutine }),
+);
+const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({
+  selectPeriod,
+}));
+const addSelectedPrevItem = createAction(
+  ADD_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
+const removeSelectedPrevItem = createAction(
+  REMOVE_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
+const getSelectedPrevItem = createAction(
+  GET_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -319,6 +337,20 @@ const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
       })
       .catch((error) => {
         logger('북마크 설정, 루틴 이름 변경 실패', error);
+      });
+  };
+};
+
+// 운동 완료 결과 모달 - 기록하기 버튼
+const recordResultAPI = (result) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch('/routines/result', result)
+      .then((response) => {
+        history.replace('/');
+      })
+      .catch((error) => {
+        logger('운동 완료 결과 모달 - 기록하기 버튼 실패', error);
       });
   };
 };
@@ -555,8 +587,8 @@ export default handleActions(
       produce(state, (draft) => {
         draft.selectedPrevItem = action.payload.selectedPrevItem;
         console.log(draft.selectedPrevItem);
-        console.log("나의 선택된 이전 루틴 불러오기 성공");
-      })
+        console.log('나의 선택된 이전 루틴 불러오기 성공');
+      }),
   },
   initialState,
 );
@@ -574,6 +606,7 @@ const actionCreators = {
   getRoutineDetailAPI,
   reArrangeRoutineDetailAPI,
   getBookmarkRoutineAPI,
+  recordResultAPI,
   addSet,
   addDetailSet,
   addBreak,

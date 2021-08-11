@@ -62,6 +62,7 @@ const P = styled.p`
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
   ${(props) => (props.clicked ? `color: #fff;` : '')}
   ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
+  ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}
 `;
 
 const Span = styled.span`
