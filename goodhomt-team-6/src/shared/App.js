@@ -18,6 +18,7 @@ import logger from './Logger';
 import HOC from './HOC';
 import { truncate } from 'fs';
 import WorkOut from '../pages/WorkOut';
+import Community from '../pages/Community';
 
 const cookie = new Cookies();
 
@@ -56,6 +57,7 @@ const App = (props) => {
             component={HOC(KakaoLanding, false)}
           />
           <Route path="/workout" exact component={HOC(WorkOut, true)} />
+          <Route path="/community" exact component={HOC(Community, true)} />
         </Switch>
       </ConnectedRouter>
     </>
