@@ -3,7 +3,7 @@ import Color from '../shared/Color';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
-import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
+import { Text, Image, FooterButton } from '../shared/Styles';
 import PlusButton from '../img/plus-button.svg';
 import PurePlusButtonGrey from '../img/pure-plus-button-grey.svg';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
@@ -12,7 +12,6 @@ import ReArrangementBlack from '../img/re-arrangement-black.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
 import InputExercise from '../components/InputExercise';
-import EditInputRoutine from '../components/EditInputRoutine';
 import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
@@ -49,9 +48,6 @@ const EditRoutine = (props) => {
   const [idxes, updateIdxes] = useState(null);
   const [reArrangement, setReArrangement] = useState(false);
 
-  console.log(idxes);
-  console.log(lists);
-
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
@@ -72,10 +68,6 @@ const EditRoutine = (props) => {
   useEffect(() => {
     setEditCompletion(checkCompletion);
   }, [checkCompletion]);
-
-  // useEffect(() => {
-  //   dispatch(exerciseCreator.getMyRoutine());
-  // }, []);
 
   // material-ui 모달
   const classes = modalStyles();
@@ -285,7 +277,7 @@ const EditRoutine = (props) => {
       )}
 
       {editor && (
-        <EditInputRoutine isExercise={isExercise} idxes={idxes}></EditInputRoutine>
+        <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
       )}
       <ModalView classes={classes} switchModal={switchModal} open={open} />
     </>

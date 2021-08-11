@@ -13,9 +13,10 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import moment from 'moment';
 import logger from '../shared/Logger';
-import RoutineItem from '../components/RoutineItem';
 import NextBtn from '../img/next_button.svg';
 import PrevBtn from '../img/prev_button.svg';
+import RemoveBtn from '../img/remove_button.svg';
+
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
@@ -29,6 +30,8 @@ const Main = (props) => {
   const getDate = moment().format('YYYYMMDD');
 
   const [todayRoutine, isTodayRoutine] = useState(false);
+  const [clicked, setClicked] = useState([]);
+
 
   // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
@@ -79,7 +82,7 @@ const Main = (props) => {
             </DateBox>
           </UserWrapper>
 
-          {/* 등록한 운동 보여주기 */}
+          {/* 오늘 등록한 운동 보여주기 - 대시보드 */}
           <RegisterWrapper>
             <Index>Today</Index>
             {myTodayRoutine && myTodayRoutine.length > 0 ?
@@ -93,7 +96,7 @@ const Main = (props) => {
                 <TodayTypeContainer>
                   <TypeWrapper>
                     <Span>종목</Span>
-                    <TextItem>{myTodayRoutine[0]?.routineName}</TextItem>
+                    <TextItem>{myTodayRoutine[0].routineName}</TextItem>
                   </TypeWrapper>
                   <Div />
                   <TypeWrapper>
@@ -148,8 +151,31 @@ const Main = (props) => {
           <CategoryList>
             {myTodayRoutine &&
               myTodayRoutine.map((routine, idx) => (
-                <RoutineItem key={idx} {...routine}
-                />
+                <div key={idx}>
+                  <TodayExerciseWrapper
+                    clicked={clicked}
+                    onClick={() => {
+                      const selected = myTodayRoutine.filter((m) => m.id == routine.id);
+                      console.log(selected);
+                      const toObject = selected[0];
+                      dispatch(exerciseActions.addSelectedPrevItem(toObject));
+                      history.push('/routinedetail');
+                    }}
+                  >
+                    <TimeBox>
+                      <Time>30:00</Time>
+                    </TimeBox>
+                    <RoutineInfo>
+                      <RoutineBox>
+                        <RoutineName>{routine.routineName}</RoutineName>
+                        {routine.createdAt &&
+                          <WorkoutDate>{routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}</WorkoutDate>
+                        }
+                      </RoutineBox>
+                      <RemoveButton src={RemoveBtn}></RemoveButton>
+                    </RoutineInfo>
+                  </TodayExerciseWrapper>
+                </div>
               ))
             }
           </CategoryList>
@@ -179,7 +205,7 @@ export default Main;
 
 const Container = styled.div`
   background-color: #f7f7fa;
-  overflow: scroll;
+  overflow-y: scroll;
 `;
 
 const Wrapper = styled.div`
@@ -396,4 +422,63 @@ const PrevIcon = styled.img`
 
 const NextIcon = styled.img`
   margin-left: 8px;
+`;
+
+const TodayExerciseWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid ${Color.lightGray};
+  line-height: 48px;
+  margin: 0px;
+  padding: 28px 0px;
+  font-size: 1rem;
+  &:hover,
+  &:active {
+    background-color: #c4c4c4;
+    cursor: pointer;
+  }
+`;
+
+const TimeBox = styled.div`
+  background-color: black;
+  width: 25%;
+  height: 44px;
+  border-radius: 22px;
+  color: white;
+  margin-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`;
+
+const Time = styled.span`
+  line-height: 45px;
+`;
+
+const RoutineInfo = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const RoutineName = styled.span`
+  font-size: 14px;
+  line-height: 24px;
+`;
+
+const WorkoutDate = styled.span`
+  font-size: 14px;
+  line-height: 24px;
+`;
+
+const RemoveButton = styled.img`
+  width: 24px;
+`;
+
+const RoutineBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  
 `;

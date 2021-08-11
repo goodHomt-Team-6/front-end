@@ -11,35 +11,37 @@ const initialState = {
   exercise: [],
   categoryItems: [],
   selectedItems: [],
-  selectedPrevItem: [],
+  selectedPrevItem: {},
   is_selected: false,
   openModal: false,
   selectPeriod: null,
-  routine: {
-    routineTime: 0,
-    rating: null,
-    is_bookmarked: false,
-    is_completed: false,
-    routineName: null,
-    myExercise: [
-      // {
-      //   exerciseName: '벤치 프레스',
-      //   set: [
-      //     {
-      //       type: 'exercise',
-      //       count: 0,
-      //       weight: 0,
-      //       setCount: 1,
-      //     },
-      //     {
-      //       type: 'break',
-      //       minutes: 0,
-      //       seconds: 0,
-      //     },
-      //   ],
-      // },
-    ],
-  },
+  routine: [
+    {
+      routineTime: 0,
+      rating: null,
+      is_bookmarked: false,
+      is_completed: false,
+      routineName: null,
+      myExercise: [
+        // {
+        //   exerciseName: '벤치 프레스',
+        //   set: [
+        //     {
+        //       type: 'exercise',
+        //       count: 0,
+        //       weight: 0,
+        //       setCount: 1,
+        //     },
+        //     {
+        //       type: 'break',
+        //       minutes: 0,
+        //       seconds: 0,
+        //     },
+        //   ],
+        // },
+      ],
+    }
+  ],
   categoryTitle: [
     {
       id: 1,
@@ -77,12 +79,6 @@ const UPDATE_SET = 'exercise/UPDATE_SET';
 const UPDATE_TIME = 'exercise/UPDATE_TIME';
 const DELETE_SET = 'exercise/DELETE_SET';
 
-const ADD_DETAIL_SET = 'exercise/ADD_DETAIL_SET';
-const ADD_DETAIL_BREAK = 'exercise/ADD_DETAIL_BREAK';
-const UPDATE_DETAIL_SET = 'exercise/UPDATE_DETAIL_SET';
-const DELETE_DETAIL_SET = 'exercise/DELETE_DETAIL_SET';
-const UPDATE_DETAIL_TIME = 'exercise/UPDATE_DETAIL_TIME';
-
 const REARRANGE_MY_EXERCISE = 'exercise/REARRANGE_MY_EXERCISE';
 const OPEN_MODAL = 'exercise/OPEN_MODAL';
 const SET_ROUTINE_NAME = 'exercise/SET_ROUTINE_NAME';
@@ -95,13 +91,13 @@ const IS_SELECTED = 'exercise/IS_SELECTED';
 const ADD_SELECTED_PREV_ITEM = 'exercise/ADD_SELECTED_PREV_ITEM';
 const REMOVE_SELECTED_PREV_ITEM = 'exercise/REMOVE_SELECTED_PREV_ITEM';
 const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
+const INITIALIZE_ROUTINE = 'exercise/INITIALIZE_ROUTINE';
+
 
 // action creators
 const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
-const addDetailSet = createAction(ADD_DETAIL_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
-const addDetailBreak = createAction(ADD_DETAIL_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
 const getExercise = createAction(GET_EXERCISE, (exercise) => ({ exercise }));
 const getExerciseType = createAction(GET_EXERCISE_TYPE, (categoryItems) => ({
@@ -128,22 +124,11 @@ const updateSet = createAction(UPDATE_SET, (set, idxes) => ({
   set,
   idxes,
 }));
-const updateDetailSet = createAction(UPDATE_DETAIL_SET, (set, idxes) => ({
-  set,
-  idxes,
-}));
 const updateTime = createAction(UPDATE_TIME, (time, idxes) => ({
   time,
   idxes,
 }));
-const updateDetailTime = createAction(UPDATE_DETAIL_TIME, (time, idxes) => ({
-  time,
-  idxes,
-}));
 const deleteSet = createAction(DELETE_SET, (idxes) => ({
-  idxes,
-}));
-const deleteDetailSet = createAction(DELETE_DETAIL_SET, (idxes) => ({
   idxes,
 }));
 const reArrangeMyExercise = createAction(REARRANGE_MY_EXERCISE, (lists) => ({
@@ -166,6 +151,7 @@ const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeri
 const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
 const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
 const getSelectedPrevItem = createAction(GET_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
+const initializeRoutine = createAction(INITIALIZE_ROUTINE, () => ({}));
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -199,12 +185,17 @@ const getExerciseTypeAPI = (id) => {
 // 운동루틴 등록하기
 const addRoutineAPI = (routine) => {
   return function (dispatch, getState, { history }) {
-    api.post('/routines', routine).then((response) => {
-      // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-      dispatch(reArrangeMyExercise([]));
-      dispatch(initializeSectedItems());
-      history.replace('/');
-    });
+    api
+      .post('/routines', routine)
+      .then((response) => {
+        // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+        dispatch(reArrangeMyExercise([]));
+        dispatch(initializeSectedItems());
+        history.replace('/');
+      })
+      .catch((error) => {
+        logger('운동 루틴 등록하기 실패', error);
+      });
   };
 };
 
@@ -373,15 +364,15 @@ export default handleActions(
     // 내가 선택한 종목에 추가
     [ADD_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        draft.routine.myExercise.push(action.payload.exercise);
+        draft.routine[0].myExercise.push(action.payload.exercise);
       }),
     // 내가 선택한 종목에서 제거
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.routine.myExercise.findIndex(
+        let index = draft.routine[0].myExercise.findIndex(
           (e) => e.exerciseName === action.payload.exercise,
         );
-        draft.routine.myExercise.splice(index, 1);
+        draft.routine[0].myExercise.splice(index, 1);
       }),
     // 화면 상단에 추가
     [ADD_SELECTED_ITEM]: (state, action) =>
@@ -399,22 +390,6 @@ export default handleActions(
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.routine.myExercise[action.payload.listIdx];
-        const setCount = list.set.reduce(
-          (cnt, elem) => cnt + ('exercise' === elem.type),
-          1,
-        );
-        logger(state);
-        list.set.push({
-          type: 'exercise',
-          weight: list.set[0].weight,
-          count: list.set[0].count,
-          setCount: setCount,
-        });
-      }),
-    // 이전 루틴 불러오기 상세 - 업데이트
-    [ADD_DETAIL_SET]: (state, action) =>
-      produce(state, (draft) => {
         const list = draft.routine[0].myExercise[action.payload.listIdx];
         const setCount = list.set.reduce(
           (cnt, elem) => cnt + ('exercise' === elem.type),
@@ -429,15 +404,6 @@ export default handleActions(
         });
       }),
     [ADD_BREAK]: (state, action) =>
-      produce(state, (draft) => {
-        const list = draft.routine.myExercise[action.payload.listIdx];
-        list.set.push({
-          type: 'break',
-          minutes: 0,
-          seconds: 0,
-        });
-      }),
-    [ADD_DETAIL_BREAK]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.routine[0].myExercise[action.payload.listIdx];
         list.set.push({
@@ -456,28 +422,12 @@ export default handleActions(
       }),
     [UPDATE_SET]: (state, action) =>
       produce(state, (draft) => {
-        const list = draft.routine.myExercise[action.payload.idxes.listIdx];
-        list.set[action.payload.idxes.setIdx].weight =
-          action.payload.set.weight;
-        list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
-      }),
-    // 이전 루틴 불러오기 상세 - 수정
-    [UPDATE_DETAIL_SET]: (state, action) =>
-      produce(state, (draft) => {
         const list = draft.routine[0].myExercise[action.payload.idxes.listIdx];
         list.set[action.payload.idxes.setIdx].weight =
           action.payload.set.weight;
         list.set[action.payload.idxes.setIdx].count = action.payload.set.count;
       }),
     [UPDATE_TIME]: (state, action) =>
-      produce(state, (draft) => {
-        const list = draft.routine.myExercise[action.payload.idxes.listIdx];
-        list.set[action.payload.idxes.setIdx] = {
-          ...list.set[action.payload.idxes.setIdx],
-          ...action.payload.time,
-        };
-      }),
-    [UPDATE_DETAIL_TIME]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.routine[0].myExercise[action.payload.idxes.listIdx];
         list.set[action.payload.idxes.setIdx] = {
@@ -486,24 +436,6 @@ export default handleActions(
         };
       }),
     [DELETE_SET]: (state, action) =>
-      produce(state, (draft) => {
-        draft.routine.myExercise[action.payload.idxes.listIdx].set =
-          draft.routine.myExercise[action.payload.idxes.listIdx].set.filter(
-            (elem, idx) => {
-              return idx != action.payload.idxes.setIdx;
-            },
-          );
-        let count = 1;
-        draft.routine.myExercise[action.payload.idxes.listIdx].set.map(
-          (set, idx) => {
-            if (set.type === 'exercise') {
-              set.setCount = count;
-              count += 1;
-            }
-          },
-        );
-      }),
-    [DELETE_DETAIL_SET]: (state, action) =>
       produce(state, (draft) => {
         draft.routine[0].myExercise[action.payload.idxes.listIdx].set =
           draft.routine[0].myExercise[action.payload.idxes.listIdx].set.filter(
@@ -523,7 +455,7 @@ export default handleActions(
       }),
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.routine.myExercise = action.payload.lists;
+        draft.routine[0].myExercise = action.payload.lists;
       }),
     [OPEN_MODAL]: (state, action) =>
       produce(state, (draft) => {
@@ -558,18 +490,19 @@ export default handleActions(
       }),
     [ADD_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.selectedPrevItem.push(action.payload.selectedPrevItem);
+        draft.selectedPrevItem = action.payload.selectedPrevItem;
       }),
     [REMOVE_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.selectedPrevItem.pop(action.payload.selectedPrevItem);
-        console.log(draft.selectedPrevItem);
       }),
     [GET_SELECTED_PREV_ITEM]: (state, action) =>
       produce(state, (draft) => {
         draft.selectedPrevItem = action.payload.selectedPrevItem;
-        console.log(draft.selectedPrevItem);
-        console.log("나의 선택된 이전 루틴 불러오기 성공");
+      }),
+    [INITIALIZE_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.routine = initialState.routine;
       })
   },
   initialState,
@@ -589,9 +522,7 @@ const actionCreators = {
   reArrangeRoutineDetailAPI,
   getBookmarkRoutineAPI,
   addSet,
-  addDetailSet,
   addBreak,
-  addDetailBreak,
   openRow,
   addExerciseType,
   removeExerciseType,
@@ -599,11 +530,8 @@ const actionCreators = {
   removeSelectedItem,
   openEditor,
   updateSet,
-  updateDetailSet,
   deleteSet,
-  deleteDetailSet,
   updateTime,
-  updateDetailTime,
   reArrangeMyExercise,
   openModal,
   setRoutineName,
@@ -614,6 +542,7 @@ const actionCreators = {
   addSelectedPrevItem,
   removeSelectedPrevItem,
   getSelectedPrevItem,
+  initializeRoutine,
 };
 
 export { actionCreators };

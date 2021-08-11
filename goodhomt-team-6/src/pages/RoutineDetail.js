@@ -19,7 +19,7 @@ import { history } from '../redux/configureStore';
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
-  const id = selectedPrevItem[0].id;
+  const id = selectedPrevItem.id;
   const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = myRoutine[0].routineName;
 
@@ -37,8 +37,7 @@ const RoutineDetail = (props) => {
       <HeaderWrapper>
         <GoBackButton
           onClick={() => {
-            dispatch(exerciseActions.removeSelectedPrevItem(selectedPrevItem));
-            history.replace('/mypastroutines');
+            history.goBack();
           }}
         >
           <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />

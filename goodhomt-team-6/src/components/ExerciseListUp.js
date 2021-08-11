@@ -20,12 +20,13 @@ const ExerciseListUp = (props) => {
   const [clicked, isClicked] = useState(false);
   const [selected, isSelected] = useState(false);
   const [clickedCategoryItem, setCategoryItem] = useState(null);
+  const [clickedCategory, isClickedCategory] = useState(false);
 
   const exerciseAll = useSelector((store) => store.exercise.exercise);
   const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
-  const myExercise = useSelector((store) => store.exercise.routine.myExercise);
+  const myExercise = useSelector((store) => store.exercise.routine[0].myExercise);
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
@@ -106,6 +107,13 @@ const ExerciseListUp = (props) => {
               dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
               setCategoryItem(e.id);
               isClicked(true);
+
+              if (clickedCategory) {
+                isClickedCategory(true);
+              } else {
+                isClickedCategory(false);
+              }
+
             }}
           >
             {e.categoryName}
@@ -242,7 +250,7 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 314px);
+  height: calc(100vh - 285px);
   overflow-x: scroll;
   background-color: #F7F7FA;
 `;
@@ -258,7 +266,8 @@ const ExerciseItem = styled.li`
   font-size: 1rem;
   &:hover,
   &:active {
-    background-color: #c4c4c4;
+    background-color: rgba(74, 64, 255, 0.15);
+    color: black;
   }
 `;
 
@@ -279,7 +288,7 @@ const SelectedWrapper = styled.div`
 
 const Selected = styled.div`
   font-size: 14px;
-  border: 1px solid #465678;
+  border: 1px solid ${Color.mainBlue};
   height: 32px;
   display: flex;
   padding: 0 8px;
@@ -287,6 +296,7 @@ const Selected = styled.div`
   line-height: 32px;
   border-radius: 16px;
   margin-right: 16px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1),
 `;
 
 const ExerciseName = styled.span`
@@ -315,7 +325,6 @@ const CategoryItem = styled.li`
   text-align: center;
   color: ${Color.navy};
   font-size: 1rem;
-  opacity: 54%;
   color: black;
   &:hover,
   &:active {

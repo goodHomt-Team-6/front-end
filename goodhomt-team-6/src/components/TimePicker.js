@@ -26,7 +26,7 @@ const seconds = () => {
 };
 
 const mapStateToProps = (state) => ({
-  myExercise: state.exercise.routine.myExercise,
+  myExercise: state.exercise.routine[0].myExercise,
 });
 
 const mapDispatchToProps = (dispatch) => ({

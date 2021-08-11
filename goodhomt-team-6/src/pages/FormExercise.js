@@ -40,7 +40,7 @@ const innerHeight = window.innerHeight - 175;
 const FormExercise = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
-  const lists = useSelector((state) => state.exercise.routine.myExercise);
+  const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
@@ -105,7 +105,7 @@ const FormExercise = (props) => {
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text type="title" margin="0px 5px 0px 0px;" fontSize="24px;">
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
           Select
         </Text>
         <PageText>2/2</PageText>
@@ -352,22 +352,46 @@ const RadioP = styled.p`
   user-select: none;
 `;
 
+// const GoBackButton = styled.div`
+//   display: flex;
+//   margin: 25px;
+//   /* width: 100%; */
+//   box-sizing: border-box;
+//   align-items: baseline;
+// `;
+
+// const PageText = styled.span`
+//   font-size: 14px;
+//   line-height: 2.5;
+// `;
+
+// const OptionCont = styled.div`
+//   background-color: #f7f7fa;
+//   display: flex;
+//   justify-content: flex-end;
+//   padding: 10px 0 0;
+// `;
+
 const GoBackButton = styled.div`
-  display: flex;
-  margin: 25px;
-  /* width: 100%; */
-  box-sizing: border-box;
-  align-items: baseline;
-`;
+      display: flex;
+      width: auto;
+      justify-content: flex-start;
+      padding: 25px;
+      /* width: 100%; */
+      box-sizing: border-box;
+      align-items: baseline;
+      background-color: #f7f7fa;
+      `;
 
 const PageText = styled.span`
-  font-size: 14px;
-  line-height: 2.5;
-`;
+      font-size: 14px;
+      line-height: 2.5;
+      `;
 
 const OptionCont = styled.div`
-  background-color: #f7f7fa;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 0 0;
-`;
+      background-color: #f7f7fa;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 0 0;
+      align-items: center;
+      `;

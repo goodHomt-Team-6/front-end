@@ -8,7 +8,7 @@ import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 
 export default function FormExerciseDnd() {
   const dispatch = useDispatch();
-  const lists = useSelector((state) => state.exercise.routine.myExercise);
+  const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const handlelists = (result) => {
     if (!result.destination) return;
     const items = [...lists];

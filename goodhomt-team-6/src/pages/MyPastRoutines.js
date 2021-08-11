@@ -6,7 +6,6 @@ import DropDown from '../components/DropDown';
 import BookmarkLine from '../img/bookmark_line.svg';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 import { FooterButton, Text } from '../shared/Styles';
-import RoutineItem from '../components/RoutineItem';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
@@ -14,6 +13,7 @@ import logger from '../shared/Logger';
 import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MoreBtn from '../img/more_button.svg';
+import '../components/RoutineItem.css';
 
 // 이전 목록 불러오기 페이지 컴포넌트
 const MyPastRoutines = (props) => {
@@ -56,6 +56,7 @@ const MyPastRoutines = (props) => {
       <GoBackButton
         onClick={() => {
           history.replace('/');
+          dispatch(exerciseActions.initializeRoutine());
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
@@ -87,7 +88,7 @@ const MyPastRoutines = (props) => {
       <CategoryList>
         {myRoutines && myRoutines.length > 0 ?
           myRoutines.map((routine, idx) => (
-            <div key={idx} {...routine}>
+            <div key={idx}>
               <RadioInput
                 id={routine.createdAt}
                 className="opacity"
@@ -105,9 +106,6 @@ const MyPastRoutines = (props) => {
                 htmlFor={routine.createdAt}
                 className="list"
                 value={routine.id}
-              // onClick={() => {
-              //   const selected = myRoutines.filter((m) => m.id == routine.id);
-              // }}
               >
                 <TimeBox>
                   <Time>30:00</Time>
@@ -201,6 +199,7 @@ const RadioBox = styled.label`
 `;
 
 const RadioInput = styled.input`
+  /* display: none; */
 `;
 
 const TimeBox = styled.div`

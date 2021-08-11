@@ -14,7 +14,7 @@ const DashBoard = (props) => {
     <>
       <MainBox>
         <TodayWrapper>
-          <Enrolled>{selectedPrevItem[0].myExercise.length}</Enrolled>
+          <Enrolled>{selectedPrevItem.myExercise.length}</Enrolled>
           <Wrapper>
             {myRoutine && isBookmarked ? <IconImg src={BookmarkSolid} /> : null}
             <span>{myRoutine[0].routineName}</span>

@@ -13,7 +13,7 @@ const BookmarkModal = ({ setShowModal }) => {
   const dispatch = useDispatch();
   const modalRef = useRef();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
-  const [routineRename, setRoutineRename] = useState(selectedPrevItem[0].routineName);
+  const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
 
   const closeModal = (e) => {
     if (e.target === modalRef.current) {
@@ -22,7 +22,7 @@ const BookmarkModal = ({ setShowModal }) => {
   };
 
   const reArrangeDetail = {
-    id: selectedPrevItem[0].id,
+    id: selectedPrevItem.id,
     isBookmarked: true,
     routineName: routineRename
   };
@@ -42,7 +42,7 @@ const BookmarkModal = ({ setShowModal }) => {
             <TextWrapper>
               <Text>날짜</Text>
               {selectedPrevItem &&
-                <TextValue>{selectedPrevItem[0].createdAt.substring(5, 7)}.{selectedPrevItem[0].createdAt.substring(8, 10)}</TextValue>
+                <TextValue>{selectedPrevItem.createdAt.substring(5, 7)}.{selectedPrevItem.createdAt.substring(8, 10)}</TextValue>
               }
             </TextWrapper>
             <Div />
@@ -53,7 +53,7 @@ const BookmarkModal = ({ setShowModal }) => {
             <WhiteDiv />
           </RoutineBasicInfo>
           <Input
-            placeholder={selectedPrevItem[0].routineName}
+            placeholder={selectedPrevItem.routineName}
             value={routineRename}
             _onChange={(e) => {
               setRoutineRename(e.target.value);

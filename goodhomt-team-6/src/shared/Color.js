@@ -9,7 +9,8 @@ const Color = {
   black: "#0f0f0f",
 
   bgIvory: "#F7F7FA",
-  mainBlue: "#4A40FF"
+  mainBlue: "#4A40FF",
+
 };
 
 export default Color;

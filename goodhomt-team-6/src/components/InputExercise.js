@@ -34,7 +34,7 @@ const InputExercise = ({ isExercise, idxes }) => {
 
 
   const savedSet = useSelector(
-    (state) => state.exercise.routine.myExercise[idxes.listIdx].set,
+    (state) => state.exercise.routine[0].myExercise[idxes.listIdx].set,
   );
   const [inputEditWeight, setInputEditWeight] = useState(true);
   const [inputEditCount, setInputEditCount] = useState(false);
