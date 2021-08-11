@@ -7,10 +7,11 @@ import StopWatch from '../img/stopwatch.svg';
 import TimeStop from '../img/time_stop.svg';
 import TimeStart from '../img/time_start.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import Check from '../img/check.svg';
 import CompletedCheck from '../img/completed_check.svg';
+import Check from '../img/check.svg';
 import logger from '../shared/Logger';
 import ProgressBarCont from '../components/ProgressBarCont';
+import ExerciseResultModal from '../components/ExerciseResultModal';
 
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
@@ -18,6 +19,7 @@ const WorkOut = (props) => {
   const routine = useSelector((state) => state.exercise.routine[0]);
   const [currentExerciseIdx, setcurrentExerciseIdx] = useState(0);
   const [currentSetIdx, setcurrentSetIdx] = useState(0);
+  const [exerciseResultModal, showExerciseResultModal] = useState(false);
 
   // 스톱워치
   useEffect(() => {
@@ -73,54 +75,90 @@ const WorkOut = (props) => {
               {routine.routineName}
             </Text>
           )}
-          {timeStop ? (
-            <Text
-              type="contents"
-              color="#9e9ea0"
-              fontSize="60px"
-              fontWeight="bold"
-              margin="0"
-            >
-              {parseInt(time / 60) < 10
-                ? `0${parseInt(time / 60)}`
-                : parseInt(time / 60)}
-              :{time % 60 < 10 ? `0${time % 60}` : time % 60}
-            </Text>
-          ) : (
-            <Text
-              type="contents"
-              color="#B4AFFF"
-              fontSize="60px"
-              fontWeight="bold"
-              margin="0"
-            >
-              {parseInt(time / 60) < 10
-                ? `0${parseInt(time / 60)}`
-                : parseInt(time / 60)}
-              :{time % 60 < 10 ? `0${time % 60}` : time % 60}
-            </Text>
-          )}
-          <PlayIconCont>
-            {timeStop ? (
-              <Image
-                src={TimeStart}
-                width="40px"
-                height="40px"
-                _onClick={() => {
-                  setTimeStop(false);
-                }}
-              ></Image>
+          {currentExerciseIdx < routine.myExercise.length ? (
+            timeStop ? (
+              <>
+                <Text
+                  type="contents"
+                  color="#9e9ea0"
+                  fontSize="60px"
+                  fontWeight="bold"
+                  margin="0"
+                >
+                  {parseInt(time / 60) < 10
+                    ? `0${parseInt(time / 60)}`
+                    : parseInt(time / 60)}
+                  :{time % 60 < 10 ? `0${time % 60}` : time % 60}
+                </Text>
+                <PlayIconCont>
+                  {timeStop ? (
+                    <Image
+                      src={TimeStart}
+                      width="40px"
+                      height="40px"
+                      _onClick={() => {
+                        setTimeStop(false);
+                      }}
+                    ></Image>
+                  ) : (
+                    <Image
+                      src={TimeStop}
+                      width="40px"
+                      height="40px"
+                      _onClick={() => {
+                        setTimeStop(true);
+                      }}
+                    ></Image>
+                  )}
+                </PlayIconCont>
+              </>
             ) : (
-              <Image
-                src={TimeStop}
-                width="40px"
-                height="40px"
-                _onClick={() => {
-                  setTimeStop(true);
-                }}
-              ></Image>
-            )}
-          </PlayIconCont>
+              <>
+                <Text
+                  type="contents"
+                  color="#B4AFFF"
+                  fontSize="60px"
+                  fontWeight="bold"
+                  margin="0"
+                >
+                  {parseInt(time / 60) < 10
+                    ? `0${parseInt(time / 60)}`
+                    : parseInt(time / 60)}
+                  :{time % 60 < 10 ? `0${time % 60}` : time % 60}
+                </Text>
+                <PlayIconCont>
+                  {timeStop ? (
+                    <Image
+                      src={TimeStart}
+                      width="40px"
+                      height="40px"
+                      _onClick={() => {
+                        setTimeStop(false);
+                      }}
+                    ></Image>
+                  ) : (
+                    <Image
+                      src={TimeStop}
+                      width="40px"
+                      height="40px"
+                      _onClick={() => {
+                        setTimeStop(true);
+                      }}
+                    ></Image>
+                  )}
+                </PlayIconCont>
+              </>
+            )
+          ) : (
+            <CompleteButton
+              onClick={() => {
+                showExerciseResultModal(true);
+                setTimeStop(true);
+              }}
+            >
+              <CompleteButtonInner>운동 완료</CompleteButtonInner>
+            </CompleteButton>
+          )}
         </TimeCont>
         <ListCont>
           {routine.myExercise.map((list, listIdx) => (
@@ -136,7 +174,7 @@ const WorkOut = (props) => {
                   <ListBody>
                     {list.exerciseName}
                     <ListCheck>
-                      <Image src={Check} width="24px" height="24px" />
+                      <Image src={CompletedCheck} width="24px" height="24px" />
                     </ListCheck>
                   </ListBody>
                 </List>
@@ -159,16 +197,16 @@ const WorkOut = (props) => {
                               completeSet(list.set.length);
                             }}
                           >
-                            <Image
-                              src={CompletedCheck}
-                              width="24px"
-                              height="24px"
-                            />
+                            <Image src={Check} width="24px" height="24px" />
                           </ListCheckBlack>
                         ) : (
                           currentSetIdx > setIdx && (
                             <ListCheck>
-                              <Image src={Check} width="24px" height="24px" />
+                              <Image
+                                src={CompletedCheck}
+                                width="24px"
+                                height="24px"
+                              />
                             </ListCheck>
                           )
                         )}
@@ -194,11 +232,7 @@ const WorkOut = (props) => {
                             //   completeSet(list.set.length);
                             // }}
                             >
-                              <Image
-                                src={CompletedCheck}
-                                width="24px"
-                                height="24px"
-                              />
+                              <Image src={Check} width="24px" height="24px" />
                             </ListCheckBlack>
                             <ProgressBarCont
                               currentSetIdx={currentSetIdx}
@@ -211,13 +245,12 @@ const WorkOut = (props) => {
                           currentSetIdx > setIdx && (
                             <>
                               <ListCheck>
-                                <Image src={Check} width="24px" height="24px" />
+                                <Image
+                                  src={CompletedCheck}
+                                  width="24px"
+                                  height="24px"
+                                />
                               </ListCheck>
-                              {/* <ProgressBarCont
-                                currentSetIdx={currentSetIdx}
-                                setIdx={setIdx}
-                                disabled
-                              /> */}
                             </>
                           )
                         )}
@@ -228,6 +261,14 @@ const WorkOut = (props) => {
             </React.Fragment>
           ))}
         </ListCont>
+        {exerciseResultModal && (
+          <ExerciseResultModal
+            exerciseLength={routine.myExercise.length}
+            time={time}
+            routineName={routine.routineName}
+            id={routine.id}
+          ></ExerciseResultModal>
+        )}
       </Container>
     </React.Fragment>
   );
@@ -322,4 +363,26 @@ const ExerciseListBody = styled.div`
   justify-content: space-between;
   padding-left: 35px;
   width: 100%;
+`;
+
+const CompleteButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 266px;
+  height: 80px;
+  border: 1px solid #4a40ff;
+  border-radius: 40px;
+`;
+
+const CompleteButtonInner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  height: 56px;
+  border: 1px solid #4a40ff;
+  border-radius: 40px;
+  background-color: #4a40ff;
+  color: white;
 `;
