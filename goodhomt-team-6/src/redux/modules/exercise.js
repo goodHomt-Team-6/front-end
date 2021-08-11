@@ -226,6 +226,7 @@ const deleteMyTodayRoutineAPI = (routineId) => {
       .then((response) => {
         logger('나의 오늘 루틴 삭제 성공');
         dispatch(deleteMyTodayRoutine());
+        console.log(response);
       })
       .catch((error) => {
         logger('나의 오늘 루틴 삭제 실패', error);

@@ -234,8 +234,8 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 17px;
+  height: 17px;
 `;
 
 const CategoryList = styled.ul`

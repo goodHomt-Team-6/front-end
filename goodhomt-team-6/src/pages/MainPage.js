@@ -329,29 +329,30 @@ const MainBox = styled.div`
       `;
 
 const TodayMainBox = styled.div`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      border-radius: 10px;
-      background-color: white;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      `;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+`;
 
 const Index = styled.h2`
-      font-size: 18px;
-      `;
+  font-size: 18px;
+  font-weight: 500;
+`;
 
 const UserWrapper = styled.div`
-      display: flex;
-      justify-content: space-between;
-      `;
+  display: flex;
+  justify-content: space-between;
+`;
 
 const InfoBox = styled.div`
-      display: flex;
-      align-items: center;
-      margin-bottom: 2rem;
-      `;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
 
 const DateBox = styled.div``;
 
