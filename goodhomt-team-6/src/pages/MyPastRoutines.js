@@ -108,7 +108,7 @@ const MyPastRoutines = (props) => {
                 value={routine.id}
               >
                 <TimeBox>
-                  <Time>30:00</Time>
+                  <Time>{Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}</Time>
                 </TimeBox>
                 {myRoutines &&
                   <RoutineInfo>
@@ -193,7 +193,7 @@ const RadioBox = styled.label`
   font-size: 1rem;
   &:hover,
   &:active {
-    background-color: #c4c4c4;
+    background-color: rgba(74, 64, 255, 0.15);;
     cursor: pointer;
   }
 `;
@@ -234,14 +234,14 @@ const WorkoutDate = styled.span`
 `;
 
 const GoBackButton = styled.div`
-      display: flex;
-      width: auto;
-      justify-content: flex-start;
-      padding: 25px;
-      /* width: 100%; */
-      box-sizing: border-box;
-      align-items: baseline;
-      background-color: ${Color.bgIvory};
+  display: flex;
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
+  /* width: 100%; */
+  box-sizing: border-box;
+  align-items: baseline;
+  background-color: ${Color.bgIvory};
 `;
 
 const RoutineText = styled.h2`

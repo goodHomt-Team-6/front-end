@@ -14,7 +14,6 @@ import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 
-
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();

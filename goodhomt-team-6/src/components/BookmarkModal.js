@@ -36,7 +36,7 @@ const BookmarkModal = ({ setShowModal }) => {
             <WhiteDiv />
             <TextWrapper>
               <Text>종목</Text>
-              <TextValue>3</TextValue>
+              <TextValue>{selectedPrevItem.myExercise.length}</TextValue>
             </TextWrapper>
             <Div />
             <TextWrapper>
@@ -48,7 +48,7 @@ const BookmarkModal = ({ setShowModal }) => {
             <Div />
             <TextWrapper>
               <Text>시간</Text>
-              <TextValue>0:00</TextValue>
+              <TextValue>{Math.floor(selectedPrevItem.routineTime / 60)}:{selectedPrevItem.routineTime % 60}</TextValue>
             </TextWrapper>
             <WhiteDiv />
           </RoutineBasicInfo>

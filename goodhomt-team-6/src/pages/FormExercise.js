@@ -114,8 +114,8 @@ const FormExercise = (props) => {
       <OptionCont>
         <Image
           src={PurePlusButtonBlack}
-          width="20px"
-          height="20px"
+          width="15px"
+          height="15px"
           borderRadius="0"
           margin="0 15px 0 0"
           _onClick={() => {
@@ -124,8 +124,8 @@ const FormExercise = (props) => {
         ></Image>
         <Image
           src={ReArrangementBlack}
-          width="20px"
-          height="20px"
+          width="18px"
+          height="18px"
           borderRadius="0"
           margin="0 20px 0 0"
           _onClick={() => {
@@ -352,32 +352,11 @@ const RadioP = styled.p`
   user-select: none;
 `;
 
-// const GoBackButton = styled.div`
-//   display: flex;
-//   margin: 25px;
-//   /* width: 100%; */
-//   box-sizing: border-box;
-//   align-items: baseline;
-// `;
-
-// const PageText = styled.span`
-//   font-size: 14px;
-//   line-height: 2.5;
-// `;
-
-// const OptionCont = styled.div`
-//   background-color: #f7f7fa;
-//   display: flex;
-//   justify-content: flex-end;
-//   padding: 10px 0 0;
-// `;
-
 const GoBackButton = styled.div`
       display: flex;
       width: auto;
       justify-content: flex-start;
       padding: 25px;
-      /* width: 100%; */
       box-sizing: border-box;
       align-items: baseline;
       background-color: #f7f7fa;

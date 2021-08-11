@@ -28,7 +28,7 @@ const DashBoard = (props) => {
           <Div />
           <TypeWrapper>
             <Span>운동시간</Span>
-            <TextItem>0m</TextItem>
+            <TextItem>{Math.floor(myRoutine[0].routineTime / 60)}:{myRoutine[0].routineTime % 60}</TextItem>
           </TypeWrapper>
         </TypeContainer>
       </MainBox>

@@ -312,8 +312,6 @@ const OpenList = styled.div`
   }
       `;
 
-
-
 const DataRow = styled.div`
       display: flex;
       justify-content: space-between;
@@ -364,7 +362,6 @@ const GoBackButton = styled.div`
       width: auto;
       justify-content: flex-start;
       padding: 25px;
-      /* width: 100%; */
       box-sizing: border-box;
       align-items: baseline;
       background-color: #f7f7fa;

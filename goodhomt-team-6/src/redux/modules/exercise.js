@@ -86,6 +86,7 @@ const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 
 const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
 const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
+const DELETE_MY_TODAY_ROUTINE = 'exercise/DELETE_MY_TODAY_ROUTINE';
 const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
 const IS_SELECTED = 'exercise/IS_SELECTED';
 const ADD_SELECTED_PREV_ITEM = 'exercise/ADD_SELECTED_PREV_ITEM';
@@ -149,6 +150,7 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
 }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
+const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, () => ({}));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
 const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
 const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
@@ -212,6 +214,21 @@ const getMyTodayRoutineAPI = (todayDate) => {
       })
       .catch((error) => {
         logger('나의 오늘 루틴 가져오기 실패', error);
+      });
+  };
+};
+
+// 나의 오늘 루틴 삭제하기
+const deleteMyTodayRoutineAPI = (routineId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .delete('/routines/${routineId}')
+      .then((response) => {
+        logger('나의 오늘 루틴 삭제 성공');
+        dispatch(deleteMyTodayRoutine());
+      })
+      .catch((error) => {
+        logger('나의 오늘 루틴 삭제 실패', error);
       });
   };
 };
@@ -491,9 +508,15 @@ export default handleActions(
         console.log(action.payload.routine);
         draft.routine = action.payload.routine;
       }),
+    // 오늘 저장한 루틴 가져오기
     [GET_MY_TODAY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.myTodayRoutine = action.payload.myTodayRoutine;
+      }),
+    // 오늘 저장한 루틴 삭제하기
+    [DELETE_MY_TODAY_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myTodayRoutine = null;
       }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>
@@ -530,6 +553,7 @@ const actionCreators = {
   getExerciseTypeAPI,
   addRoutineAPI,
   getMyTodayRoutineAPI,
+  deleteMyTodayRoutineAPI,
   getAllRoutineAPI,
   getDayAgoRoutineAPI,
   getWeekAgoRoutineAPI,
@@ -560,6 +584,7 @@ const actionCreators = {
   removeSelectedPrevItem,
   getSelectedPrevItem,
   initializeRoutine,
+  initializeSectedItems
 };
 
 export { actionCreators };

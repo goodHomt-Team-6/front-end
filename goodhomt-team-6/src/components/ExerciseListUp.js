@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import { Button, FooterButton } from '../shared/Styles';
+import { Text, Button, FooterButton } from '../shared/Styles';
 import CloseButton from '../img/close-button.svg';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -53,11 +53,11 @@ const ExerciseListUp = (props) => {
       {/* 뒤로가기 */}
       <GoBackButton
         onClick={() => {
-          history.replace('/');
+          history.goBack('');
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text>Select</Text>
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">Select</Text>
         <PageText>1/2</PageText>
       </GoBackButton>
 
@@ -107,13 +107,11 @@ const ExerciseListUp = (props) => {
               dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
               setCategoryItem(e.id);
               isClicked(true);
-
               if (clickedCategory) {
                 isClickedCategory(true);
               } else {
                 isClickedCategory(false);
               }
-
             }}
           >
             {e.categoryName}
@@ -182,7 +180,7 @@ const ExerciseListUp = (props) => {
 
       {/* 종목 추가하기 */}
       <FooterButtonWrapper>
-        {selected ? (
+        {selectedItems && selectedItems.length > 0 ? (
           <FooterButton
             onClick={() =>
               history.push('/exercise/form')}
@@ -203,15 +201,11 @@ export default ExerciseListUp;
 
 const GoBackButton = styled.div`
   display: flex;
-  margin: 25px;
-  /* width: 100%; */
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
   box-sizing: border-box;
   align-items: baseline;
-`;
-
-const Text = styled.h2`
-  margin: 0px 5px 0px 0px;
-  font-size: 24px;
 `;
 
 const PageText = styled.span`

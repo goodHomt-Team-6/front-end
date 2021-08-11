@@ -1,11 +1,11 @@
 input[type="radio"]:checked + label {
   color: #000;
-  border-color: #c4c4c4;
-  background-color: #c4c4c4;
+  border-color: rgba(74, 64, 255, 0.15);
+  background-color: rgba(74, 64, 255, 0.15);
 }
 
 input[type="radio"]:checked + label {
-  background-color: #c4c4c4;
+  background-color: rgba(74, 64, 255, 0.15);
 }
 
 .opacity {
