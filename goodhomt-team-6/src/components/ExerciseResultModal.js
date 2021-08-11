@@ -36,6 +36,7 @@ const ExerciseResultModal = ({ exerciseLength, time, routineName, id }) => {
   return (
     <ModalWrapper>
       <ModalInner>
+        <PurpleAcc></PurpleAcc>
         <Inner>
           <CheckIcon src={CompletedCheck} />
           <Text
@@ -298,4 +299,13 @@ const RoutineRatingText = styled.div`
   width: 100%;
   align-items: center;
   margin-bottom: 20px;
+`;
+
+const PurpleAcc = styled.div`
+  position: absolute;
+  width: 84px;
+  height: 28px;
+  background-color: rgba(74, 64, 255, 0.6);
+  top: -14px;
+  left: calc(50% - 42px);
 `;
