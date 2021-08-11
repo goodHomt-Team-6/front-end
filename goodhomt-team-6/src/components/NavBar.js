@@ -40,7 +40,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/');
+            history.push('/community');
           }}>
           <IconImage src={Community} />
           <Title>Community</Title>
