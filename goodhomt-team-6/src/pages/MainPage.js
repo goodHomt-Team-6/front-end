@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, Image } from '../shared/Styles';
+import { Button, Image, Text } from '../shared/Styles';
 import Color from '../shared/Color';
 import playButton from '../img/play_button.svg';
 import { history } from '../redux/configureStore';
@@ -54,11 +54,11 @@ const Main = (props) => {
                 src={userImg}
               ></Image>
               {userName && (
-                <Text>
+                <TextUser>
                   {userName} 님,
                   <br />
                   안녕하세요 :)
-                </Text>
+                </TextUser>
               )}
             </InfoBox>
 
@@ -82,7 +82,7 @@ const Main = (props) => {
 
           {/* 오늘 등록한 운동 보여주기 - 대시보드 */}
           <RegisterWrapper>
-            <Index>Today</Index>
+            <Text textAlign="left" type="title" margin="0px 0px 10px 0px;" fontSize="18px;">Today</Text>
             {myTodayRoutine && myTodayRoutine.length !== 0 ?
               <TodayMainBox>
                 {myTodayRoutine[0].isCompleted ? (
@@ -127,13 +127,17 @@ const Main = (props) => {
                   </TypeWrapper>
                 </TodayTypeContainer>
               </TodayMainBox>
-              :
-              <MainBox>
+              : // 코드 변경 예정
+              <TodayMainBox>
                 <TodayWrapper>
                   <EnrolledZero>0</EnrolledZero>
-                  <TextItem>아직 등록된 운동이 없습니다</TextItem>
+                  <DashBoardDiv>
+                    <TextItem>
+                      아직 등록된 운동이 없습니다
+                    </TextItem>
+                  </DashBoardDiv>
                 </TodayWrapper>
-                <TypeContainer>
+                <TodayTypeContainer>
                   <TypeWrapper>
                     <Span>종목</Span>
                     <TextItem>종목없음</TextItem>
@@ -143,8 +147,8 @@ const Main = (props) => {
                     <Span>운동시간</Span>
                     <TextItem>00:00</TextItem>
                   </TypeWrapper>
-                </TypeContainer>
-              </MainBox>
+                </TodayTypeContainer>
+              </TodayMainBox>
             }
           </RegisterWrapper>
 
@@ -344,11 +348,6 @@ const TodayMainBox = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-const Index = styled.h2`
-  font-size: 18px;
-  font-weight: 500;
-`;
-
 const UserWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -377,7 +376,7 @@ const LoginBtn = styled.button`
   cursor: pointer;
   `;
 
-const Text = styled.span`
+const TextUser = styled.span`
   font-size: 16px;
   `;
 

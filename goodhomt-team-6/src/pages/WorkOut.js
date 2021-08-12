@@ -12,6 +12,8 @@ import Check from '../img/check.svg';
 import logger from '../shared/Logger';
 import ProgressBarCont from '../components/ProgressBarCont';
 import ExerciseResultModal from '../components/ExerciseResultModal';
+import Header from '../components/Header';
+
 
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
@@ -63,10 +65,11 @@ const WorkOut = (props) => {
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
           Workout
         </Text>
       </GoBackButton>
+
       <Container>
         <TimeCont>
           <Image src={StopWatch} width="18px" height="20px"></Image>

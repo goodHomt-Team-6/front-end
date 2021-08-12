@@ -47,13 +47,13 @@ const Community = () => {
           {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
-              <Image
-                width="40px"
-                height="40px"
-                margin="0px 15px 0px 0px"
-                src={userImg}
-              ></Image>
-              <Text type="contents" fontSize="18px">
+              {/* <Image
+                // width="40px"
+                // height="40px"
+                // margin="0px 15px 0px 0px"
+                // src={userImg}
+              ></Image> */}
+              <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
                 Community
               </Text>
             </InfoBox>
@@ -73,7 +73,7 @@ const Community = () => {
           </UserWrapper>
 
           {/* 운동 종목 키워드 검색 */}
-          <SearchWrapper>
+          {/* <SearchWrapper>
             <SearchInput
               value={searchInput}
               onChange={(e) => {
@@ -87,7 +87,7 @@ const Community = () => {
                 setSearchInput('');
               }}
             />
-          </SearchWrapper>
+          </SearchWrapper> */}
 
           <Category>
             <CategoryItem
@@ -104,11 +104,7 @@ const Community = () => {
           {feedClicked ? (
             //Feed
             <CategoryList>
-              {feed &&
-                feed.map((item, idx) => (
-                  <FeedItem key={idx} {...item} />
-                ))
-              }
+              <FeedItem />
             </CategoryList>
           ) : (
             // Challenge

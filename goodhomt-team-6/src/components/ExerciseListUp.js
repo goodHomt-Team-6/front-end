@@ -12,6 +12,8 @@ import { List } from '@material-ui/core';
 import Logger from '../shared/Logger';
 import searchIcon from '../img/search-icon.svg';
 import { Opacity } from '@material-ui/icons';
+import Header from '../components/Header';
+
 
 // 운동리스트 컴포넌트
 const ExerciseListUp = (props) => {
@@ -52,86 +54,105 @@ const ExerciseListUp = (props) => {
 
   return (
     <>
-      {/* 뒤로가기 */}
-      <GoBackButton
-        onClick={() => {
-          history.replace('/');
-        }}
-      >
-        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
-          Select
-        </Text>
-        <PageText>1/2</PageText>
-      </GoBackButton>
+      <ExerciseListCont>
+        {/* 뒤로가기 */}
+        <Header message="Select" page="1/2"></Header>
 
-      {/* 선택한 운동 보여주기 */}
-      {selectedItems && (
-        <SelectedWrapper>
-          {selectedItems.map((e, i) => (
-            <Selected key={i}>
-              <ExerciseName>{e.exerciseName}</ExerciseName>
-              <CloseBtn
-                src={CloseButton}
-                width="10"
-                onClick={() => {
-                  dispatch(exerciseActions.removeSelectedItem(e));
-                  dispatch(exerciseActions.removeExerciseType(e));
-                }}
-              />
-            </Selected>
-          ))}
-        </SelectedWrapper>
-      )}
+        {/* 선택한 운동 보여주기 */}
+        {selectedItems && (
+          <SelectedWrapper>
+            {selectedItems.map((e, i) => (
+              <Selected key={i}>
+                <ExerciseName>{e.exerciseName}</ExerciseName>
+                <CloseBtn
+                  src={CloseButton}
+                  width="10"
+                  onClick={() => {
+                    dispatch(exerciseActions.removeSelectedItem(e));
+                    dispatch(exerciseActions.removeExerciseType(e));
+                  }}
+                />
+              </Selected>
+            ))}
+          </SelectedWrapper>
+        )}
 
-      {/* 운동 검색 */}
-      <SearchWrapper>
-        <SearchInput
-          value={searchInput}
-          onChange={(e) => {
-            setSearchInput(e.target.value);
-          }}
-        />
-        <SearchButton src={searchIcon} />
-      </SearchWrapper>
+        {/* 운동 검색 */}
+        <SearchWrapper>
+          <SearchInput
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
+          />
+          <SearchButton src={searchIcon} />
+        </SearchWrapper>
 
-      {/* 운동 카테고리 */}
-      <Category>
-        <CategoryItem
-          onClick={() => {
-            isClicked(false);
-          }}
-        >
-          전체
-        </CategoryItem>
-        {categoryTitle.map((e, i) => (
+        {/* 운동 카테고리 */}
+        <Category>
           <CategoryItem
-            key={i}
             onClick={() => {
-              dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
-              setCategoryItem(e.id);
-              isClicked(true);
-              if (clickedCategory) {
-                isClickedCategory(true);
-              } else {
-                isClickedCategory(false);
-              }
+              isClicked(false);
             }}
           >
-            {e.categoryName}
+            전체
           </CategoryItem>
-        ))}
-      </Category>
+          {categoryTitle.map((e, i) => (
+            <CategoryItem
+              key={i}
+              onClick={() => {
+                dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
+                setCategoryItem(e.id);
+                isClicked(true);
+                if (clickedCategory) {
+                  isClickedCategory(true);
+                } else {
+                  isClickedCategory(false);
+                }
+              }}
+            >
+              {e.categoryName}
+            </CategoryItem>
+          ))}
+        </Category>
 
-      {/* 운동 카테고리별 리스트 보여주기 */}
-      {clicked ? (
-        <CategoryList>
-          {categoryItems &&
-            categoryItems
+        {/* 운동 카테고리별 리스트 보여주기 */}
+        {clicked ? (
+          <CategoryList>
+            {categoryItems &&
+              categoryItems
+                .filter((e) => e.exerciseName.includes(searchInput))
+                .map((e) => (
+                  <ExerciseItem
+                    key={e.id}
+                    onClick={() => {
+                      const exercise = {
+                        exerciseName: e.exerciseName,
+                        set: [
+                          {
+                            type: 'exercise',
+                            count: 0,
+                            weight: 0,
+                            setCount: 1,
+                          },
+                        ],
+                      };
+                      dispatch(exerciseActions.addExerciseType(exercise));
+                      dispatch(exerciseActions.addSelectedItem(e));
+                    }}
+                  >
+                    <ItemWrapper>{e.exerciseName}</ItemWrapper>
+                  </ExerciseItem>
+                ))}
+          </CategoryList>
+        ) : (
+          // 운동 전체 리스트 보여주기
+          <CategoryList>
+            {exerciseAll
               .filter((e) => e.exerciseName.includes(searchInput))
-              .map((e) => (
+              .map((e, i) => (
                 <ExerciseItem
-                  key={e.id}
+                  key={i}
                   onClick={() => {
                     const exercise = {
                       exerciseName: e.exerciseName,
@@ -151,65 +172,28 @@ const ExerciseListUp = (props) => {
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>
                 </ExerciseItem>
               ))}
-        </CategoryList>
-      ) : (
-        // 운동 전체 리스트 보여주기
-        <CategoryList>
-          {exerciseAll
-            .filter((e) => e.exerciseName.includes(searchInput))
-            .map((e, i) => (
-              <ExerciseItem
-                key={i}
-                onClick={() => {
-                  const exercise = {
-                    exerciseName: e.exerciseName,
-                    set: [
-                      {
-                        type: 'exercise',
-                        count: 0,
-                        weight: 0,
-                        setCount: 1,
-                      },
-                    ],
-                  };
-                  dispatch(exerciseActions.addExerciseType(exercise));
-                  dispatch(exerciseActions.addSelectedItem(e));
-                }}
-              >
-                <ItemWrapper>{e.exerciseName}</ItemWrapper>
-              </ExerciseItem>
-            ))}
-        </CategoryList>
-      )}
-
-      {/* 종목 추가하기 */}
-      <FooterButtonWrapper>
-        {selectedItems && selectedItems.length > 0 ? (
-          <FooterButton onClick={() => history.push('/exercise/form')}>
-            종목 추가하기
-          </FooterButton>
-        ) : (
-          <FooterButton disabled>종목 추가하기</FooterButton>
+          </CategoryList>
         )}
-      </FooterButtonWrapper>
+
+        {/* 종목 추가하기 */}
+        <FooterButtonWrapper>
+          {selectedItems && selectedItems.length > 0 ? (
+            <FooterButton onClick={() => history.push('/exercise/form')}>
+              종목 추가하기
+            </FooterButton>
+          ) : (
+            <FooterButton disabled>종목 추가하기</FooterButton>
+          )}
+        </FooterButtonWrapper>
+      </ExerciseListCont>
     </>
   );
 };
 
 export default ExerciseListUp;
 
-const GoBackButton = styled.div`
-  display: flex;
-  width: auto;
-  justify-content: flex-start;
-  padding: 25px;
-  box-sizing: border-box;
-  align-items: baseline;
-`;
-
-const PageText = styled.span`
-  font-size: 14px;
-  line-height: 2.5;
+const ExerciseListCont = styled.div`
+  background-color: #f7f7fa;
 `;
 
 const SearchWrapper = styled.div`
@@ -226,6 +210,7 @@ const SearchInput = styled.input`
   width: 100%;
   height: 48px;
   border: none;
+  background-color: #f7f7fa;
   &:focus,
   &:active {
     outline: none;
