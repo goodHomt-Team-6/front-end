@@ -15,6 +15,8 @@ import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
 import FormExerciseDnd from '../components/FormExerciseDnd';
+import Header from '../components/Header';
+
 
 // material-ui 모달
 import { makeStyles } from '@material-ui/core/styles';
@@ -98,18 +100,7 @@ const EditRoutine = (props) => {
   return (
     <>
       {/* 뒤로가기 버튼 */}
-
-      <GoBackButton
-        onClick={() => {
-          history.goBack();
-        }}
-      >
-        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
-          Routine
-        </Text>
-        <PageText></PageText>
-      </GoBackButton>
+      <Header message="Routine"></Header>
 
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <OptionCont>

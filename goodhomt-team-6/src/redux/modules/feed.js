@@ -70,7 +70,6 @@ const addFeedAPI = () => {
     )
       .then((response) => {
         logger('루틴 커뮤니티 피드에 올리기 성공');
-        console.log(response);
       })
       .catch((error) => {
         logger('루틴 커뮤니티 피드에 올리기 실패', error);
@@ -86,7 +85,6 @@ const getFeedAllAPI = () => {
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 전체 가져오기 성공');
-        console.log(response.data.result);
       })
       .catch((error) => {
         logger('커뮤니티 피드 전체 가져오기 실패', error);
@@ -145,7 +143,6 @@ export default handleActions(
   {
     [GET_FEED]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.feed);
         draft.feed = action.payload.feed;
       })
   },

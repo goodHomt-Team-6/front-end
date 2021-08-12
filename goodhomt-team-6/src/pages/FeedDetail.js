@@ -166,7 +166,6 @@ const RoutineDetail = (props) => {
                 routineName: routineName,
                 myExercise: myExercise,
               };
-              console.log(myExercise);
               dispatch(exerciseActions.addRoutineAPI(routine));
               history.replace('/');
             }}

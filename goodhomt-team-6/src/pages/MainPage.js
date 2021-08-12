@@ -217,7 +217,6 @@ const Main = (props) => {
                           src={RemoveBtn}
                           onClick={() => {
                             dispatch(exerciseActions.deleteMyTodayRoutineAPI(routine.id));
-                            console.log(routine.id);
                           }}>
                         </RemoveButton>}
                     </RoutineInfo>

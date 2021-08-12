@@ -224,7 +224,6 @@ const deleteMyTodayRoutineAPI = (routineId) => {
       .then((response) => {
         logger('나의 오늘 루틴 삭제 성공');
         dispatch(deleteMyTodayRoutine());
-        console.log(response);
       })
       .catch((error) => {
         logger('나의 오늘 루틴 삭제 실패', error);
@@ -329,7 +328,6 @@ const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
       .patch('/routines/bookmark', reArrangeDetial)
       .then((response) => {
         logger('북마크 설정, 루틴 이름 변경 성공');
-        console.log(response);
         dispatch(getRoutineDetailAPI(response.data.routineId));
       })
       .catch((error) => {
@@ -504,7 +502,6 @@ export default handleActions(
     // 루틴 가져오기
     [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.routine);
         draft.routine = action.payload.routine;
       }),
     // 오늘 저장한 루틴 가져오기
