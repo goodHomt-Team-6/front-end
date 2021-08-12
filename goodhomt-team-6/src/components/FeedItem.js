@@ -10,11 +10,12 @@ import { actionCreators as feedActions } from '../redux/modules/feed';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
+  const { routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
 
   return (
-    <>
+    <FeedItemWrapper>
       {/* 유저정보 */}
       <UserWrapper>
         <Image
@@ -29,13 +30,13 @@ const FeedItem = (props) => {
               fontSize="14px"
               color="black"
               fontWeight="600">
-              {userName}
+              {communityNickname}
             </Text>
           )}
           <Text
             type="label"
             fontSize="12px"
-          >2021-07-21
+          >{createdAt.substring(0, 10)}
           </Text>
         </InfoBox>
       </UserWrapper>
@@ -43,8 +44,8 @@ const FeedItem = (props) => {
       {/* 피드 게시 운동 정보 */}
       <TodayMainBox>
         <TodayWrapper>
-          <Enrolled>3</Enrolled>
-          <TextItem>하체 집중 코스</TextItem>
+          <Enrolled>{myExercise.length}</Enrolled>
+          <TextItem>{routineName}</TextItem>
         </TodayWrapper>
         <TodayTypeContainer>
           <TypeWrapper>
@@ -93,28 +94,38 @@ const FeedItem = (props) => {
             margin="0px 8px 0px 0px"
             fontSize="14px"
             fontWeight="600">
-            하체 집중 코스
+            {routineName}
           </Text>
-          <Text
-            type="contents"
-            margin="0px"
-            color="#4A40FF"
-            fontSize="14px"
-            fontWeight="600">
-            #스쿼트 #런지 #요가
-          </Text>
+
+          {myExercise.map((item, idx) => (
+            <Text
+              key={idx}
+              type="contents"
+              margin="0px 6px 0px 0px"
+              color="#4A40FF"
+              fontSize="14px"
+              fontWeight="600">
+              #{item.exerciseName}
+            </Text>
+          ))}
+
         </TextBox>
         <Text
           type="contents"
           margin="0px"
           fontSize="14px">
-          제가 진짜 힘들게 했던 하체운동 모음입니다!</Text>
+          {description}
+        </Text>
       </TextWrapper>
-    </>
+    </FeedItemWrapper>
   );
 };
 
 export default FeedItem;
+
+const FeedItemWrapper = styled.li`
+  margin-bottom: 3rem;
+`;
 
 const UserWrapper = styled.div`
   display: flex;

@@ -29,8 +29,6 @@ const Community = () => {
     dispatch(feedActions.getFeedAllAPI());
   }, []);
 
-  console.log(feed);
-
   const peedClick = useCallback(() => {
     setPeedClicked(true);
     setChallengeClicked(false);
@@ -51,7 +49,7 @@ const Community = () => {
                 margin="0px 15px 0px 0px"
                 src={userImg}
               ></Image>
-              <Text>
+              <Text margin="0px">
                 Community
               </Text>
             </InfoBox>
@@ -73,8 +71,15 @@ const Community = () => {
                 setSearchInput(e.target.value);
               }}
             />
-            <SearchButton src={searchIcon} />
+            <SearchButton
+              src={searchIcon}
+              onClick={() => {
+                dispatch(feedActions.getFeedSearchAPI(searchInput));
+                setSearchInput('');
+              }}
+            />
           </SearchWrapper>
+          {/* <Text>00로 검색한 결과입니다</Text> */}
 
 
           <Category>
@@ -92,7 +97,11 @@ const Community = () => {
           {peedClicked ? (
             //Peed
             <CategoryList>
-              <FeedItem />
+              {feed &&
+                feed.map((item, idx) => (
+                  <FeedItem key={idx} {...item} />
+                ))
+              }
             </CategoryList>
           ) : (
             // Challenge
@@ -160,7 +169,7 @@ const IconBox = styled.div`
 `;
 
 const Text = styled.h2`
-  margin: 12px 0px;
+  margin: 8px 0px 0px 0px;
   font-size: 18px;
   font-weight: 500;
 `;

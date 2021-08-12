@@ -74,10 +74,10 @@ const getFeedAllAPI = () => {
 };
 
 // 커뮤니티 검색어로 전체 가져오기
-const getFeedSearchAPI = (팔굽) => {
+const getFeedSearchAPI = (keyword) => {
   return function (dispatch, getState, { history }) {
     api
-      .get(`/community?exerciseName=${"팔굽"}`)
+      .get(`/community?exerciseName=${keyword}`)
       .then((response) => {
         console.log(response);
         dispatch(getFeed(response.data.result));
