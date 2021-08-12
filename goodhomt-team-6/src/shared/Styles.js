@@ -52,7 +52,7 @@ const H1 = styled.h1`
 `;
 
 const P = styled.p`
-  ${(props) => (props.margin ? `margin:${props.margin};` : '')}
+  ${(props) => (props.margin ? `margin:${props.margin};` : 'margin: 0;')}
   ${(props) => (props.color ? `color:${props.color};` : '')}
   ${(props) => (props.minWidth ? `min-width:${props.minWidth};` : '')}
   ${(props) => (props.width ? `width:${props.width};` : '')}

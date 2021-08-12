@@ -26,7 +26,9 @@ const ExerciseListUp = (props) => {
   const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
-  const myExercise = useSelector((store) => store.exercise.routine[0].myExercise);
+  const myExercise = useSelector(
+    (store) => store.exercise.routine[0].myExercise,
+  );
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
@@ -53,11 +55,13 @@ const ExerciseListUp = (props) => {
       {/* 뒤로가기 */}
       <GoBackButton
         onClick={() => {
-          history.goBack('');
+          history.push('/');
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">Select</Text>
+        <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+          Select
+        </Text>
         <PageText>1/2</PageText>
       </GoBackButton>
 
@@ -181,16 +185,11 @@ const ExerciseListUp = (props) => {
       {/* 종목 추가하기 */}
       <FooterButtonWrapper>
         {selectedItems && selectedItems.length > 0 ? (
-          <FooterButton
-            onClick={() =>
-              history.push('/exercise/form')}
-          >종목 추가하기
+          <FooterButton onClick={() => history.push('/exercise/form')}>
+            종목 추가하기
           </FooterButton>
         ) : (
-          <FooterButton
-            disabled
-          >종목 추가하기
-          </FooterButton>
+          <FooterButton disabled>종목 추가하기</FooterButton>
         )}
       </FooterButtonWrapper>
     </>
@@ -246,7 +245,7 @@ const CategoryList = styled.ul`
   box-sizing: border-box;
   height: calc(100vh - 285px);
   overflow-x: scroll;
-  background-color: #F7F7FA;
+  background-color: #f7f7fa;
 `;
 
 const ExerciseItem = styled.li`
@@ -290,7 +289,7 @@ const Selected = styled.div`
   line-height: 32px;
   border-radius: 16px;
   margin-right: 16px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1),
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ExerciseName = styled.span`
