@@ -1,29 +1,54 @@
 import React from 'react';
 import styled from 'styled-components';
-import Color from '../shared/Color';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { Text } from '../shared/Styles';
+import { history } from '../redux/configureStore';
 
 const Header = (props) => {
   return (
-    <HeaderBox>
-      <Index>index</Index>
-    </HeaderBox>
+    <React.Fragment>
+      {props.toMain ? (
+        <GoBackButton
+          onClick={() => {
+            history.push('/');
+          }}
+        >
+          <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
+          <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+            {props.message}
+          </Text>
+          {props.page && <PageText>{props.page}</PageText>}
+        </GoBackButton>
+      ) : (
+        <GoBackButton
+          onClick={() => {
+            history.goBack();
+          }}
+        >
+          <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
+          <Text type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+            {props.message}
+          </Text>
+          {props.page && <PageText>{props.page}</PageText>}
+        </GoBackButton>
+      )}
+    </React.Fragment>
   );
 };
 
 export default Header;
 
-const HeaderBox = styled.div`
-  height: 8vh;
-  /* background-color: ${Color.header}; */
-`;
-
-const Index = styled.h1`
-  height: 100%;
-  margin: 0px;
-  font-size: 15px;
-  color: ${Color.navy};
+const GoBackButton = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
+  box-sizing: border-box;
+  align-items: baseline;
+  background-color: #f7f7fa;
 `;
 
+const PageText = styled.span`
+  font-size: 14px;
+  line-height: 2.5;
+`;

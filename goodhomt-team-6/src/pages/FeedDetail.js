@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Color from '../shared/Color';
 import BookmarkLine from '../img/bookmark_line.svg';
 import EditIcon from '../img/edit_icon.svg';
-import GoBackHeader from '../components/GoBackHeader';
 import { FooterButton, Text } from '../shared/Styles';
 import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';

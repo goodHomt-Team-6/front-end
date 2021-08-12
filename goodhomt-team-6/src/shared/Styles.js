@@ -45,7 +45,8 @@ const H1 = styled.h1`
   margin: 0px;
   ${(props) =>
     props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1.5em;'}
-  text-align: center;
+  ${(props) =>
+    props.textAlign ? `text-align: ${props.textAlign};` : 'text-align: center;'}
   ${(props) => (props.bold ? `font-weight: bold;` : '')}
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.fontWeight ? `font-weight:${props.fontWeight};` : '')}
@@ -55,6 +56,7 @@ const P = styled.p`
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.color ? `color:${props.color};` : '')}
   ${(props) => (props.minWidth ? `min-width:${props.minWidth};` : '')}
+  ${(props) => (props.minHeight ? `min-height:${props.minHeight};` : '')}
   ${(props) => (props.width ? `width:${props.width};` : '')}
   ${(props) => (props.bgColor ? `background-color:${props.bgColor};` : '')}
   ${(props) => (props.padding ? `padding:${props.padding};` : '')}
@@ -67,7 +69,8 @@ const P = styled.p`
 
 const Span = styled.span`
   ${(props) => (props.margin ? `margin:${props.margin};` : `margin: 0px;`)}
-  ${(props) => (props.fontSize ? `font-size:${props.fontSize};` : `font-size: 0.4em;`)}
+  ${(props) =>
+    props.fontSize ? `font-size:${props.fontSize};` : `font-size: 0.4em;`}
   ${(props) => (props.color ? `color:${props.color};` : `color: #888;`)}
   font-family: 'PoppinsR';
   ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}

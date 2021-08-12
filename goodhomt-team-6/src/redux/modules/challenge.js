@@ -7,11 +7,13 @@ import logger from '../../shared/Logger';
 const initialState = {
   challenges: [],
   myChallenges: [],
+  challengeDetail: {},
 };
 
 // actions
 const GET_CHALLENGES = 'challenge/GET_CHALLENGES';
 const GET_MY_CHALLENGES = 'challenge/GET_MY_CHALLENGES';
+const GET_CHALLENGE_DETAIL = 'challenge/GET_CHALLENGE_DETAIL';
 
 // action creators
 const getChallenges = createAction(GET_CHALLENGES, (challenges) => ({
@@ -19,6 +21,9 @@ const getChallenges = createAction(GET_CHALLENGES, (challenges) => ({
 }));
 const getMyChallenges = createAction(GET_MY_CHALLENGES, (myChallenges) => ({
   myChallenges,
+}));
+const getChallengeDetail = createAction(GET_CHALLENGE_DETAIL, (challenge) => ({
+  challenge,
 }));
 
 // middleware actions
@@ -48,6 +53,19 @@ const getMyChallengesAPI = () => {
   };
 };
 
+const getChallengeDetailAPI = (challengeId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get(`/challenges/${challengeId}`)
+      .then((response) => {
+        dispatch(getChallengeDetail(response.data.result));
+      })
+      .catch(function (err) {
+        logger('챌린지 상세를 가져오지 못했습니다.');
+      });
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -59,6 +77,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.myChallenges = action.payload.myChallenges;
       }),
+    [GET_CHALLENGE_DETAIL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.challengeDetail = action.payload.challenge;
+      }),
   },
   initialState,
 );
@@ -67,6 +89,7 @@ export default handleActions(
 const actionCreators = {
   getChallengesAPI,
   getMyChallengesAPI,
+  getChallengeDetailAPI,
 };
 
 export { actionCreators };
