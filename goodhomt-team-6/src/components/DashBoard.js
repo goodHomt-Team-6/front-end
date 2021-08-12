@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
+import { Text } from '../shared/Styles';
 import { useDispatch, useSelector } from 'react-redux';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 
@@ -22,12 +23,26 @@ const DashBoard = (props) => {
         </TodayWrapper>
         <TypeContainer>
           <TypeWrapper>
-            <Span>종목</Span>
+            <Text
+              type='label'
+              fontSize="14px"
+              fontWeight="600"
+              color="black"
+              opacity="54%"
+            >종목
+            </Text>
             <TextItem>{myRoutine[0].routineName}</TextItem>
           </TypeWrapper>
           <Div />
           <TypeWrapper>
-            <Span>운동시간</Span>
+            <Text
+              type='label'
+              fontSize="14px"
+              fontWeight="600"
+              color="black"
+              opacity="54%"
+            >운동시간
+            </Text>
             <TextItem>{Math.floor(myRoutine[0].routineTime / 60)}:{myRoutine[0].routineTime % 60}</TextItem>
           </TypeWrapper>
         </TypeContainer>
@@ -64,13 +79,6 @@ const Enrolled = styled.span`
   margin-bottom: 10px;
   line-height: 1;
   color: ${Color.mainBlue};
-`;
-
-const Span = styled.span`
-  color: black;
-  opacity: 54%;
-  font-size: 14px;
-  font-weight: 600;
 `;
 
 const TextItem = styled.span`

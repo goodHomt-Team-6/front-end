@@ -64,13 +64,16 @@ const P = styled.p`
   ${(props) => (props.clicked ? `color: #fff;` : '')}
   ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
   ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}
+  ${(props) => (props.fontSize ? `color:${props.fontSize};` : ``)}
 `;
 
 const Span = styled.span`
-  margin: 0px;
-  font-size: 0.4em;
-  color: #888;
+  ${(props) => (props.margin ? `margin:${props.margin};` : `margin: 0px;`)}
+  ${(props) => (props.fontSize ? `font-size:${props.fontSize};` : `font-size: 0.4em;`)}
+  ${(props) => (props.color ? `color:${props.color};` : `color: #888;`)}
   font-family: 'PoppinsR';
+  ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}
+  ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
 `;
 
 // Button
@@ -134,6 +137,21 @@ const BasicBtn = styled.button`
   font-size: ${(props) => (props.fontSize ? props.fontSize : '15px')};
   line-height: 1em;
   max-width: ${(props) => props.maxWidth};
+`;
+// Icon
+const Icon = forwardRef((props, ref) => {
+  const { margin, src } = props;
+  const styles = {
+    margin: margin,
+    src: src,
+  };
+
+  return <IconImg {...styles}></IconImg>;
+});
+
+const IconImg = styled.img`
+  ${(props) => (props.margin ? `margin:${props.margin};` : '')}
+  ${(props) => (props.width ? `width:${props.width};` : '')}
 `;
 
 // Image
@@ -252,4 +270,4 @@ const FooterButton = styled.div`
   width: 100%;
 `;
 
-export { Grid, Text, Button, Image, Input, FooterButton };
+export { Grid, Text, Button, Image, Input, FooterButton, Icon };

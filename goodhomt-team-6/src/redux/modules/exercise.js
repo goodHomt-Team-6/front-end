@@ -222,7 +222,7 @@ const getMyTodayRoutineAPI = (todayDate) => {
 const deleteMyTodayRoutineAPI = (routineId) => {
   return function (dispatch, getState, { history }) {
     api
-      .delete('/routines/${routineId}')
+      .delete(`/routines/${routineId}`)
       .then((response) => {
         logger('나의 오늘 루틴 삭제 성공');
         dispatch(deleteMyTodayRoutine());

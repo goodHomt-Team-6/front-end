@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Image } from '../shared/Styles';
 import Color from '../shared/Color';
-import plusButton from '../img/plus-button.svg';
 import playButton from '../img/play_button.svg';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -191,11 +190,11 @@ const Main = (props) => {
                       }}>
                       <RoutineName>{routine.routineName}</RoutineName>
                       <RoutineBoxDiv>
-                        {routine.createdAt &&
+                        {/* {routine.createdAt &&
                           <WorkoutDate>
                             {routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
                           </WorkoutDate>
-                        }
+                        } */}
                         <WorkoutDate>
                           {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
                         </WorkoutDate>

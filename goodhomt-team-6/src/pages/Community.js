@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import { Image } from '../shared/Styles';
+import { Image, Icon } from '../shared/Styles';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -9,6 +9,10 @@ import CategoryItem from '../components/CategoryItem';
 import ChallengeItem from '../components/ChallengeItem';
 import searchIcon from '../img/search-icon.svg';
 import NavBar from '../components/NavBar';
+import FeedItem from '../components/FeedItem';
+import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
+import Noti from '../img/notification.svg';
+import { actionCreators as feedActions } from '../redux/modules/feed';
 
 // 커뮤니티 페이지 컴포넌트
 const Community = () => {
@@ -19,6 +23,13 @@ const Community = () => {
 
   const exerciseAll = useSelector((store) => store.exercise.exercise);
   const userImg = useSelector((store) => store.user.user.userImg);
+  const feed = useSelector((store) => store.feed.feed);
+
+  useEffect(() => {
+    dispatch(feedActions.getFeedAllAPI());
+  }, []);
+
+  console.log(feed);
 
   const peedClick = useCallback(() => {
     setPeedClicked(true);
@@ -44,6 +55,14 @@ const Community = () => {
                 Community
               </Text>
             </InfoBox>
+            <IconBox>
+              <Icon
+                margin="0px"
+                src={PurePlusButtonBlack} />
+              <Icon
+                margin="0px 1rem"
+                src={Noti} />
+            </IconBox>
           </UserWrapper>
 
           {/* 운동 종목 키워드 검색 */}
@@ -57,11 +76,12 @@ const Community = () => {
             <SearchButton src={searchIcon} />
           </SearchWrapper>
 
+
           <Category>
             <CategoryItem
               isChecked={peedClicked}
               handle={peedClick}
-              name={"Peed"}
+              name={"Feed"}
             />
             <CategoryItem
               isChecked={challengeClicked}
@@ -72,7 +92,7 @@ const Community = () => {
           {peedClicked ? (
             //Peed
             <CategoryList>
-
+              <FeedItem />
             </CategoryList>
           ) : (
             // Challenge
@@ -133,6 +153,12 @@ const InfoBox = styled.div`
   margin-left: 1.5rem;
 `;
 
+const IconBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+`;
+
 const Text = styled.h2`
   margin: 12px 0px;
   font-size: 18px;
@@ -188,6 +214,7 @@ const NavBarWrapper = styled.div`
   position: fixed;
   bottom: 0px;
   width: 100%;
-  `;
+`;
+
 
 

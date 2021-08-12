@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
-import PlusButton from '../img/plus-button.svg';
 import PurePlusButtonGrey from '../img/pure-plus-button-grey.svg';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
 import ReArrangementGrey from '../img/re-arrangement-grey.svg';

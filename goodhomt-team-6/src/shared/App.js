@@ -57,7 +57,7 @@ const App = (props) => {
             component={HOC(KakaoLanding, false)}
           />
           <Route path="/workout" exact component={HOC(WorkOut, true)} />
-          <Route path="/community" exact component={HOC(Community, true)} />
+          <Route path="/community" exact component={Community} />
         </Switch>
       </ConnectedRouter>
     </>
