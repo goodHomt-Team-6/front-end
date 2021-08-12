@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import { Image } from '../shared/Styles';
+import { Image, Text } from '../shared/Styles';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -14,18 +14,18 @@ import NavBar from '../components/NavBar';
 const Community = () => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
-  const [peedClicked, setPeedClicked] = useState(true);
+  const [feedClicked, setFeedClicked] = useState(true);
   const [challengeClicked, setChallengeClicked] = useState(false);
 
   const exerciseAll = useSelector((store) => store.exercise.exercise);
   const userImg = useSelector((store) => store.user.user.userImg);
 
-  const peedClick = useCallback(() => {
-    setPeedClicked(true);
+  const feedClick = useCallback(() => {
+    setFeedClicked(true);
     setChallengeClicked(false);
   }, []);
   const challengeClick = useCallback(() => {
-    setPeedClicked(false);
+    setFeedClicked(false);
     setChallengeClicked(true);
   }, []);
   return (
@@ -40,7 +40,7 @@ const Community = () => {
                 margin="0px 15px 0px 0px"
                 src={userImg}
               ></Image>
-              <Text>
+              <Text type="contents" fontSize="18px">
                 Community
               </Text>
             </InfoBox>
@@ -59,40 +59,32 @@ const Community = () => {
 
           <Category>
             <CategoryItem
-              isChecked={peedClicked}
-              handle={peedClick}
-              name={"Peed"}
+              isChecked={feedClicked}
+              handle={feedClick}
+              name={'Feed'}
             />
             <CategoryItem
               isChecked={challengeClicked}
               handle={challengeClick}
-              name={"Challenge"}
+              name={'Challenge'}
             />
           </Category>
-          {peedClicked ? (
-            //Peed
-            <CategoryList>
-
-            </CategoryList>
+          {feedClicked ? (
+            //Feed
+            <CategoryList></CategoryList>
           ) : (
             // Challenge
             <CategoryList>
-              {[1, 2, 3, 4,]
-                .map((e, i) => (
-                  <ChallengeItem />
-
-                ))}
+              <ChallengeItem />
             </CategoryList>
           )}
         </InboxWrapper>
       </Wrapper>
 
-
       {/* 고정 하단바 */}
       <NavBarWrapper>
         <NavBar />
       </NavBarWrapper>
-
     </Container>
   );
 };
@@ -133,12 +125,6 @@ const InfoBox = styled.div`
   margin-left: 1.5rem;
 `;
 
-const Text = styled.h2`
-  margin: 12px 0px;
-  font-size: 18px;
-  font-weight: 500;
-`;
-
 const CategoryList = styled.ul`
   width: 100%;
   padding: 0px;
@@ -146,13 +132,13 @@ const CategoryList = styled.ul`
   list-style: none;
   box-sizing: border-box;
   height: calc(100vh - 314px);
-  background-color: #F7F7FA;
+  background-color: #f7f7fa;
 `;
 
 const Category = styled.ul`
   display: flex;
   justify-content: center;
-  width:100%;
+  width: 100%;
   padding: 0px;
   list-style: none;
   margin-top: 43px;
@@ -188,6 +174,4 @@ const NavBarWrapper = styled.div`
   position: fixed;
   bottom: 0px;
   width: 100%;
-  `;
-
-
+`;

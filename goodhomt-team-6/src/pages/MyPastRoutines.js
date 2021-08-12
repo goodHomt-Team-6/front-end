@@ -24,7 +24,9 @@ const MyPastRoutines = (props) => {
 
   const myRoutines = useSelector((store) => store.exercise.routine);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
 
   useEffect(() => {
     dispatch(exerciseActions.getAllRoutineAPI());
@@ -55,12 +57,17 @@ const MyPastRoutines = (props) => {
     <>
       <GoBackButton
         onClick={() => {
-          history.replace('/');
+          history.push('/');
           dispatch(exerciseActions.initializeRoutine());
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+        <Text
+          fontWeight="500"
+          type="title"
+          margin="0px 5px 0px 0px;"
+          fontSize="18px;"
+        >
           Main
         </Text>
       </GoBackButton>
@@ -72,60 +79,61 @@ const MyPastRoutines = (props) => {
           <MoreIcon src={MoreBtn} />
         </DivBox>
         {/* 북마크 */}
-        {bookmarked ?
-          <BookmarkImg
-            onClick={unClickedBookmark}
-            src={BookmarkSolid}
-          />
-          : <BookmarkImg
-            onClick={ClickedBookmark}
-            src={BookmarkLine}
-          />
-        }
+        {bookmarked ? (
+          <BookmarkImg onClick={unClickedBookmark} src={BookmarkSolid} />
+        ) : (
+          <BookmarkImg onClick={ClickedBookmark} src={BookmarkLine} />
+        )}
       </DropdownWrapper>
 
       {/* 나의 지난 루틴 목록 */}
       <CategoryList>
-        {myRoutines && myRoutines.length > 0 ?
-          myRoutines.map((routine, idx) => (
-            <div key={idx}>
-              <RadioInput
-                id={routine.createdAt}
-                className="opacity"
-                type="radio"
-                name={'inputButton'}
-                value={routine.id}
-                onChange={(e) => {
-                  const { value } = e.target;
-                  const selected = myRoutines.filter((m) => m.id == value);
-                  const toObject = selected[0];
-                  setClicked(toObject);
-                }}
-              />
-              <RadioBox
-                htmlFor={routine.createdAt}
-                className="list"
-                value={routine.id}
-              >
-                <TimeBox>
-                  <Time>{Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}</Time>
-                </TimeBox>
-                {myRoutines &&
-                  <RoutineInfo>
-                    <InfoBox>
-                      {routine.isBookmarked &&
-                        <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>}
-                      <RoutineName>{routine.routineName}</RoutineName>
-                    </InfoBox>
-                    {routine.createdAt &&
-                      <WorkoutDate>{routine.createdAt.substring(0, 10)}</WorkoutDate>
-                    }
-                  </RoutineInfo>
-                }
-              </RadioBox>
-            </div>
-          )) : null
-        }
+        {myRoutines && myRoutines.length > 0
+          ? myRoutines.map((routine, idx) => (
+              <div key={idx}>
+                <RadioInput
+                  id={routine.createdAt}
+                  className="opacity"
+                  type="radio"
+                  name={'inputButton'}
+                  value={routine.id}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    const selected = myRoutines.filter((m) => m.id == value);
+                    const toObject = selected[0];
+                    setClicked(toObject);
+                  }}
+                />
+                <RadioBox
+                  htmlFor={routine.createdAt}
+                  className="list"
+                  value={routine.id}
+                >
+                  <TimeBox>
+                    <Time>
+                      {Math.floor(routine.routineTime / 60)}:
+                      {routine.routineTime % 60}
+                    </Time>
+                  </TimeBox>
+                  {myRoutines && (
+                    <RoutineInfo>
+                      <InfoBox>
+                        {routine.isBookmarked && (
+                          <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>
+                        )}
+                        <RoutineName>{routine.routineName}</RoutineName>
+                      </InfoBox>
+                      {routine.createdAt && (
+                        <WorkoutDate>
+                          {routine.createdAt.substring(0, 10)}
+                        </WorkoutDate>
+                      )}
+                    </RoutineInfo>
+                  )}
+                </RadioBox>
+              </div>
+            ))
+          : null}
       </CategoryList>
 
       {/* 불러오기 버튼 */}
@@ -135,14 +143,12 @@ const MyPastRoutines = (props) => {
             onClick={() => {
               dispatch(exerciseActions.addSelectedPrevItem(clicked));
               history.push('/routinedetail');
-            }}>
+            }}
+          >
             불러오기
           </FooterButton>
         ) : (
-          <FooterButton
-            disabled>
-            불러오기
-          </FooterButton>
+          <FooterButton disabled>불러오기</FooterButton>
         )}
       </FooterButtonWrapper>
     </>
@@ -178,7 +184,6 @@ const CategoryList = styled.ul`
   height: calc(100vh - 180px);
   overflow-y: scroll;
   background-color: ${Color.bgIvory};
-
 `;
 
 const RadioBox = styled.label`
@@ -193,7 +198,7 @@ const RadioBox = styled.label`
   font-size: 1rem;
   &:hover,
   &:active {
-    background-color: rgba(74, 64, 255, 0.15);;
+    background-color: rgba(74, 64, 255, 0.15);
     cursor: pointer;
   }
 `;
@@ -258,8 +263,7 @@ const InfoBox = styled.div`
   display: flex;
 `;
 
-const MoreIcon = styled.img`
-`;
+const MoreIcon = styled.img``;
 
 const DivBox = styled.div`
   display: flex;

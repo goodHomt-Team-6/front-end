@@ -47,9 +47,6 @@ const FormExercise = (props) => {
   const [idxes, updateIdxes] = useState(null);
   const [reArrangement, setReArrangement] = useState(false);
 
-  console.log(idxes);
-  console.log(lists);
-
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
@@ -353,24 +350,24 @@ const RadioP = styled.p`
 `;
 
 const GoBackButton = styled.div`
-      display: flex;
-      width: auto;
-      justify-content: flex-start;
-      padding: 25px;
-      box-sizing: border-box;
-      align-items: baseline;
-      background-color: #f7f7fa;
-      `;
+  display: flex;
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
+  box-sizing: border-box;
+  align-items: baseline;
+  background-color: #f7f7fa;
+`;
 
 const PageText = styled.span`
-      font-size: 14px;
-      line-height: 2.5;
-      `;
+  font-size: 14px;
+  line-height: 2.5;
+`;
 
 const OptionCont = styled.div`
-      background-color: #f7f7fa;
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 0 0;
-      align-items: center;
-      `;
+  background-color: #f7f7fa;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0 0;
+  align-items: center;
+`;
