@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
+import api from '../shared/Request';
 import { Image, Text, Icon } from '../shared/Styles';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -37,10 +38,13 @@ const Community = () => {
     setFeedClicked(false);
     setChallengeClicked(true);
   }, []);
+
   return (
     <Container>
       <Wrapper>
         <InboxWrapper>
+
+          {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
               <Image
@@ -49,14 +53,19 @@ const Community = () => {
                 margin="0px 15px 0px 0px"
                 src={userImg}
               ></Image>
-              <Text margin="0px" type="contents" fontSize="18px">
+              <Text type="contents" fontSize="18px">
                 Community
               </Text>
             </InfoBox>
-            <IconBox>
+            <IconBox
+              onClick={() => {
+                dispatch(feedActions.addFeedAPI());
+              }}
+            >
               <Icon
                 margin="0px"
-                src={PurePlusButtonBlack} />
+                src={PurePlusButtonBlack}
+              />
               <Icon
                 margin="0px 1rem"
                 src={Noti} />
@@ -79,8 +88,6 @@ const Community = () => {
               }}
             />
           </SearchWrapper>
-          {/* <Text>00로 검색한 결과입니다</Text> */}
-
 
           <Category>
             <CategoryItem
@@ -125,6 +132,7 @@ export default Community;
 const Container = styled.div`
   background-color: #f7f7fa;
   overflow: scroll;
+  height: calc(100vh - 75px);
 `;
 
 const Wrapper = styled.div`
@@ -133,7 +141,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100vh;
   overflow: scroll;
 `;
 

@@ -7,12 +7,17 @@ import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
 import BookmarkLine from '../img/bookmark_line.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { history } from '../redux/configureStore';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
-  const { routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
+  const { _id, routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
+
+  const dispatch = useDispatch();
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
+  const feed = useSelector((store) => store.feed.feed);
 
   return (
     <FeedItemWrapper>
@@ -42,7 +47,13 @@ const FeedItem = (props) => {
       </UserWrapper>
 
       {/* 피드 게시 운동 정보 */}
-      <TodayMainBox>
+      <TodayMainBox
+        onClick={() => {
+          const selected = feed.filter((m) => m._id == _id);
+          const toObject = selected[0];
+          dispatch(exerciseActions.addSelectedPrevItem(toObject));
+          history.push(`/community/${_id}`);
+        }}>
         <TodayWrapper>
           <Enrolled>{myExercise.length}</Enrolled>
           <TextItem>{routineName}</TextItem>
@@ -72,18 +83,20 @@ const FeedItem = (props) => {
         </TodayTypeContainer>
       </TodayMainBox>
 
+      {/* 좋아요 */}
       <IconWrapper>
-        {/* 좋아요 */}
         <LikeWrapper>
-          <IconBtn src={LikeLine} />
+          <IconBtn
+            src={LikeLine}
+            onClick={() => {
+              console.log("좋아요클릭");
+            }} />
           <Text type="contents"
             margin="0px 0px 0px 6px"
             color="#999999"
             fontWeight="500"
           >342</Text>
         </LikeWrapper>
-        {/* 북마크 */}
-        <IconBtn src={BookmarkLine} />
       </IconWrapper>
 
       {/* 운동 정보 텍스트 */}
@@ -124,7 +137,7 @@ const FeedItem = (props) => {
 export default FeedItem;
 
 const FeedItemWrapper = styled.li`
-  margin-bottom: 3rem;
+  padding-bottom: 2.5rem;
 `;
 
 const UserWrapper = styled.div`
@@ -188,6 +201,9 @@ const TodayMainBox = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   background-color: white;
+  :hover{
+    cursor: pointer;
+  }
 `;
 
 const TextItem = styled.span`
@@ -201,9 +217,12 @@ const Span = styled.span`
   opacity: 54%;
   font-size: 14px;
   font-weight: 600;
-  `;
+`;
 
 const IconBtn = styled.img`
+:hover{
+  cursor: pointer;
+}
 `;
 
 const IconWrapper = styled.div`

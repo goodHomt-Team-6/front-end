@@ -52,7 +52,7 @@ const H1 = styled.h1`
 `;
 
 const P = styled.p`
-  ${(props) => (props.margin ? `margin:${props.margin};` : 'margin: 0;')}
+  ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.color ? `color:${props.color};` : '')}
   ${(props) => (props.minWidth ? `min-width:${props.minWidth};` : '')}
   ${(props) => (props.width ? `width:${props.width};` : '')}
@@ -61,10 +61,8 @@ const P = styled.p`
   ${(props) =>
     props.fontSize ? `font-size:${props.fontSize};` : 'font-size:1em;'}
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
-  ${(props) => (props.clicked ? `color: #fff;` : '')}
   ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
   ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}
-  ${(props) => (props.fontSize ? `color:${props.fontSize};` : ``)}
 `;
 
 const Span = styled.span`
@@ -152,6 +150,9 @@ const Icon = forwardRef((props, ref) => {
 const IconImg = styled.img`
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.width ? `width:${props.width};` : '')}
+  :hover{
+    cursor: pointer;
+  }
 `;
 
 // Image

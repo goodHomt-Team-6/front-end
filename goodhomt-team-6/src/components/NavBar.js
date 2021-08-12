@@ -39,7 +39,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/');
+            // history.push('/');
           }}>
           <IconImage src={MyPage} />
           <Title>Mypage</Title>

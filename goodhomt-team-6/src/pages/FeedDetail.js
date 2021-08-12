@@ -14,21 +14,21 @@ import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 
-// 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
+// 피드 루틴 상세화면 컴포넌트
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem.id;
-  const myRoutine = useSelector((store) => store.exercise.routine);
+  const myExercise = selectedPrevItem.myExercise;
   const routineName = selectedPrevItem.routineName;
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (selectedPrevItem.length !== 0) {
-      dispatch(exerciseActions.getRoutineDetailAPI(id));
-    }
+    dispatch(exerciseActions.getRoutineDetailAPI(id));
   }, [routineName]);
+
+  console.log(selectedPrevItem);
 
   return (
     <>
@@ -48,12 +48,6 @@ const RoutineDetail = (props) => {
 
         {/* 루틴  수정 */}
         <IconWrapper>
-          <IconImg src={EditIcon}
-            onClick={() => {
-              history.push('/editroutine');
-            }}
-          />
-
           {/* 북마크 모달 */}
           <IconImg src={BookmarkLine}
             onClick={() => {
@@ -81,14 +75,20 @@ const RoutineDetail = (props) => {
             ))}
         </Container>
 
-        {/* 운동시작 버튼 */}
+        {/* 루틴불러오기 버튼 */}
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              history.push('/workout');
+              const routine = {
+                routineName: routineName,
+                myExercise: myExercise,
+              };
+              console.log(myExercise);
+              dispatch(exerciseActions.addRoutineAPI(routine));
+              history.replace('/');
             }}
           >
-            운동시작
+            루틴 불러오기
           </FooterButton>
         </FooterButtonWrapper>
       </Wrapper>
@@ -169,5 +169,11 @@ const GoBackButton = styled.div`
   box-sizing: border-box;
   align-items: baseline;
   background-color: #f7f7fa;
+`;
+
+const RoutineText = styled.h2`
+  margin: 0px 5px 0px 0px;
+  font-size: 14px;
+  font-weight: 500;
 `;
 

@@ -9,7 +9,7 @@ import BookmarkSolid from '../img/bookmark_solid.svg';
 const DashBoard = (props) => {
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const myRoutine = useSelector((store) => store.exercise.routine);
-  const isBookmarked = myRoutine[0].isBookmarked;
+  const isBookmarked = selectedPrevItem.isBookmarked;
 
   return (
     <>
@@ -17,8 +17,8 @@ const DashBoard = (props) => {
         <TodayWrapper>
           <Enrolled>{selectedPrevItem.myExercise.length}</Enrolled>
           <Wrapper>
-            {myRoutine && isBookmarked ? <IconImg src={BookmarkSolid} /> : null}
-            <span>{myRoutine[0].routineName}</span>
+            {/* {selectedPrevItem && isBookmarked ? <IconImg src={BookmarkSolid} /> : null} */}
+            <span>{selectedPrevItem.routineName}</span>
           </Wrapper>
         </TodayWrapper>
         <TypeContainer>
@@ -31,7 +31,7 @@ const DashBoard = (props) => {
               opacity="54%"
             >종목
             </Text>
-            <TextItem>{myRoutine[0].routineName}</TextItem>
+            <TextItem>{selectedPrevItem.routineName}</TextItem>
           </TypeWrapper>
           <Div />
           <TypeWrapper>
@@ -43,7 +43,7 @@ const DashBoard = (props) => {
               opacity="54%"
             >운동시간
             </Text>
-            <TextItem>{Math.floor(myRoutine[0].routineTime / 60)}:{myRoutine[0].routineTime % 60}</TextItem>
+            <TextItem>{Math.floor(selectedPrevItem.routineTime / 60)}:{selectedPrevItem.routineTime % 60}</TextItem>
           </TypeWrapper>
         </TypeContainer>
       </MainBox>

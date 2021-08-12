@@ -30,9 +30,6 @@ const InputExercise = ({ isExercise, idxes }) => {
   const [alert, openAlert] = React.useState(false);
   const dispatch = useDispatch();
 
-  console.log(idxes);
-
-
   const savedSet = useSelector(
     (state) => state.exercise.routine[0].myExercise[idxes.listIdx].set,
   );

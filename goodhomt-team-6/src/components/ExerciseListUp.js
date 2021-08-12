@@ -55,7 +55,7 @@ const ExerciseListUp = (props) => {
       {/* 뒤로가기 */}
       <GoBackButton
         onClick={() => {
-          history.push('/');
+          history.replace('/');
         }}
       >
         <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />

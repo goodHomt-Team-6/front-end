@@ -60,7 +60,6 @@ const initialState = {
 };
 
 // actions
-const SET_POST = 'exercise/SET_POST';
 const ADD_SET = 'exercise/ADD_SET';
 const ADD_BREAK = 'exercise/ADD_BREAK';
 const OPEN_ROW = 'exercise/OPEN_ROW';
@@ -96,7 +95,6 @@ const INITIALIZE_ROUTINE = 'exercise/INITIALIZE_ROUTINE';
 
 
 // action creators
-const setPost = createAction(SET_POST, (post) => ({ post }));
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
