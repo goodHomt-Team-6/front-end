@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import GoBackHeader from '../components/GoBackHeader';
 import DropDown from '../components/DropDown';
 import BookmarkLine from '../img/bookmark_line.svg';
 import BookmarkSolid from '../img/bookmark_solid.svg';

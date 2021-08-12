@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Color from '../shared/Color';
 import BookmarkLine from '../img/bookmark_line.svg';
 import EditIcon from '../img/edit_icon.svg';
-import GoBackHeader from '../components/GoBackHeader';
 import { FooterButton, Text } from '../shared/Styles';
 import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +16,9 @@ import { history } from '../redux/configureStore';
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem.id;
   const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = myRoutine[0].routineName;
@@ -40,25 +41,32 @@ const RoutineDetail = (props) => {
           }}
         >
           <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-          <Text fontWeight="500" type="title" margin="0px 5px 0px 0px;" fontSize="18px;">
+          <Text
+            fontWeight="500"
+            type="title"
+            margin="0px 5px 0px 0px;"
+            fontSize="18px;"
+          >
             Routine
           </Text>
         </GoBackButton>
 
-
         {/* 루틴  수정 */}
         <IconWrapper>
-          <IconImg src={EditIcon}
+          <IconImg
+            src={EditIcon}
             onClick={() => {
               history.push('/editroutine');
             }}
           />
 
           {/* 북마크 모달 */}
-          <IconImg src={BookmarkLine}
+          <IconImg
+            src={BookmarkLine}
             onClick={() => {
               setShowModal(true);
-            }} />
+            }}
+          />
         </IconWrapper>
       </HeaderWrapper>
 
@@ -73,10 +81,14 @@ const RoutineDetail = (props) => {
           {myRoutine &&
             myRoutine[0].myExercise.map((e, listIdx) => (
               <List key={listIdx}>
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">{e.exerciseName}</Text>
+                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  {e.exerciseName}
+                </Text>
                 <Text type="contents"> {e.set[0].setCount}세트</Text>
                 <Text type="contents">{e.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">{e.set[0].count}회</Text>
+                <Text type="contents" padding="0 10px 0 0">
+                  {e.set[0].count}회
+                </Text>
               </List>
             ))}
         </Container>
@@ -176,4 +188,3 @@ const RoutineText = styled.h2`
   font-size: 14px;
   font-weight: 500;
 `;
-
