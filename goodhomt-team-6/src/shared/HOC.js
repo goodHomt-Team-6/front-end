@@ -26,7 +26,7 @@ export default (SpecialComponent, option, adminRoute = null) => {
       }
     }, []);
 
-    return <SpecialComponent />;
+    return <SpecialComponent paramsId={props.match.params.id} />;
   };
 
   return AuthenticateCheck;

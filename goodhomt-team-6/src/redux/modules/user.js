@@ -140,7 +140,11 @@ export default handleActions(
         if (action.payload.token != 'undefined') {
           const decoded = jwt_decode(action.payload.token);
           draft.is_login = true;
-          draft.user = { nickname: decoded.nickname, userImg: decoded.img };
+          draft.user = {
+            nickname: decoded.nickname,
+            userImg: decoded.img,
+            communityNickname: decoded.communityNickname,
+          };
         }
       }),
   },
