@@ -413,7 +413,7 @@ const CategoryList = styled.ul`
   box-sizing: border-box;
   height: calc(100vh - 314px);
   overflow-x: scroll;
-  `;
+`;
 
 const Span = styled.span`
   color: black;
