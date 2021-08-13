@@ -125,23 +125,20 @@ const ChallengeDetail = (props) => {
                   >
                     {challenge.challengeDateTime.slice(8, 10) < 12
                       ? `오전 ${challenge.challengeDateTime.slice(
-                          8,
-                          10,
-                        )}:${challenge.challengeDateTime.slice(10, 12)}`
-                      : `오후 ${
-                          challenge.challengeDateTime.slice(8, 10) - 12
-                        }:${challenge.challengeDateTime.slice(10, 12)}`}
+                        8,
+                        10,
+                      )}:${challenge.challengeDateTime.slice(10, 12)}`
+                      : `오후 ${challenge.challengeDateTime.slice(8, 10) - 12
+                      }:${challenge.challengeDateTime.slice(10, 12)}`}
                   </Text>
                   <Text type="contents" fontSize="15px" margin="10px 0 0">
-                    {`${
-                      challenge.challengeDateTime.slice(4, 6) < 10
+                    {`${challenge.challengeDateTime.slice(4, 6) < 10
                         ? challenge.challengeDateTime.slice(5, 6)
                         : challenge.challengeDateTime.slice(4, 6)
-                    }/${
-                      challenge.challengeDateTime.slice(6, 8) < 10
+                      }/${challenge.challengeDateTime.slice(6, 8) < 10
                         ? challenge.challengeDateTime.slice(7, 8)
                         : challenge.challengeDateTime.slice(6, 8)
-                    }`}
+                      }`}
                     {` ${parseDay(challenge.challengeDateTime.slice(0, 8))}`}
                   </Text>
                 </Info>
@@ -270,10 +267,14 @@ const ChallengeDetail = (props) => {
                       openRow(e);
                     }}
                   >
-                    <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                    <Text
+                      type="contents"
+                      minWidth="80px"
+                      padding="0 0 0 10px">
                       {list.exerciseName}
                     </Text>
-                    <Text type="contents">
+                    <Text
+                      type="contents">
                       {
                         list.Challenge_Sets.filter(
                           (set) => set.type === 'exercise',

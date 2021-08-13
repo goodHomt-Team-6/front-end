@@ -12,6 +12,7 @@ import BookmarkModal from '../components/BookmarkModal';
 import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
+import Header from '../components/Header';
 
 // 루틴 상세화면 컴포넌트 - 루틴 수정, 북마크추가, 루틴 이름 설정
 const RoutineDetail = (props) => {
@@ -21,7 +22,7 @@ const RoutineDetail = (props) => {
   );
   const id = selectedPrevItem.id;
   const myRoutine = useSelector((store) => store.exercise.routine);
-  const routineName = myRoutine[0].routineName;
+  const routineName = selectedPrevItem.routineName;
 
   const [showModal, setShowModal] = useState(false);
 
@@ -35,21 +36,7 @@ const RoutineDetail = (props) => {
     <>
       {/* 뒤로가기 */}
       <HeaderWrapper>
-        <GoBackButton
-          onClick={() => {
-            history.goBack();
-          }}
-        >
-          <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-          <Text
-            fontWeight="500"
-            type="title"
-            margin="0px 5px 0px 0px;"
-            fontSize="18px;"
-          >
-            Routine
-          </Text>
-        </GoBackButton>
+        <Header message="Routine"></Header>
 
         {/* 루틴  수정 */}
         <IconWrapper>
@@ -78,8 +65,8 @@ const RoutineDetail = (props) => {
 
         {/* 루틴의 세트 모음 */}
         <Container>
-          {myRoutine &&
-            myRoutine[0].myExercise.map((e, listIdx) => (
+          {selectedPrevItem &&
+            selectedPrevItem.myExercise.map((e, listIdx) => (
               <List key={listIdx}>
                 <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                   {e.exerciseName}

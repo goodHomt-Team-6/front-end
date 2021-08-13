@@ -13,6 +13,7 @@ import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MoreBtn from '../img/more_button.svg';
 import '../components/RoutineItem.css';
+import Header from '../components/Header';
 
 // 이전 목록 불러오기 페이지 컴포넌트
 const MyPastRoutines = (props) => {
@@ -54,22 +55,7 @@ const MyPastRoutines = (props) => {
 
   return (
     <>
-      <GoBackButton
-        onClick={() => {
-          history.push('/');
-          dispatch(exerciseActions.initializeRoutine());
-        }}
-      >
-        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
-        <Text
-          fontWeight="500"
-          type="title"
-          margin="0px 5px 0px 0px;"
-          fontSize="18px;"
-        >
-          Main
-        </Text>
-      </GoBackButton>
+      <Header message="Main"></Header>
 
       {/* 드롭다운 박스 */}
       <DropdownWrapper>
@@ -89,49 +75,49 @@ const MyPastRoutines = (props) => {
       <CategoryList>
         {myRoutines && myRoutines.length > 0
           ? myRoutines.map((routine, idx) => (
-              <div key={idx}>
-                <RadioInput
-                  id={routine.createdAt}
-                  className="opacity"
-                  type="radio"
-                  name={'inputButton'}
-                  value={routine.id}
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    const selected = myRoutines.filter((m) => m.id == value);
-                    const toObject = selected[0];
-                    setClicked(toObject);
-                  }}
-                />
-                <RadioBox
-                  htmlFor={routine.createdAt}
-                  className="list"
-                  value={routine.id}
-                >
-                  <TimeBox>
-                    <Time>
-                      {Math.floor(routine.routineTime / 60)}:
-                      {routine.routineTime % 60}
-                    </Time>
-                  </TimeBox>
-                  {myRoutines && (
-                    <RoutineInfo>
-                      <InfoBox>
-                        {routine.isBookmarked && (
-                          <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>
-                        )}
-                        <RoutineName>{routine.routineName}</RoutineName>
-                      </InfoBox>
-                      {routine.createdAt && (
-                        <WorkoutDate>
-                          {routine.createdAt.substring(0, 10)}
-                        </WorkoutDate>
+            <div key={idx}>
+              <RadioInput
+                id={routine.createdAt}
+                className="opacity"
+                type="radio"
+                name={'inputButton'}
+                value={routine.id}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  const selected = myRoutines.filter((m) => m.id == value);
+                  const toObject = selected[0];
+                  setClicked(toObject);
+                }}
+              />
+              <RadioBox
+                htmlFor={routine.createdAt}
+                className="list"
+                value={routine.id}
+              >
+                <TimeBox>
+                  <Time>
+                    {Math.floor(routine.routineTime / 60)}:
+                    {routine.routineTime % 60}
+                  </Time>
+                </TimeBox>
+                {myRoutines && (
+                  <RoutineInfo>
+                    <InfoBox>
+                      {routine.isBookmarked && (
+                        <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>
                       )}
-                    </RoutineInfo>
-                  )}
-                </RadioBox>
-              </div>
-            ))
+                      <RoutineName>{routine.routineName}</RoutineName>
+                    </InfoBox>
+                    {routine.createdAt && (
+                      <WorkoutDate>
+                        {routine.createdAt.substring(0, 10)}
+                      </WorkoutDate>
+                    )}
+                  </RoutineInfo>
+                )}
+              </RadioBox>
+            </div>
+          ))
           : null}
       </CategoryList>
 

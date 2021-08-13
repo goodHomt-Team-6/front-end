@@ -281,7 +281,8 @@ const Container = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: ${innerHeight}px;
+  height: 100vh;
+  /* height: ${innerHeight}px; */
   overflow-y: scroll;
 `;
 
