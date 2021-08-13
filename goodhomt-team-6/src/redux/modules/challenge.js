@@ -27,6 +27,7 @@ const getChallengeDetail = createAction(GET_CHALLENGE_DETAIL, (challenge) => ({
 }));
 
 // middleware actions
+// 전체 챌린지 리스트
 const getChallengesAPI = () => {
   return function (dispatch, getState, { history }) {
     api
@@ -40,6 +41,7 @@ const getChallengesAPI = () => {
   };
 };
 
+// 내가 참여한 챌린지 리스트
 const getMyChallengesAPI = () => {
   return function (dispatch, getState, { history }) {
     api
@@ -53,6 +55,7 @@ const getMyChallengesAPI = () => {
   };
 };
 
+// 챌린지 상세 페이지 데이터
 const getChallengeDetailAPI = (challengeId) => {
   return function (dispatch, getState, { history }) {
     api
@@ -62,6 +65,44 @@ const getChallengeDetailAPI = (challengeId) => {
       })
       .catch(function (err) {
         logger('챌린지 상세를 가져오지 못했습니다.');
+      });
+  };
+};
+
+// 챌린지 참여하기
+const joinChallengeAPI = (challengeId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch(`/challenges/${challengeId}`)
+      .then((response) => {})
+      .catch(function (err) {
+        logger('챌린지 참여에 실패했습니다.');
+      });
+  };
+};
+
+// 챌린지 참여 취소하기
+const leaveChallengeAPI = (challengeId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .delete(`/challenges/${challengeId}`)
+      .then((response) => {
+        history.push('/community');
+      })
+      .catch(function (err) {
+        logger('챌린지 참여 취소에 실패했습니다.');
+      });
+  };
+};
+
+// 챌린지 기록하기
+const recordChallengeResultAPI = (challengeId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch(`/challenges/${challengeId}/record`)
+      .then((response) => {})
+      .catch(function (err) {
+        logger('챌린지 결과 기록에 실패했습니다.');
       });
   };
 };
@@ -90,6 +131,9 @@ const actionCreators = {
   getChallengesAPI,
   getMyChallengesAPI,
   getChallengeDetailAPI,
+  joinChallengeAPI,
+  leaveChallengeAPI,
+  recordChallengeResultAPI,
 };
 
 export { actionCreators };
