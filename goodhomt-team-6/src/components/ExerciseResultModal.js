@@ -215,7 +215,6 @@ const ModalInner = styled.div`
   position: relative;
   background-color: #f7f7fa;
   width: 76%;
-  height: 55%;
   max-width: 480px;
   top: 50%;
   transform: translateY(-50%);

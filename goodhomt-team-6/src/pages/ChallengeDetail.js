@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { history } from '../redux/configureStore';
@@ -12,6 +12,8 @@ import logger from '../shared/Logger';
 import { Image, Text, FooterButton } from '../shared/Styles';
 import moment from 'moment';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
+import { actionCreators as challengeCreator } from '../redux/modules/challenge';
+import ChallengeModal from '../components/ChallengeModal';
 
 const ChallengeDetail = (props) => {
   const dispatch = useDispatch();
@@ -19,7 +21,12 @@ const ChallengeDetail = (props) => {
   const challenge = useSelector(
     (state) => state.challenge.challengeDetail.challenge,
   );
+  const myChallenges = useSelector((state) => state.challenge.myChallenges);
+  const myChallengesId = myChallenges.map((myChallenge, idx) => {
+    return myChallenge.challengeId;
+  });
   const openedRow = useSelector((state) => state.exercise.openedRow);
+  const [challengeModal, showChallengeModal] = useState(false);
 
   useEffect(() => {
     dispatch(challengeActions.getChallengeDetailAPI(challengeId));
@@ -104,7 +111,7 @@ const ChallengeDetail = (props) => {
                   fontSize="18px"
                   fontWeight="600"
                 >
-                  {/* {challenge.userCount} */}12
+                  {challenge.userCount}
                 </Text>
                 <Text type="contents" fontSize="18px" margin="0">
                   명 참가중
@@ -128,20 +135,23 @@ const ChallengeDetail = (props) => {
                   >
                     {challenge.challengeDateTime.slice(8, 10) < 12
                       ? `오전 ${challenge.challengeDateTime.slice(
-                        8,
-                        10,
-                      )}:${challenge.challengeDateTime.slice(10, 12)}`
-                      : `오후 ${challenge.challengeDateTime.slice(8, 10) - 12
-                      }:${challenge.challengeDateTime.slice(10, 12)}`}
+                          8,
+                          10,
+                        )}:${challenge.challengeDateTime.slice(10, 12)}`
+                      : `오후 ${
+                          challenge.challengeDateTime.slice(8, 10) - 12
+                        }:${challenge.challengeDateTime.slice(10, 12)}`}
                   </Text>
                   <Text type="contents" fontSize="15px" margin="10px 0 0">
-                    {`${challenge.challengeDateTime.slice(4, 6) < 10
+                    {`${
+                      challenge.challengeDateTime.slice(4, 6) < 10
                         ? challenge.challengeDateTime.slice(5, 6)
                         : challenge.challengeDateTime.slice(4, 6)
-                      }/${challenge.challengeDateTime.slice(6, 8) < 10
+                    }/${
+                      challenge.challengeDateTime.slice(6, 8) < 10
                         ? challenge.challengeDateTime.slice(7, 8)
                         : challenge.challengeDateTime.slice(6, 8)
-                      }`}
+                    }`}
                     {` ${parseDay(challenge.challengeDateTime.slice(0, 8))}`}
                   </Text>
                 </Info>
@@ -191,9 +201,9 @@ const ChallengeDetail = (props) => {
                     color="black"
                     opacity="54%"
                   >
-                    중량
+                    난이도
                   </Text>
-                  <TextItem>?</TextItem>
+                  <TextItem>{challenge.difficulty}</TextItem>
                 </TypeWrapper>
                 <Divider />
                 <TypeWrapper>
@@ -206,7 +216,7 @@ const ChallengeDetail = (props) => {
                   >
                     운동시간
                   </Text>
-                  <TextItem>?</TextItem>
+                  <TextItem>{challenge.runningTime}분</TextItem>
                 </TypeWrapper>
               </TodayTypeContainer>
             </Card>
@@ -270,14 +280,10 @@ const ChallengeDetail = (props) => {
                       openRow(e);
                     }}
                   >
-                    <Text
-                      type="contents"
-                      minWidth="80px"
-                      padding="0 0 0 10px">
+                    <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                       {list.exerciseName}
                     </Text>
-                    <Text
-                      type="contents">
+                    <Text type="contents">
                       {
                         list.Challenge_Sets.filter(
                           (set) => set.type === 'exercise',
@@ -298,16 +304,33 @@ const ChallengeDetail = (props) => {
           </React.Fragment>
         )}
       </ChallengeCont>
-      <FooterButton
-      // onClick={() => {
-      //   const routine = {
-      //     myExercise: lists,
-      //   };
-      //   dispatch(exerciseCreator.addRoutineAPI(routine));
-      // }}
-      >
-        참가 신청하기
-      </FooterButton>
+      {challenge && myChallengesId.includes(parseInt(challengeId)) ? (
+        <FooterButton
+          onClick={() => {
+            dispatch(challengeCreator.leaveChallengeAPI(challengeId));
+          }}
+        >
+          참가 취소하기
+        </FooterButton>
+      ) : (
+        <FooterButton
+          onClick={() => {
+            dispatch(challengeCreator.joinChallengeAPI(challengeId));
+            showChallengeModal(true);
+          }}
+        >
+          참가 신청하기
+        </FooterButton>
+      )}
+      {challengeModal && (
+        <ChallengeModal
+          exerciseLength={challenge.Challenge_Exercises.length}
+          time={challenge.challengeDateTime}
+          challengeName={challenge.challengeName}
+          firstExerciseName={challenge.Challenge_Exercises[0].exerciseName}
+          userCount={challenge.userCount}
+        ></ChallengeModal>
+      )}
     </React.Fragment>
   );
 };

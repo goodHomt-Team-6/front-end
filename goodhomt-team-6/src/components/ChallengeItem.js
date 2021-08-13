@@ -55,7 +55,7 @@ const ChallengeItem = () => {
                 margin="3px 0 0 10px"
                 fontWeight="600"
               >
-                {/* {challenge.userCount} */}12
+                {challenge.userCount}명 참가 예정
               </Text>
             </MascortPeopleCountCont>
             <Text
