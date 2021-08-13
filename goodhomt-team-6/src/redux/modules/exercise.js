@@ -512,7 +512,7 @@ export default handleActions(
     // 오늘 저장한 루틴 삭제하기
     [DELETE_MY_TODAY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        draft.myTodayRoutine = null;
+        draft.myTodayRoutine = [];
       }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>

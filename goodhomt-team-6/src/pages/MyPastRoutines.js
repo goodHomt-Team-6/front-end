@@ -55,7 +55,7 @@ const MyPastRoutines = (props) => {
 
   return (
     <>
-      <Header message="Main"></Header>
+      <Header toMain message="Main"></Header>
 
       {/* 드롭다운 박스 */}
       <DropdownWrapper>

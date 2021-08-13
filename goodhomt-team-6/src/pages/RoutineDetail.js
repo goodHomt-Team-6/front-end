@@ -21,16 +21,25 @@ const RoutineDetail = (props) => {
     (store) => store.exercise.selectedPrevItem,
   );
   const id = selectedPrevItem.id;
+  const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
   const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = selectedPrevItem.routineName;
+  const myExercise = selectedPrevItem.myExercise;
 
   const [showModal, setShowModal] = useState(false);
+  const [startTodayRoutine, setStartTodayRoutine] = useState('운동 시작');
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
       dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [routineName]);
+
+  useEffect(() => {
+    if (myTodayRoutine && myTodayRoutine.length === 0) {
+      setStartTodayRoutine('설정 완료');
+    }
+  }, []);
 
   return (
     <>
@@ -81,13 +90,17 @@ const RoutineDetail = (props) => {
         </Container>
 
         {/* 운동시작 버튼 */}
+
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              history.push('/workout');
-            }}
-          >
-            운동시작
+              const routine = {
+                routineName: routineName,
+                myExercise: myExercise,
+              };
+              dispatch(exerciseActions.addRoutineAPI(routine));
+            }}>
+            설정 완료
           </FooterButton>
         </FooterButtonWrapper>
       </Wrapper>
@@ -157,17 +170,6 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
-`;
-
-const GoBackButton = styled.div`
-  display: flex;
-  width: auto;
-  justify-content: flex-start;
-  padding: 25px;
-  /* width: 100%; */
-  box-sizing: border-box;
-  align-items: baseline;
-  background-color: #f7f7fa;
 `;
 
 const RoutineText = styled.h2`

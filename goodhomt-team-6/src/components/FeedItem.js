@@ -12,7 +12,7 @@ import { history } from '../redux/configureStore';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
-  const { _id, routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
+  // const { _id, routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
 
   const dispatch = useDispatch();
   const userName = useSelector((store) => store.user.user.nickname);
@@ -58,7 +58,7 @@ const FeedItem = (props) => {
                   const selected = feed.filter((m) => m._id == item._id);
                   const toObject = selected[0];
                   dispatch(exerciseActions.addSelectedPrevItem(toObject));
-                  history.push(`/community/${_id}`);
+                  history.push(`/community/${item._id}`);
                 }}>
                 <TodayWrapper>
                   <Enrolled>{item.myExercise.length}</Enrolled>

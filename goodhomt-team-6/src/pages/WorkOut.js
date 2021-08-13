@@ -18,7 +18,7 @@ import Header from '../components/Header';
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
   const [time, setTime] = useState(0);
-  const routine = useSelector((state) => state.exercise.routine[0]);
+  const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
   const [currentExerciseIdx, setcurrentExerciseIdx] = useState(0);
   const [currentSetIdx, setcurrentSetIdx] = useState(0);
   const [exerciseResultModal, showExerciseResultModal] = useState(false);

@@ -56,7 +56,11 @@ const ExerciseListUp = (props) => {
     <>
       <ExerciseListCont>
         {/* 뒤로가기 */}
-        <Header message="Select" page="1/2"></Header>
+        <Header
+          toMain
+          message="Select"
+          page="1/2"
+        />
 
         {/* 선택한 운동 보여주기 */}
         {selectedItems && (
@@ -178,8 +182,10 @@ const ExerciseListUp = (props) => {
         {/* 종목 추가하기 */}
         <FooterButtonWrapper>
           {selectedItems && selectedItems.length > 0 ? (
-            <FooterButton onClick={() => history.push('/exercise/form')}>
-              종목 추가하기
+            <FooterButton
+              onClick={() =>
+                history.push('/exercise/form')}
+            >종목 추가하기
             </FooterButton>
           ) : (
             <FooterButton disabled>종목 추가하기</FooterButton>

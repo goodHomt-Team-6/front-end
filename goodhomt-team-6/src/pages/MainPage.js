@@ -61,19 +61,7 @@ const Main = (props) => {
                 </TextUser>
               )}
             </InfoBox>
-
-            {/* 임시 로그인 버튼 - 삭제예정 */}
             <DateBox>
-              {/* {is_login ? null : (
-                <LoginBtn
-                  onClick={() => {
-                    history.push('/login');
-                  }}
-                >
-                  Login
-                </LoginBtn>
-              )} */}
-
               <PrevIcon src={PrevBtn} />
               <Today>{todayDate}</Today>
               <NextIcon src={NextBtn} />
@@ -153,8 +141,7 @@ const Main = (props) => {
           </RegisterWrapper>
 
           {/* 이전 루틴 불러오기 */}
-          {myTodayRoutine && myTodayRoutine.length > 0 ?
-            null
+          {myTodayRoutine && myTodayRoutine.length > 0 ? null
             : <FormerRoutineWrapper
               onClick={() => {
                 history.push('/mypastroutines');
@@ -173,14 +160,17 @@ const Main = (props) => {
             {myTodayRoutine &&
               myTodayRoutine.map((routine, idx) => (
                 <div key={idx}>
-                  <TodayExerciseWrapper
-                  >
+                  <TodayExerciseWrapper>
                     {routine.isCompleted ? (
-                      <TimeBox src={CompletedBtn} completed={completed}>
-                      </TimeBox>
+                      <TimeBox
+                        src={CompletedBtn}
+                        completed={completed}
+                      />
                     ) : (
                       <TimeBox>
-                        <Time>{routine.routineTime}분</Time>
+                        <Time>
+                          운동 전
+                        </Time>
                       </TimeBox>
                     )}
 
@@ -190,18 +180,21 @@ const Main = (props) => {
                         const selected = myTodayRoutine.filter((m) => m.id == routine.id);
                         const toObject = selected[0];
                         dispatch(exerciseActions.addSelectedPrevItem(toObject));
-                        history.push('/routinedetail');
+                        history.push('/todayroutinedetail');
                       }}>
-                      <RoutineName>{routine.routineName}</RoutineName>
+                      <RoutineName>
+                        {routine.routineName}
+                      </RoutineName>
                       <RoutineBoxDiv>
-                        {/* {routine.createdAt &&
+                        {routine && routine.routineTime == 0 ? (
                           <WorkoutDate>
-                            {routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
+                            00:00
                           </WorkoutDate>
-                        } */}
-                        <WorkoutDate>
-                          {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
-                        </WorkoutDate>
+                        ) : (
+                          <WorkoutDate>
+                            {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
+                          </WorkoutDate>
+                        )}
                       </RoutineBoxDiv>
                     </RoutineBox>
 
@@ -234,6 +227,7 @@ const Main = (props) => {
           <AddBtn
             onClick={() => {
               history.push('/exercise');
+              dispatch(exerciseActions.initializeRoutine());
             }}>
             <AddBtnText>
               +
@@ -487,6 +481,7 @@ const TodayExerciseWrapper = styled.div`
 const TimeBox = styled.div`
   background-color: ${(props) => props.completed ? '#4A40FF' : 'black'};
   width: 25%;
+  min-width: 75px;
   height: 44px;
   border-radius: 22px;
   color: white;
