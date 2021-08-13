@@ -23,6 +23,9 @@ const ChallengeDetail = (props) => {
 
   useEffect(() => {
     dispatch(challengeActions.getChallengeDetailAPI(challengeId));
+    return () => {
+      closeRow();
+    };
   }, []);
 
   const parseDay = (date) => {
