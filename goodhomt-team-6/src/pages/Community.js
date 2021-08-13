@@ -43,7 +43,6 @@ const Community = () => {
     <Container>
       <Wrapper>
         <InboxWrapper>
-
           {/* 유저 프로필 */}
           <UserWrapper>
             <InfoBox>
@@ -63,13 +62,8 @@ const Community = () => {
                 // dispatch(feedActions.addFeedAPI());
               }}
             >
-              <Icon
-                margin="0px"
-                src={PurePlusButtonBlack}
-              />
-              <Icon
-                margin="0px 1rem"
-                src={Noti} />
+              <Icon margin="0px" src={PurePlusButtonBlack} />
+              <Icon margin="0px 1rem" src={Noti} />
             </IconBox>
           </UserWrapper>
 
@@ -128,8 +122,6 @@ export default Community;
 
 const Container = styled.div`
   background-color: #f7f7fa;
-  overflow: scroll;
-  height: calc(100vh - 75px);
 `;
 
 const Wrapper = styled.div`
@@ -138,7 +130,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  overflow: scroll;
 `;
 
 const InboxWrapper = styled.div`
@@ -178,7 +169,6 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 314px);
   background-color: #f7f7fa;
 `;
 

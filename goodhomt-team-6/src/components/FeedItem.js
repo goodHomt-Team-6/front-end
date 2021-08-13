@@ -12,7 +12,6 @@ import { history } from '../redux/configureStore';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
-  // const { _id, routineName, description, communityNickname, createdAt, myExercise, like, totalLike } = props;
 
   const dispatch = useDispatch();
   const userName = useSelector((store) => store.user.user.nickname);
@@ -24,9 +23,7 @@ const FeedItem = (props) => {
       <FeedCont>
         {feed &&
           feed.map((item, idx) => (
-            <Card
-              key={idx}
-            >
+            <Card key={idx}>
               {/* 유저정보 */}
               <UserWrapper>
                 <Image
@@ -37,17 +34,17 @@ const FeedItem = (props) => {
                 />
                 <InfoBox>
                   {userName && (
-                    <Text type="label"
+                    <Text
+                      type="label"
                       fontSize="14px"
                       color="black"
-                      fontWeight="600">
+                      fontWeight="600"
+                    >
                       {item.communityNickname}
                     </Text>
                   )}
-                  <Text
-                    type="label"
-                    fontSize="12px"
-                  >{item.createdAt.substring(0, 10)}
+                  <Text type="label" fontSize="12px">
+                    {item.createdAt.substring(0, 10)}
                   </Text>
                 </InfoBox>
               </UserWrapper>
@@ -67,23 +64,27 @@ const FeedItem = (props) => {
                 <TodayTypeContainer>
                   <TypeWrapper>
                     <Text
-                      type='label'
+                      type="label"
                       fontSize="14px"
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >중량</Text>
+                    >
+                      중량
+                    </Text>
                     <TextItem>15kg</TextItem>
                   </TypeWrapper>
                   <Div />
                   <TypeWrapper>
                     <Text
-                      type='label'
+                      type="label"
                       fontSize="14px"
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >운동시간</Text>
+                    >
+                      운동시간
+                    </Text>
                     <TextItem>30분</TextItem>
                   </TypeWrapper>
                 </TodayTypeContainer>
@@ -95,12 +96,16 @@ const FeedItem = (props) => {
                   src={LikeLine}
                   onClick={() => {
                     dispatch(feedActions.likeAPI());
-                  }} />
-                <Text type="contents"
+                  }}
+                />
+                <Text
+                  type="contents"
                   margin="0px 0px 0px 6px"
                   color="#999999"
                   fontWeight="500"
-                >342</Text>
+                >
+                  342
+                </Text>
               </LikeWrapper>
 
               {/* 운동 정보 텍스트 */}
@@ -110,7 +115,8 @@ const FeedItem = (props) => {
                     type="contents"
                     margin="0px 8px 0px 0px"
                     fontSize="14px"
-                    fontWeight="600">
+                    fontWeight="600"
+                  >
                     {item.routineName}
                   </Text>
 
@@ -121,22 +127,18 @@ const FeedItem = (props) => {
                       margin="0px 6px 0px 0px"
                       color="#4A40FF"
                       fontSize="14px"
-                      fontWeight="600">
+                      fontWeight="600"
+                    >
                       #{i.exerciseName}
                     </Text>
                   ))}
-
                 </TextBox>
-                <Text
-                  type="contents"
-                  margin="0px"
-                  fontSize="14px">
+                <Text type="contents" margin="0px" fontSize="14px">
                   {item.description}
                 </Text>
               </TextWrapper>
             </Card>
-          ))
-        }
+          ))}
       </FeedCont>
     </FeedContReal>
   );
@@ -148,7 +150,7 @@ const FeedContReal = styled.div`
   padding: 10px 20px 30px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 368px);
+  height: calc(100vh - 230px);
   overflow-y: scroll;
 `;
 
@@ -156,8 +158,7 @@ const FeedCont = styled.li`
   /* padding-bottom: 2.5rem; */
 `;
 
-const Card = styled.div`
-`;
+const Card = styled.div``;
 
 const UserWrapper = styled.div`
   display: flex;
@@ -220,7 +221,7 @@ const TodayMainBox = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   background-color: white;
-  :hover{
+  :hover {
     cursor: pointer;
   }
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -240,9 +241,9 @@ const Span = styled.span`
 `;
 
 const IconBtn = styled.img`
-:hover{
-  cursor: pointer;
-}
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const LikeWrapper = styled.div`
