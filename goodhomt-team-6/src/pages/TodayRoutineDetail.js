@@ -34,6 +34,12 @@ const TodayRoutineDetail = (props) => {
     }
   }, [routineName]);
 
+  useEffect(() => {
+    return () => {
+      closeRow();
+    };
+  }, []);
+
   const openRow = (e) => {
     const target = e.currentTarget.id;
     dispatch(exerciseActions.openRow(target));
@@ -42,6 +48,7 @@ const TodayRoutineDetail = (props) => {
   const closeRow = () => {
     dispatch(exerciseActions.openRow(null));
   };
+
 
   return (
     <>

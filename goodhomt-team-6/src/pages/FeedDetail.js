@@ -31,6 +31,12 @@ const RoutineDetail = (props) => {
     dispatch(exerciseActions.getRoutineDetailAPI(id));
   }, [routineName]);
 
+  useEffect(() => {
+    return () => {
+      closeRow();
+    };
+  }, []);
+
   const openRow = (e) => {
     const target = e.currentTarget.id;
     dispatch(exerciseActions.openRow(target));
