@@ -14,7 +14,6 @@ import ProgressBarCont from '../components/ProgressBarCont';
 import ExerciseResultModal from '../components/ExerciseResultModal';
 import Header from '../components/Header';
 
-
 const WorkOut = (props) => {
   const [timeStop, setTimeStop] = useState(true);
   const [time, setTime] = useState(0);
@@ -295,7 +294,6 @@ const GoBackButton = styled.div`
 `;
 
 const TimeCont = styled.div`
-  height: calc(40vh - 78px);
   background-color: #000;
   display: flex;
   flex-direction: column;
@@ -307,6 +305,7 @@ const PlayIconCont = styled.div`
   display: flex;
   align-self: flex-end;
   margin-right: 10px;
+  margin-bottom: 10px;
 `;
 
 const ListCont = styled.div`
@@ -376,6 +375,7 @@ const CompleteButton = styled.div`
   height: 80px;
   border: 1px solid #4a40ff;
   border-radius: 40px;
+  margin-bottom: 20px;
 `;
 
 const CompleteButtonInner = styled.div`

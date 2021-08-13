@@ -10,6 +10,8 @@ const ProgressBarCont = ({ currentSetIdx, setIdx, minutes, seconds }) => {
     let i = 0;
     let progress = setInterval(() => {
       if (breakTime === 'disabled') {
+        // 컴포넌트 나갈때 clearInterval를 잘 호출하는데도, 시간이 계속 흘러감.
+        // 동작에는 문제 없긴함.
         clearInterval(progress);
       }
       if (i < breakTime) {

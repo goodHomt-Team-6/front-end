@@ -40,7 +40,7 @@ const initialState = {
         //   ],
         // },
       ],
-    }
+    },
   ],
   categoryTitle: [
     {
@@ -92,7 +92,6 @@ const ADD_SELECTED_PREV_ITEM = 'exercise/ADD_SELECTED_PREV_ITEM';
 const REMOVE_SELECTED_PREV_ITEM = 'exercise/REMOVE_SELECTED_PREV_ITEM';
 const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
 const INITIALIZE_ROUTINE = 'exercise/INITIALIZE_ROUTINE';
-
 
 // action creators
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
@@ -147,12 +146,26 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
   is_selected,
 }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
-const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
-const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, (routineId) => ({ routineId }));
-const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
-const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
-const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
-const getSelectedPrevItem = createAction(GET_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
+const getMyTodayRoutine = createAction(
+  GET_MY_TODAY_ROUTINE,
+  (myTodayRoutine) => ({ myTodayRoutine }),
+);
+const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, () => ({}));
+const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({
+  selectPeriod,
+}));
+const addSelectedPrevItem = createAction(
+  ADD_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
+const removeSelectedPrevItem = createAction(
+  REMOVE_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
+const getSelectedPrevItem = createAction(
+  GET_SELECTED_PREV_ITEM,
+  (selectedPrevItem) => ({ selectedPrevItem }),
+);
 const initializeRoutine = createAction(INITIALIZE_ROUTINE, () => ({}));
 
 // 운동 전체 가져오기
@@ -313,8 +326,8 @@ const getRoutineDetailAPI = (id) => {
     api
       .get(`/routines/${id}`)
       .then((response) => {
+        logger(response.data.result);
         dispatch(getMyRoutine(response.data.result));
-        logger('루틴 상세 가져오기 성공');
       })
       .catch((error) => {
         logger('루틴 상세 가져오기 실패', error);
@@ -551,7 +564,7 @@ export default handleActions(
     [INITIALIZE_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine = initialState.routine;
-      })
+      }),
   },
   initialState,
 );
@@ -593,7 +606,7 @@ const actionCreators = {
   removeSelectedPrevItem,
   getSelectedPrevItem,
   initializeRoutine,
-  initializeSectedItems
+  initializeSectedItems,
 };
 
 export { actionCreators };
