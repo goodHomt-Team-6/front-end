@@ -21,6 +21,8 @@ import WorkOut from '../pages/WorkOut';
 import Community from '../pages/Community';
 import ChallengeDetail from '../pages/ChallengeDetail';
 import FeedDetail from '../pages/FeedDetail';
+import TodayRoutineDetail from '../pages/TodayRoutineDetail';
+import AddMyFeed from '../pages/AddMyFeed';
 
 const cookie = new Cookies();
 
@@ -66,6 +68,8 @@ const App = (props) => {
             component={HOC(ChallengeDetail, true)}
           />
           <Route path="/community/:id" exact component={FeedDetail} />
+          <Route path="/todayroutinedetail" exact component={HOC(TodayRoutineDetail, true)} />
+          <Route path="/addmyfeed" exact component={AddMyFeed} />
         </Switch>
       </ConnectedRouter>
     </>

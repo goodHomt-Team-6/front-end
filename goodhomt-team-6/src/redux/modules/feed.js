@@ -14,10 +14,12 @@ const initialState = {
 // actions
 const GET_FEED = 'commnunity/GET_FEED_ALL';
 const ADD_FEED = 'community/ADD_FEED';
+const LIKE = 'community/LIKE';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
 const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
+const like = createAction(LIKE, (routineId) => ({ routineId }));
 
 // 루틴 커뮤니티 피드에 올리기
 const addFeedAPI = () => {
@@ -130,7 +132,7 @@ const likeAPI = (routineId) => {
       .put(`/like/${routineId}`)
       .then((response) => {
         logger('좋아요 토글 성공');
-        dispatch(getFeed());
+        dispatch(like(routineId));
       })
       .catch((error) => {
         logger('좋아요 토글 실패', error);
@@ -144,6 +146,10 @@ export default handleActions(
     [GET_FEED]: (state, action) =>
       produce(state, (draft) => {
         draft.feed = action.payload.feed;
+      }),
+    [LIKE]: (state, action) =>
+      produce(state, (draft) => {
+
       })
   },
   initialState

@@ -70,6 +70,12 @@ const EditRoutine = (props) => {
     setEditCompletion(checkCompletion);
   }, [checkCompletion]);
 
+  useEffect(() => {
+    return () => {
+      closeRow();
+    };
+  }, []);
+
   // material-ui 모달
   const classes = modalStyles();
   const [open, setOpen] = React.useState(false);

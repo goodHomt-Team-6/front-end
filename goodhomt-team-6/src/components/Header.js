@@ -3,14 +3,18 @@ import styled from 'styled-components';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Text } from '../shared/Styles';
 import { history } from '../redux/configureStore';
+import { useDispatch } from 'react-redux';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   return (
     <React.Fragment>
       {props.toMain ? (
         <GoBackButton
           onClick={() => {
             history.push('/');
+            dispatch(exerciseActions.initializeSectedItems());
           }}
         >
           <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />

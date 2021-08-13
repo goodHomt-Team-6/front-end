@@ -76,26 +76,14 @@ const Main = (props) => {
                 </TextUser>
               )}
             </InfoBox>
-
-            {/* 임시 로그인 버튼 - 삭제예정 */}
             <DateBox>
-              {/* {is_login ? null : (
-                <LoginBtn
-                  onClick={() => {
-                    history.push('/login');
-                  }}
-                >
-                  Login
-                </LoginBtn>
-              )} */}
-
               <PrevIcon src={PrevBtn} />
               <Today>{todayDate}</Today>
               <NextIcon src={NextBtn} />
             </DateBox>
           </UserWrapper>
 
-          {/* 오늘 등록한 운동 보여주기 - 대시보드 */}
+          {/* 대시 보드 - 오늘 등록한 운동 종목 수 */}
           <RegisterWrapper>
             <Text
               textAlign="left"
@@ -173,7 +161,6 @@ const Main = (props) => {
                     </DashBoardDiv>
                   </TodayWrapper>
                 )}
-
                 <TodayTypeContainer>
                   <TypeWrapper>
                     <Span>종목</Span>
@@ -194,7 +181,6 @@ const Main = (props) => {
                 </TodayTypeContainer>
               </TodayMainBox>
             ) : (
-              // 코드 변경 예정
               <TodayMainBox>
                 <TodayWrapper>
                   <EnrolledZero>0</EnrolledZero>
@@ -247,35 +233,56 @@ const Main = (props) => {
                       ></TimeBox>
                     ) : (
                       <TimeBox>
-                        <Time>{routine.routineTime}분</Time>
+                        <Time>
+                          운동 전
+                        </Time>
                       </TimeBox>
                     )}
+                    {myTodayRoutine && myTodayRoutine[0].isCompleted ? (
+                      <RoutineBox>
+                        <RoutineName>
+                          {routine.routineName}
+                        </RoutineName>
+                        <RoutineBoxDiv>
+                          {routine && routine.routineTime == 0 ? (
+                            <WorkoutDate>
+                              00:00
+                            </WorkoutDate>
+                          ) : (
+                            <WorkoutDate>
+                              {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
+                            </WorkoutDate>
+                          )}
+                        </RoutineBoxDiv>
+                      </RoutineBox>
 
-                    <RoutineBox
-                      clicked={clicked}
-                      onClick={() => {
-                        const selected = myTodayRoutine.filter(
-                          (m) => m.id == routine.id,
-                        );
-                        const toObject = selected[0];
-                        dispatch(exerciseActions.addSelectedPrevItem(toObject));
-                        history.push('/routinedetail');
-                      }}
-                    >
-                      <RoutineName>{routine.routineName}</RoutineName>
-                      <RoutineBoxDiv>
-                        {/* {routine.createdAt &&
-                          <WorkoutDate>
-                            {routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
-                          </WorkoutDate>
-                        } */}
-                        <WorkoutDate>
-                          {Math.floor(routine.routineTime / 60)}:
-                          {routine.routineTime % 60}
-                        </WorkoutDate>
-                      </RoutineBoxDiv>
-                    </RoutineBox>
+                    ) : (
+                      <RoutineBox
+                        clicked={clicked}
+                        onClick={() => {
+                          const selected = myTodayRoutine.filter((m) => m.id == routine.id);
+                          const toObject = selected[0];
+                          dispatch(exerciseActions.addSelectedPrevItem(toObject));
+                          history.push('/todayroutinedetail');
+                        }}>
+                        <RoutineName>
+                          {routine.routineName}
+                        </RoutineName>
+                        <RoutineBoxDiv>
+                          {routine && routine.routineTime == 0 ? (
+                            <WorkoutDate>
+                              00:00
+                            </WorkoutDate>
+                          ) : (
+                            <WorkoutDate>
+                              {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
+                            </WorkoutDate>
+                          )}
+                        </RoutineBoxDiv>
+                      </RoutineBox>
+                    )}
 
+                    {/* 운동 만족도 아이콘 */}
                     <RoutineInfo>
                       {routine.rating === 'soso' && (
                         <RemoveButton src={NormalRating}></RemoveButton>
@@ -311,6 +318,7 @@ const Main = (props) => {
           <AddBtn
             onClick={() => {
               history.push('/exercise');
+              dispatch(exerciseActions.initializeRoutine());
             }}
           >
             <AddBtnText>+</AddBtnText>
@@ -356,13 +364,6 @@ const TodayWrapper = styled.div`
   width: 100%;
 `;
 
-const TypeContainer = styled.div`
-  display: flex;
-  height: 30px;
-  margin: 24px 0px;
-  padding: 0px;
-`;
-
 const TodayTypeContainer = styled.div`
   display: flex;
   height: 30px;
@@ -404,13 +405,6 @@ const InboxWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-const MainBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
 `;
 
 const TodayMainBox = styled.div`
@@ -562,6 +556,7 @@ const TodayExerciseWrapper = styled.div`
 const TimeBox = styled.div`
   background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
   width: 25%;
+  min-width: 75px;
   height: 44px;
   border-radius: 22px;
   color: white;

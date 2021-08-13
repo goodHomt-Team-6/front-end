@@ -14,27 +14,25 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 
-
-// 피드 루틴 상세화면 컴포넌트
-const RoutineDetail = (props) => {
+// 오늘 추가한 루틴 상세 컴포넌트 - 루틴 상세 확인하고 운동 시작으로 이동
+const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
 
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem.id;
-  const myExercise = selectedPrevItem.myExercise;
+  const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
+  const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = selectedPrevItem.routineName;
+  const myExercise = selectedPrevItem.myExercise;
   const openedRow = useSelector((state) => state.exercise.openedRow);
-  const feed = useSelector((state) => state.feed.feed);
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    dispatch(exerciseActions.getRoutineDetailAPI(id));
+    if (selectedPrevItem.length !== 0) {
+      dispatch(exerciseActions.getRoutineDetailAPI(id));
+    }
   }, [routineName]);
-
-  useEffect(() => {
-    dispatch(exerciseActions.initializeRoutine());
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -51,29 +49,39 @@ const RoutineDetail = (props) => {
     dispatch(exerciseActions.openRow(null));
   };
 
+
   return (
     <>
+      {/* 뒤로가기 */}
       <HeaderWrapper>
-        {/* 뒤로가기 */}
-        <Header message="Routine" />
-
-        {/* 루틴  수정 */}
-        <IconWrapper>
-          {/* 북마크 모달 */}
-          <IconImg src={BookmarkLine}
-            onClick={() => {
-              setShowModal(true);
-            }} />
-        </IconWrapper>
+        <Header
+          toMain
+          message="Main">
+        </Header>
       </HeaderWrapper>
 
       {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
 
-      <Wrapper>
+      <BodyWrapper>
         {/* 대시보드 */}
         <DashBoard />
 
         {/* 루틴의 세트 모음 */}
+        {/* <Container>
+          {selectedPrevItem &&
+            selectedPrevItem.myExercise.map((e, listIdx) => (
+              <List key={listIdx}>
+                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  {e.exerciseName}
+                </Text>
+                <Text type="contents"> {e.set[0].setCount}세트</Text>
+                <Text type="contents">{e.set[0].weight}kg</Text>
+                <Text type="contents" padding="0 10px 0 0">
+                  {e.set[0].count}회
+                </Text>
+              </List>
+            ))}
+        </Container> */}
         <ListContainer>
           {selectedPrevItem &&
             selectedPrevItem.myExercise.map((list, listIdx) =>
@@ -162,27 +170,21 @@ const RoutineDetail = (props) => {
             )}
         </ListContainer>
 
-        {/* 루틴불러오기 버튼 */}
+        {/* 운동시작 버튼 */}
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              // const routine = {
-              //   routineName: routineName,
-              //   myExercise: myExercise,
-              // };
-              dispatch(exerciseActions.addRoutineAPI(selectedPrevItem));
-              history.replace('/');
-            }}
-          >
-            루틴 불러오기
+              history.push('/workout');
+            }}>
+            운동 시작
           </FooterButton>
         </FooterButtonWrapper>
-      </Wrapper>
+      </BodyWrapper>
     </>
   );
 };
 
-export default RoutineDetail;
+export default TodayRoutineDetail;
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -190,20 +192,7 @@ const HeaderWrapper = styled.div`
   background-color: ${Color.bgIvory};
 `;
 
-const IconWrapper = styled.div`
-  margin: 25px;
-  box-sizing: border-box;
-  align-items: baseline;
-`;
-
-const IconImg = styled.img`
-  cursor: pointer;
-  :last-child {
-    margin-left: 5px;
-  }
-`;
-
-const Wrapper = styled.div`
+const BodyWrapper = styled.div`
   background-color: #f7f7fa;
 `;
 
@@ -258,6 +247,3 @@ const List = styled.div`
     margin-top: 0;
   }
 `;
-
-
-

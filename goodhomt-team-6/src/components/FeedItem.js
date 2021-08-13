@@ -12,21 +12,15 @@ import { history } from '../redux/configureStore';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
-  const {
-    _id,
-    routineName,
-    description,
-    communityNickname,
-    createdAt,
-    myExercise,
-    like,
-    totalLike,
-  } = props;
 
   const dispatch = useDispatch();
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
   const feed = useSelector((store) => store.feed.feed);
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <FeedContReal>
@@ -65,9 +59,9 @@ const FeedItem = (props) => {
                   const selected = feed.filter((m) => m._id == item._id);
                   const toObject = selected[0];
                   dispatch(exerciseActions.addSelectedPrevItem(toObject));
-                  history.push(`/community/${_id}`);
-                }}
-              >
+                  dispatch(exerciseActions.initializeRoutine());
+                  history.push(`/community/${item._id}`);
+                }}>
                 <TodayWrapper>
                   <Enrolled>{item.myExercise.length}</Enrolled>
                   <TextItem>{item.routineName}</TextItem>
@@ -96,7 +90,10 @@ const FeedItem = (props) => {
                     >
                       운동시간
                     </Text>
-                    <TextItem>30분</TextItem>
+                    <TextItem>
+                      {/* {item.routineTime} */}
+                      30분
+                    </TextItem>
                   </TypeWrapper>
                 </TodayTypeContainer>
               </TodayMainBox>
@@ -115,7 +112,7 @@ const FeedItem = (props) => {
                   color="#999999"
                   fontWeight="500"
                 >
-                  342
+                  {item.totalLike}
                 </Text>
               </LikeWrapper>
 
