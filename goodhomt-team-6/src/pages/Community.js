@@ -58,7 +58,7 @@ const Community = () => {
             </InfoBox>
             <IconBox
               onClick={() => {
-                // 피드 올리기 디자인 완성된 후 진행 (오늘 밤)
+                // 피드 올리기 디자인 완성된 후 진행
                 // dispatch(feedActions.addFeedAPI());
               }}
             >

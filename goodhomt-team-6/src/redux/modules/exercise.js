@@ -148,7 +148,7 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
 }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(GET_MY_TODAY_ROUTINE, (myTodayRoutine) => ({ myTodayRoutine }));
-const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, () => ({}));
+const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, (routineId) => ({ routineId }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({ selectPeriod }));
 const addSelectedPrevItem = createAction(ADD_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
 const removeSelectedPrevItem = createAction(REMOVE_SELECTED_PREV_ITEM, (selectedPrevItem) => ({ selectedPrevItem }));
@@ -191,6 +191,7 @@ const addRoutineAPI = (routine) => {
       .post('/routines', routine)
       .then((response) => {
         // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
+        console.log(response);
         dispatch(reArrangeMyExercise([]));
         dispatch(initializeSectedItems());
         history.replace('/');
@@ -223,7 +224,7 @@ const deleteMyTodayRoutineAPI = (routineId) => {
       .delete(`/routines/${routineId}`)
       .then((response) => {
         logger('나의 오늘 루틴 삭제 성공');
-        dispatch(deleteMyTodayRoutine());
+        dispatch(deleteMyTodayRoutine(routineId));
       })
       .catch((error) => {
         logger('나의 오늘 루틴 삭제 실패', error);
@@ -485,7 +486,13 @@ export default handleActions(
       }),
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.routine[0].myExercise = action.payload.lists;
+        draft.routine = state.routine;
+        // draft.routine[0].myExercise = action.payload.lists;
+        // if (state.myTodayRoutine.length === 1) {
+        //   draft.routine[0].myExercise = action.payload.lists;
+        // } else {
+        //   draft.myTodayRoutine.push(action.payload.list);
+        // }
       }),
     [OPEN_MODAL]: (state, action) =>
       produce(state, (draft) => {
@@ -512,7 +519,13 @@ export default handleActions(
     // 오늘 저장한 루틴 삭제하기
     [DELETE_MY_TODAY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        draft.myTodayRoutine = [];
+        // 걸러서 삭제하는 것으로 변경
+        if (state.myTodayRoutine.length === 1) {
+          draft.myTodayRoutine = [];
+        } else {
+          const deletedMyTodayRoutine = state.myTodayRoutine.filter((item) => item.id !== action.payload.routineId);
+          draft.myTodayRoutine = deletedMyTodayRoutine;
+        }
       }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>

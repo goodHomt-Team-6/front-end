@@ -18,6 +18,10 @@ const FeedItem = (props) => {
   const userImg = useSelector((store) => store.user.user.userImg);
   const feed = useSelector((store) => store.feed.feed);
 
+  useEffect(() => {
+
+  }, []);
+
   return (
     <FeedContReal>
       <FeedCont>
@@ -55,6 +59,7 @@ const FeedItem = (props) => {
                   const selected = feed.filter((m) => m._id == item._id);
                   const toObject = selected[0];
                   dispatch(exerciseActions.addSelectedPrevItem(toObject));
+                  dispatch(exerciseActions.initializeRoutine());
                   history.push(`/community/${item._id}`);
                 }}>
                 <TodayWrapper>
@@ -85,7 +90,10 @@ const FeedItem = (props) => {
                     >
                       운동시간
                     </Text>
-                    <TextItem>30분</TextItem>
+                    <TextItem>
+                      {/* {item.routineTime} */}
+                      30분
+                    </TextItem>
                   </TypeWrapper>
                 </TodayTypeContainer>
               </TodayMainBox>
@@ -104,7 +112,7 @@ const FeedItem = (props) => {
                   color="#999999"
                   fontWeight="500"
                 >
-                  342
+                  {item.totalLike}
                 </Text>
               </LikeWrapper>
 

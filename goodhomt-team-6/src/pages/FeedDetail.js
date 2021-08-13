@@ -24,12 +24,17 @@ const RoutineDetail = (props) => {
   const myExercise = selectedPrevItem.myExercise;
   const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
+  const feed = useSelector((state) => state.feed.feed);
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(exerciseActions.getRoutineDetailAPI(id));
   }, [routineName]);
+
+  useEffect(() => {
+    dispatch(exerciseActions.initializeRoutine());
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -161,12 +166,11 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              const routine = {
-                routineName: routineName,
-                myExercise: myExercise,
-              };
-              // 여기서 덮어쓰기 되는 거로 바꿔야하네
-              dispatch(exerciseActions.addRoutineAPI(routine));
+              // const routine = {
+              //   routineName: routineName,
+              //   myExercise: myExercise,
+              // };
+              dispatch(exerciseActions.addRoutineAPI(selectedPrevItem));
               history.replace('/');
             }}
           >

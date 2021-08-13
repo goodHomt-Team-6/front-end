@@ -6,9 +6,12 @@ import Community from '../img/community.svg';
 import MyPage from '../img/mypage.svg';
 import Calendar from '../img/calendar.svg';
 import Workout from '../img/workout.svg';
+import { useDispatch } from 'react-redux';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 
 // 고정 하단바 컴포넌트
 const NavBar = (props) => {
+  const dispatch = useDispatch();
 
   return (
     <>
