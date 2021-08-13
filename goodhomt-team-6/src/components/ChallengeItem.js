@@ -43,7 +43,12 @@ const ChallengeItem = () => {
               {challenge.communityNickname || '운동좋아'} 님
             </Text>
             <MascortPeopleCountCont>
-              <Image src={Mascort} width="25px" height="24px" borderRadius="0"></Image>
+              <Image
+                src={Mascort}
+                width="25px"
+                height="24px"
+                borderRadius="0"
+              ></Image>
               <Text
                 type="contents"
                 fontSize="13px"
@@ -78,7 +83,12 @@ const ChallengeItem = () => {
               challengeId={challenge.id}
               myChallengesId={myChallengesId}
             >
-              <Image src={Clock} width="24px" height="24px" borderRadius="0"></Image>
+              <Image
+                src={Clock}
+                width="24px"
+                height="24px"
+                borderRadius="0"
+              ></Image>
               <Text type="contents" margin="0 0 0 10px" fontWeight="600">
                 {`${challenge.challengeDateTime.slice(
                   4,
@@ -98,11 +108,12 @@ const ChallengeItem = () => {
               >
                 {challenge.challengeDateTime.slice(8, 10) < 12
                   ? `${challenge.challengeDateTime.slice(
-                    8,
-                    10,
-                  )}:${challenge.challengeDateTime.slice(10, 12)}`
-                  : `${challenge.challengeDateTime.slice(8, 10) - 12
-                  }:${challenge.challengeDateTime.slice(10, 12)}`}
+                      8,
+                      10,
+                    )}:${challenge.challengeDateTime.slice(10, 12)}`
+                  : `${
+                      challenge.challengeDateTime.slice(8, 10) - 12
+                    }:${challenge.challengeDateTime.slice(10, 12)}`}
               </Text>
               <Image
                 src={Dumbbell}
@@ -133,7 +144,7 @@ const ChallengeCont = styled.div`
   padding: 10px 20px 30px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 368px);
+  height: calc(100vh - 224px);
   overflow-y: scroll;
 `;
 
