@@ -7,6 +7,8 @@ import { history } from '../redux/configureStore';
 import { Text } from '../shared/Styles';
 import Mascort from '../img/mascort_blue.svg';
 import logger from '../shared/Logger';
+import { actionCreators as challengeActions } from '../redux/modules/challenge';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 
 // 북마크 버튼 클릭시 모달 생성 컴포넌트
 const ChallengeModal = ({
@@ -15,7 +17,15 @@ const ChallengeModal = ({
   challengeName,
   firstExerciseName,
   userCount,
+  mainMessage,
+  showChallengeModal,
+  buttonMessage,
+  progressStatus,
+  challengeId,
+  myFirstChallengeExercises,
 }) => {
+  const dispatch = useDispatch();
+
   const timeFormatting = () => {
     const month = time.slice(4, 6) < 10 ? time.slice(5, 6) : time.slice(4, 6);
     const day = time.slice(6, 8) < 10 ? time.slice(7, 8) : time.slice(6, 8);
@@ -25,8 +35,17 @@ const ChallengeModal = ({
     return `${month}/${day} ${hour}:${minute}`;
   };
 
+  const modalRef = useRef();
+  const buttonRef = useRef();
+
+  const closeModal = (e) => {
+    if (e.target === modalRef.current || buttonRef.current) {
+      showChallengeModal(false);
+    }
+  };
+
   return (
-    <ModalWrapper>
+    <ModalWrapper ref={modalRef} onClick={closeModal}>
       <ModalInner>
         <PurpleAcc></PurpleAcc>
         <Inner>
@@ -37,7 +56,7 @@ const ChallengeModal = ({
             fontSize="18px"
             margin="10px 0 10px 0"
           >
-            챌린지 신청이 완료되었습니다!
+            {mainMessage}
           </Text>
           <ChallengeBasicInfo>
             <WhiteDiv />
@@ -88,11 +107,36 @@ const ChallengeModal = ({
 
           {/* 저장버튼 */}
           <ConfirmButton
+            ref={buttonRef}
             onClick={() => {
-              history.replace('/community');
+              if (progressStatus === 'start') {
+                closeModal(buttonRef);
+              } else if (progressStatus === 'end') {
+                // 리덕스의 값을 저장해두기 위해 challengeDetail 값을 이용하여 exercise의 routine을 만들어야함. (이미 workout에서 데이터를 그렇게 불러오므로...)
+                const routine = {
+                  id: challengeId,
+                  routineName: challengeName,
+                  routineTime: 0,
+                  rating: null,
+                  isBookmarked: false,
+                  isCompleted: false,
+                  myExercise: [
+                    {
+                      exerciseName: myFirstChallengeExercises[0].exerciseName,
+                      set: myFirstChallengeExercises[0].Challenge_Sets,
+                    },
+                  ],
+                };
+
+                dispatch(exerciseActions.getMyRoutine(routine));
+                sessionStorage.setItem('is_challenge_workout', 'true');
+                history.push('/workout');
+              } else {
+                dispatch(challengeActions.joinChallengeAPI(challengeId));
+              }
             }}
           >
-            {challengeName}
+            {buttonMessage ? buttonMessage : challengeName}
           </ConfirmButton>
         </Inner>
       </ModalInner>
@@ -109,11 +153,10 @@ const ModalWrapper = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1001;
   overflow: auto;
   outline: 0;
   background: rgba(0, 0, 0, 0.8);
-  position: fixed;
 `;
 
 const ModalInner = styled.div`

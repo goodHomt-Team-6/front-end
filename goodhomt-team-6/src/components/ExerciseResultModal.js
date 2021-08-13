@@ -4,6 +4,7 @@ import Color from '../shared/Color';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { actionCreators as challengeActions } from '../redux/modules/challenge';
 import { history } from '../redux/configureStore';
 import { FooterButton, Input, Text, Image } from '../shared/Styles';
 import BookmarkSolid from '../img/bookmark_solid.svg';
@@ -24,13 +25,25 @@ const ExerciseResultModal = ({ exerciseLength, time, routineName, id }) => {
   const [rating, setRating] = useState(null);
 
   const recordResult = () => {
-    const result = {
+    const resultRoutine = {
       id: id,
       routineTime: time,
       rating: rating,
       isCompleted: true,
     };
-    dispatch(exerciseActions.recordResultAPI(result));
+    const resultChallenge = {
+      id: id,
+      challengeTime: time,
+      rating: rating,
+      isCompleted: true,
+    };
+    if (sessionStorage.getItem('is_challenge_workout') === 'true') {
+      logger('여기');
+      dispatch(challengeActions.recordChallengeResultAPI(resultChallenge));
+      sessionStorage.removeItem('is_challenge_workout');
+    } else {
+      dispatch(exerciseActions.recordResultAPI(resultRoutine));
+    }
   };
 
   return (

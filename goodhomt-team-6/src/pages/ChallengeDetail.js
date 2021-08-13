@@ -315,7 +315,6 @@ const ChallengeDetail = (props) => {
       ) : (
         <FooterButton
           onClick={() => {
-            dispatch(challengeCreator.joinChallengeAPI(challengeId));
             showChallengeModal(true);
           }}
         >
@@ -329,6 +328,9 @@ const ChallengeDetail = (props) => {
           challengeName={challenge.challengeName}
           firstExerciseName={challenge.Challenge_Exercises[0].exerciseName}
           userCount={challenge.userCount}
+          showChallengeModal={showChallengeModal}
+          challengeId={challengeId}
+          mainMessage="챌린지 신청이 완료되었습니다!"
         ></ChallengeModal>
       )}
     </React.Fragment>

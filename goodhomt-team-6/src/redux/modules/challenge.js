@@ -42,11 +42,15 @@ const getChallengesAPI = () => {
 };
 
 // 내가 참여한 챌린지 리스트
-const getMyChallengesAPI = () => {
+const getMyChallengesAPI = (value) => {
   return function (dispatch, getState, { history }) {
     api
       .get('/challenges/user')
       .then((response) => {
+        if (value === 'get_detail') {
+          // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
+          dispatch(getChallengeDetailAPI(response.data.result[0].challengeId));
+        }
         dispatch(getMyChallenges(response.data.result));
       })
       .catch(function (err) {
@@ -74,7 +78,9 @@ const joinChallengeAPI = (challengeId) => {
   return function (dispatch, getState, { history }) {
     api
       .patch(`/challenges/${challengeId}`)
-      .then((response) => {})
+      .then((response) => {
+        history.replace('/community');
+      })
       .catch(function (err) {
         logger('챌린지 참여에 실패했습니다.');
       });
@@ -96,11 +102,13 @@ const leaveChallengeAPI = (challengeId) => {
 };
 
 // 챌린지 기록하기
-const recordChallengeResultAPI = (challengeId) => {
+const recordChallengeResultAPI = (result) => {
   return function (dispatch, getState, { history }) {
     api
-      .patch(`/challenges/${challengeId}/record`)
-      .then((response) => {})
+      .put(`/challenges/record`, result)
+      .then((response) => {
+        history.replace('/');
+      })
       .catch(function (err) {
         logger('챌린지 결과 기록에 실패했습니다.');
       });
