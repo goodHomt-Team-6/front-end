@@ -18,7 +18,9 @@ import Header from '../components/Header';
 const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
 
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem.id;
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
   const myRoutine = useSelector((store) => store.exercise.routine);
@@ -49,15 +51,11 @@ const TodayRoutineDetail = (props) => {
     dispatch(exerciseActions.openRow(null));
   };
 
-
   return (
     <>
       {/* 뒤로가기 */}
       <HeaderWrapper>
-        <Header
-          toMain
-          message="Main">
-        </Header>
+        <Header toMain message="Main"></Header>
       </HeaderWrapper>
 
       {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
@@ -142,27 +140,15 @@ const TodayRoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text
-                    type="contents"
-                    minWidth="80px"
-                    padding="0 0 0 10px">
+                  <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                     {list.exerciseName}
                   </Text>
-                  <Text
-                    type="contents">
-                    {
-                      list.set.filter((set) =>
-                        set.type === 'exercise').length
-                    }
+                  <Text type="contents">
+                    {list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text
-                    type="contents">
-                    {list.set[0].weght}kg
-                  </Text>
-                  <Text
-                    type="contents"
-                    padding="0 10px 0 0">
+                  <Text type="contents">{list.set[0].weght}kg</Text>
+                  <Text type="contents" padding="0 10px 0 0">
                     {list.set[0].count}회
                   </Text>
                 </List>
@@ -175,7 +161,8 @@ const TodayRoutineDetail = (props) => {
           <FooterButton
             onClick={() => {
               history.push('/workout');
-            }}>
+            }}
+          >
             운동 시작
           </FooterButton>
         </FooterButtonWrapper>
@@ -233,7 +220,7 @@ const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: ${innerHeight}px;
+  height: calc(100vh - 353px);
   overflow-y: scroll;
 `;
 
