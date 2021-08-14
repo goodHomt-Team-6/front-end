@@ -128,7 +128,7 @@ const ChallengeModal = ({
                   ],
                 };
 
-                dispatch(exerciseActions.getMyRoutine(routine));
+                dispatch(exerciseActions.getMyTodayRoutine(routine));
                 sessionStorage.setItem('is_challenge_workout', 'true');
                 history.push('/workout');
               } else {
