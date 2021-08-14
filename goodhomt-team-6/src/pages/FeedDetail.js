@@ -14,12 +14,13 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 
-
 // 피드 루틴 상세화면 컴포넌트
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
 
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem.id;
   const myExercise = selectedPrevItem.myExercise;
   const routineName = selectedPrevItem.routineName;
@@ -60,10 +61,12 @@ const RoutineDetail = (props) => {
         {/* 루틴  수정 */}
         <IconWrapper>
           {/* 북마크 모달 */}
-          <IconImg src={BookmarkLine}
+          <IconImg
+            src={BookmarkLine}
             onClick={() => {
               setShowModal(true);
-            }} />
+            }}
+          />
         </IconWrapper>
       </HeaderWrapper>
 
@@ -134,27 +137,15 @@ const RoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text
-                    type="contents"
-                    minWidth="80px"
-                    padding="0 0 0 10px">
+                  <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                     {list.exerciseName}
                   </Text>
-                  <Text
-                    type="contents">
-                    {
-                      list.set.filter((set) =>
-                        set.type === 'exercise').length
-                    }
+                  <Text type="contents">
+                    {list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text
-                    type="contents">
-                    {list.set[0].weght}kg
-                  </Text>
-                  <Text
-                    type="contents"
-                    padding="0 10px 0 0">
+                  <Text type="contents">{list.set[0].weght}kg</Text>
+                  <Text type="contents" padding="0 10px 0 0">
                     {list.set[0].count}회
                   </Text>
                 </List>
@@ -207,14 +198,6 @@ const Wrapper = styled.div`
   background-color: #f7f7fa;
 `;
 
-const Container = styled.div`
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f7f7fa;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
-`;
-
 const FooterButtonWrapper = styled.div`
   position: fixed;
   bottom: 0px;
@@ -244,7 +227,7 @@ const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: ${innerHeight}px;
+  height: calc(100vh - 355px);
   overflow-y: scroll;
 `;
 
@@ -258,6 +241,3 @@ const List = styled.div`
     margin-top: 0;
   }
 `;
-
-
-
