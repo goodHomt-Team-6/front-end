@@ -150,7 +150,7 @@ const getMyTodayRoutine = createAction(
   GET_MY_TODAY_ROUTINE,
   (myTodayRoutine) => ({ myTodayRoutine }),
 );
-const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, () => ({}));
+const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, (routineId) => ({ routineId }));
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({
   selectPeriod,
 }));
