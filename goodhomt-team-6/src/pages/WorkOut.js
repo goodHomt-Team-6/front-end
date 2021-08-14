@@ -286,7 +286,6 @@ const Container = styled.div`
 const GoBackButton = styled.div`
   display: flex;
   padding: 25px;
-  /* width: 100%; */
   box-sizing: border-box;
   align-items: baseline;
   background-color: #000;
@@ -299,6 +298,7 @@ const TimeCont = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: calc(40vh - 77px);
 `;
 
 const PlayIconCont = styled.div`
