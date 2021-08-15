@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Grid, Button, Text } from '../shared/Styles';
 import moment from 'moment';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as calendarActions } from '../redux/modules/calendar';
+import { actionCreators as challengeActions } from '../redux/modules/challenge';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import logger from '../shared/Logger';
 import Prev from '../img/prev_button.svg';
 import Next from '../img/next_button.svg';
@@ -18,7 +20,14 @@ import NavBar from '../components/NavBar';
  */
 const Calendar = (props) => {
   const dispatch = useDispatch();
-  const routines = useSelector((state) => state.calendar.routines);
+
+  useEffect(() => {
+    dispatch(challengeActions.getMyChallengesAPI());
+    dispatch(exerciseActions.getAllRoutineAPI());
+  }, []);
+
+  const myChallenges = useSelector((state) => state.challenge.myChallenges);
+  const routines = useSelector((state) => state.exercise.routine);
 
   const today = useSelector((state) => state.calendar.today);
   const setMonth = (value) => {
@@ -26,15 +35,12 @@ const Calendar = (props) => {
   };
   const _changeMonth = setMonth;
 
-  // 넘어온 데이터를 확인하자!
-  // console.log(routines);
-
-  // 이번달의 시작 주, 끝 주를 구합니다.
+  // 이번달의 시작 주, 끝 주를 구함.
   const start_week = moment(today).startOf('month').week();
   const end_week = moment(today).endOf('month').week();
 
-  // 달력에 넣을 주수 배열 길이를 구합니다.
-  // 마지막 주가 다음 해 1주일 수 있어요. (시작 주보다 끝 주가 숫자가 작을 수 있다!)
+  // 달력에 넣을 주수 배열 길이를 구함.
+  // 마지막 주가 다음 해 1주일 수 있음. (시작 주보다 끝 주가 숫자가 작을 수 있다!)
   const week_num =
     (start_week > end_week ? 53 - start_week : end_week - start_week) + 1;
 
@@ -49,7 +55,7 @@ const Calendar = (props) => {
         margin="4px auto"
         flex_direction="row"
       >
-        {/*한 주는 7일이니, 주에 7개씩 날짜 칸을 넣어줍니다. */}
+        {/*한 주는 7일이니, 주에 7개씩 날짜 칸을 넣어준다. */}
         {Array.from({ length: 7 }, (v, i) => i).map((day_index) => {
           let _day = today
             .clone()
@@ -61,42 +67,42 @@ const Calendar = (props) => {
           const is_today =
             moment().format('YYYY-MM-DD') === _day.format('YYYY-MM-DD');
 
-          // routines(Main.js에서 props로 건네줬어요!)에 해당 일자 일정이 들어가 있나 보고, 추가해줍시다.
-          const list_index = Object.keys(routines).indexOf(
-            _day.format('YYYY-MM-DD'),
-          );
-
-          // 주석풀고 데이터 확인해보기! :)!
-          // console.log(list_index);
-          // console.log(routines[_day.format("YYYY-MM-DD")]);
-          // routines에 해당 일 일정이 있으면 일정을 list에 넣어주자! (없으면 null이나 빈배열로! 일단 빈배열로 해봅시다! :))
-          const _list =
-            list_index !== -1 ? routines[_day.format('YYYY-MM-DD')] : [];
-
-          let sorted_list = _list.slice(0, _list.length);
-          // 시간순 오름차순 정렬하기.
-          sorted_list.sort(function (a, b) {
+          // routines에 해당 일 일정이 있으면 일정을 list에 넣어주자!
+          const _routineList = routines.filter((routine, idx) => {
+            return routine.createdAt?.startsWith(_day.format('YYYY-MM-DD'));
+          });
+          const _challengeList = myChallenges.filter((challenge, idx) => {
             return (
-              moment(a['datetime'], 'YYYY-MM-DD HH:mm') -
-              moment(b['datetime'], 'YYYY-MM-DD HH:mm')
+              challenge.Challenge.challengeDateTime?.startsWith(
+                _day.format('YYYYMMDD'),
+              ) && challenge.Challenge.isCompleted
             );
           });
 
-          const list = sorted_list.map((_l, idx) => {
-            // 데이터 확인하기!
-            // console.log(_l);
-            // 일정을 뿌려줘요!
-
+          const routineList = _routineList.map((_l, idx) => {
+            // 일정을 뿌려줌!
             return (
               <Grid
-                bg={_l.completed ? '#48cae4;' : '#f2aa4c;'}
-                height="auto"
-                margin="1px 0px"
-                key={`${_l.datetime}_${_l.id}`}
+                bg="rgba(74, 64, 255, 0.3)"
+                height="50%"
+                key={`${_l.id}`}
                 onClick={() => {}}
-              >
-                <Text type="label">{_l.contents}</Text>
-              </Grid>
+                width="50%"
+                style={{ position: 'absolute', top: '22%', left: '12%' }}
+              ></Grid>
+            );
+          });
+          const challengeList = _challengeList.map((_l, idx) => {
+            // 일정을 뿌려줌!
+            return (
+              <Grid
+                bg="rgba(0, 0, 0, 0.3)"
+                height="50%"
+                key={`${_l.id}`}
+                onClick={() => {}}
+                width="50%"
+                style={{ position: 'absolute', top: '22%', left: '12%' }}
+              ></Grid>
             );
           });
 
@@ -109,14 +115,19 @@ const Calendar = (props) => {
               flex_direction="column"
               bg={is_today ? '#F7F7FA' : '#ffffff'}
               justify_contents="center"
+              style={{ position: 'relative' }}
             >
               {_day.format('MM') === moment(today).format('MM') && (
-                <Text type="label" color="#666666">
-                  {_day.format('DD')}일
-                </Text>
+                <React.Fragment>
+                  <Text type="label" color="rgba(0,0,0, 0.6)" fontSize="14px">
+                    {_day.format('DD')}
+                  </Text>
+                  <React.Fragment>
+                    {_routineList && routineList}
+                    {_challengeList && challengeList}
+                  </React.Fragment>
+                </React.Fragment>
               )}
-
-              {_list && list}
             </Grid>
           );
         })}
@@ -158,13 +169,13 @@ const Calendar = (props) => {
         <Grid justify_contents="center" align="baseline" bg="#F7F7FA">
           <Button
             margin="0 30px 0 0"
-            bgColor="white"
+            bgColor="#F7F7FA"
             alignSelf="center"
             _onClick={() => {
               _changeMonth(-1);
             }}
           >
-            <Image src={Prev} width="5px" height="10px" />
+            <Image src={Prev} width="5px" height="10px" borderRadius="0" />
           </Button>
           <Text type="contents" margin="0" fontSize="30px" fontWeight="bold">
             {moment(today).format('MM')}
@@ -179,13 +190,13 @@ const Calendar = (props) => {
           </Text>
           <Button
             margin="0 0 0 30px"
-            bgColor="white"
+            bgColor="#F7F7FA"
             alignSelf="center"
             _onClick={() => {
               _changeMonth(1);
             }}
           >
-            <Image src={Next} width="5px" height="10px" />
+            <Image src={Next} width="5px" height="10px" borderRadius="0" />
           </Button>
         </Grid>
         <Grid height="auto" font_size="4" bg="#F7F7FA">
@@ -206,5 +217,5 @@ export default Calendar;
 const NavBarWrapper = styled.div`
   position: fixed;
   bottom: 0px;
-  width: 100%;
+  width: 100vw;
 `;

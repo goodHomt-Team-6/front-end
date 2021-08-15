@@ -11,7 +11,7 @@ const Grid = styled.div`
   ${(props) => (props.border ? `border: ${props.border};` : '')}
   ${(props) => (props.bg ? `background-color: ${props.bg};` : '')}
   width: ${(props) => (props.width ? props.width : '100%')};
-  min-width: 50px;
+  min-width: 40px;
   height: ${(props) => (props.height ? props.height : '100%')};
   align-items: ${(props) => (props.align ? props.align : 'center')};
   justify-content: ${(props) =>
