@@ -17,7 +17,6 @@ import closeButton from '../img/close-button.svg';
 import FormExerciseDnd from '../components/FormExerciseDnd';
 import Header from '../components/Header';
 
-
 // material-ui 모달
 import { makeStyles } from '@material-ui/core/styles';
 import ModalView from '../components/Modal';
@@ -42,7 +41,13 @@ const innerHeight = window.innerHeight - 175;
 const EditRoutine = (props) => {
   const dispatch = useDispatch();
   const [setCount, setSetCount] = useState(1);
-  const lists = useSelector((state) => state.exercise.routine[0].myExercise);
+  // const lists = useSelector((state) => state.exercise.routine[0].myExercise);
+  const lists = useSelector(
+    (state) => state.exercise.selectedPrevItem.myExercise,
+  );
+  const selectedPrevItem = useSelector(
+    (state) => state.exercise.selectedPrevItem,
+  );
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
@@ -54,6 +59,9 @@ const EditRoutine = (props) => {
   const [checkCompletion, setCheckCompletion] = useState(false);
 
   useEffect(() => {
+    // selectedPrevItem을 routine으로 옮겨줌
+    dispatch(exerciseCreator.getMyRoutine([selectedPrevItem]));
+
     if (lists) {
       for (let list in lists) {
         if (lists[list].set[0].count === 0) {
@@ -107,7 +115,6 @@ const EditRoutine = (props) => {
     <>
       {/* 뒤로가기 버튼 */}
       <Header message="Routine"></Header>
-
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
       <OptionCont>
         <Image
@@ -131,7 +138,6 @@ const EditRoutine = (props) => {
           }}
         ></Image>
       </OptionCont>
-
       {!reArrangement ? (
         <Container>
           {lists.map((list, listIdx) =>
@@ -248,14 +254,13 @@ const EditRoutine = (props) => {
                   {list.set[0].count}회
                 </Text>
               </List>
-
-            )
+            ),
           )}
         </Container>
       ) : (
         <FormExerciseDnd></FormExerciseDnd>
-      )};
-
+      )}
+      ;
       {editCompletion ? (
         <FooterButton
           onClick={() => {
@@ -263,15 +268,13 @@ const EditRoutine = (props) => {
               myExercise: lists,
             };
             dispatch(exerciseCreator.addRoutineAPI(routine));
-          }}>
+          }}
+        >
           설정 완료
         </FooterButton>
       ) : (
-        <FooterButton disabled>
-          설정 완료
-        </FooterButton>
+        <FooterButton disabled>설정 완료</FooterButton>
       )}
-
       {editor && (
         <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
       )}
@@ -283,95 +286,95 @@ const EditRoutine = (props) => {
 export default EditRoutine;
 
 const Container = styled.div`
-      padding: 20px;
-      box-sizing: border-box;
-      background-color: #f7f7fa;
-      height: ${innerHeight}px;
-      overflow-y: scroll;
-      `;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f7f7fa;
+  height: ${innerHeight}px;
+  overflow-y: scroll;
+`;
 
 const List = styled.div`
-      display: flex;
-      justify-content: space-between;
-      background-color: #fff;
-      margin-top: 20px;
-      &:first-child {
-        margin-top: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  margin-top: 20px;
+  &:first-child {
+    margin-top: 0;
   }
-      `;
+`;
 
 const OpenList = styled.div`
-      background-color: #fff;
-      margin-top: 20px;
-      &:first-child {
-        margin-top: 0;
+  background-color: #fff;
+  margin-top: 20px;
+  &:first-child {
+    margin-top: 0;
   }
-      `;
+`;
 
 const DataRow = styled.div`
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #000;
-      margin: 0 20px;
-      `;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #000;
+  margin: 0 20px;
+`;
 
 const ButtonCont = styled.div`
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      `;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+`;
 
 const ButtonWrap = styled.label`
-      display: block;
-      position: relative;
-      cursor: pointer;
-      width: 47%;
-      `;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  width: 47%;
+`;
 
 const RadioInput = styled.input`
-      width: 0px;
-      height: 0px;
-      opacity: 0;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      `;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+`;
 
 const RadioP = styled.p`
-      display: flex;
-      -webkit-box-align: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      justify-content: center;
-      height: 46px;
-      padding: 0px 15px;
-      color: rgb(102, 102, 102);
-      font-size: 14px;
-      border: 1px solid rgb(217, 217, 217);
-      border-radius: 25px;
-      background-color: rgb(255, 255, 255);
-      user-select: none;
-      `;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  height: 46px;
+  padding: 0px 15px;
+  color: rgb(102, 102, 102);
+  font-size: 14px;
+  border: 1px solid rgb(217, 217, 217);
+  border-radius: 25px;
+  background-color: rgb(255, 255, 255);
+  user-select: none;
+`;
 
 const GoBackButton = styled.div`
-      display: flex;
-      width: auto;
-      justify-content: flex-start;
-      padding: 25px;
-      box-sizing: border-box;
-      align-items: baseline;
-      background-color: #f7f7fa;
-      `;
+  display: flex;
+  width: auto;
+  justify-content: flex-start;
+  padding: 25px;
+  box-sizing: border-box;
+  align-items: baseline;
+  background-color: #f7f7fa;
+`;
 
 const PageText = styled.span`
-      font-size: 14px;
-      line-height: 2.5;
-      `;
+  font-size: 14px;
+  line-height: 2.5;
+`;
 
 const OptionCont = styled.div`
-      background-color: #f7f7fa;
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 0 0;
-      align-items: center;
-      `;
+  background-color: #f7f7fa;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0 0;
+  align-items: center;
+`;

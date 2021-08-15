@@ -7,7 +7,9 @@ import BookmarkSolid from '../img/bookmark_solid.svg';
 
 // 대시보드 컴포넌트
 const DashBoard = (props) => {
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const myRoutine = useSelector((store) => store.exercise.routine);
   const isBookmarked = selectedPrevItem.isBookmarked;
 
@@ -24,26 +26,37 @@ const DashBoard = (props) => {
         <TypeContainer>
           <TypeWrapper>
             <Text
-              type='label'
+              type="label"
               fontSize="14px"
               fontWeight="600"
               color="black"
               opacity="54%"
-            >종목
+            >
+              종목
             </Text>
-            <TextItem>{selectedPrevItem.routineName}</TextItem>
+            <TextItem>
+              {selectedPrevItem.myExercise.length < 2
+                ? selectedPrevItem.myExercise[0].exerciseName
+                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${
+                    selectedPrevItem.myExercise.length - 1
+                  }개`}
+            </TextItem>
           </TypeWrapper>
           <Div />
           <TypeWrapper>
             <Text
-              type='label'
+              type="label"
               fontSize="14px"
               fontWeight="600"
               color="black"
               opacity="54%"
-            >운동시간
+            >
+              운동시간
             </Text>
-            <TextItem>{Math.floor(selectedPrevItem.routineTime / 60)}:{selectedPrevItem.routineTime % 60}</TextItem>
+            <TextItem>
+              {Math.floor(selectedPrevItem.routineTime / 60)}:
+              {selectedPrevItem.routineTime % 60}
+            </TextItem>
           </TypeWrapper>
         </TypeContainer>
       </MainBox>

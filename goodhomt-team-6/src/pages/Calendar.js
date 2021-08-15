@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { history } from '../redux/configureStore';
 import { Image, Grid, Button, Text } from '../shared/Styles';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -10,6 +11,9 @@ import logger from '../shared/Logger';
 import Prev from '../img/prev_button.svg';
 import Next from '../img/next_button.svg';
 import NavBar from '../components/NavBar';
+import BadRating from '../img/clicked_bad_rating.svg';
+import GoodRating from '../img/clicked_good_rating.svg';
+import NormalRating from '../img/clicked_normal_rating.svg';
 
 /**
  * 달력 만들기 순서
@@ -20,14 +24,33 @@ import NavBar from '../components/NavBar';
  */
 const Calendar = (props) => {
   const dispatch = useDispatch();
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
+  const [onRoutine, setOnRoutine] = useState(false);
+  const [onChallenge, setOnChallenge] = useState(false);
 
   useEffect(() => {
     dispatch(challengeActions.getMyChallengesAPI());
     dispatch(exerciseActions.getAllRoutineAPI());
   }, []);
 
-  const myChallenges = useSelector((state) => state.challenge.myChallenges);
   const routines = useSelector((state) => state.exercise.routine);
+  const myChallenges = useSelector((state) => state.challenge.myChallenges);
+  const selectRoutine = (id) => {
+    setOnRoutine(true);
+    setOnChallenge(false);
+    const _selectedRoutine = routines.filter((routine) => {
+      return routine.id === parseInt(id);
+    });
+    setSelectedRoutine(_selectedRoutine[0]);
+  };
+  const selectChallenge = (id) => {
+    setOnChallenge(true);
+    setOnRoutine(false);
+    const _selectedRoutine = myChallenges.filter((challenge) => {
+      return challenge.id === parseInt(id);
+    });
+    setSelectedRoutine(_selectedRoutine[0]);
+  };
 
   const today = useSelector((state) => state.calendar.today);
   const setMonth = (value) => {
@@ -69,14 +92,16 @@ const Calendar = (props) => {
 
           // routines에 해당 일 일정이 있으면 일정을 list에 넣어주자!
           const _routineList = routines.filter((routine, idx) => {
-            return routine.createdAt?.startsWith(_day.format('YYYY-MM-DD'));
+            return (
+              routine.createdAt?.startsWith(_day.format('YYYY-MM-DD')) &&
+              routine.isCompleted
+            );
           });
           const _challengeList = myChallenges.filter((challenge, idx) => {
-            return (
-              challenge.Challenge.challengeDateTime?.startsWith(
-                _day.format('YYYYMMDD'),
-              ) && challenge.Challenge.isCompleted
+            return challenge.Challenge.challengeDateTime?.startsWith(
+              _day.format('YYYYMMDD'),
             );
+            // && challenge.Challenge.isCompleted
           });
 
           const routineList = _routineList.map((_l, idx) => {
@@ -86,7 +111,10 @@ const Calendar = (props) => {
                 bg="rgba(74, 64, 255, 0.3)"
                 height="50%"
                 key={`${_l.id}`}
-                onClick={() => {}}
+                id={_l.id}
+                onClick={(e) => {
+                  selectRoutine(e.target.id);
+                }}
                 width="50%"
                 style={{ position: 'absolute', top: '22%', left: '12%' }}
               ></Grid>
@@ -98,8 +126,11 @@ const Calendar = (props) => {
               <Grid
                 bg="rgba(0, 0, 0, 0.3)"
                 height="50%"
-                key={`${_l.id}`}
-                onClick={() => {}}
+                key={_l.id}
+                id={_l.id}
+                onClick={(e) => {
+                  selectChallenge(e.target.id);
+                }}
                 width="50%"
                 style={{ position: 'absolute', top: '22%', left: '12%' }}
               ></Grid>
@@ -204,6 +235,62 @@ const Calendar = (props) => {
         </Grid>
         {week_arr}
       </Grid>
+
+      {/* 클릭한 루틴, 챌린지 */}
+      {selectedRoutine && (
+        <TodayExerciseWrapper
+          onClick={() => {
+            dispatch(challengeActions.getMyChallengesAPI('calendar'));
+          }}
+        >
+          <RoutineInfo>
+            <RunningTime>
+              {onRoutine &&
+                (selectedRoutine && selectedRoutine?.routineTime === 0
+                  ? '00:00'
+                  : `${Math.floor(selectedRoutine?.routineTime / 60)}:${
+                      selectedRoutine?.routineTime % 60
+                    }`)}
+              {onChallenge &&
+                (selectedRoutine && selectedRoutine?.challengeTime === 0
+                  ? '00:00'
+                  : `${Math.floor(selectedRoutine?.challengeTime / 60)}:${
+                      selectedRoutine?.challengeTime % 60
+                    }`)}
+            </RunningTime>
+
+            <RoutineBox>
+              <RoutineName>
+                {onRoutine && selectedRoutine?.routineName}
+                {onChallenge && selectedRoutine?.Challenge.challengeName}
+              </RoutineName>
+              <WorkoutDate>
+                {onRoutine &&
+                  selectedRoutine.createdAt.slice(5, 10).replace(/-/gi, '.')}
+                {onChallenge &&
+                  `${selectedRoutine?.Challenge?.challengeDateTime.slice(
+                    4,
+                    6,
+                  )}.${selectedRoutine?.Challenge?.challengeDateTime.slice(
+                    6,
+                    8,
+                  )}`}
+              </WorkoutDate>
+            </RoutineBox>
+          </RoutineInfo>
+          {selectedRoutine?.rating === 'soso' && (
+            <RatingCont src={NormalRating}></RatingCont>
+          )}
+          {selectedRoutine?.rating === 'bad' && (
+            <RatingCont src={BadRating}></RatingCont>
+          )}
+          {(selectedRoutine?.rating === 'good' ||
+            selectedRoutine?.rating === null) && (
+            <RatingCont src={GoodRating}></RatingCont>
+          )}
+        </TodayExerciseWrapper>
+      )}
+
       {/* 고정 하단바 */}
       <NavBarWrapper>
         <NavBar />
@@ -218,4 +305,62 @@ const NavBarWrapper = styled.div`
   position: fixed;
   bottom: 0px;
   width: 100vw;
+`;
+
+const TodayExerciseWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  border-top: 1px solid rgba(0, 0, 0, 0.18);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  line-height: 48px;
+  margin: 0px;
+  padding: 28px 0px;
+  font-size: 1rem;
+  &:hover,
+  &:active {
+    cursor: pointer;
+  }
+`;
+
+const RoutineInfo = styled.div`
+  display: flex;
+  padding-left: 20px;
+`;
+
+const RatingCont = styled.img`
+  width: 40px;
+  margin-right: 20px;
+`;
+
+const RoutineBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const RoutineName = styled.span`
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+`;
+
+const WorkoutDate = styled.span`
+  font-size: 14px;
+  line-height: 24px;
+  margin-right: 8px;
+`;
+
+const RunningTime = styled.div`
+  width: 82px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
 `;
