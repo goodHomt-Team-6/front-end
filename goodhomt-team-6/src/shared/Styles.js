@@ -141,13 +141,13 @@ const BasicBtn = styled.button`
 `;
 // Icon
 const Icon = forwardRef((props, ref) => {
-  const { margin, src } = props;
+  const { margin, src, onClick } = props;
   const styles = {
     margin: margin,
     src: src,
   };
 
-  return <IconImg {...styles}></IconImg>;
+  return <IconImg {...styles} onClick={onClick}></IconImg>;
 });
 
 const IconImg = styled.img`

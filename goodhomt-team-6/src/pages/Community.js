@@ -58,12 +58,11 @@ const Community = () => {
             </InfoBox>
             <IconBox
               onClick={() => {
-                // 피드 올리기 디자인 완성된 후 진행
-                // dispatch(feedActions.addFeedAPI());
+                history.push('/selectmyfeed');
               }}
             >
               <Icon margin="0px" src={PurePlusButtonBlack} />
-              <Icon margin="0px 1rem" src={Noti} />
+              {/* <Icon margin="0px 1rem" src={Noti} /> */}
             </IconBox>
           </UserWrapper>
 
@@ -154,7 +153,8 @@ const InfoBox = styled.div`
 const IconBox = styled.div`
   display: flex;
   justify-content: center;
-  align-self: flex-start;
+  margin-right: 1.5rem;
+  /* align-self: flex-start; */
 `;
 
 // const Text = styled.h2`

@@ -2,20 +2,49 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 import Header from '../components/Header';
+import Cookies from 'universal-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { Image, Text, Input } from '../shared/Styles';
+import { Image, Text, FooterButton, Icon } from '../shared/Styles';
+import NextArrow from '../img/next_arrow_icon.svg';
+import { actionCreators as feedActions } from '../redux/modules/feed';
+import { history } from '../redux/configureStore';
+import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
 
 // 피드에 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {
   const dispatch = useDispatch();
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const user = useSelector((store) => store.user.user);
+
+  const [nickname, setNickname] = useState('');
+  const [routinename, setRoutinename] = useState('');
+  const [description, setDescription] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  const onChangeNickname = (e) => {
+    setNickname(e.target.value);
+  };
+
+  const onChangeRoutinename = (e) => {
+    setRoutinename(e.target.value);
+  };
+
+  const onChangeDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const routine = {
+    routineName: routinename,
+    communityNickname: nickname,
+    description: description,
+    is_bookmarked: selectedPrevItem.is_bookmarked,
+    routineTime: selectedPrevItem.routineTime,
+    myExercise: selectedPrevItem.myExercise
+  };
 
   return (
     <>
-      <Header message="Feed"></Header>
-      <Text
-        type="contents"
-      >루틴 제목과 설명을 입력해요!
-      </Text>
+      <Header message="Feed" />
 
       {/* 나의 오늘 운동 루틴 가져오기 */}
       <CategoryList>
@@ -27,34 +56,101 @@ const AddMyFeed = (props) => {
           </TimeBox>
           <RoutineBox>
             <RoutineName>
-              routineName
+              {selectedPrevItem.routineName}
             </RoutineName>
-            <WorkoutDate>
-              00:00
-            </WorkoutDate>
+            <TextWrapper>
+              <WorkoutDate>{selectedPrevItem.createdAt.substring(5, 7)}.{selectedPrevItem.createdAt.substring(8, 10)}
+              </WorkoutDate>
+              <WorkoutDate>
+                {Math.floor(selectedPrevItem.routineTime / 60)}:{Math.floor(selectedPrevItem.routineTime % 60)}
+              </WorkoutDate>
+            </TextWrapper>
           </RoutineBox>
+          <Icon
+            src={NextArrow}
+            onClick={() => {
+              history.push('/feedroutinedetail');
+            }} />
         </TodayExerciseWrapper>
       </CategoryList>
 
-      <Text
-        type="contents"
-      >User name
-      </Text>
-      <Input>
-      </Input>
+      {/* 피드 작성하기 */}
+      <Container>
+        {/* 커뮤니티 닉네임 - 토큰에 닉네임 있는지 없는지 확인 */}
+
+        <TextCont>
+          {user && user.communityNickname === null ?
+            <Text type="contents">User name</Text>
+            : null}
+          {user && user.communityNickname === null ? (
+            <NicknameCont>
+              <TextInput
+                onChange={onChangeNickname}
+                value={nickname}
+                placeholder="닉네임">
+              </TextInput>
+            </NicknameCont>
+          ) : null}
+
+          <Text
+            onChange={onChangeRoutinename}
+            value={routinename}
+            type="contents">
+            Routine name
+          </Text>
+          <TextInput placeholder={selectedPrevItem.routineName}></TextInput>
+          <Text type="contents">Description</Text>
+          <ElTextarea
+            onChange={onChangeDescription}
+            value={description}
+            placeholder="루틴에 대해 설명해주세요.">
+          </ElTextarea>
+        </TextCont>
+      </Container>
+      {/* {nickname !== '' && routinename !== '' && description !== '' ? ( */}
+      <FooterButton
+        onClick={
+          () => {
+            // dispatch(feedActions.addFeedAPI(routine));
+            setShowModal(true);
+          }}
+      >업로드 하기
+      </FooterButton>
+      {/* ) : (
+        <FooterButton disabled
+        >업로드 하기
+        </FooterButton>
+       )} */}
+
+      {showModal ? <AddFeedCompleteModal setShowModal={setShowModal} /> : null}
     </>
   );
 };
 
 export default AddMyFeed;
 
+const Container = styled.div`
+  padding: 0px 1.5rem;
+  height: calc(100vh - 240px);
+  overflow-y: scroll;
+  background-color: #f7f7fa;
+`;
+
 const CategoryList = styled.ul`
-  padding: 0px;
-  margin: 0;
+  margin: 0px;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 314px);
   overflow-x: scroll;
+  padding: 0px 1.5rem;
+  background-color: #f7f7fa;
+`;
+
+const TextCont = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  margin-bottom: 28px;
 `;
 
 const TodayExerciseWrapper = styled.div`
@@ -116,6 +212,61 @@ const RoutineBox = styled.div`
   width: 100%;
 `;
 
-const RoutineBoxDiv = styled.div`
+const CheckerBtn = styled.button`
+  font-size: 14px;
+  border: 1px solid ${Color.mainBlue};
+  height: 32px;
+  padding: 0 8px;
+  color: black;
+  line-height: 32px;
+  border-radius: 16px;
+  background-color: transparent;
+  width: 25%;
+  margin-left: 15px;
+  min-width: 70px;
+`;
+
+const ElTextarea = styled.textarea`
+  background-color: #EEEDFF;
+  box-sizing: border-box;
+  min-height: 112px;
+  padding: 20px;
+  width: 100%;
+  height: 120px;
+  resize: none;
+  border: none;
+  border-radius: 5px;
+  &:focus,
+  &:active {
+    outline: none;
+  }
+`;
+
+// const TextInput = styled.input`
+//   background-color: #EEEDFF;
+//   border: none;
+//   padding: 15px;
+//   width: 75%;
+//   border-radius: 10px;
+// `;
+
+const NicknameCont = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+`;
+
+const TextInput = styled.input`
+  background-color: #EEEDFF;
+  border: none;
+  padding: 15px;
+  box-sizing: border-box;
+  width: 100%;
+  :focus{
+    outline: none;
+  }
+`;
+
+const TextWrapper = styled.div`
   display: flex;
 `;

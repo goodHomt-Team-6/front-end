@@ -4,6 +4,7 @@ import api from '../../shared/Request';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import logger from '../../shared/Logger';
+import { actionCreators as userActions } from './user';
 
 // initialState
 const initialState = {
@@ -18,60 +19,18 @@ const LIKE = 'community/LIKE';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
-const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
+const addFeed = createAction(ADD_FEED, (routine) => ({ routine }));
 const like = createAction(LIKE, (routineId) => ({ routineId }));
 
 // 루틴 커뮤니티 피드에 올리기
-const addFeedAPI = () => {
+const addFeedAPI = (routine) => {
   return function (dispatch, getState, { history }) {
     api
-      .post('/community',
-      // {
-      //   routineTime: 0,
-      //   comment: [],
-      //   like: [],
-      //   createdAt: "2021-08-12 17:17:26",
-      //   communityNickname: "인섭",
-      //   description: "이것은 김인섭의 루틴입니다",
-      //   rating: null,
-      //   is_bookmarked: false,
-      //   is_completed: false,
-      //   routineName: "insub's routien",
-      //   totalLike: 0,
-      //   userId: 1,
-      //   _id: "6114d9899ee28118d9ec29d6",
-      //   myExercise: [
-      //     {
-      //       exerciseName: "팔굽혀펴기",
-      //       id: 1,
-      //       set: [
-      //         {
-      //           count: 2,
-      //           id: 1,
-      //           minutes: null,
-      //           order: 1,
-      //           seconds: null,
-      //           setCount: 1,
-      //           type: "exercise",
-      //           weight: 10
-      //         },
-      //         {
-      //           count: null,
-      //           id: 2,
-      //           minutes: 30,
-      //           order: 2,
-      //           seconds: 2,
-      //           setCount: null,
-      //           type: "break",
-      //           weight: null,
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // }
-    )
+      .post('/community', routine)
       .then((response) => {
         logger('루틴 커뮤니티 피드에 올리기 성공');
+        // 갱신된 토큰 리덕스, 쿠키에 저장하기
+        dispatch(userActions.getUpdatedAccessTokenAPI());
       })
       .catch((error) => {
         logger('루틴 커뮤니티 피드에 올리기 실패', error);
@@ -100,7 +59,6 @@ const getFeedSearchAPI = (keyword) => {
     api
       .get(`/community?exerciseName=${keyword}`)
       .then((response) => {
-        console.log(response);
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 검색으로 가져오기 성공');
       })
@@ -147,10 +105,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.feed = action.payload.feed;
       }),
-    [LIKE]: (state, action) =>
-      produce(state, (draft) => {
+    // [LIKE]: (state, action) =>
+    //   produce(state, (draft) => {
 
-      })
+    //   })
   },
   initialState
 );
