@@ -150,7 +150,10 @@ const getMyTodayRoutine = createAction(
   GET_MY_TODAY_ROUTINE,
   (myTodayRoutine) => ({ myTodayRoutine }),
 );
-const deleteMyTodayRoutine = createAction(DELETE_MY_TODAY_ROUTINE, (routineId) => ({ routineId }));
+const deleteMyTodayRoutine = createAction(
+  DELETE_MY_TODAY_ROUTINE,
+  (routineId) => ({ routineId }),
+);
 const selectPeriod = createAction(SELECT_PERIOD, (selectPeriod) => ({
   selectPeriod,
 }));
@@ -536,7 +539,9 @@ export default handleActions(
         if (state.myTodayRoutine.length === 1) {
           draft.myTodayRoutine = [];
         } else {
-          const deletedMyTodayRoutine = state.myTodayRoutine.filter((item) => item.id !== action.payload.routineId);
+          const deletedMyTodayRoutine = state.myTodayRoutine.filter(
+            (item) => item.id !== action.payload.routineId,
+          );
           draft.myTodayRoutine = deletedMyTodayRoutine;
         }
       }),

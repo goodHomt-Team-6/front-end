@@ -2,18 +2,21 @@ import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import api from '../../shared/Request';
 import logger from '../../shared/Logger';
+import { actionCreators as exerciseActions } from './exercise';
 
 // initial state
 const initialState = {
   challenges: [],
   myChallenges: [],
   challengeDetail: {},
+  loading: true,
 };
 
 // actions
 const GET_CHALLENGES = 'challenge/GET_CHALLENGES';
 const GET_MY_CHALLENGES = 'challenge/GET_MY_CHALLENGES';
 const GET_CHALLENGE_DETAIL = 'challenge/GET_CHALLENGE_DETAIL';
+const LOADING = 'challenge/Loading';
 
 // action creators
 const getChallenges = createAction(GET_CHALLENGES, (challenges) => ({
@@ -24,6 +27,9 @@ const getMyChallenges = createAction(GET_MY_CHALLENGES, (myChallenges) => ({
 }));
 const getChallengeDetail = createAction(GET_CHALLENGE_DETAIL, (challenge) => ({
   challenge,
+}));
+const getLoading = createAction(LOADING, (value) => ({
+  value,
 }));
 
 // middleware actions
@@ -50,6 +56,11 @@ const getMyChallengesAPI = (value) => {
         if (value === 'get_detail') {
           // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
           dispatch(getChallengeDetailAPI(response.data.result[0].challengeId));
+        } else if (value === 'calendar') {
+          // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
+          dispatch(
+            getChallengeDetailAPI(response.data.result[0].challengeId, true),
+          );
         }
         dispatch(getMyChallenges(response.data.result));
       })
@@ -60,11 +71,32 @@ const getMyChallengesAPI = (value) => {
 };
 
 // 챌린지 상세 페이지 데이터
-const getChallengeDetailAPI = (challengeId) => {
+const getChallengeDetailAPI = (challengeId, isCalendar) => {
   return function (dispatch, getState, { history }) {
     api
       .get(`/challenges/${challengeId}`)
       .then((response) => {
+        if (isCalendar) {
+          // 나의 챌린지 아이디 꺼내서 -> 상세 챌린지 데이터들 열람 -> 상세 챌린지 데이터들을 이용해 addSelectedPrevItem thunk 함수 파라미터 제작...
+          // 너무 백엔드 친화적인 api였다...
+          const challenge = response.data.result.challenge;
+          logger(challenge);
+          const routine = {
+            id: challenge.id,
+            routineName: challenge.challengeName,
+            routineTime: challenge.runningTime,
+            rating: null,
+            isBookmarked: false,
+            isCompleted: false,
+            myExercise: challenge.Challenge_Exercises.map((l, idx) => {
+              return { exerciseName: l.exerciseName, set: l.Challenge_Sets };
+            }),
+            createdAt: challenge.createdAt,
+          };
+
+          dispatch(exerciseActions.addSelectedPrevItem(routine));
+          history.push('/routinedetail');
+        }
         dispatch(getChallengeDetail(response.data.result));
       })
       .catch(function (err) {
@@ -129,6 +161,10 @@ export default handleActions(
     [GET_CHALLENGE_DETAIL]: (state, action) =>
       produce(state, (draft) => {
         draft.challengeDetail = action.payload.challenge;
+      }),
+    [LOADING]: (state, action) =>
+      produce(state, (draft) => {
+        draft.loading = action.payload.value;
       }),
   },
   initialState,
