@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router-dom';
 import { history } from '../redux/configureStore';
@@ -25,6 +24,7 @@ import TodayRoutineDetail from '../pages/TodayRoutineDetail';
 import AddMyFeed from '../pages/AddMyFeed';
 import SelectMyFeed from '../pages/SelectMyFeed';
 import FeedRoutineDetail from '../pages/FeedRoutineDetail';
+import Calendar from '../pages/Calendar';
 
 const cookie = new Cookies();
 
@@ -70,11 +70,15 @@ const App = (props) => {
             component={HOC(ChallengeDetail, true)}
           />
           <Route path="/community/:id" exact component={FeedDetail} />
-          <Route path="/todayroutinedetail" exact component={HOC(TodayRoutineDetail, true)} />
+          <Route
+            path="/todayroutinedetail"
+            exact
+            component={HOC(TodayRoutineDetail, true)}
+          />
           <Route path="/addmyfeed" exact component={AddMyFeed} />
           <Route path="/selectmyfeed" exact component={SelectMyFeed} />
           <Route path="/feedroutinedetail" exact component={HOC(FeedRoutineDetail, true)} />
-
+          <Route path="/calendar" exact component={Calendar} />
         </Switch>
       </ConnectedRouter>
     </>

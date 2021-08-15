@@ -19,15 +19,17 @@ const NavBar = (props) => {
         <RouteBox
           onClick={() => {
             history.push('/');
-          }}>
+          }}
+        >
           <IconImage src={Workout} />
           <Title>Workout</Title>
         </RouteBox>
 
         <RouteBox
           onClick={() => {
-            history.push('/');
-          }}>
+            history.push('/calendar');
+          }}
+        >
           <IconImage src={Calendar} />
           <Title>Calendar</Title>
         </RouteBox>
@@ -35,7 +37,8 @@ const NavBar = (props) => {
         <RouteBox
           onClick={() => {
             history.push('/community');
-          }}>
+          }}
+        >
           <IconImage src={Community} />
           <Title>Community</Title>
         </RouteBox>
@@ -43,7 +46,8 @@ const NavBar = (props) => {
         <RouteBox
           onClick={() => {
             // history.push('/');
-          }}>
+          }}
+        >
           <IconImage src={MyPage} />
           <Title>Mypage</Title>
         </RouteBox>
@@ -79,6 +83,6 @@ const IconImage = styled.img`
 const Title = styled.span`
   color: white;
   font-size: 9px;
-  padding-top: 8px; 
+  padding-top: 8px;
   opacity: 60%;
 `;

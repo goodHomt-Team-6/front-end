@@ -7,6 +7,7 @@ import Exercise from './modules/exercise';
 import User from './modules/user';
 import Challenge from './modules/challenge';
 import Feed from './modules/feed';
+import Calendar from './modules/calendar';
 
 export const history = createBrowserHistory();
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   user: User,
   feed: Feed,
   challenge: Challenge,
+  calendar: Calendar,
   router: connectRouter(history),
 });
 
@@ -32,8 +34,8 @@ if (env === 'development') {
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-    })
+        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+      })
     : compose;
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));

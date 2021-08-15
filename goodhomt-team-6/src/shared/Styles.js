@@ -11,7 +11,7 @@ const Grid = styled.div`
   ${(props) => (props.border ? `border: ${props.border};` : '')}
   ${(props) => (props.bg ? `background-color: ${props.bg};` : '')}
   width: ${(props) => (props.width ? props.width : '100%')};
-  min-width: 50px;
+  min-width: 40px;
   height: ${(props) => (props.height ? props.height : '100%')};
   align-items: ${(props) => (props.align ? props.align : 'center')};
   justify-content: ${(props) =>
@@ -49,6 +49,7 @@ const H1 = styled.h1`
     props.textAlign ? `text-align: ${props.textAlign};` : 'text-align: center;'}
   ${(props) => (props.bold ? `font-weight: bold;` : '')}
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
+  ${(props) => (props.padding ? `padding:${props.padding};` : '')}
   ${(props) => (props.fontWeight ? `font-weight:${props.fontWeight};` : '')}
 `;
 
@@ -95,6 +96,7 @@ const Button = (props) => {
     maxWidth,
     borderRadius,
     fontSize,
+    alignSelf,
   } = props;
 
   const styles = {
@@ -110,6 +112,7 @@ const Button = (props) => {
     maxWidth: maxWidth,
     borderRadius: borderRadius,
     fontSize: fontSize,
+    alignSelf: alignSelf,
   };
 
   return (
@@ -138,6 +141,7 @@ const BasicBtn = styled.button`
   font-size: ${(props) => (props.fontSize ? props.fontSize : '15px')};
   line-height: 1em;
   max-width: ${(props) => props.maxWidth};
+  align-self: ${(props) => (props.alignSelf ? props.alignSelf : '')};
 `;
 // Icon
 const Icon = forwardRef((props, ref) => {
@@ -153,7 +157,7 @@ const Icon = forwardRef((props, ref) => {
 const IconImg = styled.img`
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.width ? `width:${props.width};` : '')}
-  :hover{
+  :hover {
     cursor: pointer;
   }
 `;
