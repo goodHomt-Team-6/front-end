@@ -20,6 +20,7 @@ const RoutineDetail = (props) => {
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
   );
+
   const id = selectedPrevItem.id;
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
   const myRoutine = useSelector((store) => store.exercise.routine);
@@ -75,18 +76,21 @@ const RoutineDetail = (props) => {
         {/* 루틴의 세트 모음 */}
         <Container>
           {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((e, listIdx) => (
-              <List key={listIdx}>
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                  {e.exerciseName}
-                </Text>
-                <Text type="contents"> {e.set[0].setCount}세트</Text>
-                <Text type="contents">{e.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">
-                  {e.set[0].count}회
-                </Text>
-              </List>
-            ))}
+            selectedPrevItem.myExercise.map(
+              (e, listIdx) =>
+                e.set && (
+                  <List key={listIdx}>
+                    <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                      {e.exerciseName}
+                    </Text>
+                    <Text type="contents"> {e?.set[0].setCount}세트</Text>
+                    <Text type="contents">{e?.set[0].weight}kg</Text>
+                    <Text type="contents" padding="0 10px 0 0">
+                      {e.set[0].count}회
+                    </Text>
+                  </List>
+                ),
+            )}
         </Container>
 
         {/* 운동시작 버튼 */}
@@ -99,7 +103,8 @@ const RoutineDetail = (props) => {
                 myExercise: myExercise,
               };
               dispatch(exerciseActions.addRoutineAPI(routine));
-            }}>
+            }}
+          >
             설정 완료
           </FooterButton>
         </FooterButtonWrapper>

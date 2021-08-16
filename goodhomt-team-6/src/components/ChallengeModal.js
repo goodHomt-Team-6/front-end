@@ -120,12 +120,19 @@ const ChallengeModal = ({
                   rating: null,
                   isBookmarked: false,
                   isCompleted: false,
-                  myExercise: [
-                    {
-                      exerciseName: myFirstChallengeExercises[0].exerciseName,
-                      set: myFirstChallengeExercises[0].Challenge_Sets,
-                    },
-                  ],
+                  myExercise: myFirstChallengeExercises.map((l, idx) => {
+                    return {
+                      exerciseName: l.exerciseName,
+                      set: l.Challenge_Sets,
+                    };
+                  }),
+                  // 아래 방식이 맞는지 위 방식이 맞는지 챌린지에서 운동하기로 넘어가고 확인해봐야함.
+                  // myExercise: [
+                  //   {
+                  //     exerciseName: myFirstChallengeExercises[0].exerciseName,
+                  //     set: myFirstChallengeExercises[0].Challenge_Sets,
+                  //   },
+                  // ],
                 };
 
                 dispatch(exerciseActions.getMyTodayRoutine(routine));
