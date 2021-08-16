@@ -499,8 +499,7 @@ export default handleActions(
       }),
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.routine = state.routine;
-        // draft.routine[0].myExercise = action.payload.lists;
+        draft.routine[0].myExercise = action.payload.lists;
         // if (state.myTodayRoutine.length === 1) {
         //   draft.routine[0].myExercise = action.payload.lists;
         // } else {
