@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
@@ -13,38 +13,27 @@ import logger from '../shared/Logger';
 import ProgressBarCont from '../components/ProgressBarCont';
 import ExerciseResultModal from '../components/ExerciseResultModal';
 import Header from '../components/Header';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import StopWatchCont from '../components/StopWatchCont';
 
 const WorkOut = (props) => {
+  const dispatch = useDispatch();
   const [timeStop, setTimeStop] = useState(true);
-  const [time, setTime] = useState(0);
   const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
-  const [currentExerciseIdx, setcurrentExerciseIdx] = useState(0);
-  const [currentSetIdx, setcurrentSetIdx] = useState(0);
+  const currentExerciseIdx = useSelector(
+    (state) => state.exercise.currentExerciseIdx,
+  );
+  const currentSetIdx = useSelector((state) => state.exercise.currentSetIdx);
   const [exerciseResultModal, showExerciseResultModal] = useState(false);
-
-  // 스톱워치
-  useEffect(() => {
-    // if 문 안에 있는 interval 들을 밖에서 호출해서 연결시켜줌.
-    let interval = null;
-
-    if (!timeStop) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timeStop]);
+  const [resultTime, setResultTime] = useState(0);
 
   const completeSet = (length) => {
-    setcurrentSetIdx((prev) => prev + 1);
     // 세트 체크를 모두 완료하면 다음 종목으로 넘어가야함.
-    if (currentSetIdx == length - 1) {
-      setcurrentExerciseIdx((prev) => prev + 1);
-      setcurrentSetIdx(0);
+    if (currentSetIdx === length - 1) {
+      dispatch(exerciseActions.countCurrentExerciseIdx(currentExerciseIdx + 1));
+      dispatch(exerciseActions.countCurrentSetIdx(0));
+    } else {
+      dispatch(exerciseActions.countCurrentSetIdx(currentSetIdx + 1));
     }
   };
 
@@ -60,6 +49,8 @@ const WorkOut = (props) => {
     <React.Fragment>
       <GoBackButton
         onClick={() => {
+          dispatch(exerciseActions.countCurrentExerciseIdx(0));
+          dispatch(exerciseActions.countCurrentSetIdx(0));
           history.goBack();
         }}
       >
@@ -80,74 +71,36 @@ const WorkOut = (props) => {
           {currentExerciseIdx < routine.myExercise.length ? (
             timeStop ? (
               <>
-                <Text
-                  type="contents"
-                  color="#9e9ea0"
-                  fontSize="60px"
-                  fontWeight="bold"
-                  margin="0"
-                >
-                  {parseInt(time / 60) < 10
-                    ? `0${parseInt(time / 60)}`
-                    : parseInt(time / 60)}
-                  :{time % 60 < 10 ? `0${time % 60}` : time % 60}
-                </Text>
+                <StopWatchCont
+                  timeStop={timeStop}
+                  setResultTime={setResultTime}
+                />
                 <PlayIconCont>
-                  {timeStop ? (
-                    <Image
-                      src={TimeStart}
-                      width="40px"
-                      height="40px"
-                      _onClick={() => {
-                        setTimeStop(false);
-                      }}
-                    ></Image>
-                  ) : (
-                    <Image
-                      src={TimeStop}
-                      width="40px"
-                      height="40px"
-                      _onClick={() => {
-                        setTimeStop(true);
-                      }}
-                    ></Image>
-                  )}
+                  <Image
+                    src={TimeStart}
+                    width="40px"
+                    height="40px"
+                    _onClick={() => {
+                      setTimeStop(false);
+                    }}
+                  ></Image>
                 </PlayIconCont>
               </>
             ) : (
               <>
-                <Text
-                  type="contents"
-                  color="#B4AFFF"
-                  fontSize="60px"
-                  fontWeight="bold"
-                  margin="0"
-                >
-                  {parseInt(time / 60) < 10
-                    ? `0${parseInt(time / 60)}`
-                    : parseInt(time / 60)}
-                  :{time % 60 < 10 ? `0${time % 60}` : time % 60}
-                </Text>
+                <StopWatchCont
+                  timeStop={timeStop}
+                  setResultTime={setResultTime}
+                />
                 <PlayIconCont>
-                  {timeStop ? (
-                    <Image
-                      src={TimeStart}
-                      width="40px"
-                      height="40px"
-                      _onClick={() => {
-                        setTimeStop(false);
-                      }}
-                    ></Image>
-                  ) : (
-                    <Image
-                      src={TimeStop}
-                      width="40px"
-                      height="40px"
-                      _onClick={() => {
-                        setTimeStop(true);
-                      }}
-                    ></Image>
-                  )}
+                  <Image
+                    src={TimeStop}
+                    width="40px"
+                    height="40px"
+                    _onClick={() => {
+                      setTimeStop(true);
+                    }}
+                  ></Image>
                 </PlayIconCont>
               </>
             )
@@ -266,7 +219,7 @@ const WorkOut = (props) => {
         {exerciseResultModal && (
           <ExerciseResultModal
             exerciseLength={routine.myExercise.length}
-            time={time}
+            time={resultTime}
             routineName={routine.routineName}
             id={routine.id}
           ></ExerciseResultModal>

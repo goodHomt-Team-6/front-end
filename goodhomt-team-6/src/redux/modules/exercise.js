@@ -15,6 +15,8 @@ const initialState = {
   is_selected: false,
   openModal: false,
   selectPeriod: null,
+  currentSetIdx: 0,
+  currentExerciseIdx: 0,
   routine: [
     {
       routineTime: 0,
@@ -93,6 +95,9 @@ const REMOVE_SELECTED_PREV_ITEM = 'exercise/REMOVE_SELECTED_PREV_ITEM';
 const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
 const INITIALIZE_ROUTINE = 'exercise/INITIALIZE_ROUTINE';
 
+const COUNT_CURRENT_SET_IDX = 'exercise/COUNT_CURRENT_SET_IDX';
+const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
+
 // action creators
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
@@ -170,6 +175,15 @@ const getSelectedPrevItem = createAction(
   (selectedPrevItem) => ({ selectedPrevItem }),
 );
 const initializeRoutine = createAction(INITIALIZE_ROUTINE, () => ({}));
+const countCurrentSetIdx = createAction(COUNT_CURRENT_SET_IDX, (count) => ({
+  count,
+}));
+const countCurrentExerciseIdx = createAction(
+  COUNT_CURRENT_EXERCISE_IDX,
+  (count) => ({
+    count,
+  }),
+);
 
 // 운동 전체 가져오기
 const getExerciseAPI = () => {
@@ -583,6 +597,14 @@ export default handleActions(
       produce(state, (draft) => {
         draft.routine = initialState.routine;
       }),
+    [COUNT_CURRENT_SET_IDX]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentSetIdx = action.payload.count;
+      }),
+    [COUNT_CURRENT_EXERCISE_IDX]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentExerciseIdx = action.payload.count;
+      }),
   },
   initialState,
 );
@@ -626,6 +648,8 @@ const actionCreators = {
   getSelectedPrevItem,
   initializeRoutine,
   initializeSectedItems,
+  countCurrentSetIdx,
+  countCurrentExerciseIdx,
 };
 
 export { actionCreators };
