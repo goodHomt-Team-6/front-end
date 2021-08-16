@@ -1,26 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import ProgressBar from '@ramonak/react-progress-bar';
 import logger from '../shared/Logger';
 
 const ProgressBarCont = ({ currentSetIdx, setIdx, minutes, seconds }) => {
   const [progressTime, setProgressTime] = useState(0);
+  const timerId = useRef(null);
 
   const handleProgressBar = (breakTime) => {
     let i = 0;
-    let progress = setInterval(() => {
-      if (breakTime === 'disabled') {
-        // 컴포넌트 나갈때 clearInterval를 잘 호출하는데도, 시간이 계속 흘러감.
-        // 동작에는 문제 없긴함.
-        clearInterval(progress);
-      }
+    timerId.current = setInterval(() => {
       if (i < breakTime) {
         // state가 변하면서 progressTime은 계속 디폴트 값인 0으로 회귀하게 됨.
         // 그래서 prev 값을 이용하여 이전 값을 계속 살리면서 더해줌.
         setProgressTime((prev) => prev + 100 / breakTime);
         i++;
       } else {
-        clearInterval(progress);
+        clearInterval(timerId.current);
       }
     }, 1000);
   };
@@ -28,7 +24,7 @@ const ProgressBarCont = ({ currentSetIdx, setIdx, minutes, seconds }) => {
   useEffect(() => {
     handleProgressBar(minutes * 60 + seconds);
     return () => {
-      handleProgressBar('disabled');
+      clearInterval(timerId.current);
     };
   }, []);
 
