@@ -23,6 +23,7 @@ const ChallengeModal = ({
   progressStatus,
   challengeId,
   myFirstChallengeExercises,
+  from,
 }) => {
   const dispatch = useDispatch();
 
@@ -109,6 +110,17 @@ const ChallengeModal = ({
           <ConfirmButton
             ref={buttonRef}
             onClick={() => {
+              if (from === 'joinChallenge' && progressStatus === 'before') {
+                dispatch(challengeActions.joinChallengeAPI(challengeId));
+                return;
+              } else if (
+                from === 'joinChallenge' &&
+                progressStatus === 'start'
+              ) {
+                alert('이미 시작된 챌린지입니다!');
+                history.push('/community');
+                return;
+              }
               if (progressStatus === 'before') {
                 closeModal(buttonRef);
               } else if (progressStatus === 'start') {
@@ -126,13 +138,6 @@ const ChallengeModal = ({
                       set: l.Challenge_Sets,
                     };
                   }),
-                  // 아래 방식이 맞는지 위 방식이 맞는지 챌린지에서 운동하기로 넘어가고 확인해봐야함.
-                  // myExercise: [
-                  //   {
-                  //     exerciseName: myFirstChallengeExercises[0].exerciseName,
-                  //     set: myFirstChallengeExercises[0].Challenge_Sets,
-                  //   },
-                  // ],
                 };
 
                 dispatch(exerciseActions.getMyTodayRoutine([routine]));
@@ -223,7 +228,6 @@ const ConfirmButton = styled.button`
   background-color: #4a40ff;
   color: white;
   text-align: center;
-  line-height: 60px;
   font-weight: bold;
   cursor: pointer;
   border: none;
