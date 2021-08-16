@@ -94,7 +94,6 @@ const RoutineDetail = (props) => {
         </Container>
 
         {/* 운동시작 버튼 */}
-
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {

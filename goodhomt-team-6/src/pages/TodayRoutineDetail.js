@@ -234,3 +234,16 @@ const List = styled.div`
     margin-top: 0;
   }
 `;
+
+const IconWrapper = styled.div`
+  margin: 25px;
+  box-sizing: border-box;
+  align-items: baseline;
+`;
+
+const IconImg = styled.img`
+  cursor: pointer;
+  :last-child {
+    margin-left: 5px;
+  }
+`;

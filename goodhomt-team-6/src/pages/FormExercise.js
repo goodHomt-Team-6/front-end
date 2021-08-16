@@ -49,6 +49,7 @@ const FormExercise = (props) => {
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
+
   useEffect(() => {
     if (lists) {
       for (let list in lists) {
@@ -61,9 +62,16 @@ const FormExercise = (props) => {
       }
     }
   });
+
   useEffect(() => {
     setEditCompletion(checkCompletion);
   }, [checkCompletion]);
+
+  useEffect(() => {
+    return () => {
+      closeRow();
+    };
+  }, []);
 
   // material-ui 모달
   const classes = modalStyles();

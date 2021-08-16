@@ -207,9 +207,22 @@ const addRoutineAPI = (routine) => {
       .post('/routines', routine)
       .then((response) => {
         // 리덕스를 초기화 해주기 위해 함수를 재활용함. 네이밍과 헷갈리지 말것.
-        console.log(response);
         dispatch(reArrangeMyExercise([]));
         dispatch(initializeSectedItems());
+        history.replace('/');
+      })
+      .catch((error) => {
+        logger('운동 루틴 등록하기 실패', error);
+      });
+  };
+};
+
+// 순서 변경한 운동루틴 등록하기
+const addEditedRoutineAPI = (routine) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .post('/routines', routine)
+      .then((response) => {
         history.replace('/');
       })
       .catch((error) => {
@@ -503,6 +516,7 @@ export default handleActions(
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine[0].myExercise = action.payload.lists;
+        draft.selectedPrevItem.myExercise = action.payload.lists;
         // if (state.myTodayRoutine.length === 1) {
         //   draft.routine[0].myExercise = action.payload.lists;
         // } else {
@@ -588,6 +602,7 @@ const actionCreators = {
   reArrangeRoutineDetailAPI,
   getBookmarkRoutineAPI,
   recordResultAPI,
+  addEditedRoutineAPI,
   addSet,
   addBreak,
   openRow,
