@@ -48,11 +48,9 @@ const ChallengeBox = (props) => {
           </TextCont>
         </LeftCont>
         <Button {...props}>
-          {props.status === 'end'
-            ? props.isCompleted
-              ? '완료 인증하기'
-              : 'Go!'
-            : '참가 대기중'}
+          {props.status === 'before' && '참가 대기중'}
+          {props.status === 'start' && 'Go!'}
+          {props.status === 'end' && '운동 완료!'}
         </Button>
       </Container>
     </React.Fragment>
@@ -74,7 +72,9 @@ const Container = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-bottom: 20px;
   ${(props) => props.status === 'end' && 'background-color: #4A40FF;'}
-  ${(props) => props.status === 'start' && 'background-color: #000;'}
+  ${(props) =>
+    (props.status === 'start' || props.status === 'before') &&
+    'background-color: #000;'}
 `;
 
 const Button = styled.div`
@@ -85,7 +85,9 @@ const Button = styled.div`
   font-weight: 600;
   font-size: 12px;
   ${(props) => props.status === 'end' && 'background-color: #000;'}
-  ${(props) => props.status === 'start' && 'background-color: #6259FF;'}
+  ${(props) =>
+    (props.status === 'start' || props.status === 'before') &&
+    'background-color: #6259FF;'}
 `;
 
 const TextCont = styled.div`

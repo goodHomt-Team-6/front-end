@@ -33,9 +33,10 @@ const Main = (props) => {
   const userImg = useSelector((store) => store.user.user.userImg);
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
   const getDate = moment().format('YYYYMMDD');
-  const myFirstChallenge = useSelector(
-    (store) => store.challenge.myChallenges[0],
-  );
+  const myChallenges = useSelector((store) => store.challenge.myChallenges);
+  const myFirstChallenge = myChallenges.filter(
+    (challenge, idx) => challenge.Challenge.progressStatus != 'end',
+  )[0];
 
   const myFirstChallengeExercises = useSelector(
     (store) => store.challenge.challengeDetail.challenge?.Challenge_Exercises,
@@ -109,7 +110,7 @@ const Main = (props) => {
             )}
             {challengeModal &&
               myFirstChallengeExercises &&
-              myFirstChallenge.Challenge.progressStatus === 'end' && (
+              myFirstChallenge.Challenge.progressStatus === 'start' && (
                 <ChallengeModal
                   exerciseLength={myFirstChallengeExercises.length}
                   time={myFirstChallenge.Challenge.challengeDateTime}
@@ -120,12 +121,14 @@ const Main = (props) => {
                   progressStatus={myFirstChallenge.Challenge.progressStatus}
                   mainMessage="오늘의 챌린지를 시작할까요?"
                   buttonMessage="시작하기"
+                  myFirstChallengeExercises={myFirstChallengeExercises}
+                  challengeId={myFirstChallenge.id}
                 ></ChallengeModal>
               )}
 
             {challengeModal &&
               myFirstChallengeExercises &&
-              myFirstChallenge.Challenge.progressStatus === 'start' && (
+              myFirstChallenge.Challenge.progressStatus === 'before' && (
                 <ChallengeModal
                   exerciseLength={myFirstChallengeExercises.length}
                   time={myFirstChallenge.Challenge.challengeDateTime}
@@ -233,49 +236,45 @@ const Main = (props) => {
                       ></TimeBox>
                     ) : (
                       <TimeBox>
-                        <Time>
-                          운동 전
-                        </Time>
+                        <Time>운동 전</Time>
                       </TimeBox>
                     )}
                     {myTodayRoutine && myTodayRoutine[0].isCompleted ? (
                       <RoutineBox>
-                        <RoutineName>
-                          {routine.routineName}
-                        </RoutineName>
+                        <RoutineName>{routine.routineName}</RoutineName>
                         <RoutineBoxDiv>
                           {routine && routine.routineTime == 0 ? (
-                            <WorkoutDate>
-                              00:00
-                            </WorkoutDate>
+                            <WorkoutDate>00:00</WorkoutDate>
                           ) : (
                             <WorkoutDate>
-                              {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
+                              {Math.floor(routine.routineTime / 60)}:
+                              {routine.routineTime % 60}
                             </WorkoutDate>
                           )}
                         </RoutineBoxDiv>
                       </RoutineBox>
-
                     ) : (
                       <RoutineBox
                         clicked={clicked}
                         onClick={() => {
-                          const selected = myTodayRoutine.filter((m) => m.id == routine.id);
+                          const selected = myTodayRoutine.filter(
+                            (m) => m.id == routine.id,
+                          );
                           const toObject = selected[0];
-                          dispatch(exerciseActions.addSelectedPrevItem(toObject));
+                          dispatch(
+                            exerciseActions.addSelectedPrevItem(toObject),
+                          );
                           history.push('/todayroutinedetail');
-                        }}>
-                        <RoutineName>
-                          {routine.routineName}
-                        </RoutineName>
+                        }}
+                      >
+                        <RoutineName>{routine.routineName}</RoutineName>
                         <RoutineBoxDiv>
                           {routine && routine.routineTime == 0 ? (
-                            <WorkoutDate>
-                              00:00
-                            </WorkoutDate>
+                            <WorkoutDate>00:00</WorkoutDate>
                           ) : (
                             <WorkoutDate>
-                              {Math.floor(routine.routineTime / 60)}:{routine.routineTime % 60}
+                              {Math.floor(routine.routineTime / 60)}:
+                              {routine.routineTime % 60}
                             </WorkoutDate>
                           )}
                         </RoutineBoxDiv>
