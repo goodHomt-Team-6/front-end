@@ -323,6 +323,7 @@ const ChallengeDetail = (props) => {
       )}
       {challengeModal && (
         <ChallengeModal
+          from="joinChallenge"
           exerciseLength={challenge.Challenge_Exercises.length}
           time={challenge.challengeDateTime}
           challengeName={challenge.challengeName}
@@ -330,6 +331,7 @@ const ChallengeDetail = (props) => {
           userCount={challenge.userCount}
           showChallengeModal={showChallengeModal}
           challengeId={challengeId}
+          progressStatus={challenge.progressStatus}
           mainMessage="챌린지 신청이 완료되었습니다!"
         ></ChallengeModal>
       )}
