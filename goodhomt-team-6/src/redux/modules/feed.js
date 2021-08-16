@@ -13,10 +13,12 @@ const initialState = {
 };
 
 // actions
-const GET_FEED = 'commnunity/GET_FEED_ALL';
+const GET_FEED = 'community/GET_FEED';
+const GET_LIKE_FEED = 'community/GET_LIKE_FEED';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
+const getLikeFeed = createAction(GET_LIKE_FEED, (routineId) => ({ routineId }));
 
 // 루틴 커뮤니티 피드에 올리기
 const addFeedAPI = (routine) => {
@@ -36,7 +38,7 @@ const addFeedAPI = (routine) => {
 const getFeedAllAPI = (userId) => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/community', { userId })
+      .get(`/community/${userId}`)
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 전체 가져오기 성공');
@@ -84,7 +86,7 @@ const likeAPI = (routineId) => {
       .put(`/like/${routineId}`)
       .then((response) => {
         logger('좋아요 토글 성공');
-        console.log(response);
+        dispatch(getLikeFeed(routineId));
       })
       .catch((error) => {
         logger('좋아요 토글 실패', error);
@@ -99,6 +101,17 @@ export default handleActions(
       produce(state, (draft) => {
         draft.feed = action.payload.feed;
       }),
+    [GET_LIKE_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.feed.findIndex((i) => i._id === action.payload.routineId);
+        if (draft.feed[idx].isLike === true) {
+          draft.feed[idx].isLike = false;
+          draft.feed[idx].totalLike = draft.feed[idx].totalLike - 1;
+        } else {
+          draft.feed[idx].isLike = true;
+          draft.feed[idx].totalLike = draft.feed[idx].totalLike + 1;
+        }
+      })
   },
   initialState
 );

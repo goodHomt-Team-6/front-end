@@ -27,29 +27,29 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
+            history.push('/community');
+          }}
+        >
+          <IconImage src={Community} />
+          <Title>Feed</Title>
+        </RouteBox>
+
+        <RouteBox
+          onClick={() => {
+            history.push('/challenge');
+          }}
+        >
+          <IconImage src={Community} />
+          <Title>Challenge</Title>
+        </RouteBox>
+
+        <RouteBox
+          onClick={() => {
             history.push('/calendar');
           }}
         >
           <IconImage src={Calendar} />
           <Title>Calendar</Title>
-        </RouteBox>
-
-        <RouteBox
-          onClick={() => {
-            history.push('/community');
-          }}
-        >
-          <IconImage src={Community} />
-          <Title>Community</Title>
-        </RouteBox>
-
-        <RouteBox
-          onClick={() => {
-            // history.push('/');
-          }}
-        >
-          <IconImage src={MyPage} />
-          <Title>Mypage</Title>
         </RouteBox>
       </BtnWrapper>
     </>

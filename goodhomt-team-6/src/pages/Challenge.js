@@ -16,64 +16,70 @@ import Noti from '../img/notification.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { actionCreators as userActions } from '../redux/modules/user';
 
-// 커뮤니티 페이지 컴포넌트
-const Community = () => {
+// 챌린지 페이지 컴포넌트
+const Challenge = () => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
+  const [feedClicked, setFeedClicked] = useState(true);
+  const [challengeClicked, setChallengeClicked] = useState(false);
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
 
   useEffect(() => {
-    dispatch(feedActions.getFeedAllAPI(userId));
+    dispatch(feedActions.getFeedAllAPI("userId"));
     dispatch(userActions.getUpdatedAccessTokenAPI());
+  }, []);
+
+  const feedClick = useCallback(() => {
+    setFeedClicked(true);
+    setChallengeClicked(false);
+  }, []);
+  const challengeClick = useCallback(() => {
+    setFeedClicked(false);
+    setChallengeClicked(true);
   }, []);
 
   return (
     <Container>
-      <InboxWrapper>
-        <Text
-          type="contents"
-          padding="24px 0 24px 24px"
-          fontSize="18px"
-          textAlign="left"
-          fontWeight="bold"
-          margin="0"
-          bgColor="#F7F7FA"
-        >Feed
-        </Text>
+      <Wrapper>
+        <InboxWrapper>
+          <UserWrapper>
+            <InfoBox>
+              <Text
+                type="title"
+                margin="0px 5px 0px 0px"
+                fontSize="18px">
+                Challenge
+              </Text>
+            </InfoBox>
+          </UserWrapper>
 
-        <IconWrapper>
-          <Icon
-            onClick={() => {
-              history.push('/selectmyfeed');
-            }}
-            margin="0px"
-            src={PurePlusButtonBlack} />
-        </IconWrapper>
-      </InboxWrapper>
-
-      {/* 운동 종목 키워드 검색 */}
-      {/* <SearchWrapper>
-            <SearchInput
-              value={searchInput}
-              onChange={(e) => {
-                setSearchInput(e.target.value);
-              }}
+          {/* <Category>
+            <CategoryItem
+              isChecked={feedClicked}
+              handle={feedClick}
+              name={'Feed'}
             />
-            <SearchButton
-              src={searchIcon}
-              onClick={() => {
-                dispatch(feedActions.getFeedSearchAPI(searchInput));
-                setSearchInput('');
-              }}
+            <CategoryItem
+              isChecked={challengeClicked}
+              handle={challengeClick}
+              name={'Challenge'}
             />
-          </SearchWrapper> */}
+          </Category>
+          {feedClicked ? (
+            //Feed
+            <CategoryList>
+              <FeedItem />
+            </CategoryList>
+          ) : ( */}
 
-      {/* 피드 목록 */}
-      <FeedWrapper>
-        <FeedItem />
-      </FeedWrapper>
+          <CategoryList>
+            <ChallengeItem />
+          </CategoryList>
+          {/* )} */}
+        </InboxWrapper>
+      </Wrapper>
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
@@ -83,31 +89,68 @@ const Community = () => {
   );
 };
 
-export default Community;
+export default Challenge;
 
 const Container = styled.div`
   background-color: #f7f7fa;
 `;
 
+const Wrapper = styled.div`
+  /* padding: 1.5rem; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const InboxWrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+`;
+
+const UserWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-const IconWrapper = styled.div`
+const InfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 1.5rem;
+`;
+
+const IconBox = styled.div`
   display: flex;
   justify-content: center;
   margin-right: 1.5rem;
+  /* align-self: flex-start; */
 `;
 
-const FeedWrapper = styled.ul`
+// const Text = styled.h2`
+//   margin: 8px 0px 0px 0px;
+//   font-size: 18px;
+//   font-weight: 500;
+// `;
+
+const CategoryList = styled.ul`
   width: 100%;
   padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
   background-color: #f7f7fa;
+`;
+
+const Category = styled.ul`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0px;
+  list-style: none;
+  margin-top: 43px;
 `;
 
 const SearchWrapper = styled.div`

@@ -57,17 +57,6 @@ const RoutineDetail = (props) => {
       <HeaderWrapper>
         {/* 뒤로가기 */}
         <Header message="Routine" />
-
-        {/* 루틴  수정 */}
-        <IconWrapper>
-          {/* 북마크 모달 */}
-          <IconImg
-            src={BookmarkLine}
-            onClick={() => {
-              setShowModal(true);
-            }}
-          />
-        </IconWrapper>
       </HeaderWrapper>
 
       {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}

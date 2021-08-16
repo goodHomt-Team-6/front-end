@@ -93,7 +93,7 @@ const RoutineDetail = (props) => {
             )}
         </Container>
 
-        {/* 운동시작 버튼 */}
+        {/* 설정완료 버튼 */}
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
@@ -101,7 +101,7 @@ const RoutineDetail = (props) => {
                 routineName: routineName,
                 myExercise: myExercise,
               };
-              dispatch(exerciseActions.addRoutineAPI(routine));
+              dispatch(exerciseActions.addEditedRoutineAPI(routine));
             }}
           >
             설정 완료

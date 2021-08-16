@@ -12,8 +12,8 @@ import { history } from '../redux/configureStore';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
-
   const dispatch = useDispatch();
+
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
   const feed = useSelector((store) => store.feed.feed);
@@ -24,7 +24,7 @@ const FeedItem = (props) => {
         {feed &&
           feed.map((item, idx) => (
             <Card key={idx}>
-              {/* 유저정보 */}
+              {/* 유저 정보 */}
               <UserWrapper>
                 <UserBox>
                   <Image
@@ -32,7 +32,7 @@ const FeedItem = (props) => {
                     height="34px"
                     margin="0px 15px 0px 0px"
                     src={userImg}
-                  // src={item.userImg}
+                  // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
                   />
                   <InfoBox>
                     {userName && (
@@ -44,8 +44,10 @@ const FeedItem = (props) => {
                       >{item.communityNickname}
                       </Text>
                     )}
-                    <Text type="label" fontSize="12px">
-                      {item.createdAt.substring(0, 10)}
+                    <Text
+                      type="label"
+                      fontSize="12px"
+                    >{item.createdAt.substring(0, 10)}
                     </Text>
                   </InfoBox>
                 </UserBox>
@@ -114,8 +116,7 @@ const FeedItem = (props) => {
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >
-                      운동시간
+                    >운동시간
                     </Text>
                     <TextItem>
                       {Math.floor(item.routineTime / 60) < 10 ? (
@@ -139,8 +140,6 @@ const FeedItem = (props) => {
                 </TodayTypeContainer>
               </TodayMainBox>
 
-
-
               {/* 운동 정보 텍스트 */}
               <TextWrapper>
                 <TextBox>
@@ -149,10 +148,10 @@ const FeedItem = (props) => {
                     margin="0px 8px 0px 0px"
                     fontSize="14px"
                     fontWeight="600"
-                  >
-                    {item.routineName}
+                  >{item.routineName}
                   </Text>
 
+                  {/* 키워드 */}
                   {item.myExercise.map((i, idx) => (
                     <Text
                       key={idx}
@@ -161,13 +160,15 @@ const FeedItem = (props) => {
                       color="#4A40FF"
                       fontSize="14px"
                       fontWeight="600"
-                    >
-                      #{i.exerciseName}
+                    >#{i.exerciseName}
                     </Text>
                   ))}
                 </TextBox>
-                <Text type="contents" margin="0px" fontSize="14px">
-                  {item.description}
+                <Text
+                  type="contents"
+                  margin="0px"
+                  fontSize="14px"
+                >{item.description}
                 </Text>
               </TextWrapper>
             </Card>
@@ -181,18 +182,26 @@ const FeedItem = (props) => {
 export default FeedItem;
 
 const FeedContReal = styled.div`
-  padding: 10px 20px 30px;
+  padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 230px);
+  height: calc(100vh - 170px);
   overflow-y: scroll;
 `;
 
 const FeedCont = styled.li`
-  /* padding-bottom: 2.5rem; */
 `;
 
-const Card = styled.div``;
+const Card = styled.div`
+  border-bottom: 1px solid ${Color.clickedGray};
+  margin-top: 2.5rem;
+  :first-child {
+    margin-top: 0;
+  }
+  :last-child {
+    border-bottom: none;
+  }
+`;
 
 const UserWrapper = styled.div`
   display: flex;
@@ -289,7 +298,7 @@ const LikeWrapper = styled.div`
 const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 1rem 0px 3rem 0px;
+  margin: 1.5rem 0px 2.5rem 0px;
 `;
 
 const TextBox = styled.div`
@@ -301,5 +310,5 @@ const Time = styled.span`
 `;
 
 const UserBox = styled.div`
- display: flex;
+  display: flex;
 `;

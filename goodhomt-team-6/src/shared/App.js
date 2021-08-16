@@ -25,6 +25,7 @@ import AddMyFeed from '../pages/AddMyFeed';
 import SelectMyFeed from '../pages/SelectMyFeed';
 import FeedRoutineDetail from '../pages/FeedRoutineDetail';
 import Calendar from '../pages/Calendar';
+import Challenge from '../pages/Challenge';
 
 const cookie = new Cookies();
 
@@ -64,6 +65,7 @@ const App = (props) => {
           />
           <Route path="/workout" exact component={HOC(WorkOut, true)} />
           <Route path="/community" exact component={HOC(Community, true)} />
+          <Route path="/challenge" exact component={HOC(Challenge, true)} />
           <Route
             path="/challenge/:id"
             exact
