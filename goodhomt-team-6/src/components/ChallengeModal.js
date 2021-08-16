@@ -109,9 +109,9 @@ const ChallengeModal = ({
           <ConfirmButton
             ref={buttonRef}
             onClick={() => {
-              if (progressStatus === 'start') {
+              if (progressStatus === 'before') {
                 closeModal(buttonRef);
-              } else if (progressStatus === 'end') {
+              } else if (progressStatus === 'start') {
                 // 리덕스의 값을 저장해두기 위해 challengeDetail 값을 이용하여 exercise의 routine을 만들어야함. (이미 workout에서 데이터를 그렇게 불러오므로...)
                 const routine = {
                   id: challengeId,
@@ -135,11 +135,9 @@ const ChallengeModal = ({
                   // ],
                 };
 
-                dispatch(exerciseActions.getMyTodayRoutine(routine));
+                dispatch(exerciseActions.getMyTodayRoutine([routine]));
                 sessionStorage.setItem('is_challenge_workout', 'true');
                 history.push('/workout');
-              } else {
-                dispatch(challengeActions.joinChallengeAPI(challengeId));
               }
             }}
           >
