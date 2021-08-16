@@ -19,7 +19,6 @@ const ProgressBarCont = ({ currentSetIdx, setIdx, minutes, seconds }) => {
         // 그래서 prev 값을 이용하여 이전 값을 계속 살리면서 더해줌.
         setProgressTime((prev) => prev + 100 / breakTime);
         i++;
-        logger(i);
       } else {
         clearInterval(progress);
       }

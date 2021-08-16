@@ -38,7 +38,6 @@ const ExerciseResultModal = ({ exerciseLength, time, routineName, id }) => {
       isCompleted: true,
     };
     if (sessionStorage.getItem('is_challenge_workout') === 'true') {
-      logger('여기');
       dispatch(challengeActions.recordChallengeResultAPI(resultChallenge));
       sessionStorage.removeItem('is_challenge_workout');
     } else {
