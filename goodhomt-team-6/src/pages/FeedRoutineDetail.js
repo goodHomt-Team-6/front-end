@@ -209,7 +209,7 @@ const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 353px);
+  height: calc(100vh - 290px);
   overflow-y: scroll;
 `;
 

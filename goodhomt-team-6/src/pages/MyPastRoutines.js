@@ -95,11 +95,24 @@ const MyPastRoutines = (props) => {
                 value={routine.id}
               >
                 <TimeBox>
-                  <Time>
-                    {Math.floor(routine.routineTime / 60)}:
+                  {Math.floor(routine.routineTime / 60) < 10 ? (
+                    <Time>
+                      {'0' + Math.floor(routine.routineTime / 60)}:
+                    </Time>
+                  ) : (
+                    <Time>
+                      {Math.floor(routine.routineTime / 60)}:
+                    </Time>)
+                  }
+                  {(routine.routineTime % 60) < 10 ? (
+                    <Time>
+                      {'0' + routine.routineTime % 60}
+                    </Time>
+                  ) : (<Time>
                     {routine.routineTime % 60}
-                  </Time>
+                  </Time>)}
                 </TimeBox>
+
                 {myRoutines && (
                   <RoutineInfo>
                     <InfoBox>
@@ -110,7 +123,7 @@ const MyPastRoutines = (props) => {
                     </InfoBox>
                     {routine.createdAt && (
                       <WorkoutDate>
-                        {routine.createdAt.substring(0, 10)}
+                        {routine.createdAt.substring(0, 4)}.{routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
                       </WorkoutDate>
                     )}
                   </RoutineInfo>

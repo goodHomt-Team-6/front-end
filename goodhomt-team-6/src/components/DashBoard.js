@@ -37,9 +37,8 @@ const DashBoard = (props) => {
             <TextItem>
               {selectedPrevItem.myExercise.length < 2
                 ? selectedPrevItem.myExercise[0].exerciseName
-                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${
-                    selectedPrevItem.myExercise.length - 1
-                  }개`}
+                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${selectedPrevItem.myExercise.length - 1
+                }개`}
             </TextItem>
           </TypeWrapper>
           <Div />
@@ -53,10 +52,26 @@ const DashBoard = (props) => {
             >
               운동시간
             </Text>
+
             <TextItem>
-              {Math.floor(selectedPrevItem.routineTime / 60)}:
-              {selectedPrevItem.routineTime % 60}
+              {Math.floor(selectedPrevItem.routineTime / 60) < 10 ? (
+                <Time>
+                  {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
+                </Time>
+              ) : (
+                <Time>
+                  {Math.floor(selectedPrevItem.routineTime / 60)}:
+                </Time>)
+              }
+              {(selectedPrevItem.routineTime % 60) < 10 ? (
+                <Time>
+                  {'0' + selectedPrevItem.routineTime % 60}
+                </Time>
+              ) : (<Time>
+                {selectedPrevItem.routineTime % 60}
+              </Time>)}
             </TextItem>
+
           </TypeWrapper>
         </TypeContainer>
       </MainBox>
@@ -129,4 +144,9 @@ const IconImg = styled.img`
 
 const Wrapper = styled.div`
   display: flex;
+`;
+
+
+const Time = styled.span`
+  line-height: 45px;
 `;

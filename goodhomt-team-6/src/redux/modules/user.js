@@ -92,6 +92,7 @@ const getUpdatedAccessTokenAPI = () => {
         cookies.set('homt6_refresh_token', refreshToken, { path: '/' });
 
         dispatch(checkLogin(cookies.get('homt6_access_token')));
+        logger('갱신된 토큰 반환 성공');
       })
       .catch((err) => {
         logger('갱신된 토큰 반환 실패', err);
@@ -141,6 +142,7 @@ export default handleActions(
           const decoded = jwt_decode(action.payload.token);
           draft.is_login = true;
           draft.user = {
+            userId: decoded.id,
             nickname: decoded.nickname,
             userImg: decoded.img,
             communityNickname: decoded.communityNickname,

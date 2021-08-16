@@ -9,15 +9,20 @@ import NextArrow from '../img/next_arrow_icon.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { history } from '../redux/configureStore';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
+import { actionCreators as userActions } from '../redux/modules/user';
+import logger from '../shared/Logger';
+
 
 // 피드에 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {
   const dispatch = useDispatch();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const user = useSelector((store) => store.user.user);
+  const communityNickname = useSelector((store) => store.user.user.communityNickname);
+  const userImg = useSelector((store) => store.user.user.userImg);
 
   const [nickname, setNickname] = useState('');
-  const [routinename, setRoutinename] = useState('');
+  const [writeroutinename, setRoutinename] = useState('');
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -33,13 +38,24 @@ const AddMyFeed = (props) => {
     setDescription(e.target.value);
   };
 
-  const routine = {
-    routineName: routinename,
+  const firstWriteRoutine = {
+    routineName: writeroutinename,
     communityNickname: nickname,
     description: description,
-    is_bookmarked: selectedPrevItem.is_bookmarked,
+    isBookmarked: selectedPrevItem.isBookmarked,
     routineTime: selectedPrevItem.routineTime,
-    myExercise: selectedPrevItem.myExercise
+    myExercise: selectedPrevItem.myExercise,
+    userImg: userImg
+  };
+
+  const notFirstWriteRoutine = {
+    routineName: writeroutinename,
+    communityNickname: communityNickname,
+    description: description,
+    isBookmarked: selectedPrevItem.isBookmarked,
+    routineTime: selectedPrevItem.routineTime,
+    myExercise: selectedPrevItem.myExercise,
+    userImg: userImg
   };
 
   return (
@@ -77,7 +93,6 @@ const AddMyFeed = (props) => {
       {/* 피드 작성하기 */}
       <Container>
         {/* 커뮤니티 닉네임 - 토큰에 닉네임 있는지 없는지 확인 */}
-
         <TextCont>
           {user && user.communityNickname === null ?
             <Text type="contents">User name</Text>
@@ -89,16 +104,25 @@ const AddMyFeed = (props) => {
                 value={nickname}
                 placeholder="닉네임">
               </TextInput>
+              <CheckerBtn
+                onClick={() => {
+                  logger('중복확인 버튼 클릭');
+                }}
+              >중복확인</CheckerBtn>
             </NicknameCont>
           ) : null}
 
           <Text
-            onChange={onChangeRoutinename}
-            value={routinename}
             type="contents">
             Routine name
           </Text>
-          <TextInput placeholder={selectedPrevItem.routineName}></TextInput>
+          <TextInput
+            placeholder={selectedPrevItem.routineName}
+            onChange={onChangeRoutinename}
+            value={writeroutinename}
+          >
+          </TextInput>
+
           <Text type="contents">Description</Text>
           <ElTextarea
             onChange={onChangeDescription}
@@ -107,20 +131,21 @@ const AddMyFeed = (props) => {
           </ElTextarea>
         </TextCont>
       </Container>
-      {/* {nickname !== '' && routinename !== '' && description !== '' ? ( */}
+
       <FooterButton
         onClick={
           () => {
-            // dispatch(feedActions.addFeedAPI(routine));
-            setShowModal(true);
+            if (communityNickname !== null) {
+              dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
+              setShowModal(true);
+            } else {
+              dispatch(feedActions.addFeedAPI(firstWriteRoutine));
+              setShowModal(true);
+            }
+
           }}
       >업로드 하기
       </FooterButton>
-      {/* ) : (
-        <FooterButton disabled
-        >업로드 하기
-        </FooterButton>
-       )} */}
 
       {showModal ? <AddFeedCompleteModal setShowModal={setShowModal} /> : null}
     </>

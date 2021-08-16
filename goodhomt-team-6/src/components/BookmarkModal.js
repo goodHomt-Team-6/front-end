@@ -48,7 +48,24 @@ const BookmarkModal = ({ setShowModal }) => {
             <Div />
             <TextWrapper>
               <Text>시간</Text>
-              <TextValue>{Math.floor(selectedPrevItem.routineTime / 60)}:{selectedPrevItem.routineTime % 60}</TextValue>
+              <TextValue>
+                {Math.floor(selectedPrevItem.routineTime / 60) < 10 ? (
+                  <Time>
+                    {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
+                  </Time>
+                ) : (
+                  <Time>
+                    {Math.floor(selectedPrevItem.routineTime / 60)}:
+                  </Time>)
+                }
+                {(selectedPrevItem.routineTime % 60) < 10 ? (
+                  <Time>
+                    {'0' + selectedPrevItem.routineTime % 60}
+                  </Time>
+                ) : (<Time>
+                  {selectedPrevItem.routineTime % 60}
+                </Time>)}
+              </TextValue>
             </TextWrapper>
             <WhiteDiv />
           </RoutineBasicInfo>
@@ -173,5 +190,8 @@ const SaveButton = styled.button`
   border-radius: 50px;
   margin-top: 20px;
   line-height: 1;
+`;
+
+const Time = styled.span`
 `;
 

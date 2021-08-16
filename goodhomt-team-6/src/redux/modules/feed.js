@@ -9,18 +9,14 @@ import { actionCreators as userActions } from './user';
 // initialState
 const initialState = {
   selectedfeed: [],
-  feed: []
+  feed: [],
 };
 
 // actions
 const GET_FEED = 'commnunity/GET_FEED_ALL';
-const ADD_FEED = 'community/ADD_FEED';
-const LIKE = 'community/LIKE';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
-const addFeed = createAction(ADD_FEED, (routine) => ({ routine }));
-const like = createAction(LIKE, (routineId) => ({ routineId }));
 
 // 루틴 커뮤니티 피드에 올리기
 const addFeedAPI = (routine) => {
@@ -29,8 +25,6 @@ const addFeedAPI = (routine) => {
       .post('/community', routine)
       .then((response) => {
         logger('루틴 커뮤니티 피드에 올리기 성공');
-        // 갱신된 토큰 리덕스, 쿠키에 저장하기
-        dispatch(userActions.getUpdatedAccessTokenAPI());
       })
       .catch((error) => {
         logger('루틴 커뮤니티 피드에 올리기 실패', error);
@@ -39,10 +33,10 @@ const addFeedAPI = (routine) => {
 };
 
 // 커뮤니티 피드 전체 가져오기
-const getFeedAllAPI = () => {
+const getFeedAllAPI = (userId) => {
   return function (dispatch, getState, { history }) {
     api
-      .get('/community')
+      .get('/community', { userId })
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 전체 가져오기 성공');
@@ -69,10 +63,10 @@ const getFeedSearchAPI = (keyword) => {
 };
 
 // 커뮤니티 피드 상세 가져오기
-const getFeedDetailAPI = (routineid) => {
+const getFeedDetailAPI = (routineId) => {
   return function (dispatch, getState, { history }) {
     api
-      .get(`/community/${routineid}`)
+      .get(`/community/${routineId}`)
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 상세 가져오기 성공');
@@ -90,7 +84,7 @@ const likeAPI = (routineId) => {
       .put(`/like/${routineId}`)
       .then((response) => {
         logger('좋아요 토글 성공');
-        dispatch(like(routineId));
+        console.log(response);
       })
       .catch((error) => {
         logger('좋아요 토글 실패', error);
@@ -105,10 +99,6 @@ export default handleActions(
       produce(state, (draft) => {
         draft.feed = action.payload.feed;
       }),
-    // [LIKE]: (state, action) =>
-    //   produce(state, (draft) => {
-
-    //   })
   },
   initialState
 );

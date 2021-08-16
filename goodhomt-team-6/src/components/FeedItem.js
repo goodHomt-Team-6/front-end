@@ -18,10 +18,6 @@ const FeedItem = (props) => {
   const userImg = useSelector((store) => store.user.user.userImg);
   const feed = useSelector((store) => store.feed.feed);
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <FeedContReal>
       <FeedCont>
@@ -30,27 +26,57 @@ const FeedItem = (props) => {
             <Card key={idx}>
               {/* 유저정보 */}
               <UserWrapper>
-                <Image
-                  width="40px"
-                  height="40px"
-                  margin="0px 15px 0px 0px"
-                  src={userImg}
-                />
-                <InfoBox>
-                  {userName && (
-                    <Text
-                      type="label"
-                      fontSize="14px"
-                      color="black"
-                      fontWeight="600"
-                    >
-                      {item.communityNickname}
+                <UserBox>
+                  <Image
+                    width="34px"
+                    height="34px"
+                    margin="0px 15px 0px 0px"
+                    src={userImg}
+                  // src={item.userImg}
+                  />
+                  <InfoBox>
+                    {userName && (
+                      <Text
+                        type="label"
+                        fontSize="14px"
+                        color="black"
+                        fontWeight="600"
+                      >{item.communityNickname}
+                      </Text>
+                    )}
+                    <Text type="label" fontSize="12px">
+                      {item.createdAt.substring(0, 10)}
                     </Text>
+                  </InfoBox>
+                </UserBox>
+
+                {/* 좋아요 */}
+                <LikeWrapper>
+                  {item.isLike ? (
+                    <IconBtn
+                      src={LikeSolid}
+                      onClick={() => {
+                        dispatch(feedActions.likeAPI(item._id));
+                      }}
+                    />
+                  ) : (
+                    <IconBtn
+                      src={LikeLine}
+                      onClick={() => {
+                        dispatch(feedActions.likeAPI(item._id));
+                      }}
+                    />
                   )}
-                  <Text type="label" fontSize="12px">
-                    {item.createdAt.substring(0, 10)}
+
+                  <Text
+                    type="contents"
+                    margin="0px 0px 0px 6px"
+                    color="#999999"
+                    fontWeight="500"
+                  >
+                    {item.totalLike}
                   </Text>
-                </InfoBox>
+                </LikeWrapper>
               </UserWrapper>
 
               {/* 피드 게시 운동 정보 */}
@@ -74,10 +100,11 @@ const FeedItem = (props) => {
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >
-                      중량
+                    >종목
                     </Text>
-                    <TextItem>15kg</TextItem>
+                    <TextItem>
+                      {item.myExercise[0].exerciseName} 외 {item.myExercise.length - 1}개
+                    </TextItem>
                   </TypeWrapper>
                   <Div />
                   <TypeWrapper>
@@ -91,30 +118,28 @@ const FeedItem = (props) => {
                       운동시간
                     </Text>
                     <TextItem>
-                      {/* {item.routineTime} */}
-                      30분
+                      {Math.floor(item.routineTime / 60) < 10 ? (
+                        <Time>
+                          {'0' + Math.floor(item.routineTime / 60)}:
+                        </Time>
+                      ) : (
+                        <Time>
+                          {Math.floor(item.routineTime / 60)}:
+                        </Time>)
+                      }
+                      {(item.routineTime % 60) < 10 ? (
+                        <Time>
+                          {'0' + item.routineTime % 60}
+                        </Time>
+                      ) : (<Time>
+                        {item.routineTime % 60}
+                      </Time>)}
                     </TextItem>
                   </TypeWrapper>
                 </TodayTypeContainer>
               </TodayMainBox>
 
-              {/* 좋아요 */}
-              <LikeWrapper>
-                <IconBtn
-                  src={LikeLine}
-                  onClick={() => {
-                    dispatch(feedActions.likeAPI());
-                  }}
-                />
-                <Text
-                  type="contents"
-                  margin="0px 0px 0px 6px"
-                  color="#999999"
-                  fontWeight="500"
-                >
-                  {item.totalLike}
-                </Text>
-              </LikeWrapper>
+
 
               {/* 운동 정보 텍스트 */}
               <TextWrapper>
@@ -146,9 +171,10 @@ const FeedItem = (props) => {
                 </Text>
               </TextWrapper>
             </Card>
-          ))}
-      </FeedCont>
-    </FeedContReal>
+          ))
+        }
+      </FeedCont >
+    </FeedContReal >
   );
 };
 
@@ -170,7 +196,8 @@ const Card = styled.div``;
 
 const UserWrapper = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   margin: 0px 0px 1rem 0px;
 `;
 
@@ -249,6 +276,7 @@ const Span = styled.span`
 `;
 
 const IconBtn = styled.img`
+  width: 18px;
   :hover {
     cursor: pointer;
   }
@@ -256,7 +284,6 @@ const IconBtn = styled.img`
 
 const LikeWrapper = styled.div`
   display: flex;
-  margin-top: 1rem;
 `;
 
 const TextWrapper = styled.div`
@@ -267,4 +294,12 @@ const TextWrapper = styled.div`
 
 const TextBox = styled.div`
   display: flex;
+`;
+
+const Time = styled.span`
+  line-height: 45px;
+`;
+
+const UserBox = styled.div`
+ display: flex;
 `;

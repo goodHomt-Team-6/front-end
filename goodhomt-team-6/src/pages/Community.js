@@ -14,6 +14,7 @@ import FeedItem from '../components/FeedItem';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
 import Noti from '../img/notification.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
+import { actionCreators as userActions } from '../redux/modules/user';
 
 // 커뮤니티 페이지 컴포넌트
 const Community = () => {
@@ -22,12 +23,12 @@ const Community = () => {
   const [feedClicked, setFeedClicked] = useState(true);
   const [challengeClicked, setChallengeClicked] = useState(false);
 
-  const exerciseAll = useSelector((store) => store.exercise.exercise);
-  const userImg = useSelector((store) => store.user.user.userImg);
+  const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
 
   useEffect(() => {
-    dispatch(feedActions.getFeedAllAPI());
+    dispatch(feedActions.getFeedAllAPI("userId"));
+    dispatch(userActions.getUpdatedAccessTokenAPI());
   }, []);
 
   const feedClick = useCallback(() => {
