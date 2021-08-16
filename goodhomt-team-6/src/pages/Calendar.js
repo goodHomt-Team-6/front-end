@@ -99,9 +99,8 @@ const Calendar = (props) => {
           });
           const _challengeList = myChallenges.filter((challenge, idx) => {
             return challenge.Challenge.challengeDateTime?.startsWith(
-              _day.format('YYYYMMDD'),
+              _day.format('YYYYMMDD') && challenge.Challenge.isCompleted,
             );
-            // && challenge.Challenge.isCompleted
           });
 
           const routineList = _routineList.map((_l, idx) => {
