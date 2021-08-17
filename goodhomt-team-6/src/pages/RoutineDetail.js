@@ -101,7 +101,7 @@ const RoutineDetail = (props) => {
                 routineName: routineName,
                 myExercise: myExercise,
               };
-              dispatch(exerciseActions.addRoutineAPI(routine));
+              dispatch(exerciseActions.addEditedRoutineAPI(routine));
             }}
           >
             설정 완료
