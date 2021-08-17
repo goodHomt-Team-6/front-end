@@ -143,8 +143,8 @@ const ChallengeDetail = (props) => {
                   </Text>
                   <Text type="contents" fontSize="15px" margin="10px 0 0">
                     {`${challenge.challengeDateTime.slice(4, 6) < 10
-                        ? challenge.challengeDateTime.slice(5, 6)
-                        : challenge.challengeDateTime.slice(4, 6)
+                      ? challenge.challengeDateTime.slice(5, 6)
+                      : challenge.challengeDateTime.slice(4, 6)
                       }/${challenge.challengeDateTime.slice(6, 8) < 10
                         ? challenge.challengeDateTime.slice(7, 8)
                         : challenge.challengeDateTime.slice(6, 8)

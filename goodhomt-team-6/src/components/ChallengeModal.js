@@ -42,6 +42,7 @@ const ChallengeModal = ({
   const closeModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
       showChallengeModal(false);
+      history.replace('/challenge');
     }
   };
 
@@ -118,7 +119,7 @@ const ChallengeModal = ({
                 progressStatus === 'start'
               ) {
                 alert('이미 시작된 챌린지입니다!');
-                history.push('/community');
+                history.push('/challenge');
                 return;
               }
               if (progressStatus === 'before') {

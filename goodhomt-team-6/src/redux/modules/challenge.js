@@ -111,7 +111,8 @@ const joinChallengeAPI = (challengeId) => {
     api
       .patch(`/challenges/${challengeId}`)
       .then((response) => {
-        history.replace('/community');
+        history.replace('/challenge');
+        logger('챌린지 참여에 성공했습니다.');
       })
       .catch(function (err) {
         logger('챌린지 참여에 실패했습니다.');
@@ -125,7 +126,7 @@ const leaveChallengeAPI = (challengeId) => {
     api
       .delete(`/challenges/${challengeId}`)
       .then((response) => {
-        history.push('/community');
+        history.push('/challenge');
       })
       .catch(function (err) {
         logger('챌린지 참여 취소에 실패했습니다.');

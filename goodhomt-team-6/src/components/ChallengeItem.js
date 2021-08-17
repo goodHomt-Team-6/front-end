@@ -108,12 +108,11 @@ const ChallengeItem = () => {
               >
                 {challenge.challengeDateTime.slice(8, 10) < 12
                   ? `${challenge.challengeDateTime.slice(
-                      8,
-                      10,
-                    )}:${challenge.challengeDateTime.slice(10, 12)}`
-                  : `${
-                      challenge.challengeDateTime.slice(8, 10) - 12
-                    }:${challenge.challengeDateTime.slice(10, 12)}`}
+                    8,
+                    10,
+                  )}:${challenge.challengeDateTime.slice(10, 12)}`
+                  : `${challenge.challengeDateTime.slice(8, 10) - 12
+                  }:${challenge.challengeDateTime.slice(10, 12)}`}
               </Text>
               <Image
                 src={Dumbbell}
@@ -141,10 +140,10 @@ const ChallengeItem = () => {
 };
 
 const ChallengeCont = styled.div`
-  padding: 10px 20px 30px;
+  padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 224px);
+  height: calc(100vh - 170px);
   overflow-y: scroll;
 `;
 

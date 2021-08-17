@@ -88,7 +88,7 @@ const Main = (props) => {
             <Text
               textAlign="left"
               type="title"
-              margin="0px 0px 10px 0px;"
+              margin="0px 0px 1rem 0px;"
               fontSize="18px;"
             >
               Today
@@ -339,7 +339,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  padding: 1.5rem;
+  padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

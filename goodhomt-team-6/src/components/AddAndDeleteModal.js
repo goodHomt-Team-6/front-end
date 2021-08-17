@@ -109,7 +109,7 @@ const ModalInner = styled.div`
       background-color: ${(props) => props.cancel ? '#E9E8FF' : '#fff'};
   width: 90%;
   max-width: 480px;
-  top: 82%;
+  top: 80%;
   transform: translateY(-50%);
   margin: 0 auto 15px auto;
   padding: 10px 10px;

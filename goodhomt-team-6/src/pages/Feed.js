@@ -57,7 +57,6 @@ const Feed = () => {
         <IconWrapper>
           <Icon
             onClick={() => {
-              // history.push('/selectmyfeed');
               setShowAddFeedModal(true);
             }}
             margin="0px"
@@ -112,8 +111,7 @@ const Feed = () => {
                         width="34px"
                         height="34px"
                         margin="0px 15px 0px 0px"
-                        src={userImg}
-                      // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
+                        src={item.img}
                       />
                       <InfoBox>
                         {userName && (
@@ -232,17 +230,19 @@ const Feed = () => {
                         </Text>
 
                         {/* 키워드 */}
-                        {item.myExercise.map((i, idx) => (
-                          <Text
-                            key={idx}
-                            type="contents"
-                            margin="0px 6px 0px 0px"
-                            color="#4A40FF"
-                            fontSize="14px"
-                            fontWeight="600"
-                          >#{i.exerciseName}
-                          </Text>
-                        ))}
+                        <KeywordBox>
+                          {item.myExercise.map((i, idx) => (
+                            <Text
+                              key={idx}
+                              type="contents"
+                              margin="0px 6px 0px 0px"
+                              color="#4A40FF"
+                              fontSize="14px"
+                              fontWeight="600"
+                            >#{i.exerciseName}
+                            </Text>
+                          ))}
+                        </KeywordBox>
                       </CommentText>
 
                       {/* 삭제 버튼 */}
@@ -383,7 +383,6 @@ const TodayWrapper = styled.div`
   border-bottom: 1px solid black;
   box-sizing: border-box;
   padding: 30px;
-  margin: 0px 1rem;
 `;
 
 const TodayTypeContainer = styled.div`
@@ -431,7 +430,7 @@ const TodayMainBox = styled.div`
 
 const TextItem = styled.span`
   color: black;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
 `;
 
@@ -474,4 +473,12 @@ const UserBox = styled.div`
 
 const CommentText = styled.div`
   display: flex;
+  width: 90%;
+`;
+
+const KeywordBox = styled.div`
+  width: 50%;
+  display: flex;
+  flex-flow: row wrap ;
+
 `;

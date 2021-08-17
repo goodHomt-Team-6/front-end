@@ -19,60 +19,38 @@ import { actionCreators as userActions } from '../redux/modules/user';
 // 챌린지 페이지 컴포넌트
 const Challenge = () => {
   const dispatch = useDispatch();
-  const [searchInput, setSearchInput] = useState('');
-  const [feedClicked, setFeedClicked] = useState(true);
-  const [challengeClicked, setChallengeClicked] = useState(false);
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
 
-  useEffect(() => {
-    dispatch(feedActions.getFeedAllAPI("userId"));
-    dispatch(userActions.getUpdatedAccessTokenAPI());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(feedActions.getFeedAllAPI("userId"));
+  //   dispatch(userActions.getUpdatedAccessTokenAPI());
+  // }, []);
 
-  const feedClick = useCallback(() => {
-    setFeedClicked(true);
-    setChallengeClicked(false);
-  }, []);
-  const challengeClick = useCallback(() => {
-    setFeedClicked(false);
-    setChallengeClicked(true);
-  }, []);
+  // const feedClick = useCallback(() => {
+  //   setFeedClicked(true);
+  //   setChallengeClicked(false);
+  // }, []);
+  // const challengeClick = useCallback(() => {
+  //   setFeedClicked(false);
+  //   setChallengeClicked(true);
+  // }, []);
 
   return (
     <Container>
       <Wrapper>
         <InboxWrapper>
-          <UserWrapper>
-            <InfoBox>
-              <Text
-                type="title"
-                margin="0px 5px 0px 0px"
-                fontSize="18px">
-                Challenge
-              </Text>
-            </InfoBox>
-          </UserWrapper>
-
-          {/* <Category>
-            <CategoryItem
-              isChecked={feedClicked}
-              handle={feedClick}
-              name={'Feed'}
-            />
-            <CategoryItem
-              isChecked={challengeClicked}
-              handle={challengeClick}
-              name={'Challenge'}
-            />
-          </Category>
-          {feedClicked ? (
-            //Feed
-            <CategoryList>
-              <FeedItem />
-            </CategoryList>
-          ) : ( */}
+          <Text
+            type="contents"
+            padding="24px 0 24px 24px"
+            fontSize="18px"
+            textAlign="left"
+            fontWeight="bold"
+            margin="0"
+            bgColor="#F7F7FA">
+            Challenge
+          </Text>
 
           <CategoryList>
             <ChallengeItem />
@@ -107,7 +85,7 @@ const InboxWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 1.5rem;
+  justify-content: space-between;
 `;
 
 const UserWrapper = styled.div`
