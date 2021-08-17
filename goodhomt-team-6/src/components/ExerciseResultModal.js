@@ -20,7 +20,13 @@ import moment from 'moment';
 import logger from '../shared/Logger';
 
 // 북마크 버튼 클릭시 모달 생성 컴포넌트
-const ExerciseResultModal = ({ exerciseLength, time, routineName, id }) => {
+const ExerciseResultModal = ({
+  exerciseLength,
+  time,
+  routineName,
+  id,
+  challengeId,
+}) => {
   const dispatch = useDispatch();
   const [rating, setRating] = useState(null);
 
@@ -32,12 +38,13 @@ const ExerciseResultModal = ({ exerciseLength, time, routineName, id }) => {
       isCompleted: true,
     };
     const resultChallenge = {
-      id: id,
+      id: challengeId,
       challengeTime: time,
       rating: rating,
       isCompleted: true,
     };
     if (sessionStorage.getItem('is_challenge_workout') === 'true') {
+      console.log(resultChallenge);
       dispatch(challengeActions.recordChallengeResultAPI(resultChallenge));
       sessionStorage.removeItem('is_challenge_workout');
     } else {

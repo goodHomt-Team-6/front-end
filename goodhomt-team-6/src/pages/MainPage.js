@@ -97,6 +97,7 @@ const Main = (props) => {
               // 리액트 crontab으로 api 재호출 예약을 걸어둬서 화면을 켜놔도 실시간으로 변하는것처럼 보여줄순 없을까?
               <ChallengeBox
                 status={myFirstChallenge.Challenge.progressStatus}
+                isCompleted={myFirstChallenge.isCompleted}
                 myFirstChallenge={myFirstChallenge}
                 myFirstChallengeExercises={myFirstChallengeExercises}
                 isCompleted={myFirstChallenge.isCompleted}

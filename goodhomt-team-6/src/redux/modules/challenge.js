@@ -138,12 +138,13 @@ const leaveChallengeAPI = (challengeId) => {
 const recordChallengeResultAPI = (result) => {
   return function (dispatch, getState, { history }) {
     api
-      .put(`/challenges/record`, result)
+      .patch(`/challenges/record`, result)
       .then((response) => {
         history.replace('/');
       })
       .catch(function (err) {
         logger('챌린지 결과 기록에 실패했습니다.');
+        logger(err);
       });
   };
 };
