@@ -529,7 +529,9 @@ export default handleActions(
       }),
     [REARRANGE_MY_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
-        draft.routine[0].myExercise = action.payload.lists;
+        if (state.routine[0]) {
+          draft.routine[0].myExercise = action.payload.lists;
+        }
         draft.selectedPrevItem.myExercise = action.payload.lists;
       }),
     [OPEN_MODAL]: (state, action) =>

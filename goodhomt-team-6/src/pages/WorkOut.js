@@ -30,8 +30,8 @@ const WorkOut = (props) => {
   const completeSet = (length) => {
     // 세트 체크를 모두 완료하면 다음 종목으로 넘어가야함.
     if (currentSetIdx === length - 1) {
-      dispatch(exerciseActions.countCurrentExerciseIdx(currentExerciseIdx + 1));
       dispatch(exerciseActions.countCurrentSetIdx(0));
+      dispatch(exerciseActions.countCurrentExerciseIdx(currentExerciseIdx + 1));
     } else {
       dispatch(exerciseActions.countCurrentSetIdx(currentSetIdx + 1));
     }
@@ -181,12 +181,7 @@ const WorkOut = (props) => {
                           )}
                         {currentSetIdx === setIdx ? (
                           <>
-                            <ListCheckBlack
-                            // 일단은 휴식에서 체크 버튼 클릭을 통해 휴식을 끝내는 동작은 뺴놓자.
-                            // onClick={() => {
-                            //   completeSet(list.set.length);
-                            // }}
-                            >
+                            <ListCheckBlack>
                               <Image src={Check} width="24px" height="24px" />
                             </ListCheckBlack>
                             <ProgressBarCont
