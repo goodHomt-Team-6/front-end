@@ -49,8 +49,8 @@ const ChallengeBox = (props) => {
         </LeftCont>
         <Button {...props}>
           {props.status === 'before' && '참가 대기중'}
-          {props.status === 'start' && 'Go!'}
-          {props.status === 'end' && '운동 완료!'}
+          {props.status === 'start' && !props.isCompleted && 'Go!'}
+          {props.isCompleted && '운동 완료!'}
         </Button>
       </Container>
     </React.Fragment>
