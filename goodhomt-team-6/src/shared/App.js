@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from '../redux/configureStore';
 import MainPage from '../pages/MainPage';
 import FormExercise from '../pages/FormExercise';
-import ExerciseListUp from '../components/ExerciseListUp';
+import ExerciseListUp from '../pages/ExerciseListUp';
 import Login from '../pages/Login';
 import KakaoLanding from '../pages/KakaoLanding';
 import { actionCreators as userAction } from '../redux/modules/user';

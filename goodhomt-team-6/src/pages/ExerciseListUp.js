@@ -13,7 +13,7 @@ import Logger from '../shared/Logger';
 import searchIcon from '../img/search-icon.svg';
 import { Opacity } from '@material-ui/icons';
 import Header from '../components/Header';
-
+import Category from '../components/Category';
 
 // 운동리스트 컴포넌트
 const ExerciseListUp = (props) => {
@@ -92,8 +92,9 @@ const ExerciseListUp = (props) => {
           <SearchButton src={searchIcon} />
         </SearchWrapper>
 
+        <Category />
         {/* 운동 카테고리 */}
-        <Category>
+        {/* <Category>
           <CategoryItem
             onClick={() => {
               isClicked(false);
@@ -118,10 +119,10 @@ const ExerciseListUp = (props) => {
               {e.categoryName}
             </CategoryItem>
           ))}
-        </Category>
+        </Category> */}
 
         {/* 운동 카테고리별 리스트 보여주기 */}
-        {clicked ? (
+        {/* {clicked ? (
           <CategoryList>
             {categoryItems &&
               categoryItems
@@ -177,7 +178,7 @@ const ExerciseListUp = (props) => {
                 </ExerciseItem>
               ))}
           </CategoryList>
-        )}
+        )} */}
 
         {/* 종목 추가하기 */}
         <FooterButtonWrapper>
@@ -293,14 +294,14 @@ const CloseBtn = styled.img`
   }
 `;
 
-const Category = styled.ul`
-  display: flex;
-  padding: 0px;
-  list-style: none;
-  margin: 40px 0px 0px 0px;
-  overflow-x: scroll;
-  white-space: nowrap;
-`;
+// const Category = styled.ul`
+//   display: flex;
+//   padding: 0px;
+//   list-style: none;
+//   margin: 40px 0px 0px 0px;
+//   overflow-x: scroll;
+//   white-space: nowrap;
+// `;
 
 const CategoryItem = styled.li`
   list-style: none;
