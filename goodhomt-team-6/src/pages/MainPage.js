@@ -26,7 +26,6 @@ import ChallengeModal from '../components/ChallengeModal';
 // 메인 페이지 컴포넌트
 const Main = (props) => {
   const dispatch = useDispatch();
-  const is_login = useSelector((store) => store.user.is_login);
 
   const todayDate = moment().format('MM.DD').replace(/(^0+)/, '');
   const userName = useSelector((store) => store.user.user.nickname);
@@ -260,9 +259,8 @@ const Main = (props) => {
                           const selected = myTodayRoutine.filter(
                             (m) => m.id == routine.id,
                           );
-                          const toObject = selected[0];
                           dispatch(
-                            exerciseActions.addSelectedPrevItem(toObject),
+                            exerciseActions.addSelectedPrevItem(selected[0]),
                           );
                           history.push('/todayroutinedetail');
                         }}

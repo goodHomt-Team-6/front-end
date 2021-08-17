@@ -146,7 +146,6 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-
 const Time = styled.span`
   line-height: 45px;
 `;

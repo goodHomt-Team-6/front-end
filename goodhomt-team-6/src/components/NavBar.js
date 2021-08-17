@@ -27,7 +27,7 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/community');
+            history.push('/feed');
           }}
         >
           <IconImage src={Community} />

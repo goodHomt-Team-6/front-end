@@ -1,26 +1,25 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import api from '../../shared/Request';
-import jwt_decode from 'jwt-decode';
-import Cookies from 'universal-cookie';
 import logger from '../../shared/Logger';
-import { actionCreators as userActions } from './user';
 
 // initialState
 const initialState = {
-  selectedfeed: [],
+  selectedFeed: {},
   feed: [],
 };
 
 // actions
 const GET_FEED = 'community/GET_FEED';
 const GET_LIKE_FEED = 'community/GET_LIKE_FEED';
+const SELECT_FEED = 'community/SELECT_FEED';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
 const getLikeFeed = createAction(GET_LIKE_FEED, (routineId) => ({ routineId }));
+const selectFeed = createAction(SELECT_FEED, (routineId) => ({ routineId }));
 
-// 루틴 커뮤니티 피드에 올리기
+// 피드 추가하기
 const addFeedAPI = (routine) => {
   return function (dispatch, getState, { history }) {
     api
@@ -34,11 +33,11 @@ const addFeedAPI = (routine) => {
   };
 };
 
-// 커뮤니티 피드 전체 가져오기
+// 피드 전체 가져오기
 const getFeedAllAPI = (userId) => {
   return function (dispatch, getState, { history }) {
     api
-      .get(`/community/${userId}`)
+      .get(`/community?userId=${userId}`)
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 전체 가져오기 성공');
@@ -49,7 +48,7 @@ const getFeedAllAPI = (userId) => {
   };
 };
 
-// 커뮤니티 검색어로 전체 가져오기
+// 검색어로 전체 피드 가져오기
 const getFeedSearchAPI = (keyword) => {
   return function (dispatch, getState, { history }) {
     api
@@ -64,7 +63,7 @@ const getFeedSearchAPI = (keyword) => {
   };
 };
 
-// 커뮤니티 피드 상세 가져오기
+// 피드 상세 가져오기
 const getFeedDetailAPI = (routineId) => {
   return function (dispatch, getState, { history }) {
     api
@@ -79,7 +78,23 @@ const getFeedDetailAPI = (routineId) => {
   };
 };
 
-// 피드에서 루틴 좋아요
+// 피드 삭제하기
+const deleteFeedAPI = (routineId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .delete(`/community/${routineId}`)
+      .then((response) => {
+        logger('피드 삭제 성공');
+        const userId = getState().user.user.userId;
+        dispatch(getFeedAllAPI(userId));
+      })
+      .catch((error) => {
+        logger('피드 삭제 실패', error);
+      });
+  };
+};
+
+// 피드 좋아요 토글
 const likeAPI = (routineId) => {
   return function (dispatch, getState, { history }) {
     api
@@ -111,7 +126,12 @@ export default handleActions(
           draft.feed[idx].isLike = true;
           draft.feed[idx].totalLike = draft.feed[idx].totalLike + 1;
         }
-      })
+      }),
+    [SELECT_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.feed.findIndex((i) => i._id === action.payload.routineId);
+        draft.selectedFeed = state.feed[idx];
+      }),
   },
   initialState
 );
@@ -123,7 +143,9 @@ const actionCreators = {
   getFeedSearchAPI,
   getFeedDetailAPI,
   addFeedAPI,
+  deleteFeedAPI,
   likeAPI,
+  selectFeed,
 };
 
 export { actionCreators };

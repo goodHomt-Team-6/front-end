@@ -59,6 +59,7 @@ const AddMyFeed = (props) => {
 
   return (
     <>
+      {/* 헤더 */}
       <Header message="Feed" />
 
       {/* 나의 오늘 운동 루틴 가져오기 */}

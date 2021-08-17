@@ -531,11 +531,6 @@ export default handleActions(
       produce(state, (draft) => {
         draft.routine[0].myExercise = action.payload.lists;
         draft.selectedPrevItem.myExercise = action.payload.lists;
-        // if (state.myTodayRoutine.length === 1) {
-        //   draft.routine[0].myExercise = action.payload.lists;
-        // } else {
-        //   draft.myTodayRoutine.push(action.payload.list);
-        // }
       }),
     [OPEN_MODAL]: (state, action) =>
       produce(state, (draft) => {

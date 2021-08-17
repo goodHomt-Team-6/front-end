@@ -17,7 +17,7 @@ import logger from './Logger';
 import HOC from './HOC';
 import { truncate } from 'fs';
 import WorkOut from '../pages/WorkOut';
-import Community from '../pages/Community';
+import Feed from '../pages/Feed';
 import ChallengeDetail from '../pages/ChallengeDetail';
 import FeedDetail from '../pages/FeedDetail';
 import TodayRoutineDetail from '../pages/TodayRoutineDetail';
@@ -64,14 +64,14 @@ const App = (props) => {
             component={HOC(KakaoLanding, false)}
           />
           <Route path="/workout" exact component={HOC(WorkOut, true)} />
-          <Route path="/community" exact component={HOC(Community, true)} />
+          <Route path="/feed" exact component={HOC(Feed, true)} />
           <Route path="/challenge" exact component={HOC(Challenge, true)} />
           <Route
             path="/challenge/:id"
             exact
             component={HOC(ChallengeDetail, true)}
           />
-          <Route path="/community/:id" exact component={FeedDetail} />
+          <Route path="/feed/:id" exact component={FeedDetail} />
           <Route
             path="/todayroutinedetail"
             exact

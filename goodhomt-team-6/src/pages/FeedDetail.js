@@ -133,7 +133,7 @@ const RoutineDetail = (props) => {
                     {list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text type="contents">{list.set[0].weght}kg</Text>
+                  <Text type="contents">{list.set[0].weight}kg</Text>
                   <Text type="contents" padding="0 10px 0 0">
                     {list.set[0].count}회
                   </Text>
@@ -146,11 +146,8 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              // const routine = {
-              //   routineName: routineName,
-              //   myExercise: myExercise,
-              // };
-              dispatch(exerciseActions.addRoutineAPI(selectedPrevItem));
+              dispatch(exerciseActions.addEditedRoutineAPI(selectedPrevItem));
+              console.log(selectedPrevItem);
               history.replace('/');
             }}
           >

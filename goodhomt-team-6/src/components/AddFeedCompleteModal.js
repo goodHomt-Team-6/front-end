@@ -44,7 +44,7 @@ const AddFeedCompleteModal = ({ setShowModal }) => {
           {/* 저장버튼 */}
           <ConfirmButton
             onClick={() => {
-              history.replace('/community');
+              history.replace('/feed');
             }}
             ref={buttonRef}
           >바로 확인하기

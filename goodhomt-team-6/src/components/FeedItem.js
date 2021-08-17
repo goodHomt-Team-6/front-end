@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import { Image, Text } from '../shared/Styles';
+import { Image, Text, Icon } from '../shared/Styles';
 import { useSelector, useDispatch } from 'react-redux';
 import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
+import Delete from '../img/more_button_delete.svg';
 import BookmarkLine from '../img/bookmark_line.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { history } from '../redux/configureStore';
+import logger from '../shared/Logger';
+import AddAndDeleteModal from './AddAndDeleteModal';
 
 // 피드 아이템 컴포넌트
 const FeedItem = (props) => {
@@ -16,6 +19,7 @@ const FeedItem = (props) => {
 
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
+  const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
 
   return (
@@ -69,7 +73,6 @@ const FeedItem = (props) => {
                       }}
                     />
                   )}
-
                   <Text
                     type="contents"
                     margin="0px 0px 0px 6px"
@@ -85,10 +88,9 @@ const FeedItem = (props) => {
               <TodayMainBox
                 onClick={() => {
                   const selected = feed.filter((m) => m._id == item._id);
-                  const toObject = selected[0];
-                  dispatch(exerciseActions.addSelectedPrevItem(toObject));
+                  dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
                   dispatch(exerciseActions.initializeRoutine());
-                  history.push(`/community/${item._id}`);
+                  history.push(`/feed/${item._id}`);
                 }}>
                 <TodayWrapper>
                   <Enrolled>{item.myExercise.length}</Enrolled>
@@ -143,26 +145,40 @@ const FeedItem = (props) => {
               {/* 운동 정보 텍스트 */}
               <TextWrapper>
                 <TextBox>
-                  <Text
-                    type="contents"
-                    margin="0px 8px 0px 0px"
-                    fontSize="14px"
-                    fontWeight="600"
-                  >{item.routineName}
-                  </Text>
-
-                  {/* 키워드 */}
-                  {item.myExercise.map((i, idx) => (
+                  <CommentText>
                     <Text
-                      key={idx}
                       type="contents"
-                      margin="0px 6px 0px 0px"
-                      color="#4A40FF"
+                      margin="0px 8px 0px 0px"
                       fontSize="14px"
                       fontWeight="600"
-                    >#{i.exerciseName}
+                    >{item.routineName}
                     </Text>
-                  ))}
+
+                    {/* 키워드 */}
+                    {item.myExercise.map((i, idx) => (
+                      <Text
+                        key={idx}
+                        type="contents"
+                        margin="0px 6px 0px 0px"
+                        color="#4A40FF"
+                        fontSize="14px"
+                        fontWeight="600"
+                      >#{i.exerciseName}
+                      </Text>
+                    ))}
+                  </CommentText>
+
+                  {/* 삭제 버튼 */}
+                  {item && item.userId === userId ? (
+                    <Icon
+                      margin="0px 5px 0px 0px"
+                      src={Delete}
+                      onClick={() => {
+                        logger("삭제 모달창 띄우기");
+                      }}
+                    />
+                  ) : null
+                  }
                 </TextBox>
                 <Text
                   type="contents"
@@ -303,6 +319,7 @@ const TextWrapper = styled.div`
 
 const TextBox = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 
 const Time = styled.span`
@@ -310,5 +327,9 @@ const Time = styled.span`
 `;
 
 const UserBox = styled.div`
+  display: flex;
+`;
+
+const CommentText = styled.div`
   display: flex;
 `;
