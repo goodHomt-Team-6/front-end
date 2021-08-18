@@ -24,7 +24,7 @@ const WorkOut = (props) => {
     (state) => state.exercise.currentExerciseIdx,
   );
   const challengeId = useSelector(
-    (state) => state.challenge.challengeDetail.challenge.id,
+    (state) => state.challenge.challengeDetail?.challenge?.id,
   );
   const currentSetIdx = useSelector((state) => state.exercise.currentSetIdx);
   const [exerciseResultModal, showExerciseResultModal] = useState(false);

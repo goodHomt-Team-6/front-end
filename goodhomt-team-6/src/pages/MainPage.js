@@ -174,8 +174,24 @@ const Main = (props) => {
                     <Span>운동시간</Span>
                     {myTodayRoutine[0].isCompleted ? (
                       <TextItem>
-                        {Math.floor(myTodayRoutine[0].routineTime / 60)}:
-                        {myTodayRoutine[0].routineTime % 60}
+                        <WorkoutDate>
+                          {Math.floor(myTodayRoutine[0].routineTime / 60) < 10 ? (
+                            <Time>
+                              {'0' + Math.floor(myTodayRoutine[0].routineTime / 60)}:
+                            </Time>
+                          ) : (
+                            <Time>
+                              {Math.floor(myTodayRoutine[0].routineTime / 60)}:
+                            </Time>)
+                          }
+                          {(myTodayRoutine[0].routineTime % 60) < 10 ? (
+                            <Time>
+                              {'0' + myTodayRoutine[0].routineTime % 60}
+                            </Time>
+                          ) : (<Time>
+                            {myTodayRoutine[0].routineTime % 60}
+                          </Time>)}
+                        </WorkoutDate>
                       </TextItem>
                     ) : (
                       <TextItem>00:00</TextItem>
@@ -247,8 +263,22 @@ const Main = (props) => {
                             <WorkoutDate>00:00</WorkoutDate>
                           ) : (
                             <WorkoutDate>
-                              {Math.floor(routine.routineTime / 60)}:
-                              {routine.routineTime % 60}
+                              {Math.floor(routine.routineTime / 60) < 10 ? (
+                                <Time>
+                                  {'0' + Math.floor(routine.routineTime / 60)}:
+                                </Time>
+                              ) : (
+                                <Time>
+                                  {Math.floor(routine.routineTime / 60)}:
+                                </Time>)
+                              }
+                              {(routine.routineTime % 60) < 10 ? (
+                                <Time>
+                                  {'0' + routine.routineTime % 60}
+                                </Time>
+                              ) : (<Time>
+                                {routine.routineTime % 60}
+                              </Time>)}
                             </WorkoutDate>
                           )}
                         </RoutineBoxDiv>
@@ -569,7 +599,6 @@ const TimeBox = styled.div`
 `;
 
 const Time = styled.span`
-  line-height: 45px;
   font-size: 14px;
 `;
 
