@@ -77,9 +77,7 @@ const Main = (props) => {
               )}
             </InfoBox>
             <DateBox>
-              <PrevIcon src={PrevBtn} />
               <Today>{todayDate}</Today>
-              <NextIcon src={NextBtn} />
             </DateBox>
           </UserWrapper>
 
