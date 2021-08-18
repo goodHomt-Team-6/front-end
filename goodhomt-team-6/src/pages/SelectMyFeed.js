@@ -120,7 +120,7 @@ const MyPastRoutines = (props) => {
                     </InfoBox>
                     {routine.createdAt && (
                       <WorkoutDate>
-                        {routine.createdAt.substring(0, 10)}
+                        {routine.createdAt.substring(0, 4)}.{routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
                       </WorkoutDate>
                     )}
                   </RoutineInfo>
