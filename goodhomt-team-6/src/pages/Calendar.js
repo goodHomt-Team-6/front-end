@@ -55,6 +55,7 @@ const Calendar = (props) => {
     setSelectedRoutine(_selectedRoutine[0]);
   };
 
+  // 여기서 today는 처음엔 진짜 '오늘 날짜'로 들어가지만, setMonth를 통해 월을 이동할수 있음.
   const today = useSelector((state) => state.calendar.today);
   const setMonth = (value) => {
     dispatch(calendarActions.setMonth(value));
@@ -70,7 +71,7 @@ const Calendar = (props) => {
   const week_num =
     (start_week > end_week ? 53 - start_week : end_week - start_week) + 1;
 
-  // 주수 길이의 배열을 만들고,
+  // 이번 월에 몇번째 주가 들어가는지 배열로 만듦,
   const _week_arr = Array.from({ length: week_num }, (v, i) => start_week + i);
 
   // 주마다 7개씩 날짜를 넣어주면 끝!
@@ -84,6 +85,7 @@ const Calendar = (props) => {
         {/*한 주는 7일이니, 주에 7개씩 날짜 칸을 넣어준다. */}
         {Array.from({ length: 7 }, (v, i) => i).map((day_index) => {
           let _day = today
+            // today 본래 값이 변형되지 않도록 clone 메서드 이용
             .clone()
             .startOf('year')
             .week(week_index)

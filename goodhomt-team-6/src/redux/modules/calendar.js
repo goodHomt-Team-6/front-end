@@ -28,7 +28,6 @@ export default handleActions(
         draft.today = moment(draft.today)
           .clone()
           .add(action.payload.value, 'month');
-        // 시간 남으면 cookie 이용해서 새로고침 해도 기존에 보던 월이 수정안되게 해보자
       }),
   },
   initialState,
