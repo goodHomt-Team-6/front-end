@@ -8,6 +8,7 @@ const initialState = {
   selectedFeed: {},
   feed: [],
   isNickname: false,
+  savedNickname: '',
 };
 
 // actions
@@ -16,6 +17,7 @@ const GET_SELECTED_FEED = 'community/GET_SELECTED_FEED';
 const GET_LIKE_FEED = 'community/GET_LIKE_FEED';
 const SELECT_FEED = 'community/SELECT_FEED';
 const NICKNAME_CHECK = 'community/NICKNAME_CHECK';
+const NICKNAME_SAVE = 'community/NICKNAME_SAVE';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
@@ -23,6 +25,7 @@ const getSelectedFeed = createAction(GET_SELECTED_FEED, (selectedFeed) => ({ sel
 const getLikeFeed = createAction(GET_LIKE_FEED, (routineId) => ({ routineId }));
 const selectFeed = createAction(SELECT_FEED, (routineId) => ({ routineId }));
 const nicknameCheck = createAction(NICKNAME_CHECK, (isNickname) => ({ isNickname }));
+const nicknameSave = createAction(NICKNAME_SAVE, (nickname) => ({ nickname }));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -126,6 +129,7 @@ const nicknameCheckAPI = (communityNickname) => {
       })
       .catch((error) => {
         logger('중복체크 실패', error);
+        dispatch(nicknameCheck(false));
       });
   };
 };
@@ -160,6 +164,10 @@ export default handleActions(
     [NICKNAME_CHECK]: (state, action) =>
       produce(state, (draft) => {
         draft.isNickname = action.payload.isNickname;
+      }),
+    [NICKNAME_SAVE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.savedNickname = action.payload.nickname;
       })
   },
   initialState
@@ -176,6 +184,7 @@ const actionCreators = {
   likeAPI,
   nicknameCheckAPI,
   selectFeed,
+  nicknameSave,
 };
 
 export { actionCreators };

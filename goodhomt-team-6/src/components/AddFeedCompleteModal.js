@@ -4,20 +4,23 @@ import Color from '../shared/Color';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { actionCreators as feedActions } from '../redux/modules/feed';
 import { history } from '../redux/configureStore';
 import { FooterButton, Input, Text } from '../shared/Styles';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 import Mascort from '../img/mascort_blue.svg';
 
 
+
 // 피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
-const AddFeedCompleteModal = ({ message, setShowCheckModal, setShowModal }) => {
+const AddFeedCompleteModal = ({ setNickname, message, setShowCheckModal, setShowModal }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
   const buttonRef = useRef();
 
   const isNickname = useSelector((store) => store.feed.isNickname);
+  const nickname = useSelector((store) => store.feed.nickname);
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
 
@@ -34,6 +37,16 @@ const AddFeedCompleteModal = ({ message, setShowCheckModal, setShowModal }) => {
     }
   };
 
+  // 중복체크 실패시 인풋 비워주기 
+  const CheckFailcloseModal = (e) => {
+    if (e.target === modalRef.current || buttonRef.current) {
+      setShowCheckModal(false);
+      dispatch(feedActions.nicknameSave(''));
+      setNickname('');
+    }
+  };
+
+
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>
       {setShowModal ? (
@@ -47,7 +60,7 @@ const AddFeedCompleteModal = ({ message, setShowCheckModal, setShowModal }) => {
               fontSize="18px"
               margin="10px 0 10px 0"
             >
-              {message} 내 피드를 업로드 했습니다!
+              내 피드를 업로드 했습니다!
             </Text>
 
             {/* 저장버튼 */}
@@ -92,11 +105,10 @@ const AddFeedCompleteModal = ({ message, setShowCheckModal, setShowModal }) => {
                 onClick={closeModal}
                 ref={buttonRef}
               >확인
-                {/* 인풋 비워주기 */}
               </ConfirmButton>
             ) : (
               <ConfirmButton
-                onClick={closeModal}
+                onClick={CheckFailcloseModal}
                 ref={buttonRef}
               >확인
               </ConfirmButton>

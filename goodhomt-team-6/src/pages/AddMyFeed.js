@@ -19,6 +19,8 @@ const AddMyFeed = (props) => {
   const user = useSelector((store) => store.user.user);
   const communityNickname = useSelector((store) => store.user.user.communityNickname);
   const userImg = useSelector((store) => store.user.user.userImg);
+  const isNickname = useSelector((store) => store.feed.isNickname);
+  const savedNickname = useSelector((store) => store.feed.savedNickname);
 
   const [nickname, setNickname] = useState('');
   const [writeroutinename, setRoutinename] = useState('');
@@ -109,6 +111,7 @@ const AddMyFeed = (props) => {
                 onClick={() => {
                   dispatch(feedActions.nicknameCheckAPI(nickname));
                   setShowCheckModal(true);
+                  dispatch(feedActions.nicknameSave(nickname));
                 }}
               >중복확인</CheckerBtn>
             </NicknameCont>
@@ -117,6 +120,7 @@ const AddMyFeed = (props) => {
           {showCheckModal ?
             <AddFeedCompleteModal
               setShowCheckModal={setShowCheckModal}
+              setNickname={setNickname}
             /> : null}
 
           <Text
