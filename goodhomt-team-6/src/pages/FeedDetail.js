@@ -32,6 +32,8 @@ const RoutineDetail = (props) => {
 
   const [showModal, setShowModal] = useState(false);
 
+  console.log(selectedFeed);
+
   useEffect(() => {
     dispatch(exerciseActions.initializeRoutine());
     dispatch(feedActions.getFeedDetailAPI(id));
@@ -129,8 +131,7 @@ const RoutineDetail = (props) => {
                   key={listIdx}
                   onClick={(e) => {
                     openRow(e);
-                  }}
-                >
+                  }}>
                   <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                     {list.exerciseName}
                   </Text>
@@ -138,9 +139,21 @@ const RoutineDetail = (props) => {
                     {list && list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text type="contents">{list.set[0].weight}kg</Text>
-                  <Text type="contents" padding="0 10px 0 0">
-                    {list.set[0].count}회
+                  {list && list.set[0].weight === null ? (
+                    <Text
+                      type="contents">
+                      0kg
+                    </Text>
+                  ) : (
+                    <Text
+                      type="contents">
+                      {list && list.set[0].weight}kg
+                    </Text>
+                  )}
+                  <Text
+                    type="contents"
+                    padding="0 10px 0 0">
+                    {list && list.set[0].count}회
                   </Text>
                 </List>
               ),
@@ -151,15 +164,14 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              if (myTodayRoutine && myTodayRoutine[0].isCompleted === true || myTodayRoutine.length !== 0) {
+              if (myTodayRoutine &&
+                myTodayRoutine[0].isCompleted === true || myTodayRoutine.length !== 0) {
                 setShowModal(true);
               } else {
                 dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
                 history.replace('/');
               }
-
-            }}
-          >
+            }}>
             루틴 불러오기
           </FooterButton>
         </FooterButtonWrapper>

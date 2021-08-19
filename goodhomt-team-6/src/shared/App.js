@@ -71,14 +71,14 @@ const App = (props) => {
             exact
             component={HOC(ChallengeDetail, true)}
           />
-          <Route path="/feed/:id" exact component={FeedDetail} />
+          <Route path="/feed/:id" exact component={HOC(FeedDetail, true)} />
           <Route
             path="/todayroutinedetail"
             exact
             component={HOC(TodayRoutineDetail, true)}
           />
-          <Route path="/addmyfeed" exact component={AddMyFeed} />
-          <Route path="/selectmyfeed" exact component={SelectMyFeed} />
+          <Route path="/addmyfeed" exact component={HOC(AddMyFeed, true)} />
+          <Route path="/selectmyfeed" exact component={HOC(SelectMyFeed, true)} />
           <Route
             path="/feedroutinedetail"
             exact
