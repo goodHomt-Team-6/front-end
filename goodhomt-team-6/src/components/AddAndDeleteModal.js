@@ -12,7 +12,7 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 
 // 피드 추가, 삭제할 때 생성되는 모달 컴포넌트
-const AddAndDeleteModal = ({ showModal, setShowModal, showAddFeedModal, setShowAddFeedModal, message }) => {
+const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, message }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -47,7 +47,7 @@ const AddAndDeleteModal = ({ showModal, setShowModal, showAddFeedModal, setShowA
               <ConfirmButton
                 onClick={() => {
                   history.replace('/feed');
-                  dispatch(feedActions.deleteFeedAPI(selectedFeed._id));
+                  dispatch(feedActions.deleteFeedAPI(selectedFeed.id));
                 }}
                 ref={buttonRef}
               >{message}

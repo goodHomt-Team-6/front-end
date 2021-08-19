@@ -111,7 +111,7 @@ const Feed = () => {
                         width="34px"
                         height="34px"
                         margin="0px 15px 0px 0px"
-                        src={item.img}
+                        src={item.User.img}
                       />
                       <InfoBox>
                         {userName && (
@@ -133,18 +133,18 @@ const Feed = () => {
 
                     {/* 좋아요 */}
                     <LikeWrapper>
-                      {item.isLike ? (
+                      {item.isLiked === 1 ? (
                         <IconBtn
                           src={LikeSolid}
                           onClick={() => {
-                            dispatch(feedActions.likeAPI(item._id));
+                            dispatch(feedActions.likeAPI(item.id));
                           }}
                         />
                       ) : (
                         <IconBtn
                           src={LikeLine}
                           onClick={() => {
-                            dispatch(feedActions.likeAPI(item._id));
+                            dispatch(feedActions.likeAPI(item.id));
                           }}
                         />
                       )}
@@ -162,10 +162,10 @@ const Feed = () => {
                   {/* 피드 게시 운동 정보 */}
                   <TodayMainBox
                     onClick={() => {
-                      const selected = feed.filter((m) => m._id == item._id);
+                      const selected = feed.filter((m) => m.id == item.id);
                       dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
                       dispatch(exerciseActions.initializeRoutine());
-                      history.push(`/feed/${item._id}`);
+                      history.push(`/feed/${item.id}`);
                     }}>
                     <TodayWrapper>
                       <Enrolled>{item.myExercise.length}</Enrolled>
@@ -252,7 +252,7 @@ const Feed = () => {
                           src={Delete}
                           onClick={() => {
                             setShowModal(true);
-                            dispatch(feedActions.selectFeed(item._id));
+                            dispatch(feedActions.selectFeed(item.id));
                           }}
                         />
                       ) : null

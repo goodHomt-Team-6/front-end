@@ -7,12 +7,14 @@ import { FooterButton, Text } from '../shared/Styles';
 import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { actionCreators as feedActions } from '../redux/modules/feed';
 import DashBoard from '../components/DashBoard';
 import BookmarkModal from '../components/BookmarkModal';
 import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
+import _ from 'lodash';
 
 // 피드 루틴 상세화면 컴포넌트
 const RoutineDetail = (props) => {
@@ -25,17 +27,16 @@ const RoutineDetail = (props) => {
   const myExercise = selectedPrevItem.myExercise;
   const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
-  const feed = useSelector((state) => state.feed.feed);
+  const selectedFeed = useSelector((state) => state.feed.selectedFeed);
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    dispatch(exerciseActions.getRoutineDetailAPI(id));
-  }, [routineName]);
-
-  useEffect(() => {
     dispatch(exerciseActions.initializeRoutine());
+    dispatch(feedActions.getFeedDetailAPI(id));
   }, []);
+
+  console.log(selectedFeed);
 
   useEffect(() => {
     return () => {
@@ -67,8 +68,8 @@ const RoutineDetail = (props) => {
 
         {/* 루틴의 세트 모음 */}
         <ListContainer>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((list, listIdx) =>
+          {!_.isEmpty(selectedFeed) &&
+            selectedFeed.myExercise.map((list, listIdx) =>
               listIdx === parseInt(openedRow) ? (
                 <OpenList id={listIdx} key={listIdx}>
                   <Text
@@ -130,7 +131,7 @@ const RoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list.set.filter((set) => set.type === 'exercise').length}
+                    {list && list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
                   <Text type="contents">{list.set[0].weight}kg</Text>
@@ -146,8 +147,7 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              dispatch(exerciseActions.addEditedRoutineAPI(selectedPrevItem));
-              console.log(selectedPrevItem);
+              dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
               history.replace('/');
             }}
           >

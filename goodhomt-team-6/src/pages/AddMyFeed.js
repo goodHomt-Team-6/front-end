@@ -24,6 +24,7 @@ const AddMyFeed = (props) => {
   const [writeroutinename, setRoutinename] = useState('');
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showCheckModal, setShowCheckModal] = useState(false);
 
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
@@ -106,11 +107,17 @@ const AddMyFeed = (props) => {
               </TextInput>
               <CheckerBtn
                 onClick={() => {
-                  logger('중복확인 버튼 클릭');
+                  dispatch(feedActions.nicknameCheckAPI(nickname));
+                  setShowCheckModal(true);
                 }}
               >중복확인</CheckerBtn>
             </NicknameCont>
           ) : null}
+
+          {showCheckModal ?
+            <AddFeedCompleteModal
+              setShowCheckModal={setShowCheckModal}
+            /> : null}
 
           <Text
             type="contents">
@@ -142,11 +149,9 @@ const AddMyFeed = (props) => {
               dispatch(feedActions.addFeedAPI(firstWriteRoutine));
               setShowModal(true);
             }
-
           }}
       >업로드 하기
       </FooterButton>
-
       {showModal ? <AddFeedCompleteModal setShowModal={setShowModal} /> : null}
     </>
   );

@@ -11,46 +11,101 @@ import Mascort from '../img/mascort_blue.svg';
 
 
 // 피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
-const AddFeedCompleteModal = ({ setShowModal }) => {
+const AddFeedCompleteModal = ({ message, setShowCheckModal, setShowModal }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
   const buttonRef = useRef();
 
+  const isNickname = useSelector((store) => store.feed.isNickname);
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
 
   const closeModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
-      setShowModal(false);
+      if (setShowModal) {
+        setShowModal(false);
+        return;
+      }
+      if (setShowCheckModal) {
+        setShowCheckModal(false);
+        return;
+      }
     }
   };
 
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>
-      <ModalInner>
-        <PurpleAcc></PurpleAcc>
-        <Inner>
-          <MascortIcon src={Mascort} borderRadius="0" />
-          <Text
-            type="contents"
-            color="black"
-            fontSize="18px"
-            margin="10px 0 10px 0"
-          >
-            내 피드를 업로드 했습니다!
-          </Text>
+      {setShowModal ? (
+        <ModalInner>
+          <PurpleAcc></PurpleAcc>
+          <Inner>
+            <MascortIcon src={Mascort} borderRadius="0" />
+            <Text
+              type="contents"
+              color="black"
+              fontSize="18px"
+              margin="10px 0 10px 0"
+            >
+              {message} 내 피드를 업로드 했습니다!
+            </Text>
 
-          {/* 저장버튼 */}
-          <ConfirmButton
-            onClick={() => {
-              history.replace('/feed');
-            }}
-            ref={buttonRef}
-          >바로 확인하기
-          </ConfirmButton>
-        </Inner>
-      </ModalInner>
+            {/* 저장버튼 */}
+            <ConfirmButton
+              onClick={() => {
+                history.replace('/feed');
+              }}
+              ref={buttonRef}
+            >바로 확인하기
+            </ConfirmButton>
+          </Inner>
+        </ModalInner>
+      ) : (
+        <ModalInner>
+          <PurpleAcc></PurpleAcc>
+          <Inner>
+            <MascortIcon src={Mascort} borderRadius="0" />
+            {isNickname ? (
+              <Text
+                type="contents"
+                color="black"
+                fontSize="18px"
+                margin="10px 0 10px 0"
+              >
+                사용가능한 닉네임입니다.
+              </Text>
+            ) : (
+              <Text
+                type="contents"
+                color="black"
+                fontSize="18px"
+                margin="10px 0 10px 0"
+              >
+                중복된 닉네임이 존재합니다.
+              </Text>
+            )}
+
+
+            {/* 저장버튼 */}
+            {isNickname ? (
+              <ConfirmButton
+                onClick={closeModal}
+                ref={buttonRef}
+              >확인
+                {/* 인풋 비워주기 */}
+              </ConfirmButton>
+            ) : (
+              <ConfirmButton
+                onClick={closeModal}
+                ref={buttonRef}
+              >확인
+              </ConfirmButton>
+            )}
+
+          </Inner>
+        </ModalInner>
+      )}
+
     </ModalWrapper>
 
   );

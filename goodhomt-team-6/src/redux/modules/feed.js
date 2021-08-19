@@ -7,17 +7,22 @@ import logger from '../../shared/Logger';
 const initialState = {
   selectedFeed: {},
   feed: [],
+  isNickname: false,
 };
 
 // actions
 const GET_FEED = 'community/GET_FEED';
+const GET_SELECTED_FEED = 'community/GET_SELECTED_FEED';
 const GET_LIKE_FEED = 'community/GET_LIKE_FEED';
 const SELECT_FEED = 'community/SELECT_FEED';
+const NICKNAME_CHECK = 'community/NICKNAME_CHECK';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
+const getSelectedFeed = createAction(GET_SELECTED_FEED, (selectedFeed) => ({ selectedFeed }));
 const getLikeFeed = createAction(GET_LIKE_FEED, (routineId) => ({ routineId }));
 const selectFeed = createAction(SELECT_FEED, (routineId) => ({ routineId }));
+const nicknameCheck = createAction(NICKNAME_CHECK, (isNickname) => ({ isNickname }));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -69,7 +74,7 @@ const getFeedDetailAPI = (routineId) => {
     api
       .get(`/community/${routineId}`)
       .then((response) => {
-        dispatch(getFeed(response.data.result));
+        dispatch(getSelectedFeed(response.data.result));
         logger('커뮤니티 피드 상세 가져오기 성공');
       })
       .catch((error) => {
@@ -109,6 +114,22 @@ const likeAPI = (routineId) => {
   };
 };
 
+// 커뮤니티 닉네임 중복체크
+const nicknameCheckAPI = (communityNickname) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .post('/community/dupCheck', { communityNickname })
+      .then((response) => {
+        console.log(response);
+        logger('중복체크 성공');
+        dispatch(nicknameCheck(response.data.ok));
+      })
+      .catch((error) => {
+        logger('중복체크 실패', error);
+      });
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -116,22 +137,30 @@ export default handleActions(
       produce(state, (draft) => {
         draft.feed = action.payload.feed;
       }),
+    [GET_SELECTED_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedFeed = action.payload.selectedFeed;
+      }),
     [GET_LIKE_FEED]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.feed.findIndex((i) => i._id === action.payload.routineId);
-        if (draft.feed[idx].isLike === true) {
-          draft.feed[idx].isLike = false;
+        let idx = draft.feed.findIndex((i) => i.id === action.payload.routineId);
+        if (draft.feed[idx].isLiked === 1) {
+          draft.feed[idx].isLiked = 0;
           draft.feed[idx].totalLike = draft.feed[idx].totalLike - 1;
         } else {
-          draft.feed[idx].isLike = true;
+          draft.feed[idx].isLiked = 1;
           draft.feed[idx].totalLike = draft.feed[idx].totalLike + 1;
         }
       }),
     [SELECT_FEED]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.feed.findIndex((i) => i._id === action.payload.routineId);
+        let idx = draft.feed.findIndex((i) => i.id === action.payload.routineId);
         draft.selectedFeed = state.feed[idx];
       }),
+    [NICKNAME_CHECK]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isNickname = action.payload.isNickname;
+      })
   },
   initialState
 );
@@ -145,6 +174,7 @@ const actionCreators = {
   addFeedAPI,
   deleteFeedAPI,
   likeAPI,
+  nicknameCheckAPI,
   selectFeed,
 };
 

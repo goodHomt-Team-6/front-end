@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 const cookie = new Cookies();
 
 const api = axios.create({
-  baseURL: `http://54.180.158.188/`,
+  baseURL: `https:// www.kingstar.shop/`,
 });
 
 // axios header에 기본적으로 토큰 넣어두기
