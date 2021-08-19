@@ -144,12 +144,12 @@ const TodayRoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list.set.filter((set) => set.type === 'exercise').length}
+                    {list.set !== [] && list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text type="contents">{list.set[0].weight}kg</Text>
+                  <Text type="contents">{list.set !== [] && list.set[0].weight}kg</Text>
                   <Text type="contents" padding="0 10px 0 0">
-                    {list.set[0].count}회
+                    {list.set !== [] && list.set[0].count}회
                   </Text>
                 </List>
               ),
