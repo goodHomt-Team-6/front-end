@@ -7,6 +7,7 @@ import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
+import addButton from '../img/add_exercise_button.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -225,8 +226,7 @@ const Main = (props) => {
             <FormerRoutineWrapper
               onClick={() => {
                 history.push('/mypastroutines');
-              }}
-            >
+              }}>
               <FormerRoutineIcon
                 width="24px"
                 height="24px"
@@ -339,18 +339,18 @@ const Main = (props) => {
         </InboxWrapper>
       </Wrapper>
 
-      {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
-        <DivBox>
-          <AddBtn
-            onClick={() => {
-              history.push('/exercise');
-              dispatch(exerciseActions.initializeRoutine());
-            }}
-          >
-            <AddBtnText>+</AddBtnText>
-          </AddBtn>
-        </DivBox>
-      )}
+      {/* {myTodayRoutine && myTodayRoutine.length !== 0 ? null : ( */}
+      <DivBox>
+        <AddBtn
+          onClick={() => {
+            history.push('/exercise');
+            dispatch(exerciseActions.initializeRoutine());
+          }}
+        >
+          <AddBtnText src={addButton}></AddBtnText>
+        </AddBtn>
+      </DivBox>
+      {/* )} */}
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
@@ -517,8 +517,8 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 314px);
-  overflow-x: scroll;
+  height: calc(100vh - 460px);
+  overflow-y: scroll;
 `;
 
 const Span = styled.span`
@@ -535,7 +535,7 @@ const TextItem = styled.span`
 `;
 
 const AddBtn = styled.button`
-  position: absolute;
+  /* position: absolute;
   bottom: 6rem;
   right: 1.5rem;
   color: white;
@@ -546,21 +546,25 @@ const AddBtn = styled.button`
   background-color: ${Color.mainBlue};
   cursor: pointer;
   border: none;
+  z-index: 1000; */
+`;
+
+const AddBtnText = styled.img`
+  position: absolute;
+  bottom: 6rem;
+  right: 1.5rem;
+  color: white;
+  font-size: 30px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
   z-index: 1000;
 `;
 
-const AddBtnText = styled.span``;
-
 const DivBox = styled.div`
   width: 100%;
-`;
-
-const PrevIcon = styled.img`
-  margin-right: 8px;
-`;
-
-const NextIcon = styled.img`
-  margin-left: 8px;
 `;
 
 const TodayExerciseWrapper = styled.div`
@@ -583,8 +587,8 @@ const TimeBox = styled.div`
   background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
   width: 25%;
   min-width: 75px;
-  height: 44px;
-  border-radius: 22px;
+  /* height: 44px; */
+  border-radius: 30px;
   color: white;
   margin-right: 15px;
   display: flex;

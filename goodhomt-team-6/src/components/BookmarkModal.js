@@ -30,6 +30,7 @@ const BookmarkModal = ({ setShowModal }) => {
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>
       <ModalInner>
+        <PurpleAcc></PurpleAcc>
         <Inner>
           <BookmarkIcon src={BookmarkSolid} />
           <RoutineBasicInfo>
@@ -193,5 +194,14 @@ const SaveButton = styled.button`
 `;
 
 const Time = styled.span`
+`;
+
+const PurpleAcc = styled.div`
+  position: absolute;
+  width: 84px;
+  height: 28px;
+  background-color: rgba(74, 64, 255, 0.6);
+  top: -14px;
+  left: calc(50% - 42px);
 `;
 

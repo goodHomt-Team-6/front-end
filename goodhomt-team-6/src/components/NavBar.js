@@ -4,6 +4,7 @@ import Color from '../shared/Color';
 import { history } from '../redux/configureStore';
 import Community from '../img/community.svg';
 import MyPage from '../img/mypage.svg';
+import Challenge from '../img/challenge_icon.svg';
 import Calendar from '../img/calendar.svg';
 import Workout from '../img/workout.svg';
 import { useDispatch } from 'react-redux';
@@ -39,7 +40,7 @@ const NavBar = (props) => {
             history.push('/challenge');
           }}
         >
-          <IconImage src={Community} />
+          <IconImage src={Challenge} />
           <Title>Challenge</Title>
         </RouteBox>
 
