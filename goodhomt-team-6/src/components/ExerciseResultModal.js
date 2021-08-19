@@ -44,7 +44,6 @@ const ExerciseResultModal = ({
       isCompleted: true,
     };
     if (sessionStorage.getItem('is_challenge_workout') === 'true') {
-      console.log(resultChallenge);
       dispatch(challengeActions.recordChallengeResultAPI(resultChallenge));
       sessionStorage.removeItem('is_challenge_workout');
     } else {

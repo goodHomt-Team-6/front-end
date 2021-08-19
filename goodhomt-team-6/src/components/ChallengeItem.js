@@ -106,13 +106,14 @@ const ChallengeItem = () => {
                 fontWeight="600"
                 margin="0 0 0 4px"
               >
-                {challenge.challengeDateTime.slice(8, 10) < 12
+                {challenge.challengeDateTime.slice(8, 10) < 13
                   ? `${challenge.challengeDateTime.slice(
-                    8,
-                    10,
-                  )}:${challenge.challengeDateTime.slice(10, 12)}`
-                  : `${challenge.challengeDateTime.slice(8, 10) - 12
-                  }:${challenge.challengeDateTime.slice(10, 12)}`}
+                      8,
+                      10,
+                    )}:${challenge.challengeDateTime.slice(10, 12)}`
+                  : `${
+                      challenge.challengeDateTime.slice(8, 10) - 12
+                    }:${challenge.challengeDateTime.slice(10, 12)}`}
               </Text>
               <Image
                 src={Dumbbell}

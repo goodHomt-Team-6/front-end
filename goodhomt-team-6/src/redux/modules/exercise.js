@@ -205,7 +205,6 @@ const getExerciseTypeAPI = (id) => {
     api
       .get(`/exercises/${id}`)
       .then((response) => {
-        logger(response.data);
         dispatch(getExerciseType(response.data.result[0]));
       })
       .catch((error) => {
@@ -356,7 +355,6 @@ const getRoutineDetailAPI = (id) => {
     api
       .get(`/routines/${id}`)
       .then((response) => {
-        logger(response.data.result);
         dispatch(getMyRoutine(response.data.result));
       })
       .catch((error) => {
