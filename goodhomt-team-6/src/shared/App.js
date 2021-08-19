@@ -79,8 +79,12 @@ const App = (props) => {
           />
           <Route path="/addmyfeed" exact component={AddMyFeed} />
           <Route path="/selectmyfeed" exact component={SelectMyFeed} />
-          <Route path="/feedroutinedetail" exact component={HOC(FeedRoutineDetail, true)} />
-          <Route path="/calendar" exact component={Calendar} />
+          <Route
+            path="/feedroutinedetail"
+            exact
+            component={HOC(FeedRoutineDetail, true)}
+          />
+          <Route path="/calendar" exact component={HOC(Calendar, true)} />
         </Switch>
       </ConnectedRouter>
     </>
