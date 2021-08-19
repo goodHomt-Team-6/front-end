@@ -13,7 +13,7 @@ import Mascort from '../img/mascort_blue.svg';
 
 
 // 피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
-const AddFeedCompleteModal = ({ setNickname, message, setShowCheckModal, setShowModal }) => {
+const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowCheckModal, setShowModal }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -60,7 +60,7 @@ const AddFeedCompleteModal = ({ setNickname, message, setShowCheckModal, setShow
               fontSize="18px"
               margin="10px 0 10px 0"
             >
-              내 피드를 업로드 했습니다!
+              {message}
             </Text>
 
             {/* 저장버튼 */}
@@ -69,7 +69,7 @@ const AddFeedCompleteModal = ({ setNickname, message, setShowCheckModal, setShow
                 history.replace('/feed');
               }}
               ref={buttonRef}
-            >바로 확인하기
+            >{buttonMessage}
             </ConfirmButton>
           </Inner>
         </ModalInner>

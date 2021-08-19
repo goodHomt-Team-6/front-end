@@ -339,18 +339,18 @@ const Main = (props) => {
         </InboxWrapper>
       </Wrapper>
 
-      {/* {myTodayRoutine && myTodayRoutine.length !== 0 ? null : ( */}
-      <DivBox>
-        <AddBtn
-          onClick={() => {
-            history.push('/exercise');
-            dispatch(exerciseActions.initializeRoutine());
-          }}
-        >
-          <AddBtnText src={addButton}></AddBtnText>
-        </AddBtn>
-      </DivBox>
-      {/* )} */}
+      {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
+        <DivBox>
+          <AddBtn
+            onClick={() => {
+              history.push('/exercise');
+              dispatch(exerciseActions.initializeRoutine());
+            }}
+          >
+            <AddBtnText src={addButton}></AddBtnText>
+          </AddBtn>
+        </DivBox>
+      )}
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
@@ -587,7 +587,7 @@ const TimeBox = styled.div`
   background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
   width: 25%;
   min-width: 75px;
-  /* height: 44px; */
+  height: 44px;
   border-radius: 30px;
   color: white;
   margin-right: 15px;

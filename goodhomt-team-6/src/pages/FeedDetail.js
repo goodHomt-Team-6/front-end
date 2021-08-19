@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import DashBoard from '../components/DashBoard';
-import BookmarkModal from '../components/BookmarkModal';
+import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
 import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
@@ -28,6 +28,7 @@ const RoutineDetail = (props) => {
   const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const selectedFeed = useSelector((state) => state.feed.selectedFeed);
+  const myTodayRoutine = useSelector((state) => state.exercise.myTodayRoutine);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -35,8 +36,6 @@ const RoutineDetail = (props) => {
     dispatch(exerciseActions.initializeRoutine());
     dispatch(feedActions.getFeedDetailAPI(id));
   }, []);
-
-  console.log(selectedFeed);
 
   useEffect(() => {
     return () => {
@@ -60,7 +59,12 @@ const RoutineDetail = (props) => {
         <Header message="Routine" />
       </HeaderWrapper>
 
-      {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
+      {showModal ?
+        <AddFeedCompleteModal
+          message={'이미 오늘 운동을 등록했습니다!'}
+          buttonMessage={'피드로 돌아가기'}
+          setShowModal={setShowModal}
+        /> : null}
 
       <Wrapper>
         {/* 대시보드 */}
@@ -147,8 +151,13 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
-              history.replace('/');
+              if (myTodayRoutine && myTodayRoutine[0].isCompleted === true || myTodayRoutine.length !== 0) {
+                setShowModal(true);
+              } else {
+                dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
+                history.replace('/');
+              }
+
             }}
           >
             루틴 불러오기

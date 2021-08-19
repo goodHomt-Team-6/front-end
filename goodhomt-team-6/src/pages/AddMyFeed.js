@@ -155,6 +155,13 @@ const AddMyFeed = (props) => {
         </TextCont>
       </Container>
 
+      {showModal ?
+        <AddFeedCompleteModal
+          message={'내 피드를 업로드 했습니다!'}
+          buttonMessage={'바로 확인하기'}
+          setShowModal={setShowModal}
+        /> : null}
+
       <FooterButton
         onClick={() => {
           if (communityNickname !== null) {
@@ -168,7 +175,6 @@ const AddMyFeed = (props) => {
         }}
       >업로드 하기
       </FooterButton>
-      {showModal ? <AddFeedCompleteModal setShowModal={setShowModal} /> : null}
     </>
   );
 };
