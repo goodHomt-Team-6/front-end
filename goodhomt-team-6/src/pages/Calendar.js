@@ -20,7 +20,7 @@ import NormalRating from '../img/clicked_normal_rating.svg';
  *  - 이번달이 몇 주가 필요한 지 "주"수 구하기
  *  - 주수만큼 map 돌리기
  *  - map 돌리면서 안에 날짜 넣어주기!
- *  - +) 일정도 같이 넣어주면 good!
+ *  - +) 일정도 같이 넣어주기
  */
 const Calendar = (props) => {
   const dispatch = useDispatch();
@@ -29,12 +29,14 @@ const Calendar = (props) => {
   const [onChallenge, setOnChallenge] = useState(false);
 
   useEffect(() => {
-    dispatch(challengeActions.getMyChallengesAPI());
+    dispatch(challengeActions.getMyChallengesAPI('all'));
     dispatch(exerciseActions.getAllRoutineAPI());
   }, []);
 
   const routines = useSelector((state) => state.exercise.routine);
-  const myChallenges = useSelector((state) => state.challenge.myChallenges);
+  const allMyChallenges = useSelector(
+    (state) => state.challenge.allMyChallenges,
+  );
   const selectRoutine = (id) => {
     setOnRoutine(true);
     setOnChallenge(false);
@@ -46,7 +48,7 @@ const Calendar = (props) => {
   const selectChallenge = (id) => {
     setOnChallenge(true);
     setOnRoutine(false);
-    const _selectedRoutine = myChallenges.filter((challenge) => {
+    const _selectedRoutine = allMyChallenges.filter((challenge) => {
       return challenge.id === parseInt(id);
     });
     setSelectedRoutine(_selectedRoutine[0]);
@@ -97,7 +99,7 @@ const Calendar = (props) => {
               routine.isCompleted
             );
           });
-          const _challengeList = myChallenges.filter((challenge, idx) => {
+          const _challengeList = allMyChallenges.filter((challenge, idx) => {
             return challenge.Challenge.challengeDateTime?.startsWith(
               _day.format('YYYYMMDD') && challenge.Challenge.isCompleted,
             );
@@ -245,17 +247,23 @@ const Calendar = (props) => {
           <RoutineInfo>
             <RunningTime>
               {onRoutine &&
-                (selectedRoutine && selectedRoutine?.routineTime === 0
-                  ? '00:00'
-                  : `${Math.floor(selectedRoutine?.routineTime / 60)}:${
-                      selectedRoutine?.routineTime % 60
-                    }`)}
+                (selectedRoutine &&
+                Math.floor(selectedRoutine?.routineTime / 60) < 10
+                  ? `0${Math.floor(selectedRoutine?.routineTime / 60)}:`
+                  : Math.floor(selectedRoutine?.routineTime / 60)`:`)}
+              {onRoutine &&
+                (selectedRoutine && selectedRoutine?.routineTime < 10
+                  ? `0${selectedRoutine?.routineTime % 60}`
+                  : selectedRoutine?.routineTime % 60)}
               {onChallenge &&
-                (selectedRoutine && selectedRoutine?.challengeTime === 0
-                  ? '00:00'
-                  : `${Math.floor(selectedRoutine?.challengeTime / 60)}:${
-                      selectedRoutine?.challengeTime % 60
-                    }`)}
+                (selectedRoutine &&
+                Math.floor(selectedRoutine?.challengeTime / 60) < 10
+                  ? `0${Math.floor(selectedRoutine?.challengeTime / 60)}:`
+                  : Math.floor(selectedRoutine?.challengeTime / 60)`:`)}
+              {onChallenge &&
+                (selectedRoutine && selectedRoutine?.challengeTime < 10
+                  ? `0${selectedRoutine?.challengeTime % 60}`
+                  : selectedRoutine?.challengeTime % 60)}
             </RunningTime>
 
             <RoutineBox>
