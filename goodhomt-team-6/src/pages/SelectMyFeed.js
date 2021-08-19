@@ -6,6 +6,7 @@ import BookmarkLine from '../img/bookmark_line.svg';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 import { FooterButton, Text } from '../shared/Styles';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { actionCreators as feedActions } from '../redux/modules/feed';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import logger from '../shared/Logger';
@@ -29,6 +30,7 @@ const MyPastRoutines = (props) => {
   useEffect(() => {
     dispatch(exerciseActions.getAllRoutineAPI());
     dispatch(exerciseActions.getSelectedPrevItem);
+    dispatch(feedActions.initializeWrittenFeed());
   }, []);
 
   useEffect(() => {

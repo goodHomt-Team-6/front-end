@@ -41,7 +41,7 @@ const AddFeedCompleteModal = ({ setNickname, message, setShowCheckModal, setShow
   const CheckFailcloseModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
       setShowCheckModal(false);
-      dispatch(feedActions.nicknameSave(''));
+      dispatch(feedActions.saveNickname(''));
       setNickname('');
     }
   };

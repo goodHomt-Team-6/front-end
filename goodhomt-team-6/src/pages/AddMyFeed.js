@@ -21,12 +21,22 @@ const AddMyFeed = (props) => {
   const userImg = useSelector((store) => store.user.user.userImg);
   const isNickname = useSelector((store) => store.feed.isNickname);
   const savedNickname = useSelector((store) => store.feed.savedNickname);
+  const savedRoutineName = useSelector((store) => store.feed.savedRoutineName);
+  const savedDescription = useSelector((store) => store.feed.savedDescription);
 
   const [nickname, setNickname] = useState('');
   const [writeroutinename, setRoutinename] = useState('');
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showCheckModal, setShowCheckModal] = useState(false);
+
+  useEffect(() => {
+    if (savedNickname !== '' || savedRoutineName !== '') {
+      setNickname(savedNickname);
+      setRoutinename(savedRoutineName);
+      setDescription(savedDescription);
+    }
+  }, []);
 
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
@@ -89,6 +99,8 @@ const AddMyFeed = (props) => {
             src={NextArrow}
             onClick={() => {
               history.push('/feedroutinedetail');
+              dispatch(feedActions.saveRoutinename(writeroutinename));
+              dispatch(feedActions.saveDescription(description));
             }} />
         </TodayExerciseWrapper>
       </CategoryList>
@@ -109,9 +121,9 @@ const AddMyFeed = (props) => {
               </TextInput>
               <CheckerBtn
                 onClick={() => {
-                  dispatch(feedActions.nicknameCheckAPI(nickname));
+                  dispatch(feedActions.checkNicknameAPI(nickname));
                   setShowCheckModal(true);
-                  dispatch(feedActions.nicknameSave(nickname));
+                  dispatch(feedActions.saveNickname(nickname));
                 }}
               >중복확인</CheckerBtn>
             </NicknameCont>
@@ -130,30 +142,30 @@ const AddMyFeed = (props) => {
           <TextInput
             placeholder={selectedPrevItem.routineName}
             onChange={onChangeRoutinename}
-            value={writeroutinename}
+            value={writeroutinename || ''}
           >
           </TextInput>
 
           <Text type="contents">Description</Text>
           <ElTextarea
             onChange={onChangeDescription}
-            value={description}
+            value={description || ''}
             placeholder="루틴에 대해 설명해주세요.">
           </ElTextarea>
         </TextCont>
       </Container>
 
       <FooterButton
-        onClick={
-          () => {
-            if (communityNickname !== null) {
-              dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
-              setShowModal(true);
-            } else {
-              dispatch(feedActions.addFeedAPI(firstWriteRoutine));
-              setShowModal(true);
-            }
-          }}
+        onClick={() => {
+          if (communityNickname !== null) {
+            dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
+            setShowModal(true);
+          } else {
+            dispatch(feedActions.addFeedAPI(firstWriteRoutine));
+            setShowModal(true);
+          }
+          dispatch(feedActions.initializeWrittenFeed());
+        }}
       >업로드 하기
       </FooterButton>
       {showModal ? <AddFeedCompleteModal setShowModal={setShowModal} /> : null}
