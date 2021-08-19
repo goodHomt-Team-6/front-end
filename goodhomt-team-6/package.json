@@ -41,6 +41,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "react-slick": "^0.28.1",
+    "reactjs-crontab": "^4.5.0",
     "redux": "^4.1.0",
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
