@@ -11,20 +11,11 @@ const ChallengeBox = (props) => {
     const month = dateTime.slice(4, 6);
     const date = dateTime.slice(6, 8);
     const format = `${year}-${month}-${date}T00:00:00.000Z`;
-    const DAYS = {
-      Monday: '월',
-      Tuesday: '화',
-      Wednesday: '수',
-      Thursday: '목',
-      Friday: '금',
-      Saturday: '토',
-      Sunday: '일',
-    };
 
     const returnDate = `${month < 10 ? dateTime.slice(5, 6) : month}/${
       date < 10 ? dateTime.slice(7, 8) : date
     }`;
-    const returnDay = DAYS[moment(format).format('dddd')];
+    const returnDay = moment(format).format('dddd')[0];
     const returnTime =
       dateTime.slice(8, 10) < 12
         ? `오전 ${dateTime.slice(8, 10)}:${dateTime.slice(10, 12)}`
