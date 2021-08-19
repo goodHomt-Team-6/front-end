@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Color from '../shared/Color';
 import api from '../shared/Request';
 import logger from '../shared/Logger';
+import Moment from 'react-moment';
+import 'moment/locale/ko';
 
 import { Image, Text, Icon } from '../shared/Styles';
 import { history } from '../redux/configureStore';
@@ -38,6 +40,11 @@ const Feed = () => {
     dispatch(feedActions.getFeedAllAPI(userId));
     dispatch(userActions.getUpdatedAccessTokenAPI());
   }, []);
+
+  const displayCreatedAt = (createdAt) => {
+    const startTime = new Date(createdAt);
+    return <Moment fromNow>{startTime}</Moment>;
+  };
 
 
   return (
@@ -126,7 +133,7 @@ const Feed = () => {
                         <Text
                           type="label"
                           fontSize="12px"
-                        >{item.createdAt.substring(0, 10)}
+                        >{displayCreatedAt(item.createdAt)}
                         </Text>
                       </InfoBox>
                     </UserBox>
