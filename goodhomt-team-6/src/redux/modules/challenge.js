@@ -56,11 +56,19 @@ const getChallengesAPI = () => {
 };
 
 // 내가 참여한 챌린지 리스트
-const getMyChallengesAPI = (value) => {
+const getMyChallengesAPI = (value, idx) => {
   return function (dispatch, getState, { history }) {
     if (value === 'all') {
       api.get(`/challenges/user?type=${value}`).then((response) => {
         dispatch(getAllMyChallenges(response.data.result));
+      });
+    } else if (value === 'calendar') {
+      api.get(`/challenges/user?type=all`).then((response) => {
+        // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
+        dispatch(
+          getChallengeDetailAPI(response.data.result[idx].challengeId, true),
+        );
+        dispatch(getMyChallenges(response.data.result));
       });
     } else {
       api
@@ -70,11 +78,6 @@ const getMyChallengesAPI = (value) => {
             // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
             dispatch(
               getChallengeDetailAPI(response.data.result[0].challengeId),
-            );
-          } else if (value === 'calendar') {
-            // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
-            dispatch(
-              getChallengeDetailAPI(response.data.result[0].challengeId, true),
             );
           }
           dispatch(getMyChallenges(response.data.result));

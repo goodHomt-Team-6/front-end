@@ -37,6 +37,7 @@ const Calendar = (props) => {
   const allMyChallenges = useSelector(
     (state) => state.challenge.allMyChallenges,
   );
+
   const selectRoutine = (id) => {
     setOnRoutine(true);
     setOnChallenge(false);
@@ -101,7 +102,7 @@ const Calendar = (props) => {
           });
           const _challengeList = allMyChallenges.filter((challenge, idx) => {
             return challenge.Challenge.challengeDateTime?.startsWith(
-              _day.format('YYYYMMDD') && challenge.Challenge.isCompleted,
+              _day.format('YYYYMMDD'),
             );
           });
 
@@ -241,7 +242,18 @@ const Calendar = (props) => {
       {selectedRoutine && (
         <TodayExerciseWrapper
           onClick={() => {
-            dispatch(challengeActions.getMyChallengesAPI('calendar'));
+            if (onRoutine) {
+              dispatch(exerciseActions.addSelectedPrevItem(selectedRoutine));
+              history.push('/routinedetail');
+            }
+            if (onChallenge) {
+              dispatch(
+                challengeActions.getMyChallengesAPI(
+                  'calendar',
+                  allMyChallenges.indexOf(selectedRoutine),
+                ),
+              );
+            }
           }}
         >
           <RoutineInfo>

@@ -42,7 +42,6 @@ const ChallengeModal = ({
   const closeModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
       showChallengeModal(false);
-      history.replace('/challenge');
     }
   };
 
@@ -140,7 +139,6 @@ const ChallengeModal = ({
                     };
                   }),
                 };
-
                 dispatch(exerciseActions.getMyTodayRoutine([routine]));
                 sessionStorage.setItem('is_challenge_workout', 'true');
                 history.push('/workout');
