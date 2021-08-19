@@ -10,10 +10,15 @@ import { FooterButton, Input, Text } from '../shared/Styles';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 import Mascort from '../img/mascort_blue.svg';
 
-
-
 // 피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
-const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowCheckModal, setShowModal }) => {
+const AddFeedCompleteModal = ({
+  setNickname,
+  message,
+  buttonMessage,
+  setShowCheckModal,
+  setShowModal,
+  buttonLink,
+}) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -21,8 +26,12 @@ const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowChec
 
   const isNickname = useSelector((store) => store.feed.isNickname);
   const nickname = useSelector((store) => store.feed.nickname);
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
-  const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
+  const [routineRename, setRoutineRename] = useState(
+    selectedPrevItem.routineName,
+  );
 
   const closeModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
@@ -37,7 +46,7 @@ const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowChec
     }
   };
 
-  // 중복체크 실패시 인풋 비워주기 
+  // 중복체크 실패시 인풋 비워주기
   const CheckFailcloseModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
       setShowCheckModal(false);
@@ -45,7 +54,6 @@ const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowChec
       setNickname('');
     }
   };
-
 
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>
@@ -66,10 +74,15 @@ const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowChec
             {/* 저장버튼 */}
             <ConfirmButton
               onClick={() => {
-                history.replace('/feed');
+                if (buttonLink) {
+                  history.push(buttonLink);
+                } else {
+                  history.replace('/feed');
+                }
               }}
               ref={buttonRef}
-            >{buttonMessage}
+            >
+              {buttonMessage}
             </ConfirmButton>
           </Inner>
         </ModalInner>
@@ -98,28 +111,20 @@ const AddFeedCompleteModal = ({ setNickname, message, buttonMessage, setShowChec
               </Text>
             )}
 
-
             {/* 저장버튼 */}
             {isNickname ? (
-              <ConfirmButton
-                onClick={closeModal}
-                ref={buttonRef}
-              >확인
+              <ConfirmButton onClick={closeModal} ref={buttonRef}>
+                확인
               </ConfirmButton>
             ) : (
-              <ConfirmButton
-                onClick={CheckFailcloseModal}
-                ref={buttonRef}
-              >확인
+              <ConfirmButton onClick={CheckFailcloseModal} ref={buttonRef}>
+                확인
               </ConfirmButton>
             )}
-
           </Inner>
         </ModalInner>
       )}
-
     </ModalWrapper>
-
   );
 };
 
