@@ -24,9 +24,7 @@ import NormalRating from '../img/clicked_normal_rating.svg';
  */
 const Calendar = (props) => {
   const dispatch = useDispatch();
-  const [selectedRoutine, setSelectedRoutine] = useState(null);
-  const [onRoutine, setOnRoutine] = useState(false);
-  const [onChallenge, setOnChallenge] = useState(false);
+  const [selectedList, setSelectedList] = useState(null);
 
   useEffect(() => {
     dispatch(challengeActions.getMyChallengesAPI('all'));
@@ -37,23 +35,6 @@ const Calendar = (props) => {
   const allMyChallenges = useSelector(
     (state) => state.challenge.allMyChallenges,
   );
-
-  const selectRoutine = (id) => {
-    setOnRoutine(true);
-    setOnChallenge(false);
-    const _selectedRoutine = routines.filter((routine) => {
-      return routine.id === parseInt(id);
-    });
-    setSelectedRoutine(_selectedRoutine[0]);
-  };
-  const selectChallenge = (id) => {
-    setOnChallenge(true);
-    setOnRoutine(false);
-    const _selectedRoutine = allMyChallenges.filter((challenge) => {
-      return challenge.id === parseInt(id);
-    });
-    setSelectedRoutine(_selectedRoutine[0]);
-  };
 
   // 여기서 today는 처음엔 진짜 '오늘 날짜'로 들어가지만, setMonth를 통해 월을 이동할수 있음.
   const today = useSelector((state) => state.calendar.today);
@@ -107,38 +88,49 @@ const Calendar = (props) => {
               _day.format('YYYYMMDD'),
             );
           });
+          const _totalList = _routineList.concat(_challengeList);
 
-          const routineList = _routineList.map((_l, idx) => {
+          const totalList = _totalList.map((_l, idx) => {
             // 일정을 뿌려줌!
-            return (
-              <Grid
-                bg="rgba(74, 64, 255, 0.3)"
-                height="50%"
-                key={`${_l.id}`}
-                id={_l.id}
-                onClick={(e) => {
-                  selectRoutine(e.target.id);
-                }}
-                width="50%"
-                style={{ position: 'absolute', top: '22%', left: '12%' }}
-              ></Grid>
-            );
-          });
-          const challengeList = _challengeList.map((_l, idx) => {
-            // 일정을 뿌려줌!
-            return (
-              <Grid
-                bg="rgba(0, 0, 0, 0.3)"
-                height="50%"
-                key={_l.id}
-                id={_l.id}
-                onClick={(e) => {
-                  selectChallenge(e.target.id);
-                }}
-                width="50%"
-                style={{ position: 'absolute', top: '22%', left: '12%' }}
-              ></Grid>
-            );
+            if (_l?.routineName) {
+              return (
+                <Grid
+                  bg="rgba(74, 64, 255, 0.3)"
+                  height="50%"
+                  key={`${_l.id}`}
+                  id={_l.id}
+                  onClick={() => {
+                    setSelectedList(_totalList);
+                  }}
+                  width="50%"
+                  style={{
+                    position: 'absolute',
+                    top: '22%',
+                    left: '12%',
+                    zIndex: '1',
+                  }}
+                ></Grid>
+              );
+            } else if (_l?.challengeId) {
+              return (
+                <Grid
+                  bg="rgba(0, 0, 0, 0.3)"
+                  height="50%"
+                  key={`${_l.id}`}
+                  id={_l.id}
+                  onClick={() => {
+                    setSelectedList(_totalList);
+                  }}
+                  width="50%"
+                  style={{
+                    position: 'absolute',
+                    top: '22%',
+                    left: '12%',
+                    zIndex: '1',
+                  }}
+                ></Grid>
+              );
+            }
           });
 
           return (
@@ -154,12 +146,16 @@ const Calendar = (props) => {
             >
               {_day.format('MM') === moment(today).format('MM') && (
                 <React.Fragment>
-                  <Text type="label" color="rgba(0,0,0, 0.6)" fontSize="14px">
+                  <Text
+                    type="label"
+                    color="rgba(0,0,0, 0.6)"
+                    fontSize="14px"
+                    style={{ fontFamily: 'sans-serif' }}
+                  >
                     {_day.format('DD')}
                   </Text>
                   <React.Fragment>
-                    {_routineList && routineList}
-                    {_challengeList && challengeList}
+                    {(_routineList || _challengeList) && totalList}
                   </React.Fragment>
                 </React.Fragment>
               )}
@@ -200,7 +196,7 @@ const Calendar = (props) => {
       >
         Calendar
       </Text>
-      <Grid flex_direction="column" width="100vw" height="50vh" margin="auto">
+      <Grid flex_direction="column" width="100vw" height="45vh" margin="auto">
         <Grid justify_contents="center" align="baseline" bg="#F7F7FA">
           <Button
             margin="0 30px 0 0"
@@ -241,76 +237,81 @@ const Calendar = (props) => {
       </Grid>
 
       {/* 클릭한 루틴, 챌린지 */}
-      {selectedRoutine && (
-        <TodayExerciseWrapper
-          onClick={() => {
-            if (onRoutine) {
-              dispatch(exerciseActions.addSelectedPrevItem(selectedRoutine));
-              history.push('/routinedetail');
-            }
-            if (onChallenge) {
-              dispatch(
-                challengeActions.getMyChallengesAPI(
-                  'calendar',
-                  allMyChallenges.indexOf(selectedRoutine),
-                ),
-              );
-            }
-          }}
-        >
-          <RoutineInfo>
-            <RunningTime>
-              {onRoutine &&
-                (selectedRoutine &&
-                Math.floor(selectedRoutine?.routineTime / 60) < 10
-                  ? `0${Math.floor(selectedRoutine?.routineTime / 60)}:`
-                  : Math.floor(selectedRoutine?.routineTime / 60)`:`)}
-              {onRoutine &&
-                (selectedRoutine && selectedRoutine?.routineTime < 10
-                  ? `0${selectedRoutine?.routineTime % 60}`
-                  : selectedRoutine?.routineTime % 60)}
-              {onChallenge &&
-                (selectedRoutine &&
-                Math.floor(selectedRoutine?.challengeTime / 60) < 10
-                  ? `0${Math.floor(selectedRoutine?.challengeTime / 60)}:`
-                  : Math.floor(selectedRoutine?.challengeTime / 60)`:`)}
-              {onChallenge &&
-                (selectedRoutine && selectedRoutine?.challengeTime < 10
-                  ? `0${selectedRoutine?.challengeTime % 60}`
-                  : selectedRoutine?.challengeTime % 60)}
-            </RunningTime>
+      {selectedList &&
+        selectedList.map((l, idx) =>
+          l?.routineName ? (
+            <TodayExerciseWrapper
+              onClick={() => {
+                dispatch(exerciseActions.addSelectedPrevItem(l));
+                history.push('/routinedetail');
+              }}
+            >
+              <RoutineInfo>
+                <RunningTime>
+                  {l && Math.floor(l?.routineTime / 60) < 10
+                    ? `0${Math.floor(l?.routineTime / 60)}:`
+                    : Math.floor(l?.routineTime / 60)`:`}
+                  {l && l?.routineTime < 10
+                    ? `0${l?.routineTime % 60}`
+                    : l?.routineTime % 60}
+                </RunningTime>
 
-            <RoutineBox>
-              <RoutineName>
-                {onRoutine && selectedRoutine?.routineName}
-                {onChallenge && selectedRoutine?.Challenge.challengeName}
-              </RoutineName>
-              <WorkoutDate>
-                {onRoutine &&
-                  selectedRoutine.createdAt.slice(5, 10).replace(/-/gi, '.')}
-                {onChallenge &&
-                  `${selectedRoutine?.Challenge?.challengeDateTime.slice(
-                    4,
-                    6,
-                  )}.${selectedRoutine?.Challenge?.challengeDateTime.slice(
-                    6,
-                    8,
-                  )}`}
-              </WorkoutDate>
-            </RoutineBox>
-          </RoutineInfo>
-          {selectedRoutine?.rating === 'soso' && (
-            <RatingCont src={NormalRating}></RatingCont>
-          )}
-          {selectedRoutine?.rating === 'bad' && (
-            <RatingCont src={BadRating}></RatingCont>
-          )}
-          {(selectedRoutine?.rating === 'good' ||
-            selectedRoutine?.rating === null) && (
-            <RatingCont src={GoodRating}></RatingCont>
-          )}
-        </TodayExerciseWrapper>
-      )}
+                <RoutineBox>
+                  <RoutineName>{l?.routineName}</RoutineName>
+                  <WorkoutDate>
+                    {l.createdAt.slice(5, 10).replace(/-/gi, '.')}
+                  </WorkoutDate>
+                </RoutineBox>
+              </RoutineInfo>
+              {l?.rating === 'soso' && (
+                <RatingCont src={NormalRating}></RatingCont>
+              )}
+              {l?.rating === 'bad' && <RatingCont src={BadRating}></RatingCont>}
+              {(l?.rating === 'good' || l?.rating === null) && (
+                <RatingCont src={GoodRating}></RatingCont>
+              )}
+            </TodayExerciseWrapper>
+          ) : (
+            <TodayExerciseWrapper
+              onClick={() => {
+                dispatch(
+                  challengeActions.getMyChallengesAPI(
+                    'calendar',
+                    allMyChallenges.indexOf(l),
+                  ),
+                );
+              }}
+            >
+              <RoutineInfo>
+                <RunningTime>
+                  {l && Math.floor(l?.challengeTime / 60) < 10
+                    ? `0${Math.floor(l?.challengeTime / 60)}:`
+                    : Math.floor(l?.challengeTime / 60)`:`}
+                  {l && l?.challengeTime < 10
+                    ? `0${l?.challengeTime % 60}`
+                    : l?.challengeTime % 60}
+                </RunningTime>
+
+                <RoutineBox>
+                  <RoutineName>{l?.Challenge.challengeName}</RoutineName>
+                  <WorkoutDate>
+                    {`${l?.Challenge?.challengeDateTime.slice(
+                      4,
+                      6,
+                    )}.${l?.Challenge?.challengeDateTime.slice(6, 8)}`}
+                  </WorkoutDate>
+                </RoutineBox>
+              </RoutineInfo>
+              {l?.rating === 'soso' && (
+                <RatingCont src={NormalRating}></RatingCont>
+              )}
+              {l?.rating === 'bad' && <RatingCont src={BadRating}></RatingCont>}
+              {(l?.rating === 'good' || l?.rating === null) && (
+                <RatingCont src={GoodRating}></RatingCont>
+              )}
+            </TodayExerciseWrapper>
+          ),
+        )}
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
