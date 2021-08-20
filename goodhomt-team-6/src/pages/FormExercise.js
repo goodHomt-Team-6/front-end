@@ -6,7 +6,7 @@ import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
 import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
 import PurePlusButtonGrey from '../img/pure-plus-button-grey.svg';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
-import ReArrangementGrey from '../img/re-arrangement-grey.svg';
+import ReArrangementNavy from '../img/re-arrangement-navy.svg';
 import ReArrangementBlack from '../img/re-arrangement-black.svg';
 import logger from '../shared/Logger';
 import './FormExercise.css';
@@ -126,16 +126,29 @@ const FormExercise = (props) => {
             history.push('/exercise');
           }}
         ></Image>
-        <Image
-          src={ReArrangementBlack}
-          width="18px"
-          height="18px"
-          borderRadius="0"
-          margin="0 20px 0 0"
-          _onClick={() => {
-            setReArrangement(!reArrangement);
-          }}
-        ></Image>
+        {!reArrangement ? (
+          <Image
+            src={ReArrangementBlack}
+            width="18px"
+            height="18px"
+            borderRadius="0"
+            margin="0 20px 0 0"
+            _onClick={() => {
+              setReArrangement(!reArrangement);
+            }}
+          ></Image>
+        ) : (
+          <Image
+            src={ReArrangementNavy}
+            width="18px"
+            height="18px"
+            borderRadius="0"
+            margin="0 20px 0 0"
+            _onClick={() => {
+              setReArrangement(!reArrangement);
+            }}
+          ></Image>
+        )}
       </OptionCont>
       {!reArrangement ? (
         <Container>
@@ -147,6 +160,8 @@ const FormExercise = (props) => {
                   width="100%"
                   padding="20px 0 0 20px"
                   margin="0"
+                  fontWeight="600"
+                  fontSize="1.1em"
                   onClick={() => {
                     closeRow();
                   }}
@@ -241,7 +256,13 @@ const FormExercise = (props) => {
                   openRow(e);
                 }}
               >
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                <Text
+                  type="contents"
+                  minWidth="80px"
+                  padding="0 0 0 10px"
+                  fontWeight="600"
+                  fontSize="1.1em"
+                >
                   {list.exerciseName}
                 </Text>
                 <Text type="contents">
@@ -301,6 +322,8 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const OpenList = styled.div`
@@ -309,6 +332,8 @@ const OpenList = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const DataRow = styled.div`
