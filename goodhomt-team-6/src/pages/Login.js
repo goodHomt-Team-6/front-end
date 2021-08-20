@@ -12,9 +12,7 @@ const Login = (props) => {
 
   return (
     <>
-      <ImgContainer
-        src={LoginBackground}>
-      </ImgContainer>
+      <ImgContainer src={LoginBackground}></ImgContainer>
       <LoginWrapper>
         <img
           src={kakaoLoginButton}
@@ -30,7 +28,6 @@ const Login = (props) => {
           로그아웃 (사용 불가)
         </div> */}
       </LoginWrapper>
-
     </>
   );
 };
@@ -47,12 +44,14 @@ const ImgContainer = styled.img`
   z-index: -1;
 `;
 
+const innerHeight = window.innerHeight;
+
 const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  height: 93vh;
+  height: ${innerHeight * 0.93}px;
   margin-bottom: 30px;
   cursor: pointer;
 `;

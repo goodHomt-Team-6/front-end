@@ -61,12 +61,13 @@ const RoutineDetail = (props) => {
         <Header message="Routine" />
       </HeaderWrapper>
 
-      {showModal ?
+      {showModal ? (
         <AddFeedCompleteModal
           message={'이미 오늘 운동을 등록했습니다!'}
           buttonMessage={'피드로 돌아가기'}
           setShowModal={setShowModal}
-        /> : null}
+        />
+      ) : null}
 
       <Wrapper>
         {/* 대시보드 */}
@@ -131,28 +132,22 @@ const RoutineDetail = (props) => {
                   key={listIdx}
                   onClick={(e) => {
                     openRow(e);
-                  }}>
+                  }}
+                >
                   <Text type="contents" minWidth="80px" padding="0 0 0 10px">
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list && list.set.filter((set) => set.type === 'exercise').length}
+                    {list &&
+                      list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
                   {list && list.set[0].weight === null ? (
-                    <Text
-                      type="contents">
-                      0kg
-                    </Text>
+                    <Text type="contents">0kg</Text>
                   ) : (
-                    <Text
-                      type="contents">
-                      {list && list.set[0].weight}kg
-                    </Text>
+                    <Text type="contents">{list && list.set[0].weight}kg</Text>
                   )}
-                  <Text
-                    type="contents"
-                    padding="0 10px 0 0">
+                  <Text type="contents" padding="0 10px 0 0">
                     {list && list.set[0].count}회
                   </Text>
                 </List>
@@ -235,11 +230,13 @@ const DataRow = styled.div`
   margin: 0 20px;
 `;
 
+const innerHeight = window.innerHeight - 355;
+
 const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 355px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 

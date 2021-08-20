@@ -46,7 +46,6 @@ const Feed = () => {
     return <Moment fromNow>{startTime}</Moment>;
   };
 
-
   return (
     <Container>
       <InboxWrapper>
@@ -58,7 +57,8 @@ const Feed = () => {
           fontWeight="bold"
           margin="0"
           bgColor="#F7F7FA"
-        >Feed
+        >
+          Feed
         </Text>
 
         <IconWrapper>
@@ -67,25 +67,21 @@ const Feed = () => {
               setShowAddFeedModal(true);
             }}
             margin="0px"
-            src={PurePlusButtonBlack} />
+            src={PurePlusButtonBlack}
+          />
         </IconWrapper>
       </InboxWrapper>
 
-      {
-        showModal ?
-          <AddAndDeleteModal
-            message="피드 삭제"
-            setShowModal={setShowModal} />
-          : null
-      }
+      {showModal ? (
+        <AddAndDeleteModal message="피드 삭제" setShowModal={setShowModal} />
+      ) : null}
 
-      {
-        showAddFeedModal ?
-          <AddAndDeleteModal
-            message="피드 추가"
-            setShowAddFeedModal={setShowAddFeedModal} />
-          : null
-      }
+      {showAddFeedModal ? (
+        <AddAndDeleteModal
+          message="피드 추가"
+          setShowAddFeedModal={setShowAddFeedModal}
+        />
+      ) : null}
 
       {/* 운동 종목 키워드 검색 */}
       {/* <SearchWrapper>
@@ -127,13 +123,12 @@ const Feed = () => {
                             fontSize="14px"
                             color="black"
                             fontWeight="600"
-                          >{item.communityNickname}
+                          >
+                            {item.communityNickname}
                           </Text>
                         )}
-                        <Text
-                          type="label"
-                          fontSize="12px"
-                        >{displayCreatedAt(item.createdAt)}
+                        <Text type="label" fontSize="12px">
+                          {displayCreatedAt(item.createdAt)}
                         </Text>
                       </InfoBox>
                     </UserBox>
@@ -170,10 +165,13 @@ const Feed = () => {
                   <TodayMainBox
                     onClick={() => {
                       const selected = feed.filter((m) => m.id == item.id);
-                      dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
+                      dispatch(
+                        exerciseActions.addSelectedPrevItem(selected[0]),
+                      );
                       dispatch(exerciseActions.initializeRoutine());
                       history.push(`/feed/${item.id}`);
-                    }}>
+                    }}
+                  >
                     <TodayWrapper>
                       <Enrolled>{item.myExercise.length}</Enrolled>
                       <TextItem>{item.routineName}</TextItem>
@@ -186,10 +184,12 @@ const Feed = () => {
                           fontWeight="600"
                           color="black"
                           opacity="54%"
-                        >종목
+                        >
+                          종목
                         </Text>
                         <TextItem>
-                          {item.myExercise[0].exerciseName} 외 {item.myExercise.length - 1}개
+                          {item.myExercise[0].exerciseName} 외{' '}
+                          {item.myExercise.length - 1}개
                         </TextItem>
                       </TypeWrapper>
                       <Div />
@@ -200,7 +200,8 @@ const Feed = () => {
                           fontWeight="600"
                           color="black"
                           opacity="54%"
-                        >운동시간
+                        >
+                          운동시간
                         </Text>
                         <TextItem>
                           {Math.floor(item.routineTime / 60) < 10 ? (
@@ -208,17 +209,13 @@ const Feed = () => {
                               {'0' + Math.floor(item.routineTime / 60)}:
                             </Time>
                           ) : (
-                            <Time>
-                              {Math.floor(item.routineTime / 60)}:
-                            </Time>)
-                          }
-                          {(item.routineTime % 60) < 10 ? (
-                            <Time>
-                              {'0' + item.routineTime % 60}
-                            </Time>
-                          ) : (<Time>
-                            {item.routineTime % 60}
-                          </Time>)}
+                            <Time>{Math.floor(item.routineTime / 60)}:</Time>
+                          )}
+                          {item.routineTime % 60 < 10 ? (
+                            <Time>{'0' + (item.routineTime % 60)}</Time>
+                          ) : (
+                            <Time>{item.routineTime % 60}</Time>
+                          )}
                         </TextItem>
                       </TypeWrapper>
                     </TodayTypeContainer>
@@ -233,7 +230,8 @@ const Feed = () => {
                           margin="0px 8px 0px 0px"
                           fontSize="14px"
                           fontWeight="600"
-                        >{item.routineName}
+                        >
+                          {item.routineName}
                         </Text>
 
                         {/* 키워드 */}
@@ -246,7 +244,8 @@ const Feed = () => {
                               color="#4A40FF"
                               fontSize="14px"
                               fontWeight="600"
-                            >#{i.exerciseName}
+                            >
+                              #{i.exerciseName}
                             </Text>
                           ))}
                         </KeywordBox>
@@ -262,21 +261,16 @@ const Feed = () => {
                             dispatch(feedActions.selectFeed(item.id));
                           }}
                         />
-                      ) : null
-                      }
+                      ) : null}
                     </TextBox>
-                    <Text
-                      type="contents"
-                      margin="0px"
-                      fontSize="14px"
-                    >{item.description}
+                    <Text type="contents" margin="0px" fontSize="14px">
+                      {item.description}
                     </Text>
                   </TextWrapper>
                 </Card>
-              ))
-            }
-          </FeedCont >
-        </FeedContReal >
+              ))}
+          </FeedCont>
+        </FeedContReal>
       </FeedWrapper>
 
       {/* 고정 하단바 */}
@@ -346,16 +340,17 @@ const NavBarWrapper = styled.div`
   width: 100%;
 `;
 
+const innerHeight = window.innerHeight - 170;
+
 const FeedContReal = styled.div`
   padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 170px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 
-const FeedCont = styled.li`
-`;
+const FeedCont = styled.li``;
 
 const Card = styled.div`
   border-bottom: 1px solid ${Color.clickedGray};
@@ -486,6 +481,5 @@ const CommentText = styled.div`
 const KeywordBox = styled.div`
   width: 50%;
   display: flex;
-  flex-flow: row wrap ;
-
+  flex-flow: row wrap;
 `;

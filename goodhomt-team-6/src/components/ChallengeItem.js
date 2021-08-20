@@ -140,11 +140,13 @@ const ChallengeItem = () => {
   );
 };
 
+const innerHeight = window.innerHeight - 170;
+
 const ChallengeCont = styled.div`
   padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 170px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 

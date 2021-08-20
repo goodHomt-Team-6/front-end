@@ -330,11 +330,13 @@ const ChallengeDetail = (props) => {
   );
 };
 
+const innerHeight = window.innerHeight - 177;
+
 const ChallengeCont = styled.div`
   padding: 10px 20px 30px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 177px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
   background-color: #f7f7fa;
 `;

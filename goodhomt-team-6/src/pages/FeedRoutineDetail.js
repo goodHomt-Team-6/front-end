@@ -172,14 +172,6 @@ const BodyWrapper = styled.div`
   background-color: #f7f7fa;
 `;
 
-const Container = styled.div`
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f7f7fa;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
-`;
-
 const FooterButtonWrapper = styled.div`
   position: fixed;
   bottom: 0px;
@@ -205,11 +197,13 @@ const DataRow = styled.div`
   margin: 0 20px;
 `;
 
+const innerHeight = window.innerHeight - 290;
+
 const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 290px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 

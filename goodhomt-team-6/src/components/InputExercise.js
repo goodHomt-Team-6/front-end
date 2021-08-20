@@ -227,11 +227,13 @@ const InputExercise = ({ isExercise, idxes }) => {
 
 export default InputExercise;
 
+const innerHeight = window.innerHeight;
+
 const InputCont = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: ${innerHeight}px;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -243,7 +245,7 @@ const DataRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0 20px;
-  height: 50vh;
+  height: ${innerHeight / 2}px;
   align-items: center;
   position: relative;
   &:after {
@@ -259,7 +261,7 @@ const DataRow = styled.div`
 const InputForm = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 50vh;
+  height: ${innerHeight / 2}px;
   flex-direction: column;
   background: rgba(255, 255, 255, 1);
 `;

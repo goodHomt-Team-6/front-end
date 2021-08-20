@@ -95,42 +95,43 @@ const TodayRoutineDetail = (props) => {
                   >
                     {list.exerciseName}
                   </Text>
-                  {list && list.set.map((set, setIdx) => (
-                    <DataRow key={setIdx}>
-                      <Text
-                        type="contents"
-                        fontSize="1.3em"
-                        minWidth="80px"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.setCount}세트`
-                          : '휴식'}
-                      </Text>
-                      <Text
-                        type="contents"
-                        fontSize="1.3em"
-                        minWidth="80px"
-                        textAlign="center"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.weight}Kg`
-                          : `${set.minutes}분`}
-                      </Text>
-                      <Text
-                        type="contents"
-                        fontSize="1.3em"
-                        minWidth="80px"
-                        textAlign="right"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.count}회`
-                          : `${set.seconds}초`}
-                      </Text>
-                    </DataRow>
-                  ))}
+                  {list &&
+                    list.set.map((set, setIdx) => (
+                      <DataRow key={setIdx}>
+                        <Text
+                          type="contents"
+                          fontSize="1.3em"
+                          minWidth="80px"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.setCount}세트`
+                            : '휴식'}
+                        </Text>
+                        <Text
+                          type="contents"
+                          fontSize="1.3em"
+                          minWidth="80px"
+                          textAlign="center"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.weight}Kg`
+                            : `${set.minutes}분`}
+                        </Text>
+                        <Text
+                          type="contents"
+                          fontSize="1.3em"
+                          minWidth="80px"
+                          textAlign="right"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.count}회`
+                            : `${set.seconds}초`}
+                        </Text>
+                      </DataRow>
+                    ))}
                 </OpenList>
               ) : (
                 <List
@@ -144,10 +145,13 @@ const TodayRoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list.set !== [] && list.set.filter((set) => set.type === 'exercise').length}
+                    {list.set !== [] &&
+                      list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  <Text type="contents">{list.set !== [] && list.set[0].weight}kg</Text>
+                  <Text type="contents">
+                    {list.set !== [] && list.set[0].weight}kg
+                  </Text>
                   <Text type="contents" padding="0 10px 0 0">
                     {list.set !== [] && list.set[0].count}회
                   </Text>
@@ -183,14 +187,6 @@ const BodyWrapper = styled.div`
   background-color: #f7f7fa;
 `;
 
-const Container = styled.div`
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f7f7fa;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
-`;
-
 const FooterButtonWrapper = styled.div`
   position: fixed;
   bottom: 0px;
@@ -216,11 +212,13 @@ const DataRow = styled.div`
   margin: 0 20px;
 `;
 
+const innerHeight = window.innerHeight - 353;
+
 const ListContainer = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background-color: #f7f7fa;
-  height: calc(100vh - 353px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 
