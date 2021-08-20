@@ -96,7 +96,7 @@ const RoutineDetail = (props) => {
           <FooterButton
             onClick={() => {
               if (
-                (myTodayRoutine && myTodayRoutine[0].isCompleted === true) ||
+                (myTodayRoutine && myTodayRoutine[0]?.isCompleted === true) ||
                 myTodayRoutine.length !== 0
               ) {
                 setShowConfirmModal(true);
