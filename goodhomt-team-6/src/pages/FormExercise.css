@@ -1,7 +1,7 @@
 input[type="radio"]:checked + p.list {
   color: rgb(255, 255, 255);
-  border-color: #000;
-  background-color: #000;
+  border-color: #4a40ff;
+  background-color: #4a40ff;
 }
 
 input[type="radio"]:checked + p.input {

@@ -15,6 +15,7 @@ import { history } from '../redux/configureStore';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import closeButton from '../img/close-button.svg';
 import FormExerciseDnd from '../components/FormExerciseDnd';
+import removeStick from '../img/remove_stick.svg';
 
 // material-ui 모달
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,11 +35,10 @@ const modalStyles = makeStyles((theme) => ({
   },
 }));
 
-const innerHeight = window.innerHeight - 173;
+const innerHeight = window.innerHeight - 181;
 
 const FormExercise = (props) => {
   const dispatch = useDispatch();
-  const [setCount, setSetCount] = useState(1);
   const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
@@ -115,40 +115,61 @@ const FormExercise = (props) => {
         <PageText>2/2</PageText>
       </GoBackButton>
       {/* 클릭한 list만 재렌더링 되도록 최적화 필요 */}
-      <OptionCont>
-        <Image
-          src={PurePlusButtonBlack}
-          width="15px"
-          height="15px"
-          borderRadius="0"
-          margin="0 15px 0 0"
-          _onClick={() => {
-            history.push('/exercise');
-          }}
-        ></Image>
-        {!reArrangement ? (
-          <Image
-            src={ReArrangementBlack}
-            width="18px"
-            height="18px"
-            borderRadius="0"
-            margin="0 20px 0 0"
-            _onClick={() => {
-              setReArrangement(!reArrangement);
+      <OptionCont reArrangement={reArrangement}>
+        {reArrangement && (
+          <DeleteAll
+            onClick={() => {
+              dispatch(exerciseCreator.removeSelectedItem());
+              dispatch(exerciseCreator.removeExerciseType());
             }}
-          ></Image>
-        ) : (
-          <Image
-            src={ReArrangementNavy}
-            width="18px"
-            height="18px"
-            borderRadius="0"
-            margin="0 20px 0 0"
-            _onClick={() => {
-              setReArrangement(!reArrangement);
-            }}
-          ></Image>
+          >
+            <Image
+              src={removeStick}
+              width="24px"
+              height="24px"
+              borderRadius="0"
+              margin="0 5px 0 0"
+            />
+            <Text type="contents" fontSize="13px" margin="0 3px 0 0">
+              전체 삭제
+            </Text>
+          </DeleteAll>
         )}
+        <OptionContRight>
+          <Image
+            src={PurePlusButtonBlack}
+            width="15px"
+            height="15px"
+            borderRadius="0"
+            margin="0 25px 0 0"
+            _onClick={() => {
+              history.push('/exercise');
+            }}
+          ></Image>
+          {!reArrangement ? (
+            <Image
+              src={ReArrangementBlack}
+              width="18px"
+              height="18px"
+              borderRadius="0"
+              margin="0 20px 0 0"
+              _onClick={() => {
+                setReArrangement(!reArrangement);
+              }}
+            ></Image>
+          ) : (
+            <Image
+              src={ReArrangementNavy}
+              width="18px"
+              height="18px"
+              borderRadius="0"
+              margin="0 20px 0 0"
+              _onClick={() => {
+                setReArrangement(!reArrangement);
+              }}
+            ></Image>
+          )}
+        </OptionContRight>
       </OptionCont>
       {!reArrangement ? (
         <Container>
@@ -198,7 +219,7 @@ const FormExercise = (props) => {
                       type="contents"
                       fontSize="1.3em"
                       minWidth="80px"
-                      color="#848484"
+                      color="#000"
                     >
                       {set.type === 'exercise' ? `${set.setCount}세트` : '휴식'}
                     </Text>
@@ -207,7 +228,7 @@ const FormExercise = (props) => {
                       fontSize="1.3em"
                       minWidth="80px"
                       textAlign="center"
-                      color="#848484"
+                      color="#000"
                     >
                       {set.type === 'exercise'
                         ? `${set.weight}Kg`
@@ -218,7 +239,7 @@ const FormExercise = (props) => {
                       fontSize="1.3em"
                       minWidth="80px"
                       textAlign="right"
-                      color="#848484"
+                      color="#000"
                     >
                       {set.type === 'exercise'
                         ? `${set.count}회`
@@ -255,24 +276,55 @@ const FormExercise = (props) => {
                 onClick={(e) => {
                   openRow(e);
                 }}
+                isColoredList={list.set[0].count > 0}
               >
-                <Text
-                  type="contents"
-                  minWidth="80px"
-                  padding="0 0 0 10px"
-                  fontWeight="600"
-                  fontSize="1.1em"
-                >
-                  {list.exerciseName}
-                </Text>
-                <Text type="contents">
-                  {list.set.filter((set) => set.type === 'exercise').length}
-                  세트
-                </Text>
-                <Text type="contents">{list.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">
-                  {list.set[0].count}회
-                </Text>
+                {list.set[0].count > 0 && openedRow === null ? (
+                  <>
+                    <Text
+                      type="contents"
+                      minWidth="80px"
+                      padding="0 0 0 10px"
+                      fontWeight="600"
+                      fontSize="1.1em"
+                      color="#000"
+                    >
+                      {list.exerciseName}
+                    </Text>
+                    <Text type="contents" color="#000">
+                      {list.set.filter((set) => set.type === 'exercise').length}
+                      세트
+                    </Text>
+                    <Text type="contents" color="#000">
+                      {list.set[0].weight}kg
+                    </Text>
+                    <Text type="contents" padding="0 10px 0 0" color="#000">
+                      {list.set[0].count}회
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text
+                      type="contents"
+                      minWidth="80px"
+                      padding="0 0 0 10px"
+                      fontWeight="600"
+                      fontSize="1.1em"
+                      color="#848484"
+                    >
+                      {list.exerciseName}
+                    </Text>
+                    <Text type="contents" color="#848484">
+                      {list.set.filter((set) => set.type === 'exercise').length}
+                      세트
+                    </Text>
+                    <Text type="contents" color="#848484">
+                      {list.set[0].weight}kg
+                    </Text>
+                    <Text type="contents" padding="0 10px 0 0" color="#848484">
+                      {list.set[0].count}회
+                    </Text>
+                  </>
+                )}
               </List>
             ),
           )}
@@ -297,7 +349,11 @@ const FormExercise = (props) => {
       )}
 
       {editor && (
-        <InputExercise isExercise={isExercise} idxes={idxes}></InputExercise>
+        <InputExercise
+          isExercise={isExercise}
+          idxes={idxes}
+          exerciseName={lists[idxes.listIdx].exerciseName}
+        ></InputExercise>
       )}
       <ModalView classes={classes} switchModal={switchModal} open={open} />
     </React.Fragment>
@@ -324,6 +380,8 @@ const List = styled.div`
   }
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-left: ${(props) =>
+    props.isColoredList ? '8px solid rgba(74, 64, 255, 0.3)' : ''};
 `;
 
 const OpenList = styled.div`
@@ -371,11 +429,11 @@ const RadioP = styled.p`
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
-  height: 46px;
+  height: 35px;
   padding: 0px 15px;
-  color: rgb(102, 102, 102);
+  color: #4a40ff;
   font-size: 14px;
-  border: 1px solid rgb(217, 217, 217);
+  border: 1px solid #4a40ff;
   border-radius: 25px;
   background-color: rgb(255, 255, 255);
   user-select: none;
@@ -399,7 +457,25 @@ const PageText = styled.span`
 const OptionCont = styled.div`
   background-color: #f7f7fa;
   display: flex;
-  justify-content: flex-end;
+  justify-content: ${(props) =>
+    props.reArrangement ? 'space-between' : 'flex-end'};
   padding: 10px 0 0;
   align-items: center;
+  min-height: 36px;
+`;
+
+const DeleteAll = styled.div`
+  display: flex;
+  width: 108px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  margin-left: 20px;
+  min-height: 32px;
+  border-radius: 16px;
+  line-height: 32px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const OptionContRight = styled.div`
+  display: flex;
 `;

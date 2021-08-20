@@ -441,10 +441,14 @@ export default handleActions(
     // 내가 선택한 종목에서 제거
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.routine[0].myExercise.findIndex(
-          (e) => e.exerciseName === action.payload.exercise.exerciseName,
-        );
-        draft.routine[0].myExercise.splice(index, 1);
+        if (action.payload.exercise) {
+          let index = draft.routine[0].myExercise.findIndex(
+            (e) => e.exerciseName === action.payload.exercise.exerciseName,
+          );
+          draft.routine[0].myExercise.splice(index, 1);
+        } else {
+          draft.routine[0].myExercise = [];
+        }
       }),
     // 화면 상단에 추가
     [ADD_SELECTED_ITEM]: (state, action) =>
@@ -454,11 +458,15 @@ export default handleActions(
     // 화면 상단에서 삭제
     [REMOVE_SELECTED_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        let index = draft.selectedItems.findIndex(
-          (item) =>
-            item.exerciseName === action.payload.selectedItems.exerciseName,
-        );
-        draft.selectedItems.splice(index, 1);
+        if (action.payload.selectedItems) {
+          let index = draft.selectedItems.findIndex(
+            (item) =>
+              item.exerciseName === action.payload.selectedItems.exerciseName,
+          );
+          draft.selectedItems.splice(index, 1);
+        } else {
+          draft.selectedItems = [];
+        }
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
@@ -467,7 +475,6 @@ export default handleActions(
           (cnt, elem) => cnt + ('exercise' === elem.type),
           1,
         );
-        logger(state);
         list.set.push({
           type: 'exercise',
           weight: list.set[0].weight,
@@ -478,11 +485,25 @@ export default handleActions(
     [ADD_BREAK]: (state, action) =>
       produce(state, (draft) => {
         const list = draft.routine[0].myExercise[action.payload.listIdx];
-        list.set.push({
-          type: 'break',
-          minutes: 0,
-          seconds: 0,
-        });
+        var firstBreak;
+        for (var i = 0; i < list.set.length; i++) {
+          if (list.set[i].type === 'break') {
+            firstBreak = list.set[i];
+          }
+        }
+        if (firstBreak) {
+          list.set.push({
+            type: 'break',
+            minutes: firstBreak.minutes,
+            seconds: firstBreak.seconds,
+          });
+        } else {
+          list.set.push({
+            type: 'break',
+            minutes: 0,
+            seconds: 0,
+          });
+        }
       }),
     [OPEN_ROW]: (state, action) =>
       produce(state, (draft) => {

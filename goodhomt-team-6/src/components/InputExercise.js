@@ -3,7 +3,7 @@ import Color from '../shared/Color';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseCreator } from '../redux/modules/exercise';
-import { Button, Input, Text, Image } from '../shared/Styles';
+import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
 import logger from '../shared/Logger';
 import MuButton from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -11,6 +11,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import './InputExercise.css';
 import SimpleSlider from './TimePicker';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { findLastIndex } from 'lodash';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputExercise = ({ isExercise, idxes }) => {
+const InputExercise = ({ isExercise, idxes, exerciseName }) => {
   const alertClasses = useStyles();
   const [alert, openAlert] = React.useState(false);
   const dispatch = useDispatch();
@@ -71,65 +73,130 @@ const InputExercise = ({ isExercise, idxes }) => {
 
   return (
     <InputCont>
+      <Text
+        type="contents"
+        margin="0"
+        color="#fff"
+        fontSize="1.2em"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          position: 'fixed',
+          left: '10px',
+          top: '27px',
+          zIndex: '9999',
+        }}
+        onClick={() => {
+          dispatch(exerciseCreator.openEditor(false));
+        }}
+      >
+        <ArrowBackIosIcon style={{ width: '16px', height: '16px' }} />
+        {exerciseName}
+      </Text>
       <DataRow>
-        <Text type="contents" fontSize="1.3em" minWidth="80px" color="#848484">
+        <Text type="contents" fontSize="1.3em" minWidth="80px" color="#fff">
           {isExercise ? `${savedSet[idxes.setIdx].setCount}세트` : '휴식'}
         </Text>
-        <Text
-          type="contents"
-          fontSize="1.3em"
-          minWidth="80px"
-          textAlign="center"
-          color="#848484"
-          clicked={inputEditWeight}
-          onClick={() => {
-            if (isExercise) {
-              setInputEditCount(false);
-              setInputEditWeight(true);
-            }
-          }}
-        >
-          {isExercise ? `${weight}Kg` : `${minutes}분`}
-        </Text>
-        <Text
-          type="contents"
-          fontSize="1.3em"
-          minWidth="80px"
-          textAlign="right"
-          color="#848484"
-          clicked={inputEditCount}
-          onClick={() => {
-            if (isExercise) {
-              setInputEditCount(true);
-              setInputEditWeight(false);
-            }
-          }}
-        >
-          {isExercise ? `${count}회` : `${seconds}초`}
-        </Text>
+        {inputEditWeight ? (
+          <Text
+            type="contents"
+            fontSize="1.3em"
+            minWidth="80px"
+            textAlign="center"
+            color="#fff"
+            onClick={() => {
+              if (isExercise) {
+                setInputEditCount(false);
+                setInputEditWeight(true);
+              }
+            }}
+          >
+            {isExercise ? `${weight}Kg` : `${minutes}분`}
+          </Text>
+        ) : (
+          <Text
+            type="contents"
+            fontSize="1.3em"
+            minWidth="80px"
+            textAlign="center"
+            color="#848484"
+            onClick={() => {
+              if (isExercise) {
+                setInputEditCount(false);
+                setInputEditWeight(true);
+              }
+            }}
+          >
+            {isExercise ? `${weight}Kg` : `${minutes}분`}
+          </Text>
+        )}
+        {inputEditCount || !isExercise ? (
+          <Text
+            type="contents"
+            fontSize="1.3em"
+            minWidth="80px"
+            textAlign="right"
+            color="#fff"
+            onClick={() => {
+              if (isExercise) {
+                setInputEditCount(true);
+                setInputEditWeight(false);
+              }
+            }}
+          >
+            {isExercise ? `${count}회` : `${seconds}초`}
+          </Text>
+        ) : (
+          <Text
+            type="contents"
+            fontSize="1.3em"
+            minWidth="80px"
+            textAlign="right"
+            color="#848484"
+            onClick={() => {
+              if (isExercise) {
+                setInputEditCount(true);
+                setInputEditWeight(false);
+              }
+            }}
+          >
+            {isExercise ? `${count}회` : `${seconds}초`}
+          </Text>
+        )}
       </DataRow>
       {(inputEditWeight || inputEditCount) && (
         <InputForm>
-          <InputHeader>
-            <Submit
-              color="#757575"
-              onClick={() => {
-                dispatch(exerciseCreator.openEditor(false));
-              }}
-            >
-              취소
-            </Submit>
-            <Submit
-              color="#000"
-              onClick={() => {
-                completeEdit();
-              }}
-            >
-              완료
-            </Submit>
-          </InputHeader>
           {isExercise ? (
             <>
+              <InputFooter>
+                <ButtonCont>
+                  <ButtonWrap>
+                    <RadioInput
+                      type="radio"
+                      name={'inputButton'}
+                      defaultChecked
+                    />
+                    <RadioP className="input" onClick={() => setUnit(1)}>
+                      {inputEditWeight && `1kg`}
+                      {inputEditCount && `1회`}
+                    </RadioP>
+                  </ButtonWrap>
+                  <ButtonWrap>
+                    <RadioInput type="radio" name={'inputButton'} />
+                    <RadioP className="input" onClick={() => setUnit(5)}>
+                      {inputEditWeight && `5kg`}
+                      {inputEditCount && `5회`}
+                    </RadioP>
+                  </ButtonWrap>
+                  <ButtonWrap>
+                    <RadioInput type="radio" name={'inputButton'} />
+                    <RadioP className="input" onClick={() => setUnit(10)}>
+                      {inputEditWeight && `10kg`}
+                      {inputEditCount && `10회`}
+                    </RadioP>
+                  </ButtonWrap>
+                </ButtonCont>
+              </InputFooter>
               <InputBody>
                 <Button
                   height="48px"
@@ -174,39 +241,19 @@ const InputExercise = ({ isExercise, idxes }) => {
                   +
                 </Button>
               </InputBody>
-              <InputFooter>
-                <ButtonCont>
-                  <ButtonWrap>
-                    <RadioInput
-                      type="radio"
-                      name={'inputButton'}
-                      defaultChecked
-                    />
-                    <RadioP className="input" onClick={() => setUnit(1)}>
-                      {inputEditWeight && `1kg`}
-                      {inputEditCount && `1회`}
-                    </RadioP>
-                  </ButtonWrap>
-                  <ButtonWrap>
-                    <RadioInput type="radio" name={'inputButton'} />
-                    <RadioP className="input" onClick={() => setUnit(5)}>
-                      {inputEditWeight && `5kg`}
-                      {inputEditCount && `5회`}
-                    </RadioP>
-                  </ButtonWrap>
-                  <ButtonWrap>
-                    <RadioInput type="radio" name={'inputButton'} />
-                    <RadioP className="input" onClick={() => setUnit(10)}>
-                      {inputEditWeight && `10kg`}
-                      {inputEditCount && `10회`}
-                    </RadioP>
-                  </ButtonWrap>
-                </ButtonCont>
-              </InputFooter>
             </>
           ) : (
             <SimpleSlider idxes={idxes} />
           )}
+          <FooterButton
+            style={{ backgroundColor: '#4A40FF' }}
+            onClick={() => {
+              completeEdit();
+            }}
+          >
+            {inputEditWeight && isExercise && '다음'}
+            {(inputEditCount || !isExercise) && '완료'}
+          </FooterButton>
         </InputForm>
       )}
       <div className={alertClasses.root}>
@@ -233,12 +280,12 @@ const InputCont = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  height: ${innerHeight}px;
+  height: ${innerHeight - 60}px;
   width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: rgba(22, 26, 29, 0.95);
+  background: rgba(22, 26, 29, 0.98);
 `;
 
 const DataRow = styled.div`
@@ -274,7 +321,7 @@ const InputHeader = styled.div`
 
 const InputBody = styled.div`
   background-color: #f7f7fa;
-  height: calc(100% - 140px);
+  height: calc(100% - 100px);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -293,7 +340,7 @@ const Submit = styled.div`
 `;
 
 const ButtonCont = styled.div`
-  padding: 20px;
+  padding: 11px 20px;
   display: flex;
   justify-content: space-between;
 `;
