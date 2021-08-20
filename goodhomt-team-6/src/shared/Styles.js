@@ -164,13 +164,14 @@ const IconImg = styled.img`
 
 // Image
 const Image = forwardRef((props, ref) => {
-  const { src, width, height, margin, borderRadius, _onClick } = props;
+  const { src, width, height, margin, borderRadius, bgColor, _onClick } = props;
   const styles = {
     src: src,
     width: width,
     height: height,
     margin: margin,
     borderRadius: borderRadius,
+    bgColor: bgColor,
   };
 
   return <ImageCircle {...styles} onClick={_onClick} ref={ref}></ImageCircle>;
@@ -184,6 +185,7 @@ const ImageCircle = styled.div`
   background-image: url('${(props) => props.src}');
   background-size: cover;
   margin: ${(props) => props.margin};
+  background-color: ${(props) => props.bgColor};
 `;
 
 //Input
