@@ -174,22 +174,25 @@ const Main = (props) => {
                     {myTodayRoutine[0].isCompleted ? (
                       <TextItem>
                         <WorkoutDate>
-                          {Math.floor(myTodayRoutine[0].routineTime / 60) < 10 ? (
+                          {Math.floor(myTodayRoutine[0].routineTime / 60) <
+                          10 ? (
                             <Time>
-                              {'0' + Math.floor(myTodayRoutine[0].routineTime / 60)}:
+                              {'0' +
+                                Math.floor(myTodayRoutine[0].routineTime / 60)}
+                              :
                             </Time>
                           ) : (
                             <Time>
                               {Math.floor(myTodayRoutine[0].routineTime / 60)}:
-                            </Time>)
-                          }
-                          {(myTodayRoutine[0].routineTime % 60) < 10 ? (
-                            <Time>
-                              {'0' + myTodayRoutine[0].routineTime % 60}
                             </Time>
-                          ) : (<Time>
-                            {myTodayRoutine[0].routineTime % 60}
-                          </Time>)}
+                          )}
+                          {myTodayRoutine[0].routineTime % 60 < 10 ? (
+                            <Time>
+                              {'0' + (myTodayRoutine[0].routineTime % 60)}
+                            </Time>
+                          ) : (
+                            <Time>{myTodayRoutine[0].routineTime % 60}</Time>
+                          )}
                         </WorkoutDate>
                       </TextItem>
                     ) : (
@@ -226,7 +229,8 @@ const Main = (props) => {
             <FormerRoutineWrapper
               onClick={() => {
                 history.push('/mypastroutines');
-              }}>
+              }}
+            >
               <FormerRoutineIcon
                 width="24px"
                 height="24px"
@@ -268,15 +272,13 @@ const Main = (props) => {
                               ) : (
                                 <Time>
                                   {Math.floor(routine.routineTime / 60)}:
-                                </Time>)
-                              }
-                              {(routine.routineTime % 60) < 10 ? (
-                                <Time>
-                                  {'0' + routine.routineTime % 60}
                                 </Time>
-                              ) : (<Time>
-                                {routine.routineTime % 60}
-                              </Time>)}
+                              )}
+                              {routine.routineTime % 60 < 10 ? (
+                                <Time>{'0' + (routine.routineTime % 60)}</Time>
+                              ) : (
+                                <Time>{routine.routineTime % 60}</Time>
+                              )}
                             </WorkoutDate>
                           )}
                         </RoutineBoxDiv>
@@ -512,12 +514,14 @@ const NavBarWrapper = styled.div`
   width: 100%;
 `;
 
+const innerHeight = window.innerHeight - 460;
+
 const CategoryList = styled.ul`
   padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 460px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 

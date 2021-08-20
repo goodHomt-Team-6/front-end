@@ -75,62 +75,58 @@ const MyPastRoutines = (props) => {
       <CategoryList>
         {myRoutines && myRoutines.length > 0
           ? myRoutines.map((routine, idx) => (
-            <div key={idx}>
-              <RadioInput
-                id={routine.createdAt}
-                className="opacity"
-                type="radio"
-                name={'inputButton'}
-                value={routine.id}
-                onChange={(e) => {
-                  const { value } = e.target;
-                  const selected = myRoutines.filter((m) => m.id == value);
-                  const toObject = selected[0];
-                  setClicked(toObject);
-                }}
-              />
-              <RadioBox
-                htmlFor={routine.createdAt}
-                className="list"
-                value={routine.id}
-              >
-                <TimeBox>
-                  {Math.floor(routine.routineTime / 60) < 10 ? (
-                    <Time>
-                      {'0' + Math.floor(routine.routineTime / 60)}:
-                    </Time>
-                  ) : (
-                    <Time>
-                      {Math.floor(routine.routineTime / 60)}:
-                    </Time>)
-                  }
-                  {(routine.routineTime % 60) < 10 ? (
-                    <Time>
-                      {'0' + routine.routineTime % 60}
-                    </Time>
-                  ) : (<Time>
-                    {routine.routineTime % 60}
-                  </Time>)}
-                </TimeBox>
-
-                {myRoutines && (
-                  <RoutineInfo>
-                    <InfoBox>
-                      {routine.isBookmarked && (
-                        <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>
-                      )}
-                      <RoutineName>{routine.routineName}</RoutineName>
-                    </InfoBox>
-                    {routine.createdAt && (
-                      <WorkoutDate>
-                        {routine.createdAt.substring(0, 4)}.{routine.createdAt.substring(5, 7)}.{routine.createdAt.substring(8, 10)}
-                      </WorkoutDate>
+              <div key={idx}>
+                <RadioInput
+                  id={routine.createdAt}
+                  className="opacity"
+                  type="radio"
+                  name={'inputButton'}
+                  value={routine.id}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    const selected = myRoutines.filter((m) => m.id == value);
+                    const toObject = selected[0];
+                    setClicked(toObject);
+                  }}
+                />
+                <RadioBox
+                  htmlFor={routine.createdAt}
+                  className="list"
+                  value={routine.id}
+                >
+                  <TimeBox>
+                    {Math.floor(routine.routineTime / 60) < 10 ? (
+                      <Time>{'0' + Math.floor(routine.routineTime / 60)}:</Time>
+                    ) : (
+                      <Time>{Math.floor(routine.routineTime / 60)}:</Time>
                     )}
-                  </RoutineInfo>
-                )}
-              </RadioBox>
-            </div>
-          ))
+                    {routine.routineTime % 60 < 10 ? (
+                      <Time>{'0' + (routine.routineTime % 60)}</Time>
+                    ) : (
+                      <Time>{routine.routineTime % 60}</Time>
+                    )}
+                  </TimeBox>
+
+                  {myRoutines && (
+                    <RoutineInfo>
+                      <InfoBox>
+                        {routine.isBookmarked && (
+                          <BookmarkIcon src={BookmarkSolid}></BookmarkIcon>
+                        )}
+                        <RoutineName>{routine.routineName}</RoutineName>
+                      </InfoBox>
+                      {routine.createdAt && (
+                        <WorkoutDate>
+                          {routine.createdAt.substring(0, 4)}.
+                          {routine.createdAt.substring(5, 7)}.
+                          {routine.createdAt.substring(8, 10)}
+                        </WorkoutDate>
+                      )}
+                    </RoutineInfo>
+                  )}
+                </RadioBox>
+              </div>
+            ))
           : null}
       </CategoryList>
 
@@ -174,12 +170,14 @@ const FooterButtonWrapper = styled.div`
   width: 100%;
 `;
 
+const innerHeight = window.innerHeight - 180;
+
 const CategoryList = styled.ul`
   padding: 0px;
   margin: 0px;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 180px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
   background-color: ${Color.bgIvory};
 `;

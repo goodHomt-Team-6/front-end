@@ -36,7 +36,7 @@ const FeedItem = (props) => {
                     height="34px"
                     margin="0px 15px 0px 0px"
                     src={userImg}
-                  // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
+                    // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
                   />
                   <InfoBox>
                     {userName && (
@@ -45,13 +45,12 @@ const FeedItem = (props) => {
                         fontSize="14px"
                         color="black"
                         fontWeight="600"
-                      >{item.communityNickname}
+                      >
+                        {item.communityNickname}
                       </Text>
                     )}
-                    <Text
-                      type="label"
-                      fontSize="12px"
-                    >{item.createdAt.substring(0, 10)}
+                    <Text type="label" fontSize="12px">
+                      {item.createdAt.substring(0, 10)}
                     </Text>
                   </InfoBox>
                 </UserBox>
@@ -91,7 +90,8 @@ const FeedItem = (props) => {
                   dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
                   dispatch(exerciseActions.initializeRoutine());
                   history.push(`/feed/${item._id}`);
-                }}>
+                }}
+              >
                 <TodayWrapper>
                   <Enrolled>{item.myExercise.length}</Enrolled>
                   <TextItem>{item.routineName}</TextItem>
@@ -104,10 +104,12 @@ const FeedItem = (props) => {
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >종목
+                    >
+                      종목
                     </Text>
                     <TextItem>
-                      {item.myExercise[0].exerciseName} 외 {item.myExercise.length - 1}개
+                      {item.myExercise[0].exerciseName} 외{' '}
+                      {item.myExercise.length - 1}개
                     </TextItem>
                   </TypeWrapper>
                   <Div />
@@ -118,25 +120,20 @@ const FeedItem = (props) => {
                       fontWeight="600"
                       color="black"
                       opacity="54%"
-                    >운동시간
+                    >
+                      운동시간
                     </Text>
                     <TextItem>
                       {Math.floor(item.routineTime / 60) < 10 ? (
-                        <Time>
-                          {'0' + Math.floor(item.routineTime / 60)}:
-                        </Time>
+                        <Time>{'0' + Math.floor(item.routineTime / 60)}:</Time>
                       ) : (
-                        <Time>
-                          {Math.floor(item.routineTime / 60)}:
-                        </Time>)
-                      }
-                      {(item.routineTime % 60) < 10 ? (
-                        <Time>
-                          {'0' + item.routineTime % 60}
-                        </Time>
-                      ) : (<Time>
-                        {item.routineTime % 60}
-                      </Time>)}
+                        <Time>{Math.floor(item.routineTime / 60)}:</Time>
+                      )}
+                      {item.routineTime % 60 < 10 ? (
+                        <Time>{'0' + (item.routineTime % 60)}</Time>
+                      ) : (
+                        <Time>{item.routineTime % 60}</Time>
+                      )}
                     </TextItem>
                   </TypeWrapper>
                 </TodayTypeContainer>
@@ -151,7 +148,8 @@ const FeedItem = (props) => {
                       margin="0px 8px 0px 0px"
                       fontSize="14px"
                       fontWeight="600"
-                    >{item.routineName}
+                    >
+                      {item.routineName}
                     </Text>
 
                     {/* 키워드 */}
@@ -163,7 +161,8 @@ const FeedItem = (props) => {
                         color="#4A40FF"
                         fontSize="14px"
                         fontWeight="600"
-                      >#{i.exerciseName}
+                      >
+                        #{i.exerciseName}
                       </Text>
                     ))}
                   </CommentText>
@@ -174,39 +173,35 @@ const FeedItem = (props) => {
                       margin="0px 5px 0px 0px"
                       src={Delete}
                       onClick={() => {
-                        logger("삭제 모달창 띄우기");
+                        logger('삭제 모달창 띄우기');
                       }}
                     />
-                  ) : null
-                  }
+                  ) : null}
                 </TextBox>
-                <Text
-                  type="contents"
-                  margin="0px"
-                  fontSize="14px"
-                >{item.description}
+                <Text type="contents" margin="0px" fontSize="14px">
+                  {item.description}
                 </Text>
               </TextWrapper>
             </Card>
-          ))
-        }
-      </FeedCont >
-    </FeedContReal >
+          ))}
+      </FeedCont>
+    </FeedContReal>
   );
 };
 
 export default FeedItem;
 
+const innerHeight = window.innerHeight - 170;
+
 const FeedContReal = styled.div`
   padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 170px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
 `;
 
-const FeedCont = styled.li`
-`;
+const FeedCont = styled.li``;
 
 const Card = styled.div`
   border-bottom: 1px solid ${Color.clickedGray};

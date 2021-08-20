@@ -56,11 +56,7 @@ const ExerciseListUp = (props) => {
     <>
       <ExerciseListCont>
         {/* 뒤로가기 */}
-        <Header
-          toMain
-          message="Select"
-          page="1/2"
-        />
+        <Header toMain message="Select" page="1/2" />
 
         {/* 선택한 운동 보여주기 */}
         {selectedItems && (
@@ -183,10 +179,8 @@ const ExerciseListUp = (props) => {
         {/* 종목 추가하기 */}
         <FooterButtonWrapper>
           {selectedItems && selectedItems.length > 0 ? (
-            <FooterButton
-              onClick={() =>
-                history.push('/exercise/form')}
-            >종목 추가하기
+            <FooterButton onClick={() => history.push('/exercise/form')}>
+              종목 추가하기
             </FooterButton>
           ) : (
             <FooterButton disabled>종목 추가하기</FooterButton>
@@ -229,13 +223,15 @@ const SearchButton = styled.img`
   height: 17px;
 `;
 
+const innerHeight = window.innerHeight - 177;
+
 const CategoryList = styled.ul`
   width: 100%;
   padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 285px);
+  height: ${innerHeight}px;
   overflow-x: scroll;
   background-color: #f7f7fa;
 `;
