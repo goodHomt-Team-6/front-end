@@ -30,6 +30,7 @@ const Feed = () => {
   const [searchInput, setSearchInput] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showAddFeedModal, setShowAddFeedModal] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
@@ -41,9 +42,16 @@ const Feed = () => {
     dispatch(userActions.getUpdatedAccessTokenAPI());
   }, []);
 
+  // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
-    const startTime = new Date(createdAt);
-    return <Moment fromNow>{startTime}</Moment>;
+    let startTime = new Date(createdAt);
+    let nowTime = Date.now();
+    if (parseInt(startTime - nowTime) > parseInt(86400000)) {
+      return <Moment format="MMM D일">{startTime}</Moment>;
+    }
+    if (parseInt(startTime - nowTime) < parseInt(86400000)) {
+      return <Moment fromNow>{startTime}</Moment>;
+    }
   };
 
   return (
@@ -61,16 +69,43 @@ const Feed = () => {
           Feed
         </Text>
 
+        {/* 검색창 */}
         <IconWrapper>
+          <SearchWrapper
+            visible={visible}>
+            <SearchInput
+              visible={visible}
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
+            />
+          </SearchWrapper>
           <Icon
+            width="16px"
+            margin="0px 10px 0px 0px"
+            src={searchIcon}
+            onClick={() => {
+              setSearchInput('');
+              if (visible) {
+                setVisible(false);
+                // dispatch(feedActions.getFeedSearchAPI(searchInput));
+              } else {
+                setVisible(true);
+              }
+            }}
+          />
+          <Icon
+            width="15px"
+            margin="0px"
+            src={PurePlusButtonBlack}
             onClick={() => {
               setShowAddFeedModal(true);
             }}
-            margin="0px"
-            src={PurePlusButtonBlack}
           />
         </IconWrapper>
       </InboxWrapper>
+
 
       {showModal ? (
         <AddAndDeleteModal message="피드 삭제" setShowModal={setShowModal} />
@@ -84,21 +119,21 @@ const Feed = () => {
       ) : null}
 
       {/* 운동 종목 키워드 검색 */}
-      {/* <SearchWrapper>
-            <SearchInput
-              value={searchInput}
-              onChange={(e) => {
-                setSearchInput(e.target.value);
-              }}
-            />
-            <SearchButton
-              src={searchIcon}
-              onClick={() => {
-                dispatch(feedActions.getFeedSearchAPI(searchInput));
-                setSearchInput('');
-              }}
-            />
-          </SearchWrapper> */}
+      {/* <SearchWrapper> */}
+      {/* <SearchInput
+        value={searchInput}
+        onChange={(e) => {
+          setSearchInput(e.target.value);
+        }}
+      /> */}
+      {/* <SearchButton
+        src={searchIcon}
+        onClick={() => {
+          // dispatch(feedActions.getFeedSearchAPI(searchInput));
+          setSearchInput('');
+        }}
+      /> */}
+      {/* </SearchWrapper> */}
 
       {/* 피드 목록 */}
       <FeedWrapper>
@@ -284,202 +319,207 @@ const Feed = () => {
 export default Feed;
 
 const Container = styled.div`
-  background-color: #f7f7fa;
-`;
+      background-color: #f7f7fa;
+      `;
 
 const InboxWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 `;
 
 const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-right: 1.5rem;
-`;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 1.5rem;
+      width: 55%;
+      `;
 
 const FeedWrapper = styled.ul`
-  width: 100%;
-  padding: 0px;
-  margin: 0;
-  list-style: none;
-  box-sizing: border-box;
-  background-color: #f7f7fa;
-`;
+      width: 100%;
+      padding: 0px;
+      margin: 0;
+      list-style: none;
+      box-sizing: border-box;
+      background-color: #f7f7fa;
+      `;
 
 const SearchWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid black;
-  margin: 0px 1.5rem;
-  padding: 0px;
-`;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid black;
+      margin: 0px;
+      padding: 0px;
+      width: ${(props) => props.visible ? '100%' : '0px'};
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      `;
 
 const SearchInput = styled.input`
-  font-size: 15px;
-  padding: 0px;
-  width: 100%;
-  height: 48px;
-  border: none;
-  background-color: ${Color.bgIvory};
-  &:focus,
-  &:active {
-    outline: none;
+      font-size: 15px;
+      padding: 0px;
+      height: 48px;
+      border: none;
+      width: ${(props) => props.visible ? '100%' : '0px'};
+      background-color: ${Color.bgIvory};
+      &:focus,
+      &:active {
+        outline: none;
   }
-`;
+      `;
 
 const SearchButton = styled.img`
-  width: 17px;
-  height: 17px;
-`;
+      width: 17px;
+      height: 17px;
+      `;
 
 const NavBarWrapper = styled.div`
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-`;
+      position: fixed;
+      bottom: 0px;
+      width: 100%;
+      `;
 
 const innerHeight = window.innerHeight - 170;
 
 const FeedContReal = styled.div`
-  padding: 20px 20px 0px 20px;
-  display: flex;
-  flex-direction: column;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
-`;
+      padding: 20px 20px 0px 20px;
+      display: flex;
+      flex-direction: column;
+      height: ${innerHeight}px;
+      /* height: clac(100% - 500px); */
+      overflow-y: scroll;
+      `;
 
 const FeedCont = styled.li``;
 
 const Card = styled.div`
-  border-bottom: 1px solid ${Color.clickedGray};
-  margin-top: 2.5rem;
-  :first-child {
-    margin-top: 0;
+      border-bottom: 1px solid ${Color.clickedGray};
+      margin-top: 2.5rem;
+      :first-child {
+        margin-top: 0;
   }
-  :last-child {
-    border-bottom: none;
+      :last-child {
+        border-bottom: none;
   }
-`;
+      `;
 
 const UserWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0px 0px 1rem 0px;
-`;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0px 0px 1rem 0px;
+      `;
 
 const InfoBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-`;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      `;
 
 const TodayWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid black;
-  box-sizing: border-box;
-  padding: 30px;
-`;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid black;
+      box-sizing: border-box;
+      padding: 30px;
+      `;
 
 const TodayTypeContainer = styled.div`
-  display: flex;
-  height: 30px;
-  margin: 24px 0px;
-  padding: 0px 15px;
-`;
+      display: flex;
+      height: 30px;
+      margin: 24px 0px;
+      padding: 0px 15px;
+      `;
 
 const Div = styled.div`
-  border-left: 1px solid gray;
-  padding: 10px;
-  margin-left: 20px;
-`;
+      border-left: 1px solid gray;
+      padding: 10px;
+      margin-left: 20px;
+      `;
 
 const TypeWrapper = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  height: 30px;
-`;
+      width: 50%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      height: 30px;
+      `;
 
 const Enrolled = styled.span`
-  font-size: 72px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1;
-  color: ${Color.mainBlue};
-`;
+      font-size: 72px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1;
+      color: ${Color.mainBlue};
+      `;
 
 const TodayMainBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  border-radius: 10px;
-  background-color: white;
-  :hover {
-    cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      border-radius: 10px;
+      background-color: white;
+      :hover {
+        cursor: pointer;
   }
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-`;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      `;
 
 const TextItem = styled.span`
-  color: black;
-  font-size: 14px;
-  font-weight: 600;
-`;
+      color: black;
+      font-size: 14px;
+      font-weight: 600;
+      `;
 
 const Span = styled.span`
-  color: black;
-  opacity: 54%;
-  font-size: 14px;
-  font-weight: 600;
-`;
+      color: black;
+      opacity: 54%;
+      font-size: 14px;
+      font-weight: 600;
+      `;
 
 const IconBtn = styled.img`
-  width: 18px;
-  :hover {
-    cursor: pointer;
+      width: 18px;
+      :hover {
+        cursor: pointer;
   }
-`;
+      `;
 
 const LikeWrapper = styled.div`
-  display: flex;
-`;
+      display: flex;
+      `;
 
 const TextWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 1.5rem 0px 2.5rem 0px;
-`;
+      display: flex;
+      flex-direction: column;
+      margin: 1.5rem 0px 2.5rem 0px;
+      `;
 
 const TextBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+      display: flex;
+      justify-content: space-between;
+      `;
 
 const Time = styled.span`
-  line-height: 45px;
-`;
+      line-height: 45px;
+      `;
 
 const UserBox = styled.div`
-  display: flex;
-`;
+      display: flex;
+      `;
 
 const CommentText = styled.div`
-  display: flex;
-  width: 90%;
-`;
+      display: flex;
+      width: 90%;
+      `;
 
 const KeywordBox = styled.div`
-  width: 50%;
-  display: flex;
-  flex-flow: row wrap;
-`;
+      width: 50%;
+      display: flex;
+      flex-flow: row wrap;
+      `;

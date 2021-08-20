@@ -11,6 +11,7 @@ const initialState = {
   savedNickname: '',
   savedRoutineName: '',
   savedDescription: '',
+  isDoubleChecked: false,
 };
 
 // actions
@@ -23,6 +24,7 @@ const SAVE_NICKNAME = 'community/SAVE_NICKNAME';
 const SAVE_ROUTINENAME = 'community/SAVE_ROUTINENAME';
 const SAVE_DESCRIPTION = 'community/SAVE_DESCRIPTION';
 const INITIALIZE_WRITTEN_FEED = 'community/INITIALIZE_WRITTEN_FEED';
+const IS_DOUBLE_CHECKED = 'community/IS_DOUBLE_CHECKED';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
@@ -34,6 +36,7 @@ const saveNickname = createAction(SAVE_NICKNAME, (nickname) => ({ nickname }));
 const saveRoutinename = createAction(SAVE_ROUTINENAME, (routinename) => ({ routinename }));
 const saveDescription = createAction(SAVE_DESCRIPTION, (description) => ({ description }));
 const initializeWrittenFeed = createAction(INITIALIZE_WRITTEN_FEED, () => ({}));
+const isDoubleChecked = createAction(IS_DOUBLE_CHECKED, (isDoubleChecked) => ({ isDoubleChecked }));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -190,6 +193,10 @@ export default handleActions(
         draft.savedNickname = initialState.savedNickname;
         draft.savedRoutineName = initialState.savedRoutineName;
         draft.savedDescription = initialState.savedDescription;
+      }),
+    [IS_DOUBLE_CHECKED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isDoubleChecked = action.payload.isDoubleChecked;
       })
   },
   initialState
@@ -210,6 +217,7 @@ const actionCreators = {
   saveRoutinename,
   saveDescription,
   initializeWrittenFeed,
+  isDoubleChecked,
 };
 
 export { actionCreators };

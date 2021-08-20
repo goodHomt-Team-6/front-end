@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import Color from '../shared/Color';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useSelector, useDispatch } from 'react-redux';
+import searchIcon from '../img/search-icon.svg';
 
-const Category = () => {
+// 운동 카테고리 컴포넌트
+const Category = (props) => {
   const dispatch = useDispatch();
   const [clicked, isClicked] = useState(false);
 
@@ -71,6 +73,18 @@ const Category = () => {
 
   return (
     <>
+      {/* 운동 검색 */}
+      <SearchWrapper>
+        <SearchInput
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+        />
+        <SearchButton src={searchIcon} />
+      </SearchWrapper>
+
+      {/* 운동 카테고리 */}
       <Categories>
         <CategoryItem handle={allClicked} onClick={allClickedYes}>
           전체
@@ -188,38 +202,6 @@ const CategoryItem = styled.li`
   border-bottom: ${(props) => (props.handle ? '1px solid black' : 'none')};
 `;
 
-const ClickedItem = styled.li`
-  list-style: none;
-  padding-bottom: 15px;
-  width: 50%;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  opacity: 100%;
-  color: ${Color.black};
-  &:hover,
-  &:active {
-    cursor: pointer;
-  }
-  border-bottom: 1.5px solid ${Color.black};
-`;
-
-const NotClickedItem = styled.li`
-  list-style: none;
-  padding-bottom: 15px;
-  width: 50%;
-  text-align: center;
-  font-size: 14px;
-  opacity: 54%;
-  font-weight: 500;
-  color: ${Color.lightGray};
-  &:hover,
-  &:active {
-    cursor: pointer;
-  }
-  border-bottom: 1.5px solid ${Color.lightGray};
-`;
-
 const ExerciseItem = styled.li`
   display: flex;
   justify-content: space-between;
@@ -237,3 +219,28 @@ const ExerciseItem = styled.li`
 `;
 
 const ItemWrapper = styled.div``;
+
+const SearchInput = styled.input`
+  font-size: 15px;
+  padding: 0px;
+  width: 100%;
+  height: 48px;
+  border: none;
+  background-color: #f7f7fa;
+  &:focus,
+  &:active {
+    outline: none;
+  }
+`;
+const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid black;
+  width: 90%;
+  margin: 0px auto;
+`;
+
+const SearchButton = styled.img`
+  width: 17px;
+  height: 17px;
+`;

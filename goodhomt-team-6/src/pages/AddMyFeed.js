@@ -27,6 +27,7 @@ const AddMyFeed = (props) => {
   const savedNickname = useSelector((store) => store.feed.savedNickname);
   const savedRoutineName = useSelector((store) => store.feed.savedRoutineName);
   const savedDescription = useSelector((store) => store.feed.savedDescription);
+  const isDoubleChecked = useSelector((store) => store.feed.isDoubleChecked);
 
   const [nickname, setNickname] = useState('');
   const [writeroutinename, setRoutinename] = useState('');
@@ -42,8 +43,13 @@ const AddMyFeed = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    // dispatch(isDoubleChecked());
+  }, [isDoubleChecked]);
+
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
+    dispatch(isDoubleChecked(false));
   };
 
   const onChangeRoutinename = (e) => {
@@ -126,8 +132,9 @@ const AddMyFeed = (props) => {
               <CheckerBtn
                 onClick={() => {
                   dispatch(feedActions.checkNicknameAPI(nickname));
-                  setShowCheckModal(true);
                   dispatch(feedActions.saveNickname(nickname));
+                  setShowCheckModal(true);
+                  dispatch(isDoubleChecked(true));
                 }}
               >
                 중복확인
@@ -166,20 +173,29 @@ const AddMyFeed = (props) => {
         />
       ) : null}
 
-      <FooterButton
-        onClick={() => {
-          if (communityNickname !== null) {
-            dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
-            setShowModal(true);
-          } else {
-            dispatch(feedActions.addFeedAPI(firstWriteRoutine));
-            setShowModal(true);
-          }
-          dispatch(feedActions.initializeWrittenFeed());
-        }}
-      >
-        업로드 하기
-      </FooterButton>
+      <FooterButtonWrapper>
+        {communityNickname &&
+          writeroutinename !== '' && description !== '' ? (
+          <FooterButton
+            onClick={() => {
+              if (communityNickname !== null) {
+                dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
+                setShowModal(true);
+              } else {
+                dispatch(feedActions.addFeedAPI(firstWriteRoutine));
+                setShowModal(true);
+              }
+              dispatch(feedActions.initializeWrittenFeed());
+            }}
+          >
+            업로드 하기
+          </FooterButton>
+        ) : (
+          <FooterButton disabled>
+            업로드 하기
+          </FooterButton>
+        )}
+      </FooterButtonWrapper>
     </>
   );
 };
@@ -329,3 +345,9 @@ const TextInput = styled.input`
 const TextWrapper = styled.div`
   display: flex;
 `;
+
+const FooterButtonWrapper = styled.div`
+      position: fixed;
+      bottom: 0px;
+      width: 100%;
+      `;

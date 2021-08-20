@@ -457,8 +457,7 @@ export default handleActions(
         let index = draft.selectedItems.findIndex(
           (item) => item.id === action.payload.selectedItems.id,
         );
-        let testArr = draft.selectedItems.splice(index, 1);
-        draft.selectedItems;
+        draft.selectedItems.splice(index, 1);
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {

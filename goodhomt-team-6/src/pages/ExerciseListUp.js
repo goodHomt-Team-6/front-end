@@ -15,18 +15,13 @@ import { Opacity } from '@material-ui/icons';
 import Header from '../components/Header';
 import Category from '../components/Category';
 
-// 운동리스트 컴포넌트
+// 운동리스트 페이지 컴포넌트
 const ExerciseListUp = (props) => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
   const [clicked, isClicked] = useState(false);
   const [selected, isSelected] = useState(false);
   const [clickedCategoryItem, setCategoryItem] = useState(null);
-  const [clickedCategory, isClickedCategory] = useState(false);
-
-  const exerciseAll = useSelector((store) => store.exercise.exercise);
-  const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
-  const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
   const myExercise = useSelector(
     (store) => store.exercise.routine[0].myExercise,
@@ -77,113 +72,23 @@ const ExerciseListUp = (props) => {
           </SelectedWrapper>
         )}
 
-        {/* 운동 검색 */}
-        <SearchWrapper>
-          <SearchInput
-            value={searchInput}
-            onChange={(e) => {
-              setSearchInput(e.target.value);
-            }}
-          />
-          <SearchButton src={searchIcon} />
-        </SearchWrapper>
-
+        {/* 운동 검색 및 카테고리 */}
         <Category />
-        {/* 운동 카테고리 */}
-        {/* <Category>
-          <CategoryItem
-            onClick={() => {
-              isClicked(false);
-            }}
-          >
-            전체
-          </CategoryItem>
-          {categoryTitle.map((e, i) => (
-            <CategoryItem
-              key={i}
-              onClick={() => {
-                dispatch(exerciseActions.getExerciseTypeAPI(`${e.id}`));
-                setCategoryItem(e.id);
-                isClicked(true);
-                if (clickedCategory) {
-                  isClickedCategory(true);
-                } else {
-                  isClickedCategory(false);
-                }
-              }}
-            >
-              {e.categoryName}
-            </CategoryItem>
-          ))}
-        </Category> */}
-
-        {/* 운동 카테고리별 리스트 보여주기 */}
-        {/* {clicked ? (
-          <CategoryList>
-            {categoryItems &&
-              categoryItems
-                .filter((e) => e.exerciseName.includes(searchInput))
-                .map((e) => (
-                  <ExerciseItem
-                    key={e.id}
-                    onClick={() => {
-                      const exercise = {
-                        exerciseName: e.exerciseName,
-                        set: [
-                          {
-                            type: 'exercise',
-                            count: 0,
-                            weight: 0,
-                            setCount: 1,
-                          },
-                        ],
-                      };
-                      dispatch(exerciseActions.addExerciseType(exercise));
-                      dispatch(exerciseActions.addSelectedItem(e));
-                    }}
-                  >
-                    <ItemWrapper>{e.exerciseName}</ItemWrapper>
-                  </ExerciseItem>
-                ))}
-          </CategoryList>
-        ) : (
-          // 운동 전체 리스트 보여주기
-          <CategoryList>
-            {exerciseAll
-              .filter((e) => e.exerciseName.includes(searchInput))
-              .map((e, i) => (
-                <ExerciseItem
-                  key={i}
-                  onClick={() => {
-                    const exercise = {
-                      exerciseName: e.exerciseName,
-                      set: [
-                        {
-                          type: 'exercise',
-                          count: 0,
-                          weight: 0,
-                          setCount: 1,
-                        },
-                      ],
-                    };
-                    dispatch(exerciseActions.addExerciseType(exercise));
-                    dispatch(exerciseActions.addSelectedItem(e));
-                  }}
-                >
-                  <ItemWrapper>{e.exerciseName}</ItemWrapper>
-                </ExerciseItem>
-              ))}
-          </CategoryList>
-        )} */}
 
         {/* 종목 추가하기 */}
         <FooterButtonWrapper>
           {selectedItems && selectedItems.length > 0 ? (
-            <FooterButton onClick={() => history.push('/exercise/form')}>
+            <FooterButton
+              onClick={() =>
+                history.push('/exercise/form')
+              }>
               종목 추가하기
             </FooterButton>
           ) : (
-            <FooterButton disabled>종목 추가하기</FooterButton>
+            <FooterButton
+              disabled>
+              종목 추가하기
+            </FooterButton>
           )}
         </FooterButtonWrapper>
       </ExerciseListCont>
@@ -197,62 +102,7 @@ const ExerciseListCont = styled.div`
   background-color: #f7f7fa;
 `;
 
-const SearchWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid black;
-  width: 90%;
-  margin: 0px auto;
-`;
-
-const SearchInput = styled.input`
-  font-size: 15px;
-  padding: 0px;
-  width: 100%;
-  height: 48px;
-  border: none;
-  background-color: #f7f7fa;
-  &:focus,
-  &:active {
-    outline: none;
-  }
-`;
-
-const SearchButton = styled.img`
-  width: 17px;
-  height: 17px;
-`;
-
 const innerHeight = window.innerHeight - 177;
-
-const CategoryList = styled.ul`
-  width: 100%;
-  padding: 0px;
-  margin: 0;
-  list-style: none;
-  box-sizing: border-box;
-  height: ${innerHeight}px;
-  overflow-x: scroll;
-  background-color: #f7f7fa;
-`;
-
-const ExerciseItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 48px;
-  border-bottom: 1px solid ${Color.lightGray};
-  line-height: 48px;
-  padding: 10px 18px;
-  font-size: 1rem;
-  &:hover,
-  &:active {
-    background-color: rgba(74, 64, 255, 0.15);
-    color: black;
-  }
-`;
-
-const ItemWrapper = styled.div``;
 
 const SelectedWrapper = styled.div`
   height: auto;
@@ -288,31 +138,6 @@ const CloseBtn = styled.img`
   &:hover {
     cursor: pointer;
   }
-`;
-
-// const Category = styled.ul`
-//   display: flex;
-//   padding: 0px;
-//   list-style: none;
-//   margin: 40px 0px 0px 0px;
-//   overflow-x: scroll;
-//   white-space: nowrap;
-// `;
-
-const CategoryItem = styled.li`
-  list-style: none;
-  padding-bottom: 15px;
-  width: 33.3%;
-  text-align: center;
-  color: ${Color.navy};
-  font-size: 1rem;
-  color: black;
-  &:hover,
-  &:active {
-    cursor: pointer;
-    color: ${Color.navy};
-  }
-  border-bottom: 1px solid black;
 `;
 
 const FooterButtonWrapper = styled.div`
