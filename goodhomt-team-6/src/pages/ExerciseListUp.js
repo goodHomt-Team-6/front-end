@@ -127,7 +127,7 @@ const Selected = styled.div`
   line-height: 32px;
   border-radius: 16px;
   margin-right: 16px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 `;
 
 const ExerciseName = styled.span`

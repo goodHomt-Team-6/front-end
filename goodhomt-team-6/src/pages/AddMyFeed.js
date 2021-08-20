@@ -44,12 +44,16 @@ const AddMyFeed = (props) => {
   }, []);
 
   useEffect(() => {
-    // dispatch(isDoubleChecked());
+    if (savedNickname !== '' || savedRoutineName !== '') {
+      setNickname(savedNickname);
+      setRoutinename(savedRoutineName);
+      setDescription(savedDescription);
+    }
   }, [isDoubleChecked]);
 
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
-    dispatch(isDoubleChecked(false));
+    dispatch(feedActions.isDoubleChecked(false));
   };
 
   const onChangeRoutinename = (e) => {
@@ -134,7 +138,7 @@ const AddMyFeed = (props) => {
                   dispatch(feedActions.checkNicknameAPI(nickname));
                   dispatch(feedActions.saveNickname(nickname));
                   setShowCheckModal(true);
-                  dispatch(isDoubleChecked(true));
+                  dispatch(feedActions.isDoubleChecked(true));
                 }}
               >
                 중복확인
@@ -174,7 +178,7 @@ const AddMyFeed = (props) => {
       ) : null}
 
       <FooterButtonWrapper>
-        {communityNickname &&
+        {communityNickname || isDoubleChecked &&
           writeroutinename !== '' && description !== '' ? (
           <FooterButton
             onClick={() => {

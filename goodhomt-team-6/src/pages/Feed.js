@@ -16,6 +16,7 @@ import searchIcon from '../img/search-icon.svg';
 import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
 import Delete from '../img/more_button_delete.svg';
+import CloseButton from '../img/close-button.svg';
 import NavBar from '../components/NavBar';
 import FeedItem from '../components/FeedItem';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
@@ -69,8 +70,22 @@ const Feed = () => {
           Feed
         </Text>
 
-        {/* 검색창 */}
+        {/* 운동 종목 키워드 검색 */}
         <IconWrapper>
+          {/* 검색한 키워드 보여주기 */}
+          {/* {searchedKeyword && ( */}
+          {/* <SelectedWrapper>
+            <Selected>
+              <ExerciseName>스쿼트</ExerciseName>
+              <CloseBtn
+                src={CloseButton}
+                width="10"
+                onClick={() => {
+                }}
+              />
+            </Selected>
+          </SelectedWrapper> */}
+
           <SearchWrapper
             visible={visible}>
             <SearchInput
@@ -106,7 +121,6 @@ const Feed = () => {
         </IconWrapper>
       </InboxWrapper>
 
-
       {showModal ? (
         <AddAndDeleteModal message="피드 삭제" setShowModal={setShowModal} />
       ) : null}
@@ -117,23 +131,6 @@ const Feed = () => {
           setShowAddFeedModal={setShowAddFeedModal}
         />
       ) : null}
-
-      {/* 운동 종목 키워드 검색 */}
-      {/* <SearchWrapper> */}
-      {/* <SearchInput
-        value={searchInput}
-        onChange={(e) => {
-          setSearchInput(e.target.value);
-        }}
-      /> */}
-      {/* <SearchButton
-        src={searchIcon}
-        onClick={() => {
-          // dispatch(feedActions.getFeedSearchAPI(searchInput));
-          setSearchInput('');
-        }}
-      /> */}
-      {/* </SearchWrapper> */}
 
       {/* 피드 목록 */}
       <FeedWrapper>
@@ -333,7 +330,7 @@ const IconWrapper = styled.div`
       display: flex;
       justify-content: flex-end;
       margin-right: 1.5rem;
-      width: 55%;
+      width: 65%;
       `;
 
 const FeedWrapper = styled.ul`
@@ -523,3 +520,42 @@ const KeywordBox = styled.div`
       display: flex;
       flex-flow: row wrap;
       `;
+
+
+
+const Selected = styled.div`
+  font-size: 14px;
+  border: 1px solid ${Color.mainBlue};
+  height: 32px;
+  display: flex;
+  padding: 0 8px;
+  color: black;
+  line-height: 32px;
+  border-radius: 16px;
+  margin-right: 16px;
+  background-color: #fff;
+`;
+
+const SelectedWrapper = styled.div`
+  height: auto;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  white-space: nowrap;
+  box-sizing: border-box;
+  margin: 15px 0px;
+  display: flex;
+  z-index: 1000;
+`;
+
+const ExerciseName = styled.span`
+  margin-right: 5px;
+`;
+
+const CloseBtn = styled.img`
+  &:hover {
+    cursor: pointer;
+  }
+`;
