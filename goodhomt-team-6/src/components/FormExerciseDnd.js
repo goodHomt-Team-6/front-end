@@ -24,119 +24,121 @@ export default function FormExerciseDnd() {
   };
 
   return (
-    <DragDropContext onDragEnd={handlelists}>
-      <Droppable droppableId="lists">
-        {(provided) => (
-          <Container
-            className="lists"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {lists.map((list, listIdx) => (
-              <Draggable
-                key={listIdx}
-                // draggableId에는 string 값이 들어가야 함.
-                draggableId={listIdx.toString()}
-                index={listIdx}
-                disableInteractiveElementBlocking="true"
-              >
-                {(provided) => (
-                  <ListCont
-                    ref={provided.innerRef}
-                    {...provided.dragHandleProps}
-                    {...provided.draggableProps}
-                    id={listIdx}
-                  >
-                    {!touchStart && (
-                      <Image
-                        src={removeButton}
-                        width="26px"
-                        height="24px"
-                        bgColor="#fff"
-                        margin="0 10px 0 0"
-                        _onClick={() => {
-                          dispatch(exerciseCreator.removeSelectedItem(list));
-                          dispatch(exerciseCreator.removeExerciseType(list));
-                        }}
-                      />
-                    )}
-                    {parseInt(touchedListIdx) === parseInt(listIdx) ? (
-                      <List
-                        touchStart={touchStart}
-                        isTouched={
-                          parseInt(touchedListIdx) === parseInt(listIdx)
-                        }
-                        onTouchStart={() => {
-                          setToutchStart(true);
-                          setTouchedListIdx(listIdx);
-                        }}
-                        onTouchEnd={() => {
-                          setToutchStart(false);
-                          setTouchedListIdx(null);
-                        }}
-                      >
-                        <Text
-                          type="contents"
-                          minWidth="80px"
-                          padding="0 0 0 30px"
-                          fontWeight="600"
-                          fontSize="1.1em"
-                        >
-                          {list.exerciseName}
-                        </Text>
+    <React.Fragment>
+      <DragDropContext onDragEnd={handlelists}>
+        <Droppable droppableId="lists">
+          {(provided) => (
+            <Container
+              className="lists"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {lists.map((list, listIdx) => (
+                <Draggable
+                  key={listIdx}
+                  // draggableId에는 string 값이 들어가야 함.
+                  draggableId={listIdx.toString()}
+                  index={listIdx}
+                  disableInteractiveElementBlocking="true"
+                >
+                  {(provided) => (
+                    <ListCont
+                      ref={provided.innerRef}
+                      {...provided.dragHandleProps}
+                      {...provided.draggableProps}
+                      id={listIdx}
+                    >
+                      {!touchStart && (
                         <Image
-                          ref={provided.innerRef}
-                          src={DragIndicator}
-                          width="20px"
-                          height="20px"
-                          borderRadius="0"
-                          margin="0 15px 0 0"
-                        ></Image>
-                      </List>
-                    ) : (
-                      <List
-                        touchStart={touchStart}
-                        isTouched={
-                          parseInt(touchedListIdx) === parseInt(listIdx)
-                        }
-                        onTouchStart={() => {
-                          setToutchStart(true);
-                          setTouchedListIdx(listIdx);
-                        }}
-                        onTouchEnd={() => {
-                          setToutchStart(false);
-                          setTouchedListIdx(null);
-                        }}
-                      >
-                        <Text
-                          type="contents"
-                          minWidth="80px"
-                          padding="0 0 0 30px"
-                          fontWeight="600"
-                          fontSize="1.1em"
+                          src={removeButton}
+                          width="26px"
+                          height="24px"
+                          bgColor="#fff"
+                          margin="0 10px 0 0"
+                          _onClick={() => {
+                            dispatch(exerciseCreator.removeSelectedItem(list));
+                            dispatch(exerciseCreator.removeExerciseType(list));
+                          }}
+                        />
+                      )}
+                      {parseInt(touchedListIdx) === parseInt(listIdx) ? (
+                        <List
+                          touchStart={touchStart}
+                          isTouched={
+                            parseInt(touchedListIdx) === parseInt(listIdx)
+                          }
+                          onTouchStart={() => {
+                            setToutchStart(true);
+                            setTouchedListIdx(listIdx);
+                          }}
+                          onTouchEnd={() => {
+                            setToutchStart(false);
+                            setTouchedListIdx(null);
+                          }}
                         >
-                          {list.exerciseName}
-                        </Text>
-                        <Image
-                          ref={provided.innerRef}
-                          src={DragIndicator}
-                          width="20px"
-                          height="20px"
-                          borderRadius="0"
-                          margin="0 15px 0 0"
-                        ></Image>
-                      </List>
-                    )}
-                  </ListCont>
-                )}
-              </Draggable>
-            ))}
-            {/* 가장 위로 위치를 변경할때 필요한 높이를 확보해준다고 한다. */}
-            {provided.placeholder}
-          </Container>
-        )}
-      </Droppable>
-    </DragDropContext>
+                          <Text
+                            type="contents"
+                            minWidth="80px"
+                            padding="0 0 0 30px"
+                            fontWeight="600"
+                            fontSize="1.1em"
+                          >
+                            {list.exerciseName}
+                          </Text>
+                          <Image
+                            ref={provided.innerRef}
+                            src={DragIndicator}
+                            width="20px"
+                            height="20px"
+                            borderRadius="0"
+                            margin="0 15px 0 0"
+                          ></Image>
+                        </List>
+                      ) : (
+                        <List
+                          touchStart={touchStart}
+                          isTouched={
+                            parseInt(touchedListIdx) === parseInt(listIdx)
+                          }
+                          onTouchStart={() => {
+                            setToutchStart(true);
+                            setTouchedListIdx(listIdx);
+                          }}
+                          onTouchEnd={() => {
+                            setToutchStart(false);
+                            setTouchedListIdx(null);
+                          }}
+                        >
+                          <Text
+                            type="contents"
+                            minWidth="80px"
+                            padding="0 0 0 30px"
+                            fontWeight="600"
+                            fontSize="1.1em"
+                          >
+                            {list.exerciseName}
+                          </Text>
+                          <Image
+                            ref={provided.innerRef}
+                            src={DragIndicator}
+                            width="20px"
+                            height="20px"
+                            borderRadius="0"
+                            margin="0 15px 0 0"
+                          ></Image>
+                        </List>
+                      )}
+                    </ListCont>
+                  )}
+                </Draggable>
+              ))}
+              {/* 가장 위로 위치를 변경할때 필요한 높이를 확보해준다고 한다. */}
+              {provided.placeholder}
+            </Container>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </React.Fragment>
   );
 }
 

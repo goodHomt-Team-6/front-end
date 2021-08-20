@@ -19,8 +19,8 @@ const minutes = () => {
 
 const seconds = () => {
   var times = [];
-  for (var i = 0; i < 60; i++) {
-    times.push(('0' + i).slice(-2));
+  for (var i = 0; i < 6; i++) {
+    times.push(('0' + i * 10).slice(-2));
   }
   return times;
 };
@@ -89,7 +89,7 @@ class SimpleSlider extends React.Component {
       this.slider2.slickGoTo(
         this.props.myExercise[this.props.idxes.listIdx].set[
           this.props.idxes.setIdx
-        ].seconds,
+        ].seconds / 10,
         true,
       );
     }
@@ -126,7 +126,7 @@ class SimpleSlider extends React.Component {
         <Slider
           {...settings}
           afterChange={(seconds) => {
-            this.props.updateTime({ seconds: seconds }, this.props.idxes);
+            this.props.updateTime({ seconds: 10 * seconds }, this.props.idxes);
           }}
           className="slider-entity seconds slider2"
           ref={(slider) => (this.slider2 = slider)}
