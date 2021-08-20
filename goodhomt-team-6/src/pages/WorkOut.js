@@ -244,13 +244,15 @@ const GoBackButton = styled.div`
   color: #fff;
 `;
 
+const innerHeight = window.innerHeight;
+
 const TimeCont = styled.div`
   background-color: #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(40vh - 77px);
+  height: ${innerHeight * 0.4 - 77}px;
 `;
 
 const PlayIconCont = styled.div`
@@ -261,7 +263,7 @@ const PlayIconCont = styled.div`
 `;
 
 const ListCont = styled.div`
-  height: 60vh;
+  height: ${innerHeight * 0.6};
   overflow-y: scroll;
 `;
 

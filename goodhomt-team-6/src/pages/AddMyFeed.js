@@ -15,9 +15,13 @@ import logger from '../shared/Logger';
 // 피드에 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const user = useSelector((store) => store.user.user);
-  const communityNickname = useSelector((store) => store.user.user.communityNickname);
+  const communityNickname = useSelector(
+    (store) => store.user.user.communityNickname,
+  );
   const userImg = useSelector((store) => store.user.user.userImg);
   const isNickname = useSelector((store) => store.feed.isNickname);
   const savedNickname = useSelector((store) => store.feed.savedNickname);
@@ -57,7 +61,7 @@ const AddMyFeed = (props) => {
     isBookmarked: selectedPrevItem.isBookmarked,
     routineTime: selectedPrevItem.routineTime,
     myExercise: selectedPrevItem.myExercise,
-    userImg: userImg
+    userImg: userImg,
   };
 
   const notFirstWriteRoutine = {
@@ -67,7 +71,7 @@ const AddMyFeed = (props) => {
     isBookmarked: selectedPrevItem.isBookmarked,
     routineTime: selectedPrevItem.routineTime,
     myExercise: selectedPrevItem.myExercise,
-    userImg: userImg
+    userImg: userImg,
   };
 
   return (
@@ -79,19 +83,18 @@ const AddMyFeed = (props) => {
       <CategoryList>
         <TodayExerciseWrapper>
           <TimeBox>
-            <Time>
-              운동 전
-            </Time>
+            <Time>운동 전</Time>
           </TimeBox>
           <RoutineBox>
-            <RoutineName>
-              {selectedPrevItem.routineName}
-            </RoutineName>
+            <RoutineName>{selectedPrevItem.routineName}</RoutineName>
             <TextWrapper>
-              <WorkoutDate>{selectedPrevItem.createdAt.substring(5, 7)}.{selectedPrevItem.createdAt.substring(8, 10)}
+              <WorkoutDate>
+                {selectedPrevItem.createdAt.substring(5, 7)}.
+                {selectedPrevItem.createdAt.substring(8, 10)}
               </WorkoutDate>
               <WorkoutDate>
-                {Math.floor(selectedPrevItem.routineTime / 60)}:{Math.floor(selectedPrevItem.routineTime % 60)}
+                {Math.floor(selectedPrevItem.routineTime / 60)}:
+                {Math.floor(selectedPrevItem.routineTime % 60)}
               </WorkoutDate>
             </TextWrapper>
           </RoutineBox>
@@ -101,7 +104,8 @@ const AddMyFeed = (props) => {
               history.push('/feedroutinedetail');
               dispatch(feedActions.saveRoutinename(writeroutinename));
               dispatch(feedActions.saveDescription(description));
-            }} />
+            }}
+          />
         </TodayExerciseWrapper>
       </CategoryList>
 
@@ -109,58 +113,58 @@ const AddMyFeed = (props) => {
       <Container>
         {/* 커뮤니티 닉네임 - 토큰에 닉네임 있는지 없는지 확인 */}
         <TextCont>
-          {user && user.communityNickname === null ?
+          {user && user.communityNickname === null ? (
             <Text type="contents">User name</Text>
-            : null}
+          ) : null}
           {user && user.communityNickname === null ? (
             <NicknameCont>
               <TextInput
                 onChange={onChangeNickname}
                 value={nickname}
-                placeholder="닉네임">
-              </TextInput>
+                placeholder="닉네임"
+              ></TextInput>
               <CheckerBtn
                 onClick={() => {
                   dispatch(feedActions.checkNicknameAPI(nickname));
                   setShowCheckModal(true);
                   dispatch(feedActions.saveNickname(nickname));
                 }}
-              >중복확인</CheckerBtn>
+              >
+                중복확인
+              </CheckerBtn>
             </NicknameCont>
           ) : null}
 
-          {showCheckModal ?
+          {showCheckModal ? (
             <AddFeedCompleteModal
               setShowCheckModal={setShowCheckModal}
               setNickname={setNickname}
-            /> : null}
+            />
+          ) : null}
 
-          <Text
-            type="contents">
-            Routine name
-          </Text>
+          <Text type="contents">Routine name</Text>
           <TextInput
             placeholder={selectedPrevItem.routineName}
             onChange={onChangeRoutinename}
             value={writeroutinename || ''}
-          >
-          </TextInput>
+          ></TextInput>
 
           <Text type="contents">Description</Text>
           <ElTextarea
             onChange={onChangeDescription}
             value={description || ''}
-            placeholder="루틴에 대해 설명해주세요.">
-          </ElTextarea>
+            placeholder="루틴에 대해 설명해주세요."
+          ></ElTextarea>
         </TextCont>
       </Container>
 
-      {showModal ?
+      {showModal ? (
         <AddFeedCompleteModal
           message={'내 피드를 업로드 했습니다!'}
           buttonMessage={'바로 확인하기'}
           setShowModal={setShowModal}
-        /> : null}
+        />
+      ) : null}
 
       <FooterButton
         onClick={() => {
@@ -173,7 +177,8 @@ const AddMyFeed = (props) => {
           }
           dispatch(feedActions.initializeWrittenFeed());
         }}
-      >업로드 하기
+      >
+        업로드 하기
       </FooterButton>
     </>
   );
@@ -181,9 +186,11 @@ const AddMyFeed = (props) => {
 
 export default AddMyFeed;
 
+const innerHeight = window.innerHeight - 240;
+
 const Container = styled.div`
   padding: 0px 1.5rem;
-  height: calc(100vh - 240px);
+  height: ${innerHeight}px;
   overflow-y: scroll;
   background-color: #f7f7fa;
 `;
@@ -217,12 +224,12 @@ const TodayExerciseWrapper = styled.div`
   font-size: 1rem;
   &:hover,
   &:active {
-  cursor: pointer;
+    cursor: pointer;
   }
 `;
 
 const TimeBox = styled.div`
-  background-color: ${(props) => props.completed ? '#4A40FF' : 'black'};
+  background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
   width: 25%;
   min-width: 75px;
   height: 44px;
@@ -232,7 +239,7 @@ const TimeBox = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
-  background-image: url("${(props) => props.src}");
+  background-image: url('${(props) => props.src}');
   background-size: 25%;
   background-repeat: no-repeat;
   background-position: center;
@@ -279,7 +286,7 @@ const CheckerBtn = styled.button`
 `;
 
 const ElTextarea = styled.textarea`
-  background-color: #EEEDFF;
+  background-color: #eeedff;
   box-sizing: border-box;
   min-height: 112px;
   padding: 20px;
@@ -309,12 +316,12 @@ const NicknameCont = styled.div`
 `;
 
 const TextInput = styled.input`
-  background-color: #EEEDFF;
+  background-color: #eeedff;
   border: none;
   padding: 15px;
   box-sizing: border-box;
   width: 100%;
-  :focus{
+  :focus {
     outline: none;
   }
 `;

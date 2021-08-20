@@ -30,7 +30,6 @@ const Category = () => {
     }
   }, [selectedItems]);
 
-
   const allClickedYes = () => {
     setAllClicked(true);
     setTopClicked(false);
@@ -73,24 +72,16 @@ const Category = () => {
   return (
     <>
       <Categories>
-        <CategoryItem
-          handle={allClicked}
-          onClick={allClickedYes}>
+        <CategoryItem handle={allClicked} onClick={allClickedYes}>
           전체
         </CategoryItem>
-        <CategoryItem
-          handle={topClicked}
-          onClick={TopClickedYes}>
+        <CategoryItem handle={topClicked} onClick={TopClickedYes}>
           상체
         </CategoryItem>
-        <CategoryItem
-          handle={bottomClicked}
-          onClick={BottomClickedYes}>
+        <CategoryItem handle={bottomClicked} onClick={BottomClickedYes}>
           하체
         </CategoryItem>
-        <CategoryItem
-          handle={elseClicked}
-          onClick={ElseClickedYes}>
+        <CategoryItem handle={elseClicked} onClick={ElseClickedYes}>
           기타
         </CategoryItem>
       </Categories>
@@ -159,13 +150,15 @@ const Category = () => {
 
 export default Category;
 
+const innerHeight = window.innerHeight - 285;
+
 const CategoryList = styled.ul`
   width: 100%;
   padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: calc(100vh - 285px);
+  height: ${innerHeight}px;
   overflow-x: scroll;
   background-color: #f7f7fa;
 `;
@@ -192,7 +185,7 @@ const CategoryItem = styled.li`
     cursor: pointer;
     color: ${Color.navy};
   }
-  border-bottom: ${(props) => props.handle ? "1px solid black" : "none"};
+  border-bottom: ${(props) => (props.handle ? '1px solid black' : 'none')};
 `;
 
 const ClickedItem = styled.li`
@@ -244,4 +237,3 @@ const ExerciseItem = styled.li`
 `;
 
 const ItemWrapper = styled.div``;
-
