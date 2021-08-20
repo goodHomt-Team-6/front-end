@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Button, Image, Text } from '../shared/Styles';
+import { Button, Image, Text, Icon } from '../shared/Styles';
 import Color from '../shared/Color';
 import playButton from '../img/play_button.svg';
 import { history } from '../redux/configureStore';
@@ -8,14 +8,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import addButton from '../img/add_exercise_button.svg';
+import calendarIcon from '../img/calendar_main_icon.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as challengeActions } from '../redux/modules/challenge';
 import moment from 'moment';
 import logger from '../shared/Logger';
-import NextBtn from '../img/next_button.svg';
-import PrevBtn from '../img/prev_button.svg';
 import RemoveBtn from '../img/remove_button.svg';
 import CompletedBtn from '../img/completed_icon.svg';
 import BadRating from '../img/clicked_bad_rating.svg';
@@ -77,7 +76,14 @@ const Main = (props) => {
                 </TextUser>
               )}
             </InfoBox>
-            <DateBox>
+            <DateBox
+              onClick={() => {
+                history.push('/calendar');
+              }}>
+              <Icon
+                margin="0px 5px 0px 0px"
+                src={calendarIcon}>
+              </Icon>
               <Today>{todayDate}</Today>
             </DateBox>
           </UserWrapper>
@@ -175,7 +181,7 @@ const Main = (props) => {
                       <TextItem>
                         <WorkoutDate>
                           {Math.floor(myTodayRoutine[0].routineTime / 60) <
-                          10 ? (
+                            10 ? (
                             <Time>
                               {'0' +
                                 Math.floor(myTodayRoutine[0].routineTime / 60)}
@@ -456,7 +462,12 @@ const InfoBox = styled.div`
   margin-bottom: 2rem;
 `;
 
-const DateBox = styled.div``;
+const DateBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+`;
 
 const Today = styled.span`
   font-size: 17px;
@@ -589,7 +600,7 @@ const TodayExerciseWrapper = styled.div`
 
 const TimeBox = styled.div`
   background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
-  width: 25%;
+  width: 75px;
   min-width: 75px;
   height: 44px;
   border-radius: 30px;
@@ -606,6 +617,7 @@ const TimeBox = styled.div`
 
 const Time = styled.span`
   font-size: 14px;
+  line-height: 3;
 `;
 
 const Completed = styled.img`

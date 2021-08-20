@@ -262,7 +262,7 @@ const Calendar = (props) => {
             <RunningTime>
               {onRoutine &&
                 (selectedRoutine &&
-                Math.floor(selectedRoutine?.routineTime / 60) < 10
+                  Math.floor(selectedRoutine?.routineTime / 60) < 10
                   ? `0${Math.floor(selectedRoutine?.routineTime / 60)}:`
                   : Math.floor(selectedRoutine?.routineTime / 60)`:`)}
               {onRoutine &&
@@ -271,7 +271,7 @@ const Calendar = (props) => {
                   : selectedRoutine?.routineTime % 60)}
               {onChallenge &&
                 (selectedRoutine &&
-                Math.floor(selectedRoutine?.challengeTime / 60) < 10
+                  Math.floor(selectedRoutine?.challengeTime / 60) < 10
                   ? `0${Math.floor(selectedRoutine?.challengeTime / 60)}:`
                   : Math.floor(selectedRoutine?.challengeTime / 60)`:`)}
               {onChallenge &&
@@ -307,8 +307,8 @@ const Calendar = (props) => {
           )}
           {(selectedRoutine?.rating === 'good' ||
             selectedRoutine?.rating === null) && (
-            <RatingCont src={GoodRating}></RatingCont>
-          )}
+              <RatingCont src={GoodRating}></RatingCont>
+            )}
         </TodayExerciseWrapper>
       )}
 
