@@ -164,12 +164,17 @@ const RoutineDetail = (props) => {
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
-              if (myTodayRoutine &&
-                myTodayRoutine[0].isCompleted === true || myTodayRoutine.length !== 0) {
-                setShowModal(true);
-              } else {
+              if (myTodayRoutine.length === 0 || myTodayRoutine === null) {
                 dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
                 history.replace('/');
+              }
+              else {
+                // if (myTodayRoutine.length !== 0) {
+                setShowModal(true);
+                // }
+                // if (myTodayRoutine[0].isCompleted === true) {
+                //   setShowModal(true);
+                // }
               }
             }}>
             루틴 불러오기
