@@ -32,8 +32,6 @@ const RoutineDetail = (props) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  console.log(selectedFeed);
-
   useEffect(() => {
     dispatch(exerciseActions.initializeRoutine());
     dispatch(feedActions.getFeedDetailAPI(id));
@@ -142,13 +140,13 @@ const RoutineDetail = (props) => {
                       list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
-                  {list && list.set[0].weight === null ? (
+                  {list !== [] && list.set[0].weight === null ? (
                     <Text type="contents">0kg</Text>
                   ) : (
-                    <Text type="contents">{list && list.set[0].weight}kg</Text>
+                    <Text type="contents">{list !== [] && list.set[0].weight}kg</Text>
                   )}
                   <Text type="contents" padding="0 10px 0 0">
-                    {list && list.set[0].count}회
+                    {list !== [] && list.set[0].count}회
                   </Text>
                 </List>
               ),

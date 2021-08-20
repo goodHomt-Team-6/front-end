@@ -9,6 +9,9 @@ import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
 import addButton from '../img/add_exercise_button.svg';
 import calendarIcon from '../img/calendar_main_icon.svg';
+import ratingGood from '../img/rating_good.svg';
+import ratingBad from '../img/rating_bad.svg';
+import ratingSoso from '../img/rating_soso.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -75,6 +78,7 @@ const Main = (props) => {
                   안녕하세요 :)
                 </TextUser>
               )}
+              <TextUserDeco></TextUserDeco>
             </InfoBox>
             <DateBox
               onClick={() => {
@@ -151,7 +155,15 @@ const Main = (props) => {
               <TodayMainBox>
                 {myTodayRoutine[0].isCompleted ? (
                   <TodayWrapper>
-                    <Enrolled>{myTodayRoutine.length}</Enrolled>
+                    {myTodayRoutine[0].rating === 'soso' && (
+                      <Enrolled src={NormalRating}></Enrolled>
+                    )}
+                    {myTodayRoutine[0].rating === 'bad' && (
+                      <Enrolled src={BadRating}></Enrolled>
+                    )}
+                    {myTodayRoutine[0].rating === 'good' && (
+                      <Enrolled src={GoodRating}></Enrolled>
+                    )}
                     <DashBoardDiv>
                       <TextItem>오늘의 운동을 완료했습니다!</TextItem>
                     </DashBoardDiv>
@@ -253,41 +265,50 @@ const Main = (props) => {
               myTodayRoutine.map((routine, idx) => (
                 <div key={idx}>
                   <TodayExerciseWrapper>
-                    {routine.isCompleted ? (
-                      <TimeBox
-                        src={CompletedBtn}
-                        completed={completed}
-                      ></TimeBox>
+                    {/* {routine.isCompleted ? (
+                      <TimeBox src={ratingGood} completed={completed}></TimeBox>
                     ) : (
-                      <TimeBox>
-                        <Time>운동 전</Time>
-                      </TimeBox>
+                      <TimeBox><Time>운동 전</Time></TimeBox>
+                    )} */}
+
+                    {routine.isCompleted && routine.rating === 'soso' && (
+                      <TimeBox src={ratingSoso} completed={completed}></TimeBox>
                     )}
+                    {routine.isCompleted && routine.rating === 'bad' && (
+                      <TimeBox src={ratingBad} completed={completed}></TimeBox>
+                    )}
+                    {routine.isCompleted && routine.rating === 'good' && (
+                      <TimeBox src={ratingGood} completed={completed}></TimeBox>
+                    )}
+                    {routine.rating === 'null' && (
+                      <TimeBox><Time>운동 전</Time></TimeBox>
+                    )}
+
                     {myTodayRoutine && myTodayRoutine[0].isCompleted ? (
                       <RoutineBox>
                         <RoutineName>{routine.routineName}</RoutineName>
-                        <RoutineBoxDiv>
-                          {routine && routine.routineTime == 0 ? (
-                            <WorkoutDate>00:00</WorkoutDate>
-                          ) : (
-                            <WorkoutDate>
-                              {Math.floor(routine.routineTime / 60) < 10 ? (
-                                <Time>
-                                  {'0' + Math.floor(routine.routineTime / 60)}:
-                                </Time>
-                              ) : (
-                                <Time>
-                                  {Math.floor(routine.routineTime / 60)}:
-                                </Time>
-                              )}
-                              {routine.routineTime % 60 < 10 ? (
-                                <Time>{'0' + (routine.routineTime % 60)}</Time>
-                              ) : (
-                                <Time>{routine.routineTime % 60}</Time>
-                              )}
-                            </WorkoutDate>
-                          )}
-                        </RoutineBoxDiv>
+                        {/* <RoutineBoxDiv> */}
+                        {routine && routine.routineTime == 0 ? (
+                          <WorkoutDate>00:00</WorkoutDate>
+                        ) : (
+                          <WorkoutDate>
+                            {Math.floor(routine.routineTime / 60) < 10 ? (
+                              <Time>
+                                {'0' + Math.floor(routine.routineTime / 60)}:
+                              </Time>
+                            ) : (
+                              <Time>
+                                {Math.floor(routine.routineTime / 60)}:
+                              </Time>
+                            )}
+                            {routine.routineTime % 60 < 10 ? (
+                              <Time>{'0' + (routine.routineTime % 60)}</Time>
+                            ) : (
+                              <Time>{routine.routineTime % 60}</Time>
+                            )}
+                          </WorkoutDate>
+                        )}
+                        {/* </RoutineBoxDiv> */}
                       </RoutineBox>
                     ) : (
                       <RoutineBox
@@ -420,12 +441,15 @@ const TypeWrapper = styled.div`
   height: 30px;
 `;
 
-const Enrolled = styled.span`
-  font-size: 72px;
+const Enrolled = styled.img`
+  width: 50px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  /* font-size: 72px;
   font-weight: 600;
   margin-bottom: 10px;
   line-height: 1;
-  color: ${Color.mainBlue};
+  color: ${Color.mainBlue}; */
 `;
 
 const EnrolledZero = styled.span`
@@ -610,7 +634,7 @@ const TimeBox = styled.div`
   justify-content: center;
   align-content: center;
   background-image: url('${(props) => props.src}');
-  background-size: 25%;
+  background-size: 100%;
   background-repeat: no-repeat;
   background-position: center;
 `;
@@ -655,4 +679,14 @@ const RoutineBoxDiv = styled.div`
 
 const DashBoardDiv = styled.div`
   display: flex;
+`;
+
+const TextUserDeco = styled.div`
+  background-color: #4A40FF;
+  width: 44px;
+  height: 16px;
+  position: relative;
+  right: 85px;
+  bottom: 10px;
+  opacity: 30%;
 `;
