@@ -442,7 +442,7 @@ export default handleActions(
     [REMOVE_EXERCISE_TYPE]: (state, action) =>
       produce(state, (draft) => {
         let index = draft.routine[0].myExercise.findIndex(
-          (e) => e.exerciseName === action.payload.exercise,
+          (e) => e.exerciseName === action.payload.exercise.exerciseName,
         );
         draft.routine[0].myExercise.splice(index, 1);
       }),
@@ -455,10 +455,10 @@ export default handleActions(
     [REMOVE_SELECTED_ITEM]: (state, action) =>
       produce(state, (draft) => {
         let index = draft.selectedItems.findIndex(
-          (item) => item.id === action.payload.selectedItems.id,
+          (item) =>
+            item.exerciseName === action.payload.selectedItems.exerciseName,
         );
-        let testArr = draft.selectedItems.splice(index, 1);
-        draft.selectedItems;
+        draft.selectedItems.splice(index, 1);
       }),
     [ADD_SET]: (state, action) =>
       produce(state, (draft) => {
