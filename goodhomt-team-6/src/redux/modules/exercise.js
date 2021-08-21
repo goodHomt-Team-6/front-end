@@ -581,6 +581,7 @@ export default handleActions(
         // 걸러서 삭제하는 것으로 변경
         if (state.myTodayRoutine.length === 1) {
           draft.myTodayRoutine = [];
+          draft.selectedPrevItem = {};
         } else {
           const deletedMyTodayRoutine = state.myTodayRoutine.filter(
             (item) => item.id !== action.payload.routineId,

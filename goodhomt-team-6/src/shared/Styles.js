@@ -66,6 +66,7 @@ const P = styled.p`
   ${(props) => (props.textAlign ? `text-align:${props.textAlign};` : '')}
   ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
   ${(props) => (props.opacity ? `opacity:${props.opacity};` : '')}
+  ${(props) => (props.lineHeight ? `line-height:${props.lineHeight};` : '')}
 `;
 
 const Span = styled.span`

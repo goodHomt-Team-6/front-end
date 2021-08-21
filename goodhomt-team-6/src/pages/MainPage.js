@@ -20,9 +20,9 @@ import moment from 'moment';
 import logger from '../shared/Logger';
 import RemoveBtn from '../img/remove_button.svg';
 import CompletedBtn from '../img/completed_icon.svg';
-import BadRating from '../img/clicked_bad_rating.svg';
-import GoodRating from '../img/clicked_good_rating.svg';
-import NormalRating from '../img/clicked_normal_rating.svg';
+import BadRating from '../img/rating_bad_big.svg';
+import GoodRating from '../img/rating_good_big.svg';
+import NormalRating from '../img/rating_soso_big.svg';
 import ChallengeBox from '../components/MainChallengeBox';
 import ChallengeModal from '../components/ChallengeModal';
 
@@ -151,6 +151,7 @@ const Main = (props) => {
                 ></ChallengeModal>
               )}
 
+
             {myTodayRoutine && myTodayRoutine.length !== 0 ? (
               <TodayMainBox>
                 {myTodayRoutine[0].isCompleted ? (
@@ -174,7 +175,7 @@ const Main = (props) => {
                       history.push('/workout');
                     }}
                   >
-                    <Enrolled>{myTodayRoutine.length}</Enrolled>
+                    <EnrolledOne>{myTodayRoutine.length}</EnrolledOne>
                     <DashBoardDiv>
                       <PlayBtnIcon src={playButton} />
                       <TextItem>오늘의 운동을 시작해보세요!</TextItem>
@@ -265,29 +266,47 @@ const Main = (props) => {
               myTodayRoutine.map((routine, idx) => (
                 <div key={idx}>
                   <TodayExerciseWrapper>
-                    {/* {routine.isCompleted ? (
-                      <TimeBox src={ratingGood} completed={completed}></TimeBox>
-                    ) : (
-                      <TimeBox><Time>운동 전</Time></TimeBox>
-                    )} */}
-
-                    {routine.isCompleted && routine.rating === 'soso' && (
-                      <TimeBox src={ratingSoso} completed={completed}></TimeBox>
-                    )}
-                    {routine.isCompleted && routine.rating === 'bad' && (
-                      <TimeBox src={ratingBad} completed={completed}></TimeBox>
-                    )}
-                    {routine.isCompleted && routine.rating === 'good' && (
-                      <TimeBox src={ratingGood} completed={completed}></TimeBox>
-                    )}
-                    {routine.rating === 'null' && (
-                      <TimeBox><Time>운동 전</Time></TimeBox>
-                    )}
+                    {/* 운동 전, 운동 완료 후 만족도 */}
+                    {routine.isCompleted === true &&
+                      routine.rating === 'soso' &&
+                      (<TimeBox
+                        src={ratingSoso}
+                        completed={completed}>
+                      </TimeBox>)
+                    }
+                    {routine.isCompleted === true &&
+                      routine.rating === 'bad' &&
+                      (<TimeBox
+                        src={ratingBad}
+                        completed={completed}>
+                      </TimeBox>)
+                    }
+                    {routine.isCompleted === true &&
+                      routine.rating === 'good' &&
+                      (<TimeBox
+                        src={ratingGood}
+                        completed={completed}>
+                      </TimeBox>)
+                    }
+                    {
+                      routine.isCompleted === false &&
+                      (<TimeBox>
+                        <Text lineHeight="1" fontSize="0.9em" type="contents">
+                          운동 전
+                        </Text>
+                      </TimeBox>)
+                    }
 
                     {myTodayRoutine && myTodayRoutine[0].isCompleted ? (
-                      <RoutineBox>
-                        <RoutineName>{routine.routineName}</RoutineName>
-                        {/* <RoutineBoxDiv> */}
+                      <RoutineBox
+                        clicked={clicked}
+                        onClick={() => {
+                          const selected = myTodayRoutine.filter((select) => select.id == routine.id);
+                          dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
+                          history.push('/todayroutinedetail');
+                        }}
+                      >
+                        <Time>{routine.routineName}</Time>
                         {routine && routine.routineTime == 0 ? (
                           <WorkoutDate>00:00</WorkoutDate>
                         ) : (
@@ -308,18 +327,14 @@ const Main = (props) => {
                             )}
                           </WorkoutDate>
                         )}
-                        {/* </RoutineBoxDiv> */}
+
                       </RoutineBox>
                     ) : (
                       <RoutineBox
                         clicked={clicked}
                         onClick={() => {
-                          const selected = myTodayRoutine.filter(
-                            (m) => m.id == routine.id,
-                          );
-                          dispatch(
-                            exerciseActions.addSelectedPrevItem(selected[0]),
-                          );
+                          const selected = myTodayRoutine.filter((select) => select.id == routine.id);
+                          dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
                           history.push('/todayroutinedetail');
                         }}
                       >
@@ -337,30 +352,6 @@ const Main = (props) => {
                       </RoutineBox>
                     )}
 
-                    {/* 운동 만족도 아이콘 */}
-                    <RoutineInfo>
-                      {routine.rating === 'soso' && (
-                        <RemoveButton src={NormalRating}></RemoveButton>
-                      )}
-                      {routine.rating === 'bad' && (
-                        <RemoveButton src={BadRating}></RemoveButton>
-                      )}
-                      {routine.rating === 'good' && (
-                        <RemoveButton src={GoodRating}></RemoveButton>
-                      )}
-                      {routine.rating === null && (
-                        <RemoveButton
-                          src={RemoveBtn}
-                          onClick={() => {
-                            dispatch(
-                              exerciseActions.deleteMyTodayRoutineAPI(
-                                routine.id,
-                              ),
-                            );
-                          }}
-                        ></RemoveButton>
-                      )}
-                    </RoutineInfo>
                   </TodayExerciseWrapper>
                 </div>
               ))}
@@ -459,6 +450,14 @@ const EnrolledZero = styled.span`
   line-height: 1;
 `;
 
+const EnrolledOne = styled.span`
+  font-size: 72px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1;
+  color: ${Color.mainBlue};
+`;
+
 const InboxWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -472,7 +471,8 @@ const TodayMainBox = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.1);
 `;
 
 const UserWrapper = styled.div`
@@ -610,10 +610,9 @@ const TodayExerciseWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 48px;
+  /* height: 48px; */
   border-bottom: 1px solid ${Color.lightGray};
-  line-height: 48px;
-  margin: 0px;
+  /* line-height: 48px; */
   padding: 28px 0px;
   font-size: 1rem;
   &:hover,
@@ -629,7 +628,7 @@ const TimeBox = styled.div`
   height: 44px;
   border-radius: 30px;
   color: white;
-  margin-right: 15px;
+  margin-right: 20px;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -641,7 +640,10 @@ const TimeBox = styled.div`
 
 const Time = styled.span`
   font-size: 14px;
-  line-height: 3;
+`;
+
+const TimeWrapper = styled.div`
+  margin: 0px;
 `;
 
 const Completed = styled.img`
@@ -668,9 +670,10 @@ const RemoveButton = styled.img`
 `;
 
 const RoutineBox = styled.div`
+  width: 100%;
+  margin: 0px;
   display: flex;
   flex-direction: column;
-  width: 100%;
 `;
 
 const RoutineBoxDiv = styled.div`

@@ -35,10 +35,13 @@ const DashBoard = (props) => {
               종목
             </Text>
             <TextItem>
-              {selectedPrevItem.myExercise.length < 2
-                ? selectedPrevItem.myExercise[0].exerciseName
-                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${selectedPrevItem.myExercise.length - 1
-                }개`}
+              {selectedPrevItem.myExercise !== [] &&
+                selectedPrevItem.myExercise.length < 2 ? (
+                selectedPrevItem.myExercise[0].exerciseName
+              ) : (
+                `${selectedPrevItem.myExercise[0].exerciseName} 외 ${selectedPrevItem.myExercise.length - 1
+                }개`
+              )}
             </TextItem>
           </TypeWrapper>
           <Div />

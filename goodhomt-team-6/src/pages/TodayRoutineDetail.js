@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 import BookmarkLine from '../img/bookmark_line.svg';
+import routineDelete from '../img/routine_delete.svg';
 import EditIcon from '../img/edit_icon.svg';
-import { FooterButton, Text } from '../shared/Styles';
+import { FooterButton, Text, Icon } from '../shared/Styles';
 import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -23,7 +24,6 @@ const TodayRoutineDetail = (props) => {
   );
   const id = selectedPrevItem.id;
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
-  const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = selectedPrevItem.routineName;
   const myExercise = selectedPrevItem.myExercise;
   const openedRow = useSelector((state) => state.exercise.openedRow);
@@ -56,6 +56,22 @@ const TodayRoutineDetail = (props) => {
       {/* 뒤로가기 */}
       <HeaderWrapper>
         <Header toMain message="Main"></Header>
+
+        {/* 루틴  수정 */}
+        <IconWrapper>
+          <IconImg
+            src={EditIcon}
+            onClick={() => {
+              history.push('/editroutine');
+            }} />
+
+          {/* 북마크 모달 */}
+          <IconImg
+            src={BookmarkLine}
+            onClick={() => {
+              setShowModal(true);
+            }} />
+        </IconWrapper>
       </HeaderWrapper>
 
       {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
@@ -150,25 +166,53 @@ const TodayRoutineDetail = (props) => {
                     세트
                   </Text>
                   <Text type="contents">
-                    {list.set !== [] && list.set[0].weight}kg
+                    {list.set === [] ? null : list.set[0].weight}kg
                   </Text>
                   <Text type="contents" padding="0 10px 0 0">
-                    {list.set !== [] && list.set[0].count}회
+                    {list.set === [] ? null : list.set[0].count}회
                   </Text>
                 </List>
               ),
             )}
+
+          {/* 삭제버튼 */}
+          <Selected
+            onClick={() => {
+              dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
+              history.replace('/');
+            }}>
+            <Icon
+              src={routineDelete}
+              width="20px"
+              margin="0px 5px 0px 0px" />
+            <Text
+              margin="0px"
+              type="contents"
+            >삭제
+            </Text>
+          </Selected>
         </ListContainer>
 
         {/* 운동시작 버튼 */}
         <FooterButtonWrapper>
-          <FooterButton
-            onClick={() => {
-              history.push('/workout');
-            }}
-          >
-            운동 시작
-          </FooterButton>
+          {selectedPrevItem && selectedPrevItem.isCompleted === true ? (
+            <FooterButton
+              onClick={() => {
+                // history.push('/workout');
+              }}
+            >
+              공유하기
+            </FooterButton>
+          ) : (
+            <FooterButton
+              onClick={() => {
+                history.push('/workout');
+              }}
+            >
+              운동 시작
+            </FooterButton>
+          )}
+
         </FooterButtonWrapper>
       </BodyWrapper>
     </>
@@ -243,5 +287,26 @@ const IconImg = styled.img`
   cursor: pointer;
   :last-child {
     margin-left: 5px;
+  }
+`;
+
+const Selected = styled.div`
+  font-size: 14px;
+  border: 1px solid black;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  color: black;
+  line-height: 32px;
+  border-radius: 16px;
+  margin: 20px 16px 0px 0px;
+  width: 60px;
+`;
+
+const CloseBtn = styled.img`
+  &:hover {
+    cursor: pointer;
   }
 `;
