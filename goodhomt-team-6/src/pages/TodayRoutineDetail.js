@@ -303,6 +303,7 @@ const Selected = styled.div`
   border-radius: 16px;
   margin: 20px 16px 0px 0px;
   width: 60px;
+  background-color: #fff;
 `;
 
 const CloseBtn = styled.img`
