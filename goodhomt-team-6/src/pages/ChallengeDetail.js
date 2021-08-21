@@ -17,7 +17,7 @@ import ChallengeModal from '../components/ChallengeModal';
 
 const ChallengeDetail = (props) => {
   const dispatch = useDispatch();
-  const challengeId = props.paramsId;
+  const challengeId = props.match.params.id;
   const challenge = useSelector(
     (state) => state.challenge.challengeDetail.challenge,
   );
