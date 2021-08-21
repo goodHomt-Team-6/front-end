@@ -25,6 +25,10 @@ import GoodRating from '../img/rating_good_big.svg';
 import NormalRating from '../img/rating_soso_big.svg';
 import ChallengeBox from '../components/MainChallengeBox';
 import ChallengeModal from '../components/ChallengeModal';
+import LoginModal from '../components/LoginModal';
+import Cookies from 'universal-cookie';
+
+const cookie = new Cookies();
 
 // 메인 페이지 컴포넌트
 const Main = (props) => {
@@ -39,7 +43,8 @@ const Main = (props) => {
   const myFirstChallenge = myChallenges.filter(
     (challenge, idx) => challenge.Challenge.progressStatus != 'end',
   )[0];
-
+  const is_login = useSelector((store) => store.user?.is_login);
+  const loginModal = useSelector((store) => store.user.loginModal);
   const myFirstChallengeExercises = useSelector(
     (store) => store.challenge.challengeDetail.challenge?.Challenge_Exercises,
   );
@@ -51,12 +56,21 @@ const Main = (props) => {
   const [clicked, setClicked] = useState([]);
   const [completed, isCompleted] = useState(true);
   const [challengeModal, showChallengeModal] = useState(false);
+  const tokenCookie = cookie.get('homt6_is_login');
 
   // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
-    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
-    dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+    if (is_login) {
+      dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+      dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+    }
   }, []);
+  useEffect(() => {
+    if (is_login) {
+      dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+      dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+    }
+  }, [is_login]);
 
   return (
     <Container>
@@ -71,23 +85,39 @@ const Main = (props) => {
                 margin="0px 15px 0px 0px"
                 src={userImg}
               ></Image>
-              {userName && (
-                <TextUser>
-                  {userName} 님,
-                  <br />
-                  안녕하세요 :)
-                </TextUser>
+              {is_login ? (
+                <>
+                  <TextUser>
+                    {userName} 님,
+                    <br />
+                    안녕하세요 :)
+                  </TextUser>
+                  <TextUserDeco></TextUserDeco>
+                </>
+              ) : (
+                <LoginCont
+                  onClick={() => {
+                    sessionStorage.setItem('redirect_url', '/');
+                    dispatch(userActions.showLoginModal(true));
+                  }}
+                >
+                  <Text type="contents" margin="0">
+                    LogIn
+                  </Text>
+                </LoginCont>
               )}
-              <TextUserDeco></TextUserDeco>
             </InfoBox>
             <DateBox
               onClick={() => {
-                history.push('/calendar');
-              }}>
-              <Icon
-                margin="0px 5px 0px 0px"
-                src={calendarIcon}>
-              </Icon>
+                if (!tokenCookie) {
+                  sessionStorage.setItem('redirect_url', '/calendar');
+                  dispatch(userActions.showLoginModal(true));
+                } else {
+                  history.push('/calendar');
+                }
+              }}
+            >
+              <Icon margin="0px 5px 0px 0px" src={calendarIcon}></Icon>
               <Today>{todayDate}</Today>
             </DateBox>
           </UserWrapper>
@@ -151,7 +181,6 @@ const Main = (props) => {
                 ></ChallengeModal>
               )}
 
-
             {myTodayRoutine && myTodayRoutine.length !== 0 ? (
               <TodayMainBox>
                 {myTodayRoutine[0].isCompleted ? (
@@ -194,7 +223,7 @@ const Main = (props) => {
                       <TextItem>
                         <WorkoutDate>
                           {Math.floor(myTodayRoutine[0].routineTime / 60) <
-                            10 ? (
+                          10 ? (
                             <Time>
                               {'0' +
                                 Math.floor(myTodayRoutine[0].routineTime / 60)}
@@ -247,7 +276,12 @@ const Main = (props) => {
           {myTodayRoutine && myTodayRoutine.length > 0 ? null : (
             <FormerRoutineWrapper
               onClick={() => {
-                history.push('/mypastroutines');
+                if (!tokenCookie) {
+                  sessionStorage.setItem('redirect_url', '/mypastroutines');
+                  dispatch(userActions.showLoginModal(true));
+                } else {
+                  history.push('/mypastroutines');
+                }
               }}
             >
               <FormerRoutineIcon
@@ -268,41 +302,44 @@ const Main = (props) => {
                   <TodayExerciseWrapper>
                     {/* 운동 전, 운동 완료 후 만족도 */}
                     {routine.isCompleted === true &&
-                      routine.rating === 'soso' &&
-                      (<TimeBox
-                        src={ratingSoso}
-                        completed={completed}>
-                      </TimeBox>)
-                    }
+                      routine.rating === 'soso' && (
+                        <TimeBox
+                          src={ratingSoso}
+                          completed={completed}
+                        ></TimeBox>
+                      )}
                     {routine.isCompleted === true &&
-                      routine.rating === 'bad' &&
-                      (<TimeBox
-                        src={ratingBad}
-                        completed={completed}>
-                      </TimeBox>)
-                    }
+                      routine.rating === 'bad' && (
+                        <TimeBox
+                          src={ratingBad}
+                          completed={completed}
+                        ></TimeBox>
+                      )}
                     {routine.isCompleted === true &&
-                      routine.rating === 'good' &&
-                      (<TimeBox
-                        src={ratingGood}
-                        completed={completed}>
-                      </TimeBox>)
-                    }
-                    {
-                      routine.isCompleted === false &&
-                      (<TimeBox>
+                      routine.rating === 'good' && (
+                        <TimeBox
+                          src={ratingGood}
+                          completed={completed}
+                        ></TimeBox>
+                      )}
+                    {routine.isCompleted === false && (
+                      <TimeBox>
                         <Text lineHeight="1" fontSize="0.9em" type="contents">
                           운동 전
                         </Text>
-                      </TimeBox>)
-                    }
+                      </TimeBox>
+                    )}
 
                     {myTodayRoutine && myTodayRoutine[0].isCompleted ? (
                       <RoutineBox
                         clicked={clicked}
                         onClick={() => {
-                          const selected = myTodayRoutine.filter((select) => select.id == routine.id);
-                          dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
+                          const selected = myTodayRoutine.filter(
+                            (select) => select.id == routine.id,
+                          );
+                          dispatch(
+                            exerciseActions.addSelectedPrevItem(selected[0]),
+                          );
                           history.push('/todayroutinedetail');
                         }}
                       >
@@ -327,14 +364,17 @@ const Main = (props) => {
                             )}
                           </WorkoutDate>
                         )}
-
                       </RoutineBox>
                     ) : (
                       <RoutineBox
                         clicked={clicked}
                         onClick={() => {
-                          const selected = myTodayRoutine.filter((select) => select.id == routine.id);
-                          dispatch(exerciseActions.addSelectedPrevItem(selected[0]));
+                          const selected = myTodayRoutine.filter(
+                            (select) => select.id == routine.id,
+                          );
+                          dispatch(
+                            exerciseActions.addSelectedPrevItem(selected[0]),
+                          );
                           history.push('/todayroutinedetail');
                         }}
                       >
@@ -351,7 +391,6 @@ const Main = (props) => {
                         </RoutineBoxDiv>
                       </RoutineBox>
                     )}
-
                   </TodayExerciseWrapper>
                 </div>
               ))}
@@ -363,8 +402,13 @@ const Main = (props) => {
         <DivBox>
           <AddBtn
             onClick={() => {
-              history.push('/exercise');
-              dispatch(exerciseActions.initializeRoutine());
+              if (!tokenCookie) {
+                sessionStorage.setItem('redirect_url', '/exercise');
+                dispatch(userActions.showLoginModal(true));
+              } else {
+                history.push('/exercise');
+                dispatch(exerciseActions.initializeRoutine());
+              }
             }}
           >
             <AddBtnText src={addButton}></AddBtnText>
@@ -376,6 +420,7 @@ const Main = (props) => {
       <NavBarWrapper>
         <NavBar />
       </NavBarWrapper>
+      {loginModal && <LoginModal></LoginModal>}
     </Container>
   );
 };
@@ -471,7 +516,7 @@ const TodayMainBox = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   background-color: white;
-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
     inset 0px 1px 0px rgba(255, 255, 255, 0.1);
 `;
 
@@ -642,18 +687,6 @@ const Time = styled.span`
   font-size: 14px;
 `;
 
-const TimeWrapper = styled.div`
-  margin: 0px;
-`;
-
-const Completed = styled.img`
-  width: 17px;
-`;
-
-const RoutineInfo = styled.div`
-  display: flex;
-`;
-
 const RoutineName = styled.span`
   font-size: 14px;
   line-height: 24px;
@@ -663,10 +696,6 @@ const WorkoutDate = styled.span`
   font-size: 14px;
   line-height: 24px;
   margin-right: 8px;
-`;
-
-const RemoveButton = styled.img`
-  width: 24px;
 `;
 
 const RoutineBox = styled.div`
@@ -685,11 +714,19 @@ const DashBoardDiv = styled.div`
 `;
 
 const TextUserDeco = styled.div`
-  background-color: #4A40FF;
+  background-color: #4a40ff;
   width: 44px;
   height: 16px;
   position: relative;
   right: 85px;
   bottom: 10px;
   opacity: 30%;
+`;
+
+const LoginCont = styled.div`
+  border-radius: 17px;
+  height: 24px;
+  background-color: #000;
+  color: #fff;
+  padding: 5px 12px;
 `;

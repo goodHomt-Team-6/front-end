@@ -14,8 +14,6 @@ import MyPastRoutines from '../pages/MyPastRoutines';
 import RoutineDetail from '../pages/RoutineDetail';
 import EditRoutine from '../pages/EditRoutine';
 import logger from './Logger';
-import HOC from './HOC';
-import { truncate } from 'fs';
 import WorkOut from '../pages/WorkOut';
 import Feed from '../pages/Feed';
 import ChallengeDetail from '../pages/ChallengeDetail';
@@ -42,49 +40,33 @@ const App = (props) => {
     <>
       <ConnectedRouter history={history}>
         <Switch>
-          <Route path="/" exact component={HOC(MainPage, null)} />
-          <Route
-            path="/mypastroutines"
-            exact
-            component={HOC(MyPastRoutines, true)}
-          />
-          <Route path="/login" exact component={HOC(Login, false)} />
-          <Route path="/exercise" exact component={HOC(ExerciseListUp, true)} />
+          <Route path="/" exact component={MainPage} />
+          <Route path="/mypastroutines" exact component={MyPastRoutines} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/exercise" exact component={ExerciseListUp} />
           <Route path="/routinedetail" exact component={RoutineDetail} />
           <Route path="/editroutine" exact component={EditRoutine} />
-          <Route
-            path="/exercise/form"
-            exact
-            component={HOC(FormExercise, truncate)}
-          />
+          <Route path="/exercise/form" exact component={FormExercise} />
           {/* 카카오 로그인 후 랜딩되는 redirect uri */}
-          <Route
-            path="/oauth/callback/kakao"
-            exact
-            component={HOC(KakaoLanding, false)}
-          />
-          <Route path="/workout" exact component={HOC(WorkOut, true)} />
-          <Route path="/feed" exact component={HOC(Feed, true)} />
-          <Route path="/challenge" exact component={HOC(Challenge, true)} />
-          <Route
-            path="/challenge/:id"
-            exact
-            component={HOC(ChallengeDetail, true)}
-          />
-          <Route path="/feed/:id" exact component={HOC(FeedDetail, true)} />
+          <Route path="/oauth/callback/kakao" exact component={KakaoLanding} />
+          <Route path="/workout" exact component={WorkOut} />
+          <Route path="/feed" exact component={Feed} />
+          <Route path="/challenge" exact component={Challenge} />
+          <Route path="/challenge/:id" exact component={ChallengeDetail} />
+          <Route path="/feed/:id" exact component={FeedDetail} />
           <Route
             path="/todayroutinedetail"
             exact
-            component={HOC(TodayRoutineDetail, true)}
+            component={TodayRoutineDetail}
           />
-          <Route path="/addmyfeed" exact component={HOC(AddMyFeed, true)} />
-          <Route path="/selectmyfeed" exact component={HOC(SelectMyFeed, true)} />
+          <Route path="/addmyfeed" exact component={AddMyFeed} />
+          <Route path="/selectmyfeed" exact component={SelectMyFeed} />
           <Route
             path="/feedroutinedetail"
             exact
-            component={HOC(FeedRoutineDetail, true)}
+            component={FeedRoutineDetail}
           />
-          <Route path="/calendar" exact component={HOC(Calendar, true)} />
+          <Route path="/calendar" exact component={Calendar} />
         </Switch>
       </ConnectedRouter>
     </>
