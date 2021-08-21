@@ -11,7 +11,7 @@ const ChallengeBox = (props) => {
     const month = dateTime.slice(4, 6);
     const date = dateTime.slice(6, 8);
     const format = `${year}-${month}-${date}T00:00:00.000Z`;
-
+    
     const returnDate = `${month < 10 ? dateTime.slice(5, 6) : month}/${
       date < 10 ? dateTime.slice(7, 8) : date
     }`;

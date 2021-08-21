@@ -30,6 +30,7 @@ const ChallengeDetail = (props) => {
 
   useEffect(() => {
     dispatch(challengeActions.getChallengeDetailAPI(challengeId));
+    logger(challengeId);
     return () => {
       closeRow();
     };

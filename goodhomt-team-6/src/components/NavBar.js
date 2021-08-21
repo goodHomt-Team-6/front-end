@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import Color from '../shared/Color';
 import { history } from '../redux/configureStore';
-import Community from '../img/community.svg';
-import MyPage from '../img/mypage.svg';
-import Challenge from '../img/challenge_icon.svg';
-import Calendar from '../img/calendar.svg';
-import Workout from '../img/workout.svg';
+import FeedGrey from '../img/feed_grey.svg';
+import FeedWhite from '../img/feed_white.svg';
+import ChallengeGrey from '../img/challenge_grey.svg';
+import ChallengeWhite from '../img/challenge_white.svg';
+import CalendarGrey from '../img/calendar_grey.svg';
+import CalendarWhite from '../img/calendar_white.svg';
+import WorkoutGrey from '../img/workout_grey.svg';
+import WorkoutWhite from '../img/workout_white.svg';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { actionCreators as userActions } from '../redux/modules/user';
+import logger from '../shared/Logger';
 
 const cookie = new Cookies();
 
@@ -17,6 +20,7 @@ const cookie = new Cookies();
 const NavBar = (props) => {
   const dispatch = useDispatch();
   const tokenCookie = cookie.get('homt6_is_login');
+  const path = history.location.pathname;
 
   return (
     <>
@@ -26,8 +30,17 @@ const NavBar = (props) => {
             history.push('/');
           }}
         >
-          <IconImage src={Workout} />
-          <Title>Workout</Title>
+          {path === '/' ? (
+            <>
+              <IconImage src={WorkoutWhite} />
+              <Title opacity="1">Workout</Title>
+            </>
+          ) : (
+            <>
+              <IconImage src={WorkoutGrey} />
+              <Title>Workout</Title>
+            </>
+          )}
         </RouteBox>
 
         <RouteBox
@@ -40,8 +53,17 @@ const NavBar = (props) => {
             }
           }}
         >
-          <IconImage src={Community} />
-          <Title>Feed</Title>
+          {path === '/feed' ? (
+            <>
+              <IconImage src={FeedWhite} />
+              <Title opacity="1">Feed</Title>
+            </>
+          ) : (
+            <>
+              <IconImage src={FeedGrey} />
+              <Title>Feed</Title>
+            </>
+          )}
         </RouteBox>
 
         <RouteBox
@@ -54,8 +76,17 @@ const NavBar = (props) => {
             }
           }}
         >
-          <IconImage src={Challenge} />
-          <Title>Challenge</Title>
+          {path === '/challenge' ? (
+            <>
+              <IconImage src={ChallengeWhite} />
+              <Title opacity="1">Challenge</Title>
+            </>
+          ) : (
+            <>
+              <IconImage src={ChallengeGrey} />
+              <Title>Challenge</Title>
+            </>
+          )}
         </RouteBox>
 
         <RouteBox
@@ -68,8 +99,17 @@ const NavBar = (props) => {
             }
           }}
         >
-          <IconImage src={Calendar} />
-          <Title>Calendar</Title>
+          {path === '/calendar' ? (
+            <>
+              <IconImage src={CalendarWhite} />
+              <Title opacity="1">Calendar</Title>
+            </>
+          ) : (
+            <>
+              <IconImage src={CalendarGrey} />
+              <Title>Calendar</Title>
+            </>
+          )}
         </RouteBox>
       </BtnWrapper>
     </>
@@ -104,5 +144,6 @@ const Title = styled.span`
   color: white;
   font-size: 9px;
   padding-top: 8px;
-  opacity: 60%;
+  opacity: ${(props) => (props.opacity ? props.opacity : '60%')};
+  font-weight: 600;
 `;
