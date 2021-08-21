@@ -373,7 +373,8 @@ const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
         dispatch(getRoutineDetailAPI(response.data.routineId));
       })
       .catch((error) => {
-        logger('북마크 설정, 루틴 이름 변경 실패', error);
+        logger('북마크 설정, 루틴 이름 변경 실패');
+        logger(error);
       });
   };
 };

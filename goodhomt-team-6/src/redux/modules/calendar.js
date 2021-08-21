@@ -8,15 +8,24 @@ import moment from 'moment';
 const initialState = {
   routines: [],
   today: moment(),
+  isCalendarChallengeData: false,
 };
 
 // actions
 const SET_MONTH = 'calendar/SET_MONTH';
+const SET_IS_CALENDAR_CHALLENGE_DATA =
+  'challenge/SET_IS_CALENDAR_CHALLENGE_DATA';
 
 // action creators
 const setMonth = createAction(SET_MONTH, (value) => ({
   value,
 }));
+const setIsCalendarChallengeData = createAction(
+  SET_IS_CALENDAR_CHALLENGE_DATA,
+  (value) => ({
+    value,
+  }),
+);
 
 // middleware actions
 
@@ -29,11 +38,16 @@ export default handleActions(
           .clone()
           .add(action.payload.value, 'month');
       }),
+    [SET_IS_CALENDAR_CHALLENGE_DATA]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isCalendarChallengeData = action.payload.value;
+      }),
   },
   initialState,
 );
 
 const actionCreators = {
   setMonth,
+  setIsCalendarChallengeData,
 };
 export { actionCreators };

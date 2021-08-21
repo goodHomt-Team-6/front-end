@@ -203,6 +203,7 @@ const actionCreators = {
   joinChallengeAPI,
   leaveChallengeAPI,
   recordChallengeResultAPI,
+  getLoading,
 };
 
 export { actionCreators };
