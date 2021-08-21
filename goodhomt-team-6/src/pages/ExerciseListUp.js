@@ -113,7 +113,7 @@ const SelectedWrapper = styled.div`
   }
   white-space: nowrap;
   box-sizing: border-box;
-  margin: 15px 16px;
+  margin: 0px 16px 10px 16px;
   display: flex;
 `;
 

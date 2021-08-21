@@ -196,7 +196,7 @@ const Feed = () => {
                   {/* 피드 게시 운동 정보 */}
                   <TodayMainBox
                     onClick={() => {
-                      const selected = feed.filter((m) => m.id == item.id);
+                      const selected = feed.filter((select) => select.id == item.id);
                       dispatch(
                         exerciseActions.addSelectedPrevItem(selected[0]),
                       );

@@ -164,7 +164,7 @@ const Category = (props) => {
 
 export default Category;
 
-const innerHeight = window.innerHeight - 285;
+const innerHeight = window.innerHeight - 268;
 
 const CategoryList = styled.ul`
   width: 100%;
@@ -181,7 +181,7 @@ const Categories = styled.ul`
   display: flex;
   padding: 0px;
   list-style: none;
-  margin: 40px 0px 0px 0px;
+  margin: 25px 0px 0px 0px;
   overflow-x: scroll;
   white-space: nowrap;
 `;

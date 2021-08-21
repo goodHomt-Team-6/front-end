@@ -7,11 +7,7 @@ import BookmarkSolid from '../img/bookmark_solid.svg';
 
 // 대시보드 컴포넌트
 const DashBoard = (props) => {
-  const selectedPrevItem = useSelector(
-    (store) => store.exercise.selectedPrevItem,
-  );
-  const myRoutine = useSelector((store) => store.exercise.routine);
-  const isBookmarked = selectedPrevItem.isBookmarked;
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   return (
     <>

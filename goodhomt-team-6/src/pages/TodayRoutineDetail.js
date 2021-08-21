@@ -21,17 +21,17 @@ import AddAndDeleteModal from '../components/AddAndDeleteModal';
 const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
 
-  const selectedPrevItem = useSelector(
-    (store) => store.exercise.selectedPrevItem,
-  );
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem.id;
-  const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
   const routineName = selectedPrevItem.routineName;
-  const myExercise = selectedPrevItem.myExercise;
   const openedRow = useSelector((state) => state.exercise.openedRow);
 
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(exerciseActions.getRoutineDetailAPI(id));
+  }, []);
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
@@ -150,15 +150,15 @@ const TodayRoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list.set !== [] &&
+                    {list && list.set !== [] &&
                       list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
                   <Text type="contents">
-                    {list.set === [] ? null : list.set[0].weight}kg
+                    {list && list.set === [] ? null : list.set[0].weight}kg
                   </Text>
                   <Text type="contents" padding="0 10px 0 0">
-                    {list.set === [] ? null : list.set[0].count}회
+                    {list && list.set === [] ? null : list.set[0].count}회
                   </Text>
                 </List>
               ),

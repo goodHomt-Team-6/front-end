@@ -13,12 +13,10 @@ import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
 import NavBar from '../components/NavBar';
-import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as challengeActions } from '../redux/modules/challenge';
 import moment from 'moment';
 import logger from '../shared/Logger';
-import RemoveBtn from '../img/remove_button.svg';
 import CompletedBtn from '../img/completed_icon.svg';
 import BadRating from '../img/rating_bad_big.svg';
 import GoodRating from '../img/rating_good_big.svg';
@@ -60,38 +58,38 @@ const Main = (props) => {
 
   return (
     <Container>
+      {/* 유저 프로필 */}
+      <UserWrapper>
+        <InfoBox>
+          <Image
+            width="40px"
+            height="40px"
+            margin="0px 15px 0px 0px"
+            src={userImg}
+          ></Image>
+          {userName && (
+            <TextUser>
+              {userName} 님,
+              <br />
+              안녕하세요 :)
+            </TextUser>
+          )}
+          <TextUserDeco></TextUserDeco>
+        </InfoBox>
+        <DateBox
+          onClick={() => {
+            history.push('/calendar');
+          }}>
+          <Icon
+            margin="0px 5px 0px 0px"
+            src={calendarIcon}>
+          </Icon>
+          <Today>{todayDate}</Today>
+        </DateBox>
+      </UserWrapper>
+
       <Wrapper>
         <InboxWrapper>
-          {/* 유저 프로필 */}
-          <UserWrapper>
-            <InfoBox>
-              <Image
-                width="40px"
-                height="40px"
-                margin="0px 15px 0px 0px"
-                src={userImg}
-              ></Image>
-              {userName && (
-                <TextUser>
-                  {userName} 님,
-                  <br />
-                  안녕하세요 :)
-                </TextUser>
-              )}
-              <TextUserDeco></TextUserDeco>
-            </InfoBox>
-            <DateBox
-              onClick={() => {
-                history.push('/calendar');
-              }}>
-              <Icon
-                margin="0px 5px 0px 0px"
-                src={calendarIcon}>
-              </Icon>
-              <Today>{todayDate}</Today>
-            </DateBox>
-          </UserWrapper>
-
           {/* 대시 보드 - 오늘 등록한 운동 종목 수 */}
           <RegisterWrapper>
             <Text
@@ -360,16 +358,12 @@ const Main = (props) => {
       </Wrapper>
 
       {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
-        <DivBox>
-          <AddBtn
-            onClick={() => {
-              history.push('/exercise');
-              dispatch(exerciseActions.initializeRoutine());
-            }}
-          >
-            <AddBtnText src={addButton}></AddBtnText>
-          </AddBtn>
-        </DivBox>
+        <AddBtn
+          onClick={() => {
+            history.push('/exercise');
+            dispatch(exerciseActions.initializeRoutine());
+          }}
+          src={addButton}></AddBtn>
       )}
 
       {/* 고정 하단바 */}
@@ -382,19 +376,31 @@ const Main = (props) => {
 
 export default Main;
 
+const innerHeight = window.innerHeight - 75;
+
 const Container = styled.div`
   background-color: #f7f7fa;
   overflow-y: scroll;
+  height: ${innerHeight}px;
 `;
 
 const Wrapper = styled.div`
-  padding: 20px 20px 0px 20px;
+  margin: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100%;
+  height: ${innerHeight}px;
   overflow: scroll;
+  box-sizing: border-box;
+`;
+
+const InboxWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: ${innerHeight}px;
+  box-sizing: border-box;
+  width: 100%;
 `;
 
 const RegisterWrapper = styled.div``;
@@ -436,11 +442,6 @@ const Enrolled = styled.img`
   width: 50px;
   margin-top: 10px;
   margin-bottom: 20px;
-  /* font-size: 72px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1;
-  color: ${Color.mainBlue}; */
 `;
 
 const EnrolledZero = styled.span`
@@ -458,12 +459,6 @@ const EnrolledOne = styled.span`
   color: ${Color.mainBlue};
 `;
 
-const InboxWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
 const TodayMainBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -476,14 +471,20 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
 `;
 
 const UserWrapper = styled.div`
+  /* display: flex;
+  justify-content: space-between;
+  margin: 20px 20px 20px 20px;
+  background-color: ${Color.bgIvory}; */
+
   display: flex;
   justify-content: space-between;
+  padding: 20px 20px 20px 20px;
+  background-color: ${Color.bgIvory};
 `;
 
 const InfoBox = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
 `;
 
 const DateBox = styled.div`
@@ -549,15 +550,11 @@ const NavBarWrapper = styled.div`
   width: 100%;
 `;
 
-const innerHeight = window.innerHeight - 460;
-
 const CategoryList = styled.ul`
   padding: 0px;
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: ${innerHeight}px;
-  overflow-y: scroll;
 `;
 
 const Span = styled.span`
@@ -573,25 +570,10 @@ const TextItem = styled.span`
   font-weight: 600;
 `;
 
-const AddBtn = styled.button`
-  /* position: absolute;
+const AddBtn = styled.img`
+  position: fixed;
   bottom: 6rem;
-  right: 1.5rem;
-  color: white;
-  font-size: 30px;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background-color: ${Color.mainBlue};
-  cursor: pointer;
-  border: none;
-  z-index: 1000; */
-`;
-
-const AddBtnText = styled.img`
-  position: absolute;
-  bottom: 6rem;
-  right: 1.5rem;
+  right: 20px;
   color: white;
   font-size: 30px;
   width: 70px;
@@ -600,10 +582,6 @@ const AddBtnText = styled.img`
   cursor: pointer;
   border: none;
   z-index: 1000;
-`;
-
-const DivBox = styled.div`
-  width: 100%;
 `;
 
 const TodayExerciseWrapper = styled.div`

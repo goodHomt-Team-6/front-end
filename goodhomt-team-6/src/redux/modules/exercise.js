@@ -236,6 +236,7 @@ const addEditedRoutineAPI = (routine) => {
     api
       .post('/routines', routine)
       .then((response) => {
+        logger('운동 루틴 등록하기 성공');
         history.replace('/');
       })
       .catch((error) => {

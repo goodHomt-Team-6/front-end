@@ -24,8 +24,6 @@ const RoutineDetail = (props) => {
     (store) => store.exercise.selectedPrevItem,
   );
   const id = selectedPrevItem.id;
-  const myExercise = selectedPrevItem.myExercise;
-  const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const selectedFeed = useSelector((state) => state.feed.selectedFeed);
   const myTodayRoutine = useSelector((state) => state.exercise.myTodayRoutine);
@@ -80,7 +78,7 @@ const RoutineDetail = (props) => {
                   <Text
                     type="contents"
                     minWidth="80px"
-                    padding="0 0 0 10px"
+                    padding="0 0 0 20px"
                     onClick={() => {
                       closeRow();
                     }}
@@ -91,7 +89,7 @@ const RoutineDetail = (props) => {
                     <DataRow key={setIdx}>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         color="#848484"
                       >
@@ -101,18 +99,18 @@ const RoutineDetail = (props) => {
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         textAlign="center"
                         color="#848484"
                       >
                         {set.type === 'exercise'
-                          ? `${set.weight}Kg`
+                          ? `${set.weight}kg`
                           : `${set.minutes}분`}
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         textAlign="right"
                         color="#848484"
@@ -132,7 +130,7 @@ const RoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
                     {list !== [] ? (list.exerciseName) : null}
                   </Text>
                   <Text type="contents">
@@ -145,7 +143,7 @@ const RoutineDetail = (props) => {
                   ) : (
                     <Text type="contents">{list !== [] ? (list.set[0].weight) : null}kg</Text>
                   )}
-                  <Text type="contents" padding="0 10px 0 0">
+                  <Text type="contents" padding="0 20px 0 0">
                     {list !== [] && list.set[0].count}회
                   </Text>
                 </List>
@@ -159,15 +157,9 @@ const RoutineDetail = (props) => {
             onClick={() => {
               if (myTodayRoutine.length === 0 || myTodayRoutine === null) {
                 dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
-                history.replace('/');
               }
               else {
-                // if (myTodayRoutine.length !== 0) {
                 setShowModal(true);
-                // }
-                // if (myTodayRoutine[0].isCompleted === true) {
-                //   setShowModal(true);
-                // }
               }
             }}>
             루틴 불러오기
@@ -247,4 +239,6 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;

@@ -12,9 +12,8 @@ const ChallengeBox = (props) => {
     const date = dateTime.slice(6, 8);
     const format = `${year}-${month}-${date}T00:00:00.000Z`;
 
-    const returnDate = `${month < 10 ? dateTime.slice(5, 6) : month}/${
-      date < 10 ? dateTime.slice(7, 8) : date
-    }`;
+    const returnDate = `${month < 10 ? dateTime.slice(5, 6) : month}/${date < 10 ? dateTime.slice(7, 8) : date
+      }`;
     const returnDay = moment(format).format('dddd')[0];
     const returnTime =
       dateTime.slice(8, 10) < 12
@@ -33,7 +32,7 @@ const ChallengeBox = (props) => {
             <Text type="contents" fontSize="9px" margin="0">
               {formatDate()}
             </Text>
-            <Text type="contents" fontSize="18px" margin="0">
+            <Text type="contents" fontSize="17px" margin="0">
               {props.myFirstChallenge.Challenge.challengeName}
             </Text>
           </TextCont>
