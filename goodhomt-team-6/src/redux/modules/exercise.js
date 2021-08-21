@@ -570,6 +570,8 @@ export default handleActions(
     [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine = action.payload.routine;
+        // 북마크 이름변경시 사용, 액션 따로 만들어야함
+        // draft.selectedPrevItem.routineName = action.payload.routine[0].routineName;
       }),
     // 오늘 저장한 루틴 가져오기
     [GET_MY_TODAY_ROUTINE]: (state, action) =>

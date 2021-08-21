@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 
 // 대시보드 컴포넌트
-const DashBoard = (props) => {
+const DashBoard = ({ props }) => {
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   return (

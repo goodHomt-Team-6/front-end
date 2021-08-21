@@ -64,22 +64,6 @@ const TodayRoutineDetail = (props) => {
         {/* 대시보드 */}
         <DashBoard />
 
-        {/* 루틴의 세트 모음 */}
-        {/* <Container>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((e, listIdx) => (
-              <List key={listIdx}>
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                  {e.exerciseName}
-                </Text>
-                <Text type="contents"> {e.set[0].setCount}세트</Text>
-                <Text type="contents">{e.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">
-                  {e.set[0].count}회
-                </Text>
-              </List>
-            ))}
-        </Container> */}
         <ListContainer>
           {selectedPrevItem &&
             selectedPrevItem.myExercise.map((list, listIdx) =>
@@ -88,7 +72,7 @@ const TodayRoutineDetail = (props) => {
                   <Text
                     type="contents"
                     minWidth="80px"
-                    padding="0 0 0 10px"
+                    padding="0 0 0 20px"
                     onClick={() => {
                       closeRow();
                     }}
@@ -99,7 +83,7 @@ const TodayRoutineDetail = (props) => {
                     <DataRow key={setIdx}>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         color="#848484"
                       >
@@ -109,18 +93,18 @@ const TodayRoutineDetail = (props) => {
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         textAlign="center"
                         color="#848484"
                       >
                         {set.type === 'exercise'
-                          ? `${set.weight}Kg`
+                          ? `${set.weight}kg`
                           : `${set.minutes}분`}
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.3em"
+                        fontSize="1.2em"
                         minWidth="80px"
                         textAlign="right"
                         color="#848484"
@@ -140,7 +124,7 @@ const TodayRoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
@@ -148,7 +132,7 @@ const TodayRoutineDetail = (props) => {
                     세트
                   </Text>
                   <Text type="contents">{list.set[0].weght}kg</Text>
-                  <Text type="contents" padding="0 10px 0 0">
+                  <Text type="contents" padding="0 20px 0 0">
                     {list.set[0].count}회
                   </Text>
                 </List>
@@ -216,4 +200,6 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;

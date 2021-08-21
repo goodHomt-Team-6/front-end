@@ -86,9 +86,9 @@ const MyPastRoutines = (props) => {
                 value={routine.id}
                 onChange={(e) => {
                   const { value } = e.target;
-                  const selected = myRoutines.filter((m) => m.id == value);
-                  const toObject = selected[0];
-                  setClicked(toObject);
+                  const selected = myRoutines.filter((select) => select.id == value);
+                  console.log(selected[0]);
+                  setClicked(selected[0]);
                 }}
               />
               <RadioBox

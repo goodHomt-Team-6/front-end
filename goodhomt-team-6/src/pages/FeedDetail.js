@@ -67,7 +67,7 @@ const RoutineDetail = (props) => {
 
       <Wrapper>
         {/* 대시보드 */}
-        <DashBoard />
+        <DashBoard selectedFeed={selectedFeed} />
 
         {/* 루틴의 세트 모음 */}
         <ListContainer>
@@ -85,7 +85,7 @@ const RoutineDetail = (props) => {
                   >
                     {list.exerciseName}
                   </Text>
-                  {list.set.map((set, setIdx) => (
+                  {list && list.set.map((set, setIdx) => (
                     <DataRow key={setIdx}>
                       <Text
                         type="contents"

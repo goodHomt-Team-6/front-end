@@ -110,12 +110,11 @@ const AddMyFeed = (props) => {
             </TimeBox>)
           }
           {selectedPrevItem &&
-            selectedPrevItem.rating === 'good' &&
-            (<TimeBox
-              src={ratingGood}
-            >
-            </TimeBox>)
-          }
+            selectedPrevItem.rating === 'good' && (
+              <TimeBox
+                src={ratingGood}>
+              </TimeBox>
+            )}
 
           <RoutineBox>
             <RoutineName>{selectedPrevItem.routineName}</RoutineName>
@@ -125,8 +124,22 @@ const AddMyFeed = (props) => {
                 {selectedPrevItem.createdAt.substring(8, 10)}
               </WorkoutDate>
               <WorkoutDate>
-                {Math.floor(selectedPrevItem.routineTime / 60)}:
-                {Math.floor(selectedPrevItem.routineTime % 60)}
+                {Math.floor(selectedPrevItem.routineTime / 60) < 10 ? (
+                  <Time>
+                    {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
+                  </Time>
+                ) : (
+                  <Time>
+                    {Math.floor(selectedPrevItem.routineTime / 60)}:
+                  </Time>)
+                }
+                {(selectedPrevItem.routineTime % 60) < 10 ? (
+                  <Time>
+                    {'0' + selectedPrevItem.routineTime % 60}
+                  </Time>
+                ) : (<Time>
+                  {selectedPrevItem.routineTime % 60}
+                </Time>)}
               </WorkoutDate>
             </TextWrapper>
           </RoutineBox>
@@ -199,9 +212,6 @@ const AddMyFeed = (props) => {
         />
       ) : null}
 
-
-
-
       <FooterButtonWrapper>
         {writeroutinename !== '' && description !== '' ? (
           <FooterButton
@@ -225,13 +235,6 @@ const AddMyFeed = (props) => {
           </FooterButton>
         )}
       </FooterButtonWrapper>
-
-
-
-
-
-
-
     </>
   );
 };
@@ -298,12 +301,7 @@ const TimeBox = styled.div`
 `;
 
 const Time = styled.span`
-  line-height: 45px;
   font-size: 14px;
-`;
-
-const RoutineInfo = styled.div`
-  display: flex;
 `;
 
 const RoutineName = styled.span`
