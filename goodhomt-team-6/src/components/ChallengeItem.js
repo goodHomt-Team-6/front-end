@@ -15,14 +15,23 @@ const ChallengeItem = () => {
   const dispatch = useDispatch();
   const challenges = useSelector((state) => state.challenge.challenges);
   const myChallenges = useSelector((state) => state.challenge.myChallenges);
+  const is_login = useSelector((store) => store.user?.is_login);
   const myChallengesId = myChallenges.map((myChallenge, idx) => {
     return myChallenge.challengeId;
   });
 
   useEffect(() => {
-    dispatch(challengeActions.getChallengesAPI());
-    dispatch(challengeActions.getMyChallengesAPI());
+    if (is_login) {
+      dispatch(challengeActions.getChallengesAPI());
+      dispatch(challengeActions.getMyChallengesAPI());
+    }
   }, []);
+  useEffect(() => {
+    if (is_login) {
+      dispatch(challengeActions.getChallengesAPI());
+      dispatch(challengeActions.getMyChallengesAPI());
+    }
+  }, [is_login]);
 
   return (
     <ChallengeCont>

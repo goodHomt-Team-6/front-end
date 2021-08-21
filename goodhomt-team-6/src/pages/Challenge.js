@@ -20,23 +20,6 @@ import { actionCreators as userActions } from '../redux/modules/user';
 const Challenge = () => {
   const dispatch = useDispatch();
 
-  const userId = useSelector((store) => store.user.user.userId);
-  const feed = useSelector((store) => store.feed.feed);
-
-  // useEffect(() => {
-  //   dispatch(feedActions.getFeedAllAPI("userId"));
-  //   dispatch(userActions.getUpdatedAccessTokenAPI());
-  // }, []);
-
-  // const feedClick = useCallback(() => {
-  //   setFeedClicked(true);
-  //   setChallengeClicked(false);
-  // }, []);
-  // const challengeClick = useCallback(() => {
-  //   setFeedClicked(false);
-  //   setChallengeClicked(true);
-  // }, []);
-
   return (
     <Container>
       <Wrapper>
@@ -48,7 +31,8 @@ const Challenge = () => {
             textAlign="left"
             fontWeight="bold"
             margin="0"
-            bgColor="#F7F7FA">
+            bgColor="#F7F7FA"
+          >
             Challenge
           </Text>
 
@@ -74,7 +58,6 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  /* padding: 1.5rem; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -88,31 +71,6 @@ const InboxWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const UserWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const InfoBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 1.5rem;
-`;
-
-const IconBox = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-right: 1.5rem;
-  /* align-self: flex-start; */
-`;
-
-// const Text = styled.h2`
-//   margin: 8px 0px 0px 0px;
-//   font-size: 18px;
-//   font-weight: 500;
-// `;
-
 const CategoryList = styled.ul`
   width: 100%;
   padding: 0px;
@@ -120,41 +78,6 @@ const CategoryList = styled.ul`
   list-style: none;
   box-sizing: border-box;
   background-color: #f7f7fa;
-`;
-
-const Category = styled.ul`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 0px;
-  list-style: none;
-  margin-top: 43px;
-`;
-
-const SearchWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid black;
-  margin: 0px 1.5rem;
-  padding: 0px;
-`;
-
-const SearchInput = styled.input`
-  font-size: 15px;
-  padding: 0px;
-  width: 100%;
-  height: 48px;
-  border: none;
-  background-color: ${Color.bgIvory};
-  &:focus,
-  &:active {
-    outline: none;
-  }
-`;
-
-const SearchButton = styled.img`
-  width: 17px;
-  height: 17px;
 `;
 
 const NavBarWrapper = styled.div`
