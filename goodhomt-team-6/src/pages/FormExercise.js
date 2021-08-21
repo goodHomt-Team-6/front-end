@@ -297,7 +297,7 @@ const FormExercise = (props) => {
                     <Text type="contents" color="#000">
                       {list.set[0].weight}kg
                     </Text>
-                    <Text type="contents" padding="0 10px 0 0" color="#000">
+                    <Text type="contents" padding="0 20px 0 0" color="#000">
                       {list.set[0].count}회
                     </Text>
                   </>
@@ -306,7 +306,7 @@ const FormExercise = (props) => {
                     <Text
                       type="contents"
                       minWidth="80px"
-                      padding="0 0 0 10px"
+                      padding="0 0 0 20px"
                       fontWeight="600"
                       fontSize="1.1em"
                       color="#848484"
@@ -320,7 +320,7 @@ const FormExercise = (props) => {
                     <Text type="contents" color="#848484">
                       {list.set[0].weight}kg
                     </Text>
-                    <Text type="contents" padding="0 10px 0 0" color="#848484">
+                    <Text type="contents" padding="0 20px 0 0" color="#848484">
                       {list.set[0].count}회
                     </Text>
                   </>

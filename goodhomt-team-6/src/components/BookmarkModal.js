@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 
@@ -15,6 +15,10 @@ const BookmarkModal = ({ setShowModal }) => {
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
 
+  useEffect(() => {
+    dispatch(exerciseActions.getSelectedPrevItem);
+  }, []);
+
   const closeModal = (e) => {
     if (e.target === modalRef.current) {
       setShowModal(false);
@@ -24,8 +28,10 @@ const BookmarkModal = ({ setShowModal }) => {
   const reArrangeDetail = {
     id: selectedPrevItem.id,
     isBookmarked: true,
-    routineName: routineRename
+    routineName: routineRename,
+    createdAt: selectedPrevItem.createdAt
   };
+
 
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>

@@ -4,9 +4,11 @@ import Color from '../shared/Color';
 import { Text } from '../shared/Styles';
 import { useDispatch, useSelector } from 'react-redux';
 import BookmarkSolid from '../img/bookmark_solid.svg';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 
 // 대시보드 컴포넌트
 const DashBoard = ({ props }) => {
+  const dispatch = useDispatch();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
 
   return (
@@ -15,7 +17,7 @@ const DashBoard = ({ props }) => {
         <TodayWrapper>
           <Enrolled>{selectedPrevItem.myExercise.length}</Enrolled>
           <Wrapper>
-            {/* {selectedPrevItem && isBookmarked ? <IconImg src={BookmarkSolid} /> : null} */}
+            {selectedPrevItem && selectedPrevItem.isBookmarked ? <IconImg src={BookmarkSolid} /> : null}
             <span>{selectedPrevItem.routineName}</span>
           </Wrapper>
         </TodayWrapper>

@@ -87,6 +87,7 @@ const INITIALIZE_SELECTED_ITEMS = 'exercise/INITIALIZE_SELECTED_ITEMS';
 
 const GET_MY_ROUTINE = 'exercise/GET_MY_ROUTINE';
 const GET_MY_TODAY_ROUTINE = 'exercise/GET_MY_TODAY_ROUTINE';
+const GET_MY_CHANGENAME_ROUTINE = 'exercise/GET_MY_CHANGENAME_ROUTINE';
 const DELETE_MY_TODAY_ROUTINE = 'exercise/DELETE_MY_TODAY_ROUTINE';
 const SELECT_PERIOD = 'exercise/SELECT_PERIOD';
 const IS_SELECTED = 'exercise/IS_SELECTED';
@@ -151,6 +152,7 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
   is_selected,
 }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
+const getMyChangeNameRoutine = createAction(GET_MY_CHANGENAME_ROUTINE, (routine) => ({ routine }));
 const getMyTodayRoutine = createAction(
   GET_MY_TODAY_ROUTINE,
   (myTodayRoutine) => ({ myTodayRoutine }),
@@ -357,6 +359,7 @@ const getRoutineDetailAPI = (id) => {
       .get(`/routines/${id}`)
       .then((response) => {
         dispatch(getMyRoutine(response.data.result));
+        logger('루틴 상세 가져오기 성공');
       })
       .catch((error) => {
         logger('루틴 상세 가져오기 실패', error);
@@ -364,14 +367,30 @@ const getRoutineDetailAPI = (id) => {
   };
 };
 
-// 루틴 상세설정 - 북마크, 루틴이름 변경
-const reArrangeRoutineDetailAPI = (reArrangeDetial) => {
+// 북마크 설정, 이름 변경된 루틴 상세 가져오기
+const getChangeNameRoutineDetailAPI = (id) => {
   return function (dispatch, getState, { history }) {
     api
-      .patch('/routines/bookmark', reArrangeDetial)
+      .get(`/routines/${id}`)
       .then((response) => {
+        dispatch(getMyChangeNameRoutine(response.data.result));
+        console.log(response.data.result);
+        logger('북마크, 이름변경된 루틴 상세 가져오기 성공');
+      })
+      .catch((error) => {
+        logger('북마크, 이름변경된 루틴 상세 가져오기 실패', error);
+      });
+  };
+};
+
+// 루틴 상세설정 - 북마크, 루틴이름 변경
+const reArrangeRoutineDetailAPI = (reArrangeDetail) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .patch('/routines/bookmark', reArrangeDetail)
+      .then((response) => {
+        dispatch(getChangeNameRoutineDetailAPI(response.data.routineId));
         logger('북마크 설정, 루틴 이름 변경 성공');
-        dispatch(getRoutineDetailAPI(response.data.routineId));
       })
       .catch((error) => {
         logger('북마크 설정, 루틴 이름 변경 실패', error);
@@ -570,8 +589,6 @@ export default handleActions(
     [GET_MY_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine = action.payload.routine;
-        // 북마크 이름변경시 사용, 액션 따로 만들어야함
-        // draft.selectedPrevItem.routineName = action.payload.routine[0].routineName;
       }),
     // 오늘 저장한 루틴 가져오기
     [GET_MY_TODAY_ROUTINE]: (state, action) =>
@@ -591,6 +608,11 @@ export default handleActions(
           );
           draft.myTodayRoutine = deletedMyTodayRoutine;
         }
+      }),
+    // 북마크, 이름 변경한 루틴 가져오기
+    [GET_MY_CHANGENAME_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedPrevItem = action.payload.routine[0];
       }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>
@@ -645,6 +667,7 @@ const actionCreators = {
   getBookmarkRoutineAPI,
   recordResultAPI,
   addEditedRoutineAPI,
+  getChangeNameRoutineDetailAPI,
   addSet,
   addBreak,
   openRow,

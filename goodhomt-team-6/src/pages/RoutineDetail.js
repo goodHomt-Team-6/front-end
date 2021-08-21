@@ -40,6 +40,7 @@ const RoutineDetail = (props) => {
     dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
   }, []);
 
+
   return (
     <>
       {/* 뒤로가기 */}

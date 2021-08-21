@@ -93,7 +93,7 @@ const TodayRoutineDetail = (props) => {
                   <Text
                     type="contents"
                     minWidth="80px"
-                    padding="0 0 0 10px"
+                    padding="0 0 0 20px"
                     onClick={() => {
                       closeRow();
                     }}
@@ -105,7 +105,7 @@ const TodayRoutineDetail = (props) => {
                       <DataRow key={setIdx}>
                         <Text
                           type="contents"
-                          fontSize="1.3em"
+                          fontSize="1.2em"
                           minWidth="80px"
                           color="#848484"
                         >
@@ -115,7 +115,7 @@ const TodayRoutineDetail = (props) => {
                         </Text>
                         <Text
                           type="contents"
-                          fontSize="1.3em"
+                          fontSize="1.2em"
                           minWidth="80px"
                           textAlign="center"
                           color="#848484"
@@ -126,7 +126,7 @@ const TodayRoutineDetail = (props) => {
                         </Text>
                         <Text
                           type="contents"
-                          fontSize="1.3em"
+                          fontSize="1.2em"
                           minWidth="80px"
                           textAlign="right"
                           color="#848484"
@@ -146,7 +146,7 @@ const TodayRoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
@@ -157,7 +157,7 @@ const TodayRoutineDetail = (props) => {
                   <Text type="contents">
                     {list && list.set === [] ? null : list.set[0].weight}kg
                   </Text>
-                  <Text type="contents" padding="0 10px 0 0">
+                  <Text type="contents" padding="0 20px 0 0">
                     {list && list.set === [] ? null : list.set[0].count}회
                   </Text>
                 </List>
@@ -191,7 +191,6 @@ const TodayRoutineDetail = (props) => {
           {selectedPrevItem && selectedPrevItem.isCompleted === true ? (
             <FooterButton
               onClick={() => {
-                // history.push('/workout');
                 setShowShareModal(true);
               }}
             >
@@ -269,6 +268,8 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const IconWrapper = styled.div`
@@ -297,6 +298,7 @@ const Selected = styled.div`
   border-radius: 16px;
   margin: 20px 16px 0px 0px;
   width: 60px;
+  background-color: #fff;
 `;
 
 const CloseBtn = styled.img`

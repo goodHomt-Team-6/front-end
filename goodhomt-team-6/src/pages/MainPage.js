@@ -12,6 +12,7 @@ import calendarIcon from '../img/calendar_main_icon.svg';
 import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
+import BookmarkSolid from '../img/bookmark_solid.svg';
 import NavBar from '../components/NavBar';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
@@ -64,6 +65,7 @@ const Main = (props) => {
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
     }
   }, []);
+
   useEffect(() => {
     if (is_login) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
@@ -82,75 +84,45 @@ const Main = (props) => {
             margin="0px 15px 0px 0px"
             src={userImg}
           ></Image>
-          {userName && (
-            <TextUser>
-              {userName} 님,
-              <br />
-              안녕하세요 :)
-            </TextUser>
+          {is_login ? (
+            <>
+              <TextUser>
+                {userName} 님,
+                <br />
+                안녕하세요 :)
+              </TextUser>
+              <TextUserDeco></TextUserDeco>
+            </>
+          ) : (
+            <LoginCont
+              onClick={() => {
+                sessionStorage.setItem('redirect_url', '/');
+                dispatch(userActions.showLoginModal(true));
+              }}
+            >
+              <Text type="contents" margin="0">
+                LogIn
+              </Text>
+            </LoginCont>
           )}
-          <TextUserDeco></TextUserDeco>
         </InfoBox>
         <DateBox
           onClick={() => {
-            history.push('/calendar');
-          }}>
-          <Icon
-            margin="0px 5px 0px 0px"
-            src={calendarIcon}>
-          </Icon>
+            if (!tokenCookie) {
+              sessionStorage.setItem('redirect_url', '/calendar');
+              dispatch(userActions.showLoginModal(true));
+            } else {
+              history.push('/calendar');
+            }
+          }}
+        >
+          <Icon margin="0px 5px 0px 0px" src={calendarIcon}></Icon>
           <Today>{todayDate}</Today>
         </DateBox>
       </UserWrapper>
 
       <Wrapper>
         <InboxWrapper>
-          {/* 유저 프로필 */}
-          <UserWrapper>
-            <InfoBox>
-              <Image
-                width="40px"
-                height="40px"
-                margin="0px 15px 0px 0px"
-                src={userImg}
-              ></Image>
-              {is_login ? (
-                <>
-                  <TextUser>
-                    {userName} 님,
-                    <br />
-                    안녕하세요 :)
-                  </TextUser>
-                  <TextUserDeco></TextUserDeco>
-                </>
-              ) : (
-                <LoginCont
-                  onClick={() => {
-                    sessionStorage.setItem('redirect_url', '/');
-                    dispatch(userActions.showLoginModal(true));
-                  }}
-                >
-                  <Text type="contents" margin="0">
-                    LogIn
-                  </Text>
-                </LoginCont>
-              )}
-            </InfoBox>
-            <DateBox
-              onClick={() => {
-                if (!tokenCookie) {
-                  sessionStorage.setItem('redirect_url', '/calendar');
-                  dispatch(userActions.showLoginModal(true));
-                } else {
-                  history.push('/calendar');
-                }
-              }}
-            >
-              <Icon margin="0px 5px 0px 0px" src={calendarIcon}></Icon>
-              <Today>{todayDate}</Today>
-            </DateBox>
-          </UserWrapper>
-
           {/* 대시 보드 - 오늘 등록한 운동 종목 수 */}
           <RegisterWrapper>
             <Text
@@ -372,7 +344,12 @@ const Main = (props) => {
                           history.push('/todayroutinedetail');
                         }}
                       >
-                        <Time>{routine.routineName}</Time>
+                        <RoutineTextBox>
+                          {routine.isBookmarked === true ? (
+                            <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                          ) : null}
+                          <Time>{routine.routineName}</Time>
+                        </RoutineTextBox>
                         {routine && routine.routineTime == 0 ? (
                           <WorkoutDate>00:00</WorkoutDate>
                         ) : (
@@ -405,9 +382,13 @@ const Main = (props) => {
                             exerciseActions.addSelectedPrevItem(selected[0]),
                           );
                           history.push('/todayroutinedetail');
-                        }}
-                      >
-                        <RoutineName>{routine.routineName}</RoutineName>
+                        }}>
+                        <RoutineTextBox>
+                          {routine.isBookmarked === true ? (
+                            <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                          ) : null}
+                          <Time>{routine.routineName}</Time>
+                        </RoutineTextBox>
                         <RoutineBoxDiv>
                           {routine && routine.routineTime == 0 ? (
                             <WorkoutDate>00:00</WorkoutDate>
@@ -741,4 +722,9 @@ const LoginCont = styled.div`
   background-color: #000;
   color: #fff;
   padding: 5px 12px;
+`;
+
+const RoutineTextBox = styled.div`
+  display: flex;
+
 `;
