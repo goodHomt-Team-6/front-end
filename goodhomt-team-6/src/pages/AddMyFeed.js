@@ -6,6 +6,9 @@ import Cookies from 'universal-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image, Text, FooterButton, Icon } from '../shared/Styles';
 import NextArrow from '../img/next_arrow_icon.svg';
+import ratingGood from '../img/rating_good.svg';
+import ratingBad from '../img/rating_bad.svg';
+import ratingSoso from '../img/rating_soso.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { history } from '../redux/configureStore';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
@@ -92,9 +95,28 @@ const AddMyFeed = (props) => {
       {/* 나의 오늘 운동 루틴 가져오기 */}
       <CategoryList>
         <TodayExerciseWrapper>
-          <TimeBox>
-            <Time>운동 전</Time>
-          </TimeBox>
+          {selectedPrevItem &&
+            selectedPrevItem.rating === 'soso' &&
+            (<TimeBox
+              src={ratingSoso}
+            >
+            </TimeBox>)
+          }
+          {selectedPrevItem &&
+            selectedPrevItem.rating === 'bad' &&
+            (<TimeBox
+              src={ratingBad}
+            >
+            </TimeBox>)
+          }
+          {selectedPrevItem &&
+            selectedPrevItem.rating === 'good' &&
+            (<TimeBox
+              src={ratingGood}
+            >
+            </TimeBox>)
+          }
+
           <RoutineBox>
             <RoutineName>{selectedPrevItem.routineName}</RoutineName>
             <TextWrapper>
@@ -177,15 +199,18 @@ const AddMyFeed = (props) => {
         />
       ) : null}
 
+
+
+
       <FooterButtonWrapper>
-        {communityNickname || isDoubleChecked &&
-          writeroutinename !== '' && description !== '' ? (
+        {writeroutinename !== '' && description !== '' ? (
           <FooterButton
             onClick={() => {
               if (communityNickname !== null) {
                 dispatch(feedActions.addFeedAPI(notFirstWriteRoutine));
                 setShowModal(true);
-              } else {
+              }
+              if (communityNickname === null && isDoubleChecked === true) {
                 dispatch(feedActions.addFeedAPI(firstWriteRoutine));
                 setShowModal(true);
               }
@@ -196,10 +221,17 @@ const AddMyFeed = (props) => {
           </FooterButton>
         ) : (
           <FooterButton disabled>
-            업로드 하기
+            업로드하기
           </FooterButton>
         )}
       </FooterButtonWrapper>
+
+
+
+
+
+
+
     </>
   );
 };
@@ -250,17 +282,17 @@ const TodayExerciseWrapper = styled.div`
 
 const TimeBox = styled.div`
   background-color: ${(props) => (props.completed ? '#4A40FF' : 'black')};
-  width: 25%;
+  width: 75px;
   min-width: 75px;
   height: 44px;
-  border-radius: 22px;
+  border-radius: 30px;
   color: white;
-  margin-right: 15px;
+  margin-right: 20px;
   display: flex;
   justify-content: center;
   align-content: center;
   background-image: url('${(props) => props.src}');
-  background-size: 25%;
+  background-size: 100%;
   background-repeat: no-repeat;
   background-position: center;
 `;
@@ -321,14 +353,6 @@ const ElTextarea = styled.textarea`
   }
 `;
 
-// const TextInput = styled.input`
-//   background-color: #EEEDFF;
-//   border: none;
-//   padding: 15px;
-//   width: 75%;
-//   border-radius: 10px;
-// `;
-
 const NicknameCont = styled.div`
   display: flex;
   width: 100%;
@@ -351,7 +375,7 @@ const TextWrapper = styled.div`
 `;
 
 const FooterButtonWrapper = styled.div`
-      position: fixed;
-      bottom: 0px;
-      width: 100%;
-      `;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+`;

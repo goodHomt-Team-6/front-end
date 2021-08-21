@@ -12,7 +12,7 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 
 // 피드 추가, 삭제할 때 생성되는 모달 컴포넌트
-const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, message }) => {
+const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, setShowShareModal, message }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -32,6 +32,10 @@ const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, message }) => {
       }
       if (setShowAddFeedModal) {
         setShowAddFeedModal(false);
+        return;
+      }
+      if (setShowShareModal) {
+        setShowShareModal(false);
         return;
       }
     }
@@ -57,14 +61,26 @@ const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, message }) => {
         ) : (
           <ModalInner>
             <Inner>
-              {/* 추가하기 버튼 */}
-              <ConfirmButton
-                onClick={() => {
-                  history.push('/selectmyfeed');
-                }}
-                ref={buttonRef}
-              >{message}
-              </ConfirmButton>
+              {setShowShareModal ? (
+                // 메인페이지에서 완료한 루틴 피드 공유하기(추가하기) 버튼
+                <ConfirmButton
+                  onClick={() => {
+                    history.push('/addmyfeed');
+                  }}
+                  ref={buttonRef}
+                >{message}
+                </ConfirmButton>
+              ) : (
+                // 피드 화면에서 추가하기 버튼
+                <ConfirmButton
+                  onClick={() => {
+                    history.push('/selectmyfeed');
+                  }}
+                  ref={buttonRef}
+                >{message}
+                </ConfirmButton>
+              )}
+
             </Inner>
           </ModalInner>
         )}

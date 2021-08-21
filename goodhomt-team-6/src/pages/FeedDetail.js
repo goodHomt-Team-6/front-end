@@ -133,17 +133,17 @@ const RoutineDetail = (props) => {
                   }}
                 >
                   <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                    {list.exerciseName}
+                    {list !== [] ? (list.exerciseName) : null}
                   </Text>
                   <Text type="contents">
-                    {list &&
-                      list.set.filter((set) => set.type === 'exercise').length}
+                    {list !== [] && list.set !== [] ?
+                      (list.set.filter((set) => set.type === 'exercise').length) : null}
                     세트
                   </Text>
                   {list !== [] && list.set[0].weight === null ? (
                     <Text type="contents">0kg</Text>
                   ) : (
-                    <Text type="contents">{list !== [] && list.set[0].weight}kg</Text>
+                    <Text type="contents">{list !== [] ? (list.set[0].weight) : null}kg</Text>
                   )}
                   <Text type="contents" padding="0 10px 0 0">
                     {list !== [] && list.set[0].count}회

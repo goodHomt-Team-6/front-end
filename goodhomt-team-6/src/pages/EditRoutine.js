@@ -267,7 +267,8 @@ const EditRoutine = (props) => {
             const routine = {
               myExercise: lists,
             };
-            dispatch(exerciseCreator.addEditedRoutineAPI(routine));
+            // dispatch(exerciseCreator.addEditedRoutineAPI(routine));
+            history.goBack();
           }}
         >
           설정 완료

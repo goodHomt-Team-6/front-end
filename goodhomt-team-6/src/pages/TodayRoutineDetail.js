@@ -14,6 +14,8 @@ import logger from '../shared/Logger';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
+import AddAndDeleteModal from '../components/AddAndDeleteModal';
+
 
 // 오늘 추가한 루틴 상세 컴포넌트 - 루틴 상세 확인하고 운동 시작으로 이동
 const TodayRoutineDetail = (props) => {
@@ -29,6 +31,7 @@ const TodayRoutineDetail = (props) => {
   const openedRow = useSelector((state) => state.exercise.openedRow);
 
   const [showModal, setShowModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
@@ -74,28 +77,14 @@ const TodayRoutineDetail = (props) => {
         </IconWrapper>
       </HeaderWrapper>
 
-      {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
+      {showModal ?
+        <BookmarkModal setShowModal={setShowModal} />
+        : null}
 
       <BodyWrapper>
         {/* 대시보드 */}
         <DashBoard />
 
-        {/* 루틴의 세트 모음 */}
-        {/* <Container>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((e, listIdx) => (
-              <List key={listIdx}>
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
-                  {e.exerciseName}
-                </Text>
-                <Text type="contents"> {e.set[0].setCount}세트</Text>
-                <Text type="contents">{e.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">
-                  {e.set[0].count}회
-                </Text>
-              </List>
-            ))}
-        </Container> */}
         <ListContainer>
           {selectedPrevItem &&
             selectedPrevItem.myExercise.map((list, listIdx) =>
@@ -193,12 +182,17 @@ const TodayRoutineDetail = (props) => {
           </Selected>
         </ListContainer>
 
+        {showShareModal ? (
+          <AddAndDeleteModal message="내 피드에 추가" setShowShareModal={setShowShareModal} />
+        ) : null}
+
         {/* 운동시작 버튼 */}
         <FooterButtonWrapper>
           {selectedPrevItem && selectedPrevItem.isCompleted === true ? (
             <FooterButton
               onClick={() => {
                 // history.push('/workout');
+                setShowShareModal(true);
               }}
             >
               공유하기
