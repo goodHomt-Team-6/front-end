@@ -8,11 +8,15 @@ import Challenge from '../img/challenge_icon.svg';
 import Calendar from '../img/calendar.svg';
 import Workout from '../img/workout.svg';
 import { useDispatch } from 'react-redux';
-import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import Cookies from 'universal-cookie';
+import { actionCreators as userActions } from '../redux/modules/user';
+
+const cookie = new Cookies();
 
 // 고정 하단바 컴포넌트
 const NavBar = (props) => {
   const dispatch = useDispatch();
+  const tokenCookie = cookie.get('homt6_is_login');
 
   return (
     <>
@@ -28,7 +32,12 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/feed');
+            if (!tokenCookie) {
+              sessionStorage.setItem('redirect_url', '/feed');
+              dispatch(userActions.showLoginModal(true));
+            } else {
+              history.push('/feed');
+            }
           }}
         >
           <IconImage src={Community} />
@@ -37,7 +46,12 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/challenge');
+            if (!tokenCookie) {
+              sessionStorage.setItem('redirect_url', '/challenge');
+              dispatch(userActions.showLoginModal(true));
+            } else {
+              history.push('/challenge');
+            }
           }}
         >
           <IconImage src={Challenge} />
@@ -46,7 +60,12 @@ const NavBar = (props) => {
 
         <RouteBox
           onClick={() => {
-            history.push('/calendar');
+            if (!tokenCookie) {
+              sessionStorage.setItem('redirect_url', '/calendar');
+              dispatch(userActions.showLoginModal(true));
+            } else {
+              history.push('/calendar');
+            }
           }}
         >
           <IconImage src={Calendar} />

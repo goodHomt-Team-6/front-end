@@ -25,11 +25,20 @@ import NormalRating from '../img/clicked_normal_rating.svg';
 const Calendar = (props) => {
   const dispatch = useDispatch();
   const [selectedList, setSelectedList] = useState(null);
+  const is_login = useSelector((store) => store.user?.is_login);
 
   useEffect(() => {
-    dispatch(challengeActions.getMyChallengesAPI('all'));
-    dispatch(exerciseActions.getAllRoutineAPI());
+    if (is_login) {
+      dispatch(challengeActions.getMyChallengesAPI('all'));
+      dispatch(exerciseActions.getAllRoutineAPI());
+    }
   }, []);
+  useEffect(() => {
+    if (is_login) {
+      dispatch(challengeActions.getMyChallengesAPI('all'));
+      dispatch(exerciseActions.getAllRoutineAPI());
+    }
+  }, [is_login]);
 
   const routines = useSelector((state) => state.exercise.routine);
   const allMyChallenges = useSelector(

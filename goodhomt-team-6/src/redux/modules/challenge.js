@@ -77,13 +77,14 @@ const getMyChallengesAPI = (value, idx) => {
           if (value === 'get_detail') {
             // DB쪽 내 챌린지 api에서 Challenge_Exercises 컬럼과 join 하면 부하가 높을것 같다고 하여 챌린지 상세 api로 대체함.
             dispatch(
-              getChallengeDetailAPI(response.data.result[0].challengeId),
+              getChallengeDetailAPI(response.data.result[0]?.challengeId),
             );
           }
           dispatch(getMyChallenges(response.data.result));
         })
         .catch(function (err) {
           logger('나의 챌린지를 가져오지 못했습니다.');
+          logger(err);
         });
     }
   };

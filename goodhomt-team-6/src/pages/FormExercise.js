@@ -474,6 +474,7 @@ const DeleteAll = styled.div`
   line-height: 32px;
   align-items: center;
   justify-content: center;
+  background-color: #ffffff;
 `;
 
 const OptionContRight = styled.div`
