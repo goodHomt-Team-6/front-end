@@ -393,7 +393,8 @@ const reArrangeRoutineDetailAPI = (reArrangeDetail) => {
         logger('북마크 설정, 루틴 이름 변경 성공');
       })
       .catch((error) => {
-        logger('북마크 설정, 루틴 이름 변경 실패', error);
+        logger('북마크 설정, 루틴 이름 변경 실패');
+        logger(error);
       });
   };
 };

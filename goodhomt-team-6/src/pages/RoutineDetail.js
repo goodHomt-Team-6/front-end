@@ -6,6 +6,7 @@ import EditIcon from '../img/edit_icon.svg';
 import { FooterButton, Text } from '../shared/Styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import { actionCreators as calendarActions } from '../redux/modules/calendar';
 import DashBoard from '../components/DashBoard';
 import BookmarkModal from '../components/BookmarkModal';
 import logger from '../shared/Logger';
@@ -26,6 +27,9 @@ const RoutineDetail = (props) => {
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
   const routineName = selectedPrevItem.routineName;
   const myExercise = selectedPrevItem.myExercise;
+  const isCalendarChallengeData = useSelector(
+    (store) => store.calendar.isCalendarChallengeData,
+  );
 
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -38,6 +42,9 @@ const RoutineDetail = (props) => {
 
   useEffect(() => {
     dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    return () => {
+      dispatch(calendarActions.setIsCalendarChallengeData(false));
+    };
   }, []);
 
 
@@ -57,12 +64,15 @@ const RoutineDetail = (props) => {
           />
 
           {/* 북마크 모달 */}
-          <IconImg
-            src={BookmarkLine}
-            onClick={() => {
-              setShowModal(true);
-            }}
-          />
+          {/* 챌린지 데이터일때는 북마크를 숨김. 챌린지 데이터와 루틴 데이터는 구별이 되어있기 때문에 둘을 호환하기에는 수정 스코프가 너무 큼. */}
+          {!isCalendarChallengeData && (
+            <IconImg
+              src={BookmarkLine}
+              onClick={() => {
+                setShowModal(true);
+              }}
+            />
+          )}
         </IconWrapper>
       </HeaderWrapper>
 

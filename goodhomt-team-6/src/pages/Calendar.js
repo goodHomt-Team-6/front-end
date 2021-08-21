@@ -250,6 +250,7 @@ const Calendar = (props) => {
         selectedList.map((l, idx) =>
           l?.routineName ? (
             <TodayExerciseWrapper
+              key={idx}
               onClick={() => {
                 dispatch(exerciseActions.addSelectedPrevItem(l));
                 history.push('/routinedetail');
@@ -282,6 +283,7 @@ const Calendar = (props) => {
             </TodayExerciseWrapper>
           ) : (
             <TodayExerciseWrapper
+              key={idx}
               onClick={() => {
                 dispatch(
                   challengeActions.getMyChallengesAPI(
@@ -289,6 +291,7 @@ const Calendar = (props) => {
                     allMyChallenges.indexOf(l),
                   ),
                 );
+                dispatch(calendarActions.setIsCalendarChallengeData(true));
               }}
             >
               <RoutineInfo>
