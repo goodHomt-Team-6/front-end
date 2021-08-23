@@ -24,6 +24,7 @@ import SelectMyFeed from '../pages/SelectMyFeed';
 import FeedRoutineDetail from '../pages/FeedRoutineDetail';
 import Calendar from '../pages/Calendar';
 import Challenge from '../pages/Challenge';
+import ErrorBoundary from './ErrorBoundary';
 
 const cookie = new Cookies();
 
@@ -37,7 +38,7 @@ const App = (props) => {
   }, []);
 
   return (
-    <>
+    <ErrorBoundary>
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={MainPage} />
@@ -69,7 +70,7 @@ const App = (props) => {
           <Route path="/calendar" exact component={Calendar} />
         </Switch>
       </ConnectedRouter>
-    </>
+    </ErrorBoundary>
   );
 };
 
