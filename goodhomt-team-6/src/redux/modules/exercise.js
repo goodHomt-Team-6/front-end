@@ -367,14 +367,13 @@ const getRoutineDetailAPI = (id) => {
   };
 };
 
-// 북마크 설정, 이름 변경된 루틴 상세 가져오기
+// 북마크, 이름 변경된 루틴 상세 가져오기
 const getChangeNameRoutineDetailAPI = (id) => {
   return function (dispatch, getState, { history }) {
     api
       .get(`/routines/${id}`)
       .then((response) => {
         dispatch(getMyChangeNameRoutine(response.data.result));
-        console.log(response.data.result);
         logger('북마크, 이름변경된 루틴 상세 가져오기 성공');
       })
       .catch((error) => {

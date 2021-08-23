@@ -56,10 +56,10 @@ const Feed = () => {
   const displayCreatedAt = (createdAt) => {
     let startTime = new Date(createdAt);
     let nowTime = Date.now();
-    if (parseInt(startTime - nowTime) > parseInt(86400000)) {
+    if (parseInt(startTime - nowTime) < -86400000) {
       return <Moment format="MMM D일">{startTime}</Moment>;
     }
-    if (parseInt(startTime - nowTime) < parseInt(86400000)) {
+    if (parseInt(startTime - nowTime) > -86400000) {
       return <Moment fromNow>{startTime}</Moment>;
     }
   };

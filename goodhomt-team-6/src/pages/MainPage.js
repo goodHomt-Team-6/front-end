@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Button, Image, Text, Icon } from '../shared/Styles';
+import { Image, Text, Icon } from '../shared/Styles';
 import Color from '../shared/Color';
 import playButton from '../img/play_button.svg';
 import { history } from '../redux/configureStore';

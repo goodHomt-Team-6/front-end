@@ -29,9 +29,9 @@ const TodayRoutineDetail = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  useEffect(() => {
-    dispatch(exerciseActions.getRoutineDetailAPI(id));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(exerciseActions.getRoutineDetailAPI(id));
+  // }, []);
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
