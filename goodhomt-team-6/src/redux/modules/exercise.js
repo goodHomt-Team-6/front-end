@@ -152,7 +152,10 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
   is_selected,
 }));
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
-const getMyChangeNameRoutine = createAction(GET_MY_CHANGENAME_ROUTINE, (routine) => ({ routine }));
+const getMyChangeNameRoutine = createAction(
+  GET_MY_CHANGENAME_ROUTINE,
+  (routine) => ({ routine }),
+);
 const getMyTodayRoutine = createAction(
   GET_MY_TODAY_ROUTINE,
   (myTodayRoutine) => ({ myTodayRoutine }),
@@ -501,7 +504,6 @@ export default handleActions(
           count: list.set[0].count,
           setCount: setCount,
         });
-        logger(list);
       }),
     [ADD_BREAK]: (state, action) =>
       produce(state, (draft) => {
