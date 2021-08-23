@@ -502,6 +502,7 @@ export default handleActions(
           count: list.set[0].count,
           setCount: setCount,
         });
+        logger(list);
       }),
     [ADD_BREAK]: (state, action) =>
       produce(state, (draft) => {
