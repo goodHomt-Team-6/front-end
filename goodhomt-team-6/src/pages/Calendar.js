@@ -253,6 +253,7 @@ const Calendar = (props) => {
               key={idx}
               onClick={() => {
                 dispatch(exerciseActions.addSelectedPrevItem(l));
+                dispatch(calendarActions.setIsFromCalendar(true));
                 history.push('/routinedetail');
               }}
             >
@@ -292,6 +293,7 @@ const Calendar = (props) => {
                   ),
                 );
                 dispatch(calendarActions.setIsCalendarChallengeData(true));
+                dispatch(calendarActions.setIsFromCalendar(true));
               }}
             >
               <RoutineInfo>

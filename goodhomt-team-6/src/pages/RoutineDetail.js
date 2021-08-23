@@ -30,6 +30,7 @@ const RoutineDetail = (props) => {
   const isCalendarChallengeData = useSelector(
     (store) => store.calendar.isCalendarChallengeData,
   );
+  const isFromCalendar = useSelector((state) => state.calendar.isFromCalendar);
 
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -44,9 +45,9 @@ const RoutineDetail = (props) => {
     dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
+      dispatch(calendarActions.setIsFromCalendar(false));
     };
   }, []);
-
 
   return (
     <>
@@ -56,14 +57,16 @@ const RoutineDetail = (props) => {
 
         {/* 루틴  수정 */}
         <IconWrapper>
-          <IconImg
-            src={EditIcon}
-            onClick={() => {
-              // selectedPrevItem을 routine으로 옮겨줌
-              dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
-              history.push('/editroutine');
-            }}
-          />
+          {!isFromCalendar && (
+            <IconImg
+              src={EditIcon}
+              onClick={() => {
+                // selectedPrevItem을 routine으로 옮겨줌
+                dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
+                history.push('/editroutine');
+              }}
+            />
+          )}
 
           {/* 북마크 모달 */}
           {/* 챌린지 데이터일때는 북마크를 숨김. 챌린지 데이터와 루틴 데이터는 구별이 되어있기 때문에 둘을 호환하기에는 수정 스코프가 너무 큼. */}

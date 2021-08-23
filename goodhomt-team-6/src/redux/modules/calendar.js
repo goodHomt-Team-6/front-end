@@ -9,12 +9,14 @@ const initialState = {
   routines: [],
   today: moment(),
   isCalendarChallengeData: false,
+  isFromCalendar: false,
 };
 
 // actions
 const SET_MONTH = 'calendar/SET_MONTH';
 const SET_IS_CALENDAR_CHALLENGE_DATA =
   'challenge/SET_IS_CALENDAR_CHALLENGE_DATA';
+const SET_IS_FROM_CALENDAR = 'challenge/SET_IS_FROM_CALENDAR';
 
 // action creators
 const setMonth = createAction(SET_MONTH, (value) => ({
@@ -26,6 +28,9 @@ const setIsCalendarChallengeData = createAction(
     value,
   }),
 );
+const setIsFromCalendar = createAction(SET_IS_FROM_CALENDAR, (value) => ({
+  value,
+}));
 
 // middleware actions
 
@@ -42,6 +47,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.isCalendarChallengeData = action.payload.value;
       }),
+    [SET_IS_FROM_CALENDAR]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isFromCalendar = action.payload.value;
+      }),
   },
   initialState,
 );
@@ -49,5 +58,6 @@ export default handleActions(
 const actionCreators = {
   setMonth,
   setIsCalendarChallengeData,
+  setIsFromCalendar,
 };
 export { actionCreators };

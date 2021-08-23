@@ -162,7 +162,7 @@ const EditRoutine = (props) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           dispatch(
-                            exerciseCreator.deleteDetailSet({
+                            exerciseCreator.deleteSet({
                               listIdx: listIdx,
                               setIdx: setIdx,
                             }),
