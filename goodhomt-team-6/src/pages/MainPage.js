@@ -27,6 +27,9 @@ import ChallengeBox from '../components/MainChallengeBox';
 import ChallengeModal from '../components/ChallengeModal';
 import LoginModal from '../components/LoginModal';
 import Cookies from 'universal-cookie';
+import Crontab from 'reactjs-crontab';
+import './MainPage.css';
+import Mascort from '../img/mascort_white.svg';
 
 const cookie = new Cookies();
 
@@ -48,15 +51,58 @@ const Main = (props) => {
   const myFirstChallengeExercises = useSelector(
     (store) => store.challenge.challengeDetail.challenge?.Challenge_Exercises,
   );
+  const [isNotiCont, showNotiCont] = useState(false);
 
   const myFirstChallengeUserCount = useSelector(
     (store) => store.challenge.challengeDetail.challenge?.userCount,
   );
+  const notiCont = useRef(null);
 
   const [clicked, setClicked] = useState([]);
   const [completed, isCompleted] = useState(true);
   const [challengeModal, showChallengeModal] = useState(false);
   const tokenCookie = cookie.get('homt6_is_login');
+
+  // Crontab 적용
+  const notiChallengeStart = () => {
+    dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+    showNotiCont(true);
+    setTimeout(() => {
+      if (notiCont.current) {
+        notiCont.current.classList.replace(
+          'slide-in-bottom',
+          'slide-out-bottom',
+        );
+        setTimeout(() => {
+          showNotiCont(false);
+        }, 2000);
+      }
+    }, 2700);
+  };
+
+  let tasks;
+  if (myFirstChallenge) {
+    const myFirstChallengeDateTime =
+      myFirstChallenge?.Challenge.challengeDateTime;
+    tasks = [
+      {
+        fn: notiChallengeStart,
+        // this is the function which is triggered based on the config
+        id: '1',
+        config: `${myFirstChallengeDateTime.slice(
+          10,
+          12,
+        )} ${myFirstChallengeDateTime.slice(
+          8,
+          10,
+        )} ${myFirstChallengeDateTime.slice(
+          6,
+          8,
+        )} ${myFirstChallengeDateTime.slice(4, 6)} *}`,
+        name: '', // optional
+      },
+    ];
+  }
 
   // 오늘 저장한 나의 루틴 가져오기
   useEffect(() => {
@@ -133,20 +179,56 @@ const Main = (props) => {
             >
               Today
             </Text>
+
             {myFirstChallenge && (
-              // 리액트 crontab으로 api 재호출 예약을 걸어둬서 화면을 켜놔도 실시간으로 변하는것처럼 보여줄순 없을까?
-              <ChallengeBox
-                status={myFirstChallenge.Challenge.progressStatus}
-                isCompleted={myFirstChallenge.isCompleted}
-                myFirstChallenge={myFirstChallenge}
-                myFirstChallengeExercises={myFirstChallengeExercises}
-                isCompleted={myFirstChallenge.isCompleted}
-                onClick={() => {
-                  myFirstChallenge.isCompleted
-                    ? logger('완료 인증하기')
-                    : showChallengeModal(true);
-                }}
-              ></ChallengeBox>
+              <>
+                {myFirstChallenge.Challenge.progressStatus === 'start' &&
+                  isNotiCont && (
+                    <NotiBorder>
+                      <NotiCont ref={notiCont} className="slide-in-bottom">
+                        <Image src={Mascort} width="25px" height="25px" />
+                        <Text
+                          type="contents"
+                          fontSize="18px"
+                          fontWeight="bold"
+                          margin="4px 0 4px 0"
+                        >
+                          챌린지가 시작되었어요!
+                        </Text>
+                        <Text
+                          type="contents"
+                          fontSize="16px"
+                          textAlign="center"
+                          margin="0"
+                        >
+                          위 챌린지 박스를 클릭해서
+                          <br />
+                          챌린지를 시작해보세요
+                        </Text>
+                      </NotiCont>
+                    </NotiBorder>
+                  )}
+                {/* 리액트 crontab으로 api 재호출 예약을 걸어둬서 화면을 켜놔도
+                실시간으로 변하는것처럼 보여줄순 없을까? */}
+                <Crontab
+                  tasks={tasks}
+                  timeZone="Asia/Seoul"
+                  dashboard={{ hidden: true }}
+                  // if true, dashboard is hidden
+                />
+                <ChallengeBox
+                  status={myFirstChallenge.Challenge.progressStatus}
+                  isCompleted={myFirstChallenge.isCompleted}
+                  myFirstChallenge={myFirstChallenge}
+                  myFirstChallengeExercises={myFirstChallengeExercises}
+                  isCompleted={myFirstChallenge.isCompleted}
+                  onClick={() => {
+                    myFirstChallenge.isCompleted
+                      ? logger('완료 인증하기')
+                      : showChallengeModal(true);
+                  }}
+                ></ChallengeBox>
+              </>
             )}
             {challengeModal &&
               myFirstChallengeExercises &&
@@ -224,7 +306,7 @@ const Main = (props) => {
                       <TextItem>
                         <WorkoutDate>
                           {Math.floor(myTodayRoutine[0].routineTime / 60) <
-                            10 ? (
+                          10 ? (
                             <Time>
                               {'0' +
                                 Math.floor(myTodayRoutine[0].routineTime / 60)}
@@ -346,7 +428,11 @@ const Main = (props) => {
                       >
                         <RoutineTextBox>
                           {routine.isBookmarked === true ? (
-                            <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                            <Icon
+                              margin="0px 3px 0px 0px"
+                              width="15px"
+                              src={BookmarkSolid}
+                            />
                           ) : null}
                           <Time>{routine.routineName}</Time>
                         </RoutineTextBox>
@@ -382,10 +468,15 @@ const Main = (props) => {
                             exerciseActions.addSelectedPrevItem(selected[0]),
                           );
                           history.push('/todayroutinedetail');
-                        }}>
+                        }}
+                      >
                         <RoutineTextBox>
                           {routine.isBookmarked === true ? (
-                            <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                            <Icon
+                              margin="0px 3px 0px 0px"
+                              width="15px"
+                              src={BookmarkSolid}
+                            />
                           ) : null}
                           <Time>{routine.routineName}</Time>
                         </RoutineTextBox>
@@ -409,7 +500,6 @@ const Main = (props) => {
       </Wrapper>
 
       {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
-
         <AddBtn
           src={addButton}
           onClick={() => {
@@ -421,8 +511,7 @@ const Main = (props) => {
               dispatch(exerciseActions.initializeRoutine());
             }
           }}
-        >
-        </AddBtn>
+        ></AddBtn>
       )}
 
       {/* 고정 하단바 */}
@@ -531,11 +620,6 @@ const TodayMainBox = styled.div`
 `;
 
 const UserWrapper = styled.div`
-  /* display: flex;
-  justify-content: space-between;
-  margin: 20px 20px 20px 20px;
-  background-color: ${Color.bgIvory}; */
-
   display: flex;
   justify-content: space-between;
   padding: 20px 20px 20px 20px;
@@ -648,9 +732,7 @@ const TodayExerciseWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* height: 48px; */
   border-bottom: 1px solid ${Color.lightGray};
-  /* line-height: 48px; */
   padding: 28px 0px;
   font-size: 1rem;
   &:hover,
@@ -678,11 +760,6 @@ const TimeBox = styled.div`
 
 const Time = styled.span`
   font-size: 14px;
-`;
-
-const RoutineName = styled.span`
-  font-size: 14px;
-  line-height: 24px;
 `;
 
 const WorkoutDate = styled.span`
@@ -726,5 +803,30 @@ const LoginCont = styled.div`
 
 const RoutineTextBox = styled.div`
   display: flex;
+`;
 
+const NotiBorder = styled.div`
+  padding: 6px;
+  border: 2px solid #234e70;
+  position: fixed;
+  bottom: 90px;
+  left: calc(50% - 35vw);
+  z-index: 999999;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const NotiCont = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  height: 150px;
+  border-radius: 10px;
+  background-color: #234e70;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  box-sizing: border-box;
+  padding: 8px;
 `;
