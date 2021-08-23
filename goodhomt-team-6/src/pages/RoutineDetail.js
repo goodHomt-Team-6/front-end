@@ -59,6 +59,8 @@ const RoutineDetail = (props) => {
           <IconImg
             src={EditIcon}
             onClick={() => {
+              // selectedPrevItem을 routine으로 옮겨줌
+              dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
               history.push('/editroutine');
             }}
           />

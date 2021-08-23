@@ -40,14 +40,7 @@ const innerHeight = window.innerHeight - 175;
 // 루틴 수정하기 페이지 컴포넌트
 const EditRoutine = (props) => {
   const dispatch = useDispatch();
-  const [setCount, setSetCount] = useState(1);
-  // const lists = useSelector((state) => state.exercise.routine[0].myExercise);
-  const lists = useSelector(
-    (state) => state.exercise.selectedPrevItem.myExercise,
-  );
-  const selectedPrevItem = useSelector(
-    (state) => state.exercise.selectedPrevItem,
-  );
+  const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
   const editor = useSelector((state) => state.exercise.editor);
@@ -59,9 +52,6 @@ const EditRoutine = (props) => {
   const [checkCompletion, setCheckCompletion] = useState(false);
 
   useEffect(() => {
-    // selectedPrevItem을 routine으로 옮겨줌
-    dispatch(exerciseCreator.getMyRoutine([selectedPrevItem]));
-
     if (lists) {
       for (let list in lists) {
         if (lists[list].set[0].count === 0) {
@@ -103,12 +93,12 @@ const EditRoutine = (props) => {
 
   const clickSet = (listIdx) => {
     setIsExercise(true);
-    dispatch(exerciseCreator.addDetailSet(listIdx));
+    dispatch(exerciseCreator.addSet(listIdx));
   };
 
   const clickBreak = (listIdx) => {
     setIsExercise(false);
-    dispatch(exerciseCreator.addDetailBreak(listIdx));
+    dispatch(exerciseCreator.addBreak(listIdx));
   };
 
   return (
@@ -219,7 +209,13 @@ const EditRoutine = (props) => {
                       name={`exercise_${listIdx}`}
                       defaultChecked
                     />
-                    <RadioP className="list" onClick={() => clickSet(listIdx)}>
+                    <RadioP
+                      className="list"
+                      onClick={() => {
+                        clickSet(listIdx);
+                        logger(listIdx);
+                      }}
+                    >
                       세트
                     </RadioP>
                   </ButtonWrap>
@@ -260,7 +256,6 @@ const EditRoutine = (props) => {
       ) : (
         <FormExerciseDnd></FormExerciseDnd>
       )}
-      ;
       {editCompletion ? (
         <FooterButton
           onClick={() => {
@@ -355,21 +350,6 @@ const RadioP = styled.p`
   border-radius: 25px;
   background-color: rgb(255, 255, 255);
   user-select: none;
-`;
-
-const GoBackButton = styled.div`
-  display: flex;
-  width: auto;
-  justify-content: flex-start;
-  padding: 25px;
-  box-sizing: border-box;
-  align-items: baseline;
-  background-color: #f7f7fa;
-`;
-
-const PageText = styled.span`
-  font-size: 14px;
-  line-height: 2.5;
 `;
 
 const OptionCont = styled.div`
