@@ -76,7 +76,7 @@ const Main = (props) => {
         );
         setTimeout(() => {
           showNotiCont(false);
-        }, 2000);
+        }, 4000);
       }
     }, 2700);
   };
@@ -186,8 +186,8 @@ const Main = (props) => {
                 <>
                   {myFirstChallenge.Challenge.progressStatus === 'start' &&
                     isNotiCont && (
-                      <NotiBorder>
-                        <NotiCont ref={notiCont} className="slide-in-bottom">
+                      <NotiBorder ref={notiCont} className="slide-in-bottom">
+                        <NotiCont>
                           <Image src={Mascort} width="25px" height="25px" />
                           <Text
                             type="contents"
@@ -216,7 +216,7 @@ const Main = (props) => {
                     tasks={tasks}
                     timeZone="Asia/Seoul"
                     dashboard={{ hidden: true }}
-                  // if true, dashboard is hidden
+                    // if true, dashboard is hidden
                   />
                   <ChallengeBox
                     status={myFirstChallenge.Challenge.progressStatus}
@@ -229,8 +229,7 @@ const Main = (props) => {
                         ? logger('완료 인증하기')
                         : showChallengeModal(true);
                     }}
-                  >
-                  </ChallengeBox>
+                  ></ChallengeBox>
                 </>
               )}
               {challengeModal &&
@@ -240,7 +239,9 @@ const Main = (props) => {
                     exerciseLength={myFirstChallengeExercises.length}
                     time={myFirstChallenge.Challenge.challengeDateTime}
                     challengeName={myFirstChallenge.Challenge.challengeName}
-                    firstExerciseName={myFirstChallengeExercises[0].exerciseName}
+                    firstExerciseName={
+                      myFirstChallengeExercises[0].exerciseName
+                    }
                     userCount={myFirstChallengeUserCount}
                     showChallengeModal={showChallengeModal}
                     progressStatus={myFirstChallenge.Challenge.progressStatus}
@@ -262,7 +263,9 @@ const Main = (props) => {
                     exerciseLength={myFirstChallengeExercises.length}
                     time={myFirstChallenge.Challenge.challengeDateTime}
                     challengeName={myFirstChallenge.Challenge.challengeName}
-                    firstExerciseName={myFirstChallengeExercises[0].exerciseName}
+                    firstExerciseName={
+                      myFirstChallengeExercises[0].exerciseName
+                    }
                     userCount={myFirstChallengeUserCount}
                     showChallengeModal={showChallengeModal}
                     progressStatus={myFirstChallenge.Challenge.progressStatus}
@@ -280,7 +283,9 @@ const Main = (props) => {
                     exerciseLength={myFirstChallengeExercises.length}
                     time={myFirstChallenge.Challenge.challengeDateTime}
                     challengeName={myFirstChallenge.Challenge.challengeName}
-                    firstExerciseName={myFirstChallengeExercises[0].exerciseName}
+                    firstExerciseName={
+                      myFirstChallengeExercises[0].exerciseName
+                    }
                     userCount={myFirstChallengeUserCount}
                     showChallengeModal={showChallengeModal}
                     progressStatus={myFirstChallenge.Challenge.progressStatus}
@@ -295,17 +300,20 @@ const Main = (props) => {
                   {myTodayRoutine[0].isCompleted ? (
                     <DashBoardBase
                       message="오늘의 운동을 완료했습니다!"
-                      exerciseType={myTodayRoutine[0].routineName} />
+                      exerciseType={myTodayRoutine[0].routineName}
+                    />
                   ) : (
                     <DashBoardBase
                       message="오늘의 운동을 시작해보세요!"
-                      exerciseType={myTodayRoutine[0].routineName} />
+                      exerciseType={myTodayRoutine[0].routineName}
+                    />
                   )}
                 </>
               ) : (
                 <DashBoardBase
                   message="아직 등록된 운동이 없습니다"
-                  exerciseType="종목없음" />
+                  exerciseType="종목없음"
+                />
               )}
             </RegisterWrapper>
 
@@ -382,7 +390,11 @@ const Main = (props) => {
                         >
                           <RoutineTextBox>
                             {routine.isBookmarked === true ? (
-                              <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                              <Icon
+                                margin="0px 3px 0px 0px"
+                                width="15px"
+                                src={BookmarkSolid}
+                              />
                             ) : null}
                             <Time>{routine.routineName}</Time>
                           </RoutineTextBox>
@@ -418,10 +430,15 @@ const Main = (props) => {
                               exerciseActions.addSelectedPrevItem(selected[0]),
                             );
                             history.push('/todayroutinedetail');
-                          }}>
+                          }}
+                        >
                           <RoutineTextBox>
                             {routine.isBookmarked === true ? (
-                              <Icon margin="0px 3px 0px 0px" width="15px" src={BookmarkSolid} />
+                              <Icon
+                                margin="0px 3px 0px 0px"
+                                width="15px"
+                                src={BookmarkSolid}
+                              />
                             ) : null}
                             <Time>{routine.routineName}</Time>
                           </RoutineTextBox>
@@ -444,25 +461,21 @@ const Main = (props) => {
           </InboxWrapper>
         </Wrapper>
 
-        {
-          myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
-
-            <AddBtn
-              src={addButton}
-              onClick={() => {
-                if (!tokenCookie) {
-                  sessionStorage.setItem('redirect_url', '/exercise');
-                  dispatch(userActions.showLoginModal(true));
-                } else {
-                  history.push('/exercise');
-                  dispatch(exerciseActions.initializeRoutine());
-                }
-              }}
-            >
-            </AddBtn>
-          )
-        }
-      </Container >
+        {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
+          <AddBtn
+            src={addButton}
+            onClick={() => {
+              if (!tokenCookie) {
+                sessionStorage.setItem('redirect_url', '/exercise');
+                dispatch(userActions.showLoginModal(true));
+              } else {
+                history.push('/exercise');
+                dispatch(exerciseActions.initializeRoutine());
+              }
+            }}
+          ></AddBtn>
+        )}
+      </Container>
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
