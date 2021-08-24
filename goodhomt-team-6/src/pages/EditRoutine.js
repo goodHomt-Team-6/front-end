@@ -52,8 +52,6 @@ const EditRoutine = (props) => {
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
 
-  console.log("리스트 안 내용 확인", lists);
-
   useEffect(() => {
     dispatch(exerciseCreator.getRoutineDetailAPI(routineId));
   }, []);

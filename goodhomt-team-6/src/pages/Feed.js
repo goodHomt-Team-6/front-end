@@ -24,6 +24,7 @@ import Noti from '../img/notification.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
+import ErrorModal from '../components/ErrorModal';
 import DashBoardBase from '../components/DashBoardBase';
 
 // 피드 페이지 컴포넌트
@@ -32,6 +33,7 @@ const Feed = () => {
   const [searchInput, setSearchInput] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showAddFeedModal, setShowAddFeedModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [visible, setVisible] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -40,6 +42,7 @@ const Feed = () => {
   const userName = useSelector((store) => store.user.user.nickname);
   const userImg = useSelector((store) => store.user.user.userImg);
   const is_login = useSelector((store) => store.user?.is_login);
+  const isSearchError = useSelector((store) => store.feed.isSearchError);
 
   useEffect(() => {
     if (is_login) {
@@ -54,7 +57,14 @@ const Feed = () => {
     }
   }, [is_login]);
 
-  console.log(searchKeyword);
+  useEffect(() => {
+    if (isSearchError) {
+      setShowErrorModal(true);
+    } else {
+      setSearchKeyword('');
+      return;
+    }
+  }, [isSearchError]);
 
   // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
@@ -106,6 +116,7 @@ const Feed = () => {
             <SearchInput
               visible={visible}
               value={searchInput}
+              placeholder="검색어를 입력해주세요."
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}
@@ -154,6 +165,13 @@ const Feed = () => {
           message="피드 추가"
           setShowAddFeedModal={setShowAddFeedModal}
         />
+      ) : null}
+
+      {showErrorModal ? (
+        <ErrorModal
+          message="찾으시는 키워드가 없습니다."
+          buttonMessage="피드로 돌아가기"
+          setShowErrorModal={setShowErrorModal} />
       ) : null}
 
       {/* 피드 목록 */}
@@ -381,7 +399,7 @@ const SearchWrapper = styled.div`
   margin: 0px;
   padding: 0px;
   width: ${(props) => (props.visible ? '100%' : '0px')};
-  /* transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); */
+  /* transition: all 0.4s cubic-bezier(0.6, -0.5, 0.2, 0.1); */
 `;
 
 const SearchInput = styled.input`

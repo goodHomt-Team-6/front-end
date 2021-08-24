@@ -12,6 +12,7 @@ const initialState = {
   savedRoutineName: '',
   savedDescription: '',
   isDoubleChecked: false,
+  isSearchError: false,
 };
 
 // actions
@@ -25,6 +26,7 @@ const SAVE_ROUTINENAME = 'community/SAVE_ROUTINENAME';
 const SAVE_DESCRIPTION = 'community/SAVE_DESCRIPTION';
 const INITIALIZE_WRITTEN_FEED = 'community/INITIALIZE_WRITTEN_FEED';
 const IS_DOUBLE_CHECKED = 'community/IS_DOUBLE_CHECKED';
+const IS_SEARCH_ERROR = 'community/IS_SEARCH_ERROR';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
@@ -37,6 +39,7 @@ const saveRoutinename = createAction(SAVE_ROUTINENAME, (routinename) => ({ routi
 const saveDescription = createAction(SAVE_DESCRIPTION, (description) => ({ description }));
 const initializeWrittenFeed = createAction(INITIALIZE_WRITTEN_FEED, () => ({}));
 const isDoubleChecked = createAction(IS_DOUBLE_CHECKED, (isDoubleChecked) => ({ isDoubleChecked }));
+const isSearchError = createAction(IS_SEARCH_ERROR, (isSearchError) => ({ isSearchError }));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -78,6 +81,7 @@ const getFeedSearchAPI = (keyword, userId) => {
       })
       .catch((error) => {
         logger('커뮤니티 피드 검색으로 가져오기 실패', error);
+        dispatch(isSearchError(true));
       });
   };
 };
@@ -134,7 +138,6 @@ const checkNicknameAPI = (communityNickname) => {
     api
       .post('/community/dupCheck', { communityNickname })
       .then((response) => {
-        console.log(response);
         logger('중복체크 성공');
         dispatch(checkNickname(response.data.ok));
       })
@@ -197,6 +200,10 @@ export default handleActions(
     [IS_DOUBLE_CHECKED]: (state, action) =>
       produce(state, (draft) => {
         draft.isDoubleChecked = action.payload.isDoubleChecked;
+      }),
+    [IS_SEARCH_ERROR]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isSearchError = action.payload.isSearchError;
       })
   },
   initialState
@@ -218,6 +225,7 @@ const actionCreators = {
   saveDescription,
   initializeWrittenFeed,
   isDoubleChecked,
+  isSearchError,
 };
 
 export { actionCreators };

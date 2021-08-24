@@ -87,7 +87,6 @@ const MyPastRoutines = (props) => {
                 onChange={(e) => {
                   const { value } = e.target;
                   const selected = myRoutines.filter((select) => select.id == value);
-                  console.log(selected[0]);
                   setClicked(selected[0]);
                 }}
               />
