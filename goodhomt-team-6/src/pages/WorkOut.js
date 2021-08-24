@@ -13,7 +13,9 @@ import logger from '../shared/Logger';
 import ProgressBarCont from '../components/ProgressBarCont';
 import ExerciseResultModal from '../components/ExerciseResultModal';
 import Header from '../components/Header';
-import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+import exercise, {
+  actionCreators as exerciseActions,
+} from '../redux/modules/exercise';
 import StopWatchCont from '../components/StopWatchCont';
 
 const WorkOut = (props) => {
@@ -112,6 +114,8 @@ const WorkOut = (props) => {
               onClick={() => {
                 showExerciseResultModal(true);
                 setTimeStop(true);
+                dispatch(exerciseActions.countCurrentSetIdx(0));
+                dispatch(exerciseActions.countCurrentExerciseIdx(0));
               }}
             >
               <CompleteButtonInner>운동 완료</CompleteButtonInner>

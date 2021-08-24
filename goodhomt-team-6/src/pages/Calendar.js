@@ -15,6 +15,8 @@ import BadRating from '../img/clicked_bad_rating.svg';
 import GoodRating from '../img/clicked_good_rating.svg';
 import NormalRating from '../img/clicked_normal_rating.svg';
 
+const innerHeight = window.innerHeight;
+
 /**
  * 달력 만들기 순서
  *  - 이번달이 몇 주가 필요한 지 "주"수 구하기
@@ -205,7 +207,12 @@ const Calendar = (props) => {
       >
         Calendar
       </Text>
-      <Grid flex_direction="column" width="100vw" height="45vh" margin="auto">
+      <Grid
+        flex_direction="column"
+        width="100vw"
+        height={innerHeight * 0.45 + 'px'}
+        margin="auto"
+      >
         <Grid justify_contents="center" align="baseline" bg="#F7F7FA">
           <Button
             margin="0 30px 0 0"
@@ -245,88 +252,93 @@ const Calendar = (props) => {
         {week_arr}
       </Grid>
 
-      {/* 클릭한 루틴, 챌린지 */}
-      {selectedList &&
-        selectedList.map((l, idx) =>
-          l?.routineName ? (
-            <TodayExerciseWrapper
-              key={idx}
-              onClick={() => {
-                dispatch(exerciseActions.addSelectedPrevItem(l));
-                dispatch(calendarActions.setIsFromCalendar(true));
-                history.push('/routinedetail');
-              }}
-            >
-              <RoutineInfo>
-                <RunningTime>
-                  {l && Math.floor(l?.routineTime / 60) < 10
-                    ? `0${Math.floor(l?.routineTime / 60)}:`
-                    : Math.floor(l?.routineTime / 60)`:`}
-                  {l && l?.routineTime < 10
-                    ? `0${l?.routineTime % 60}`
-                    : l?.routineTime % 60}
-                </RunningTime>
+      <TodayExerciseCont>
+        {/* 클릭한 루틴, 챌린지 */}
+        {selectedList &&
+          selectedList.map((l, idx) =>
+            l?.routineName ? (
+              <TodayExerciseWrapper
+                key={idx}
+                onClick={() => {
+                  dispatch(exerciseActions.addSelectedPrevItem(l));
+                  dispatch(calendarActions.setIsFromCalendar(true));
+                  history.push('/routinedetail');
+                }}
+              >
+                <RoutineInfo>
+                  <RunningTime>
+                    {l && Math.floor(l?.routineTime / 60) < 10
+                      ? `0${Math.floor(l?.routineTime / 60)}:`
+                      : Math.floor(l?.routineTime / 60)`:`}
+                    {l && l?.routineTime < 10
+                      ? `0${l?.routineTime % 60}`
+                      : l?.routineTime % 60}
+                  </RunningTime>
 
-                <RoutineBox>
-                  <RoutineName>{l?.routineName}</RoutineName>
-                  <WorkoutDate>
-                    {l.createdAt.slice(5, 10).replace(/-/gi, '.')}
-                  </WorkoutDate>
-                </RoutineBox>
-              </RoutineInfo>
-              {l?.rating === 'soso' && (
-                <RatingCont src={NormalRating}></RatingCont>
-              )}
-              {l?.rating === 'bad' && <RatingCont src={BadRating}></RatingCont>}
-              {(l?.rating === 'good' || l?.rating === null) && (
-                <RatingCont src={GoodRating}></RatingCont>
-              )}
-            </TodayExerciseWrapper>
-          ) : (
-            <TodayExerciseWrapper
-              key={idx}
-              onClick={() => {
-                dispatch(
-                  challengeActions.getMyChallengesAPI(
-                    'calendar',
-                    allMyChallenges.indexOf(l),
-                  ),
-                );
-                dispatch(calendarActions.setIsCalendarChallengeData(true));
-                dispatch(calendarActions.setIsFromCalendar(true));
-              }}
-            >
-              <RoutineInfo>
-                <RunningTime>
-                  {l && Math.floor(l?.challengeTime / 60) < 10
-                    ? `0${Math.floor(l?.challengeTime / 60)}:`
-                    : Math.floor(l?.challengeTime / 60)`:`}
-                  {l && l?.challengeTime < 10
-                    ? `0${l?.challengeTime % 60}`
-                    : l?.challengeTime % 60}
-                </RunningTime>
+                  <RoutineBox>
+                    <RoutineName>{l?.routineName}</RoutineName>
+                    <WorkoutDate>
+                      {l.createdAt.slice(5, 10).replace(/-/gi, '.')}
+                    </WorkoutDate>
+                  </RoutineBox>
+                </RoutineInfo>
+                {l?.rating === 'soso' && (
+                  <RatingCont src={NormalRating}></RatingCont>
+                )}
+                {l?.rating === 'bad' && (
+                  <RatingCont src={BadRating}></RatingCont>
+                )}
+                {(l?.rating === 'good' || l?.rating === null) && (
+                  <RatingCont src={GoodRating}></RatingCont>
+                )}
+              </TodayExerciseWrapper>
+            ) : (
+              <TodayExerciseWrapper
+                key={idx}
+                onClick={() => {
+                  dispatch(
+                    challengeActions.getMyChallengesAPI(
+                      'calendar',
+                      allMyChallenges.indexOf(l),
+                    ),
+                  );
+                  dispatch(calendarActions.setIsCalendarChallengeData(true));
+                  dispatch(calendarActions.setIsFromCalendar(true));
+                }}
+              >
+                <RoutineInfo>
+                  <RunningTime>
+                    {l && Math.floor(l?.challengeTime / 60) < 10
+                      ? `0${Math.floor(l?.challengeTime / 60)}:`
+                      : Math.floor(l?.challengeTime / 60)`:`}
+                    {l && l?.challengeTime < 10
+                      ? `0${l?.challengeTime % 60}`
+                      : l?.challengeTime % 60}
+                  </RunningTime>
 
-                <RoutineBox>
-                  <RoutineName>{l?.Challenge.challengeName}</RoutineName>
-                  <WorkoutDate>
-                    {`${l?.Challenge?.challengeDateTime.slice(
-                      4,
-                      6,
-                    )}.${l?.Challenge?.challengeDateTime.slice(6, 8)}`}
-                  </WorkoutDate>
-                </RoutineBox>
-              </RoutineInfo>
-              {l?.rating === 'soso' && (
-                <RatingCont src={NormalRating}></RatingCont>
-              )}
-              {l?.rating === 'bad' && <RatingCont src={BadRating}></RatingCont>}
-              {(l?.rating === 'good' || l?.rating === null) && (
-                <RatingCont src={GoodRating}></RatingCont>
-              )}
-            </TodayExerciseWrapper>
-          ),
-        )}
-
+                  <RoutineBox>
+                    <RoutineName>{l?.Challenge.challengeName}</RoutineName>
+                    <WorkoutDate>
+                      {`${l?.Challenge?.challengeDateTime.slice(
+                        4,
+                        6,
+                      )}.${l?.Challenge?.challengeDateTime.slice(6, 8)}`}
+                    </WorkoutDate>
+                  </RoutineBox>
+                </RoutineInfo>
+                {l?.rating === 'soso' && (
+                  <RatingCont src={NormalRating}></RatingCont>
+                )}
+                {l?.rating === 'bad' && (
+                  <RatingCont src={BadRating}></RatingCont>
+                )}
+                {(l?.rating === 'good' || l?.rating === null) && (
+                  <RatingCont src={GoodRating}></RatingCont>
+                )}
+              </TodayExerciseWrapper>
+            ),
+          )}
+      </TodayExerciseCont>
       {/* 고정 하단바 */}
       <NavBarWrapper>
         <NavBar />
@@ -399,4 +411,9 @@ const RunningTime = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 20px;
+`;
+
+const TodayExerciseCont = styled.div`
+  height: ${innerHeight * 0.55 - 150}px;
+  overflow-y: scroll;
 `;
