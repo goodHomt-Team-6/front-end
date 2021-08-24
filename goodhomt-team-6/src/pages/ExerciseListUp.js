@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 import { Text, Button, FooterButton } from '../shared/Styles';
@@ -26,9 +26,11 @@ const ExerciseListUp = (props) => {
   const myExercise = useSelector(
     (store) => store.exercise.routine[0].myExercise,
   );
+  const selectedWrapper = useRef(null);
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());
+    selectedWrapper.current.scrollBy(500, 0);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const ExerciseListUp = (props) => {
 
         {/* 선택한 운동 보여주기 */}
         {selectedItems && (
-          <SelectedWrapper>
+          <SelectedWrapper ref={selectedWrapper}>
             {selectedItems.map((e, i) => (
               <Selected key={i}>
                 <ExerciseName>{e.exerciseName}</ExerciseName>
@@ -73,22 +75,16 @@ const ExerciseListUp = (props) => {
         )}
 
         {/* 운동 검색 및 카테고리 */}
-        <Category />
+        <Category selectedItems={selectedItems} />
 
         {/* 종목 추가하기 */}
         <FooterButtonWrapper>
           {selectedItems && selectedItems.length > 0 ? (
-            <FooterButton
-              onClick={() =>
-                history.push('/exercise/form')
-              }>
+            <FooterButton onClick={() => history.push('/exercise/form')}>
               종목 추가하기
             </FooterButton>
           ) : (
-            <FooterButton
-              disabled>
-              종목 추가하기
-            </FooterButton>
+            <FooterButton disabled>종목 추가하기</FooterButton>
           )}
         </FooterButtonWrapper>
       </ExerciseListCont>
@@ -126,7 +122,7 @@ const Selected = styled.div`
   color: black;
   line-height: 32px;
   border-radius: 16px;
-  margin-right: 16px;
+  margin-right: 4px;
   background-color: #fff;
 `;
 
