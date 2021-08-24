@@ -33,6 +33,7 @@ const Feed = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAddFeedModal, setShowAddFeedModal] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
@@ -83,18 +84,21 @@ const Feed = () => {
         {/* 운동 종목 키워드 검색 */}
         <IconWrapper>
           {/* 검색한 키워드 보여주기 */}
-          {/* {searchedKeyword && ( */}
-          {/* <SelectedWrapper>
-            <Selected>
-              <ExerciseName>스쿼트</ExerciseName>
-              <CloseBtn
-                src={CloseButton}
-                width="10"
-                onClick={() => {
-                }}
-              />
-            </Selected>
-          </SelectedWrapper> */}
+          {searchKeyword !== '' ? (
+            <SelectedWrapper visible={visible}>
+              <Selected>
+                <ExerciseName>{searchKeyword}</ExerciseName>
+                <CloseBtn
+                  src={CloseButton}
+                  width="10"
+                  onClick={() => {
+                    setSearchKeyword('');
+                    dispatch(feedActions.getFeedAllAPI(userId));
+                  }}
+                />
+              </Selected>
+            </SelectedWrapper>
+          ) : null}
 
           <SearchWrapper visible={visible}>
             <SearchInput
@@ -113,9 +117,15 @@ const Feed = () => {
               setSearchInput('');
               if (visible) {
                 setVisible(false);
-                // dispatch(feedActions.getFeedSearchAPI(searchInput));
+                dispatch(feedActions.getFeedSearchAPI(searchInput, userId));
+                setSearchKeyword(searchInput);
               } else {
-                setVisible(true);
+                if (searchKeyword === '') {
+                  setVisible(true);
+                } else {
+                  setVisible(true);
+                  setSearchKeyword('');
+                }
               }
             }}
           />
@@ -361,7 +371,7 @@ const SearchWrapper = styled.div`
   margin: 0px;
   padding: 0px;
   width: ${(props) => (props.visible ? '100%' : '0px')};
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); */
 `;
 
 const SearchInput = styled.input`
