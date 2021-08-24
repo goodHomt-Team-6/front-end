@@ -181,7 +181,9 @@ const getSelectedPrevItem = createAction(
   (selectedPrevItem) => ({ selectedPrevItem }),
 );
 const initializeRoutine = createAction(INITIALIZE_ROUTINE, () => ({}));
-const setEditedRoutine = createAction(SET_EDITED_ROUTINE, (routine) => ({ routine }));
+const setEditedRoutine = createAction(SET_EDITED_ROUTINE, (routine) => ({
+  routine,
+}));
 const countCurrentSetIdx = createAction(COUNT_CURRENT_SET_IDX, (count) => ({
   count,
 }));
@@ -429,6 +431,8 @@ const recordResultAPI = (result) => {
       .patch('/routines/result', result)
       .then((response) => {
         history.replace('/');
+        dispatch(countCurrentSetIdx(0));
+        dispatch(countCurrentExerciseIdx(0));
       })
       .catch((error) => {
         logger('운동 완료 결과 모달 - 기록하기 버튼 실패', error);
@@ -525,7 +529,7 @@ export default handleActions(
           count: list.set[0].count,
           setCount: setCount,
           minutes: null, // 루틴수정을 위해 추가
-          seconds: null // 루틴수정을 위해 추가
+          seconds: null, // 루틴수정을 위해 추가
         });
       }),
     [ADD_BREAK]: (state, action) =>

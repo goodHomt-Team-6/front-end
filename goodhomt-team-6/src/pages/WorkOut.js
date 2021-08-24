@@ -114,8 +114,6 @@ const WorkOut = (props) => {
               onClick={() => {
                 showExerciseResultModal(true);
                 setTimeStop(true);
-                dispatch(exerciseActions.countCurrentSetIdx(0));
-                dispatch(exerciseActions.countCurrentExerciseIdx(0));
               }}
             >
               <CompleteButtonInner>운동 완료</CompleteButtonInner>

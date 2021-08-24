@@ -160,6 +160,8 @@ const recordChallengeResultAPI = (result) => {
       .patch(`/challenges/record`, result)
       .then((response) => {
         history.replace('/');
+        dispatch(exerciseActions.countCurrentSetIdx(0));
+        dispatch(exerciseActions.countCurrentExerciseIdx(0));
       })
       .catch(function (err) {
         logger('챌린지 결과 기록에 실패했습니다.');
