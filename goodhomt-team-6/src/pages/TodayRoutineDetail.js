@@ -31,14 +31,16 @@ const TodayRoutineDetail = (props) => {
   const [showShareModal, setShowShareModal] = useState(false);
 
   // useEffect(() => {
-  //   dispatch(exerciseActions.getRoutineDetailAPI(id));
+  //   if (selectedPrevItem.length !== 0) {
+  //     dispatch(exerciseActions.getRoutineDetailAPI(id));
+  //   }
   // }, []);
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
       dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
-  }, [routineName]);
+  }, [selectedPrevItem]);
 
   useEffect(() => {
     return () => {

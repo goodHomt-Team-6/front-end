@@ -95,6 +95,7 @@ const ADD_SELECTED_PREV_ITEM = 'exercise/ADD_SELECTED_PREV_ITEM';
 const REMOVE_SELECTED_PREV_ITEM = 'exercise/REMOVE_SELECTED_PREV_ITEM';
 const GET_SELECTED_PREV_ITEM = 'exercise/GET_SELECTED_PREV_ITEM';
 const INITIALIZE_ROUTINE = 'exercise/INITIALIZE_ROUTINE';
+const SET_EDITED_ROUTINE = 'exercise/SET_EDITED_ROUTINE';
 
 const COUNT_CURRENT_SET_IDX = 'exercise/COUNT_CURRENT_SET_IDX';
 const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
@@ -180,6 +181,7 @@ const getSelectedPrevItem = createAction(
   (selectedPrevItem) => ({ selectedPrevItem }),
 );
 const initializeRoutine = createAction(INITIALIZE_ROUTINE, () => ({}));
+const setEditedRoutine = createAction(SET_EDITED_ROUTINE, (routine) => ({ routine }));
 const countCurrentSetIdx = createAction(COUNT_CURRENT_SET_IDX, (count) => ({
   count,
 }));
@@ -365,7 +367,8 @@ const EditRoutineAPI = (routineId, routine) => {
         logger('루틴 수정하기 성공');
         const _routine = getState().exercise.routine;
         dispatch(addSelectedPrevItem(_routine[0]));
-
+        // 루틴에도 넣어주자
+        dispatch(setEditedRoutine(_routine[0]));
       })
       .catch((error) => {
         logger('루틴 수정하기 실패', error);
@@ -661,6 +664,11 @@ export default handleActions(
     [INITIALIZE_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
         draft.routine = initialState.routine;
+      }),
+    // 수정한 루틴으로 변경해주기
+    [SET_EDITED_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.routine[0] = action.payload.routine;
       }),
     [COUNT_CURRENT_SET_IDX]: (state, action) =>
       produce(state, (draft) => {
