@@ -4,9 +4,11 @@ import Color from '../shared/Color';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useSelector, useDispatch } from 'react-redux';
 import searchIcon from '../img/search-icon.svg';
+import logger from '../shared/Logger';
 
 // 운동 카테고리 컴포넌트
 const Category = (props) => {
+  logger(props.selectedItems);
   const dispatch = useDispatch();
   const [clicked, isClicked] = useState(false);
 
@@ -17,8 +19,12 @@ const Category = (props) => {
 
   const [clickedCategoryItem, setCategoryItem] = useState(null);
   const [allClicked, setAllClicked] = useState(true);
-  const [topClicked, setTopClicked] = useState(false);
+  const [backClicked, setBackClicked] = useState(false);
   const [bottomClicked, setBottomClicked] = useState(false);
+  const [chestClicked, setChestClicked] = useState(false);
+  const [bellyClicked, setBellyClicked] = useState(false);
+  const [shoulderClicked, setShoulderClicked] = useState(false);
+  const [armClicked, setArmClicked] = useState(false);
   const [elseClicked, setElseClicked] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
@@ -32,43 +38,78 @@ const Category = (props) => {
     }
   }, [selectedItems]);
 
-  const allClickedYes = () => {
-    setAllClicked(true);
-    setTopClicked(false);
+  const setFalse = () => {
+    setAllClicked(false);
+    setBackClicked(false);
     setBottomClicked(false);
+    setChestClicked(false);
+    setBellyClicked(false);
+    setShoulderClicked(false);
+    setArmClicked(false);
     setElseClicked(false);
+  };
+
+  const allClickedYes = () => {
+    setFalse();
+    setAllClicked(true);
     dispatch(exerciseActions.getExerciseAPI());
     isClicked(false);
   };
 
-  const TopClickedYes = () => {
-    setAllClicked(false);
-    setTopClicked(true);
-    setBottomClicked(false);
-    setElseClicked(false);
+  const backClickedYes = () => {
+    setFalse();
+    setBackClicked(true);
     dispatch(exerciseActions.getExerciseTypeAPI(1));
     isClicked(true);
     setCategoryItem(1);
   };
 
-  const BottomClickedYes = () => {
-    setAllClicked(false);
-    setTopClicked(false);
+  const bottomClickedYes = () => {
+    setFalse();
     setBottomClicked(true);
-    setElseClicked(false);
     dispatch(exerciseActions.getExerciseTypeAPI(2));
     isClicked(true);
     setCategoryItem(2);
   };
 
-  const ElseClickedYes = () => {
-    setAllClicked(false);
-    setTopClicked(false);
-    setBottomClicked(false);
-    setElseClicked(true);
+  const chestClickedYes = () => {
+    setFalse();
+    setChestClicked(true);
     dispatch(exerciseActions.getExerciseTypeAPI(3));
     isClicked(true);
     setCategoryItem(3);
+  };
+
+  const bellyClickedYes = () => {
+    setFalse();
+    setBellyClicked(true);
+    dispatch(exerciseActions.getExerciseTypeAPI(4));
+    isClicked(true);
+    setCategoryItem(4);
+  };
+
+  const shoulderClickedYes = () => {
+    setFalse();
+    setShoulderClicked(true);
+    dispatch(exerciseActions.getExerciseTypeAPI(5));
+    isClicked(true);
+    setCategoryItem(5);
+  };
+
+  const armClickedYes = () => {
+    setFalse();
+    setArmClicked(true);
+    dispatch(exerciseActions.getExerciseTypeAPI(6));
+    isClicked(true);
+    setCategoryItem(6);
+  };
+
+  const elseClickedYes = () => {
+    setFalse();
+    setElseClicked(true);
+    dispatch(exerciseActions.getExerciseTypeAPI(7));
+    isClicked(true);
+    setCategoryItem(7);
   };
 
   return (
@@ -89,13 +130,25 @@ const Category = (props) => {
         <CategoryItem handle={allClicked} onClick={allClickedYes}>
           전체
         </CategoryItem>
-        <CategoryItem handle={topClicked} onClick={TopClickedYes}>
-          상체
+        <CategoryItem handle={backClicked} onClick={backClickedYes}>
+          등
         </CategoryItem>
-        <CategoryItem handle={bottomClicked} onClick={BottomClickedYes}>
+        <CategoryItem handle={bottomClicked} onClick={bottomClickedYes}>
           하체
         </CategoryItem>
-        <CategoryItem handle={elseClicked} onClick={ElseClickedYes}>
+        <CategoryItem handle={chestClicked} onClick={chestClickedYes}>
+          가슴
+        </CategoryItem>
+        <CategoryItem handle={bellyClicked} onClick={bellyClickedYes}>
+          복근
+        </CategoryItem>
+        <CategoryItem handle={shoulderClicked} onClick={shoulderClickedYes}>
+          어깨
+        </CategoryItem>
+        <CategoryItem handle={armClicked} onClick={armClickedYes}>
+          팔
+        </CategoryItem>
+        <CategoryItem handle={elseClicked} onClick={elseClickedYes}>
           기타
         </CategoryItem>
       </Categories>
@@ -131,7 +184,7 @@ const Category = (props) => {
         </CategoryList>
       ) : (
         // 운동 전체 리스트 보여주기
-        <CategoryList>
+        <CategoryList selectedItems={selectedItems}>
           {exerciseAll
             .filter((e) => e.exerciseName.includes(searchInput))
             .map((e, i) => (
@@ -172,7 +225,8 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-  height: ${innerHeight}px;
+  height: ${(props) =>
+    props.selectedItems.length ? innerHeight - 34 : innerHeight}px;
   overflow-x: scroll;
   background-color: #f7f7fa;
 `;
@@ -189,7 +243,7 @@ const Categories = styled.ul`
 const CategoryItem = styled.li`
   list-style: none;
   padding-bottom: 15px;
-  width: 33.3%;
+  min-width: 65px;
   text-align: center;
   color: ${Color.navy};
   font-size: 1rem;
