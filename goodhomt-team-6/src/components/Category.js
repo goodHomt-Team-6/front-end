@@ -8,7 +8,6 @@ import logger from '../shared/Logger';
 
 // 운동 카테고리 컴포넌트
 const Category = (props) => {
-  logger(props.selectedItems);
   const dispatch = useDispatch();
   const [clicked, isClicked] = useState(false);
 
@@ -155,7 +154,7 @@ const Category = (props) => {
 
       {/* 운동 카테고리별 리스트 보여주기 */}
       {clicked ? (
-        <CategoryList>
+        <CategoryList selectedItems={props.selectedItems.length}>
           {categoryItems &&
             categoryItems
               .filter((e) => e.exerciseName.includes(searchInput))
@@ -184,7 +183,7 @@ const Category = (props) => {
         </CategoryList>
       ) : (
         // 운동 전체 리스트 보여주기
-        <CategoryList selectedItems={selectedItems}>
+        <CategoryList selectedItems={props.selectedItems.length}>
           {exerciseAll
             .filter((e) => e.exerciseName.includes(searchInput))
             .map((e, i) => (
@@ -226,7 +225,7 @@ const CategoryList = styled.ul`
   list-style: none;
   box-sizing: border-box;
   height: ${(props) =>
-    props.selectedItems.length ? innerHeight - 34 : innerHeight}px;
+    props.selectedItems > 0 ? innerHeight - 34 : innerHeight}px;
   overflow-x: scroll;
   background-color: #f7f7fa;
 `;
