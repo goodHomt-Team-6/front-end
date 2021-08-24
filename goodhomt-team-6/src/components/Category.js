@@ -237,6 +237,10 @@ const Categories = styled.ul`
   margin: 25px 0px 0px 0px;
   overflow-x: scroll;
   white-space: nowrap;
+   scrollbar-width: none;
+  ::-webkit-scrollbar{
+    display: none;
+  }
 `;
 
 const CategoryItem = styled.li`
