@@ -54,6 +54,8 @@ const Feed = () => {
     }
   }, [is_login]);
 
+  console.log(searchKeyword);
+
   // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
     let startTime = new Date(createdAt);
@@ -81,7 +83,6 @@ const Feed = () => {
           Feed
         </Text>
 
-        {/* 운동 종목 키워드 검색 */}
         <IconWrapper>
           {/* 검색한 키워드 보여주기 */}
           {searchKeyword !== '' ? (
@@ -100,6 +101,7 @@ const Feed = () => {
             </SelectedWrapper>
           ) : null}
 
+          {/* 운동 종목 키워드 검색 */}
           <SearchWrapper visible={visible}>
             <SearchInput
               visible={visible}
@@ -298,7 +300,15 @@ const Feed = () => {
                               color="#4A40FF"
                               fontSize="14px"
                               fontWeight="600"
-                            >
+                              onClick={() => {
+                                if (visible) {
+                                  setVisible(false);
+                                  setSearchKeyword(i.exerciseName);
+                                } else {
+                                  setSearchKeyword(i.exerciseName);
+                                }
+                                dispatch(feedActions.getFeedSearchAPI(i.exerciseName, userId));
+                              }}>
                               #{i.exerciseName}
                             </Text>
                           ))}
