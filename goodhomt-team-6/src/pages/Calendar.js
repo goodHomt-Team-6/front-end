@@ -210,7 +210,7 @@ const Calendar = (props) => {
       <Grid
         flex_direction="column"
         width="100vw"
-        height={innerHeight * 0.45 + 'px'}
+        height={innerHeight * 0.48 + 'px'}
         margin="auto"
       >
         <Grid justify_contents="center" align="baseline" bg="#F7F7FA">
@@ -224,7 +224,7 @@ const Calendar = (props) => {
           >
             <Image src={Prev} width="5px" height="10px" borderRadius="0" />
           </Button>
-          <Text type="contents" margin="0" fontSize="30px" fontWeight="bold">
+          <Text type="contents" margin="0" fontSize="22px" fontWeight="bold">
             {moment(today).format('MM')}
           </Text>
           <Text

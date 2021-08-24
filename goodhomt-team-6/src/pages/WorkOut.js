@@ -69,7 +69,7 @@ const WorkOut = (props) => {
         <TimeCont>
           <Image src={StopWatch} width="18px" height="20px"></Image>
           {routine.routineName && (
-            <Text type="contents" color="#fff">
+            <Text type="contents" color="#fff" fontSize="14px" margin="0">
               {routine.routineName}
             </Text>
           )}
@@ -83,8 +83,8 @@ const WorkOut = (props) => {
                 <PlayIconCont>
                   <Image
                     src={TimeStart}
-                    width="40px"
-                    height="40px"
+                    width="30px"
+                    height="30px"
                     _onClick={() => {
                       setTimeStop(false);
                     }}
@@ -100,8 +100,8 @@ const WorkOut = (props) => {
                 <PlayIconCont>
                   <Image
                     src={TimeStop}
-                    width="40px"
-                    height="40px"
+                    width="30px"
+                    height="30px"
                     _onClick={() => {
                       setTimeStop(true);
                     }}
@@ -254,7 +254,7 @@ const TimeCont = styled.div`
   background-color: #000;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   height: ${innerHeight * 0.4 - 77}px;
 `;
