@@ -10,6 +10,7 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 const DashBoard = ({ props }) => {
   const dispatch = useDispatch();
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const routine = useSelector((store) => store.exercise.routine[0]);
 
   return (
     <>

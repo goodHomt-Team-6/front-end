@@ -24,6 +24,7 @@ import Noti from '../img/notification.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
+import DashBoardBase from '../components/DashBoardBase';
 
 // 피드 페이지 컴포넌트
 const Feed = () => {
@@ -130,7 +131,10 @@ const Feed = () => {
       </InboxWrapper>
 
       {showModal ? (
-        <AddAndDeleteModal message="피드 삭제" setShowModal={setShowModal} />
+        <AddAndDeleteModal
+          message="피드 삭제"
+          setShowModal={setShowModal}
+        />
       ) : null}
 
       {showAddFeedModal ? (
@@ -142,13 +146,13 @@ const Feed = () => {
 
       {/* 피드 목록 */}
       <FeedWrapper>
-        <FeedContReal>
+        <FeedContainer>
           <FeedCont>
             {feed &&
               feed.map((item, idx) => (
                 <Card key={idx}>
                   {/* 유저 정보 */}
-                  <UserWrapper>
+                  <UserContainer>
                     <UserBox>
                       <Image
                         width="34px"
@@ -199,7 +203,7 @@ const Feed = () => {
                         {item.totalLike}
                       </Text>
                     </LikeWrapper>
-                  </UserWrapper>
+                  </UserContainer>
 
                   {/* 피드 게시 운동 정보 */}
                   <TodayMainBox
@@ -310,7 +314,7 @@ const Feed = () => {
                 </Card>
               ))}
           </FeedCont>
-        </FeedContReal>
+        </FeedContainer>
       </FeedWrapper>
 
       {/* 고정 하단바 */}
@@ -386,7 +390,7 @@ const NavBarWrapper = styled.div`
 
 const innerHeight = window.innerHeight - 170;
 
-const FeedContReal = styled.div`
+const FeedContainer = styled.div`
   padding: 20px 20px 0px 20px;
   display: flex;
   flex-direction: column;
@@ -408,7 +412,7 @@ const Card = styled.div`
   }
 `;
 
-const UserWrapper = styled.div`
+const UserContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

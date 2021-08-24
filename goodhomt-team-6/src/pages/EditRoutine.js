@@ -40,6 +40,7 @@ const innerHeight = window.innerHeight - 175;
 // 루틴 수정하기 페이지 컴포넌트
 const EditRoutine = (props) => {
   const dispatch = useDispatch();
+  const routineId = useSelector((state) => state.exercise.routine[0].id);
   const lists = useSelector((state) => state.exercise.routine[0].myExercise);
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const [isExercise, setIsExercise] = useState(true);
@@ -50,6 +51,12 @@ const EditRoutine = (props) => {
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
+
+  console.log("리스트 안 내용 확인", lists);
+
+  useEffect(() => {
+    dispatch(exerciseCreator.getRoutineDetailAPI(routineId));
+  }, []);
 
   useEffect(() => {
     if (lists) {
@@ -130,13 +137,13 @@ const EditRoutine = (props) => {
       </OptionCont>
       {!reArrangement ? (
         <Container>
-          {lists.map((list, listIdx) =>
+          {lists && lists.map((list, listIdx) =>
             listIdx === parseInt(openedRow) ? (
               <OpenList id={listIdx} key={listIdx}>
                 <Text
                   type="contents"
                   width="100%"
-                  padding="20px 0 0 20px"
+                  padding="20px 0 20px 20px"
                   margin="0"
                   onClick={() => {
                     closeRow();
@@ -172,7 +179,7 @@ const EditRoutine = (props) => {
                     )}
                     <Text
                       type="contents"
-                      fontSize="1.3em"
+                      fontSize="1.1em"
                       minWidth="80px"
                       color="#848484"
                     >
@@ -180,18 +187,18 @@ const EditRoutine = (props) => {
                     </Text>
                     <Text
                       type="contents"
-                      fontSize="1.3em"
+                      fontSize="1.1em"
                       minWidth="80px"
                       textAlign="center"
                       color="#848484"
                     >
                       {set.type === 'exercise'
-                        ? `${set.weight}Kg`
+                        ? `${set.weight}kg`
                         : `${set.minutes}분`}
                     </Text>
                     <Text
                       type="contents"
-                      fontSize="1.3em"
+                      fontSize="1.1em"
                       minWidth="80px"
                       textAlign="right"
                       color="#848484"
@@ -223,7 +230,8 @@ const EditRoutine = (props) => {
                     <RadioInput type="radio" name={`exercise_${listIdx}`} />
                     <RadioP
                       className="list"
-                      onClick={() => clickBreak(listIdx)}
+                      onClick={() =>
+                        clickBreak(listIdx)}
                     >
                       휴식
                     </RadioP>
@@ -238,7 +246,7 @@ const EditRoutine = (props) => {
                   openRow(e);
                 }}
               >
-                <Text type="contents" minWidth="80px" padding="0 0 0 10px">
+                <Text type="contents" minWidth="80px" padding="0 0 0 20px">
                   {list.exerciseName}
                 </Text>
                 <Text type="contents">
@@ -246,7 +254,7 @@ const EditRoutine = (props) => {
                   세트
                 </Text>
                 <Text type="contents">{list.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 10px 0 0">
+                <Text type="contents" padding="0 20px 0 0">
                   {list.set[0].count}회
                 </Text>
               </List>
@@ -262,7 +270,7 @@ const EditRoutine = (props) => {
             const routine = {
               myExercise: lists,
             };
-            // dispatch(exerciseCreator.addEditedRoutineAPI(routine));
+            dispatch(exerciseCreator.EditRoutineAPI(routineId, routine));
             history.goBack();
           }}
         >
@@ -297,6 +305,8 @@ const List = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const OpenList = styled.div`
@@ -305,6 +315,8 @@ const OpenList = styled.div`
   &:first-child {
     margin-top: 0;
   }
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const DataRow = styled.div`

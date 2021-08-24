@@ -89,7 +89,7 @@ const RoutineDetail = (props) => {
                     <DataRow key={setIdx}>
                       <Text
                         type="contents"
-                        fontSize="1.2em"
+                        fontSize="1.1em"
                         minWidth="80px"
                         color="#848484"
                       >
@@ -99,7 +99,7 @@ const RoutineDetail = (props) => {
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.2em"
+                        fontSize="1.1em"
                         minWidth="80px"
                         textAlign="center"
                         color="#848484"
@@ -110,7 +110,7 @@ const RoutineDetail = (props) => {
                       </Text>
                       <Text
                         type="contents"
-                        fontSize="1.2em"
+                        fontSize="1.1em"
                         minWidth="80px"
                         textAlign="right"
                         color="#848484"

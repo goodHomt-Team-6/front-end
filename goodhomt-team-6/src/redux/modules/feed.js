@@ -68,10 +68,10 @@ const getFeedAllAPI = (userId) => {
 };
 
 // 검색어로 전체 피드 가져오기
-const getFeedSearchAPI = (keyword) => {
+const getFeedSearchAPI = (keyword, userId) => {
   return function (dispatch, getState, { history }) {
     api
-      .get(`/community?exerciseName=${keyword}`)
+      .get(`/community?exerciseName=${keyword}&userId=${userId}`)
       .then((response) => {
         dispatch(getFeed(response.data.result));
         logger('커뮤니티 피드 검색으로 가져오기 성공');

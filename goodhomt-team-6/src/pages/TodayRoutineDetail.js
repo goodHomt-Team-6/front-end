@@ -20,6 +20,7 @@ import AddAndDeleteModal from '../components/AddAndDeleteModal';
 // 오늘 추가한 루틴 상세 컴포넌트 - 루틴 상세 확인하고 운동 시작으로 이동
 const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
+  const routine = useSelector((store) => store.exercise.routine[0]);
 
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const id = selectedPrevItem.id;
@@ -86,8 +87,8 @@ const TodayRoutineDetail = (props) => {
         <DashBoard />
 
         <ListContainer>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((list, listIdx) =>
+          {routine &&
+            routine.myExercise.map((list, listIdx) =>
               listIdx === parseInt(openedRow) ? (
                 <OpenList id={listIdx} key={listIdx}>
                   <Text
@@ -105,7 +106,7 @@ const TodayRoutineDetail = (props) => {
                       <DataRow key={setIdx}>
                         <Text
                           type="contents"
-                          fontSize="1.2em"
+                          fontSize="1.1em"
                           minWidth="80px"
                           color="#848484"
                         >
@@ -115,18 +116,18 @@ const TodayRoutineDetail = (props) => {
                         </Text>
                         <Text
                           type="contents"
-                          fontSize="1.2em"
+                          fontSize="1.1em"
                           minWidth="80px"
                           textAlign="center"
                           color="#848484"
                         >
                           {set.type === 'exercise'
-                            ? `${set.weight}Kg`
+                            ? `${set.weight}kg`
                             : `${set.minutes}분`}
                         </Text>
                         <Text
                           type="contents"
-                          fontSize="1.2em"
+                          fontSize="1.1em"
                           minWidth="80px"
                           textAlign="right"
                           color="#848484"
@@ -188,7 +189,7 @@ const TodayRoutineDetail = (props) => {
 
         {/* 운동시작 버튼 */}
         <FooterButtonWrapper>
-          {selectedPrevItem && selectedPrevItem.isCompleted === true ? (
+          {routine && routine.isCompleted === true ? (
             <FooterButton
               onClick={() => {
                 setShowShareModal(true);

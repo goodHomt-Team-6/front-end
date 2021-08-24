@@ -355,6 +355,24 @@ const getBookmarkRoutineAPI = () => {
   };
 };
 
+// 루틴 수정하기 (EditRoutine컴포넌트에서 적용)
+const EditRoutineAPI = (routineId, routine) => {
+  console.log(routineId, routine);
+  return function (dispatch, getState, { history }) {
+    api
+      .put(`/routines/${routineId}`, routine)
+      .then((response) => {
+        logger('루틴 수정하기 성공');
+        const _routine = getState().exercise.routine;
+        dispatch(addSelectedPrevItem(_routine[0]));
+
+      })
+      .catch((error) => {
+        logger('루틴 수정하기 실패', error);
+      });
+  };
+};
+
 // 루틴 상세 가져오기
 const getRoutineDetailAPI = (id) => {
   return function (dispatch, getState, { history }) {
@@ -503,6 +521,8 @@ export default handleActions(
           weight: list.set[0].weight,
           count: list.set[0].count,
           setCount: setCount,
+          minutes: null, // 루틴수정을 위해 추가
+          seconds: null // 루틴수정을 위해 추가
         });
       }),
     [ADD_BREAK]: (state, action) =>
@@ -670,6 +690,7 @@ const actionCreators = {
   getBookmarkRoutineAPI,
   recordResultAPI,
   addEditedRoutineAPI,
+  EditRoutineAPI,
   getChangeNameRoutineDetailAPI,
   addSet,
   addBreak,

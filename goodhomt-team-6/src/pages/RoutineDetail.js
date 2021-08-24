@@ -19,6 +19,9 @@ import moment from 'moment';
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
   const getDate = moment().format('YYYYMMDD');
+  const routine = useSelector(
+    (store) => store.exercise.routine[0],
+  );
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
   );
@@ -26,7 +29,7 @@ const RoutineDetail = (props) => {
   const id = selectedPrevItem.id;
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
   const routineName = selectedPrevItem.routineName;
-  const myExercise = selectedPrevItem.myExercise;
+  const myExercise = routine.myExercise;
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const isCalendarChallengeData = useSelector(
     (store) => store.calendar.isCalendarChallengeData,
@@ -38,12 +41,16 @@ const RoutineDetail = (props) => {
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
-      dispatch(exerciseActions.getRoutineDetailAPI(id));
+      // dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [routineName]);
 
   useEffect(() => {
-    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    // dispatch(exerciseActions.getRoutineDetailAPI(id));
+  }, []);
+
+  useEffect(() => {
+    // dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
       dispatch(calendarActions.setIsFromCalendar(false));
@@ -73,7 +80,8 @@ const RoutineDetail = (props) => {
               src={EditIcon}
               onClick={() => {
                 // selectedPrevItem을 routine으로 옮겨줌
-                dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
+                // dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
+                dispatch(exerciseActions.getRoutineDetailAPI(id));
                 history.push('/editroutine');
               }}
             />
@@ -100,8 +108,8 @@ const RoutineDetail = (props) => {
 
         {/* 루틴의 세트 모음 */}
         <ListContainer>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((list, listIdx) =>
+          {routine &&
+            routine.myExercise.map((list, listIdx) =>
               listIdx === parseInt(openedRow) ? (
                 <OpenList id={listIdx} key={listIdx}>
                   <Text
@@ -179,13 +187,13 @@ const RoutineDetail = (props) => {
             )}
         </ListContainer>
 
-        {/* 설정완료 버튼 */}
+        {/* 설정완료(루틴불러오기) 버튼 */}
         <FooterButtonWrapper>
           <FooterButton
             onClick={() => {
               if (
-                (myTodayRoutine && myTodayRoutine[0]?.isCompleted === true) ||
-                myTodayRoutine.length !== 0
+                (myTodayRoutine !== null && myTodayRoutine[0]?.isCompleted === true) ||
+                myTodayRoutine !== null && myTodayRoutine.length !== 0
               ) {
                 setShowConfirmModal(true);
               } else {
@@ -197,9 +205,10 @@ const RoutineDetail = (props) => {
               }
             }}
           >
-            설정 완료
+            루틴 불러오기
           </FooterButton>
         </FooterButtonWrapper>
+
         {showConfirmModal ? (
           <AddFeedCompleteModal
             message={'이미 오늘 운동을 등록했습니다!'}
