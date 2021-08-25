@@ -413,6 +413,7 @@ const reArrangeRoutineDetailAPI = (reArrangeDetail) => {
     api
       .patch('/routines/bookmark', reArrangeDetail)
       .then((response) => {
+        // response에 변경된 routineName을 받아서 getRoutineDetailAPI를 호출하지않고 이름만 바꿔야함
         dispatch(getChangeNameRoutineDetailAPI(response.data.routineId));
         logger('북마크 설정, 루틴 이름 변경 성공');
       })

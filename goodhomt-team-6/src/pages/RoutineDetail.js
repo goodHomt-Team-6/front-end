@@ -43,9 +43,9 @@ const RoutineDetail = (props) => {
     }
   }, [routineName]);
 
-  useEffect(() => {
-    dispatch(exerciseActions.getRoutineDetailAPI(id));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(exerciseActions.getRoutineDetailAPI(id));
+  // }, []);
 
   useEffect(() => {
     dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
