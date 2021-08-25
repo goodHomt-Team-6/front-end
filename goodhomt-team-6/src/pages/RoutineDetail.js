@@ -36,19 +36,26 @@ const RoutineDetail = (props) => {
 
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const isFromEditRoutine = useSelector(
+    (state) => state.exercise.isFromEditRoutine,
+  );
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
-      dispatch(exerciseActions.getRoutineDetailAPI(id));
+      // dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [routineName]);
 
-  // useEffect(() => {
-  //   dispatch(exerciseActions.getRoutineDetailAPI(id));
-  // }, []);
+  useEffect(() => {
+    if (!isFromEditRoutine) {
+      dispatch(exerciseActions.getRoutineDetailAPI(id));
+    }
+  }, []);
 
   useEffect(() => {
-    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    if (!isFromEditRoutine) {
+      dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    }
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
       dispatch(calendarActions.setIsFromCalendar(false));
@@ -76,8 +83,6 @@ const RoutineDetail = (props) => {
             <IconImg
               src={EditIcon}
               onClick={() => {
-                // selectedPrevItem을 routine으로 옮겨줌
-                // dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
                 dispatch(exerciseActions.getRoutineDetailAPI(id));
                 history.push('/editroutine');
               }}
@@ -201,6 +206,7 @@ const RoutineDetail = (props) => {
                   myExercise: myExercise,
                 };
                 dispatch(exerciseActions.addEditedRoutineAPI(routine));
+                dispatch(exerciseActions.setIsFromEditRoutine(false));
               }
             }}
           >
