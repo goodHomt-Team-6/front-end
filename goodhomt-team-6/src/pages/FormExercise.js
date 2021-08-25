@@ -20,6 +20,7 @@ import removeStick from '../img/remove_stick.svg';
 // material-ui 모달
 import { makeStyles } from '@material-ui/core/styles';
 import ModalView from '../components/Modal';
+import moment from 'moment';
 
 const modalStyles = makeStyles((theme) => ({
   modal: {
@@ -338,6 +339,7 @@ const FormExercise = (props) => {
           onClick={() => {
             const routine = {
               myExercise: lists,
+              date: moment().format('YYYYMMDD'),
             };
             dispatch(exerciseCreator.addRoutineAPI(routine));
           }}
