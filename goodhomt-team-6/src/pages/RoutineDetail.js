@@ -47,7 +47,7 @@ const RoutineDetail = (props) => {
   }, [routineName]);
 
   useEffect(() => {
-    if (!isFromEditRoutine) {
+    if (!isFromEditRoutine && !isFromCalendar) {
       dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, []);
@@ -55,6 +55,9 @@ const RoutineDetail = (props) => {
   useEffect(() => {
     if (!isFromEditRoutine) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    }
+    if (isFromCalendar) {
+      dispatch(exerciseActions.getMyRoutine([selectedPrevItem]));
     }
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
@@ -118,6 +121,8 @@ const RoutineDetail = (props) => {
                     type="contents"
                     minWidth="80px"
                     padding="0 0 0 20px"
+                    fontWeight="600"
+                    fontSize="1.1em"
                     onClick={() => {
                       closeRow();
                     }}
@@ -131,7 +136,7 @@ const RoutineDetail = (props) => {
                           type="contents"
                           fontSize="1.1em"
                           minWidth="80px"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.setCount}세트`
@@ -142,7 +147,7 @@ const RoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="center"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.weight}kg`
@@ -153,7 +158,7 @@ const RoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="right"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.count}회`
