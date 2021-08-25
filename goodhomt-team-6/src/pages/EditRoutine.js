@@ -127,7 +127,10 @@ const EditRoutine = (props) => {
           margin="0 15px 0 0"
           _onClick={() => {
             history.push('/exercise');
-          }}
+            dispatch(exerciseCreator.setIsFromEditRoutine(true));
+            dispatch(exerciseCreator.fromEditAddSelectedItem(lists));
+          }
+          }
         ></Image>
         <Image
           src={ReArrangementBlack}

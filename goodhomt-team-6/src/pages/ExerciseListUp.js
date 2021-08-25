@@ -26,7 +26,9 @@ const ExerciseListUp = (props) => {
   const myExercise = useSelector(
     (store) => store.exercise.routine[0].myExercise,
   );
+  const isFromEditRoutine = useSelector((store) => store.exercise.isFromEditRoutine);
   const selectedWrapper = useRef(null);
+  const routine = useSelector((store) => store.exercise.routine[0]);
 
   useEffect(() => {
     dispatch(exerciseActions.getExerciseAPI());

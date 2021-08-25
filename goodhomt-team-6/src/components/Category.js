@@ -15,6 +15,7 @@ const Category = (props) => {
   const exerciseAll = useSelector((store) => store.exercise.exercise);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
+  const isFromEditRoutine = useSelector((store) => store.exercise.isFromEditRoutine);
 
   const [clickedCategoryItem, setCategoryItem] = useState(null);
   const [allClicked, setAllClicked] = useState(true);
@@ -26,10 +27,6 @@ const Category = (props) => {
   const [armClicked, setArmClicked] = useState(false);
   const [elseClicked, setElseClicked] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-
-  useEffect(() => {
-    dispatch(exerciseActions.getExerciseAPI());
-  }, []);
 
   useEffect(() => {
     if (clickedCategoryItem !== null) {
@@ -175,6 +172,7 @@ const Category = (props) => {
                     };
                     dispatch(exerciseActions.addExerciseType(exercise));
                     dispatch(exerciseActions.addSelectedItem(e));
+                    console.log(e);
                   }}
                 >
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>

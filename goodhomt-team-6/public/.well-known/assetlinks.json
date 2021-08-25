@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.goodhomt.twa",
+      "sha256_cert_fingerprints": [
+        "15:F7:65:F1:68:BE:50:19:28:42:3C:69:15:99:A0:61:18:42:C8:EF:21:15:47:D6:27:53:82:7A:EB:92:3C:F4"
+      ]
+    }
+  }
+]

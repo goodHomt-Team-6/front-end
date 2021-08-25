@@ -3,6 +3,7 @@ import { produce } from 'immer';
 import api from '../../shared/Request';
 import logger from '../../shared/Logger';
 import _ from 'lodash';
+import { DraftsRounded, Satellite } from '@material-ui/icons';
 
 // initial state
 const initialState = {
@@ -76,6 +77,7 @@ const GET_EXERCISE_TYPE = 'exercise/GET_EXERCISE_TYPE';
 
 const ADD_SELECTED_ITEM = 'exercise/ADD_SELECTED_ITEM';
 const REMOVE_SELECTED_ITEM = 'exercise/REMOVE_SELECTED_ITEM';
+const FROM_EDIT_ADD_SELECTED_ITEM = 'exercise/FROM_EDIT_ADD_SELECTED_ITEM';
 
 const OPEN_EDITOR = 'exercise/OPEN_EDITOR';
 const UPDATE_SET = 'exercise/UPDATE_SET';
@@ -129,6 +131,7 @@ const removeSelectedItem = createAction(
   REMOVE_SELECTED_ITEM,
   (selectedItems) => ({ selectedItems }),
 );
+const fromEditAddSelectedItem = createAction(FROM_EDIT_ADD_SELECTED_ITEM, (selectedItems) => ({ selectedItems }));
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
 }));
@@ -168,7 +171,7 @@ const is_selected = createAction(IS_SELECTED, (is_selected) => ({
 const getMyRoutine = createAction(GET_MY_ROUTINE, (routine) => ({ routine }));
 const getMyChangeNameRoutine = createAction(
   GET_MY_CHANGENAME_ROUTINE,
-  (routine) => ({ routine }),
+  (routineName) => ({ routineName }),
 );
 const getMyTodayRoutine = createAction(
   GET_MY_TODAY_ROUTINE,
@@ -427,8 +430,8 @@ const reArrangeRoutineDetailAPI = (reArrangeDetail) => {
     api
       .patch('/routines/bookmark', reArrangeDetail)
       .then((response) => {
-        // response에 변경된 routineName을 받아서 getRoutineDetailAPI를 호출하지않고 이름만 바꿔야함
-        dispatch(getChangeNameRoutineDetailAPI(response.data.routineId));
+        // response에 변경된 routineName을 받아서 getRoutineDetailAPI를 호출하지않고 이름만 바꿔줌
+        dispatch(getMyChangeNameRoutine(response.data.routineName));
         logger('북마크 설정, 루틴 이름 변경 성공');
       })
       .catch((error) => {
@@ -472,6 +475,17 @@ export default handleActions(
           );
           draft.exercise = leftOverExerciseItems;
         }
+        // EditRoutine페이지에서 들어온 경우 기존 항목 걸러서 가져오기
+        if (state.isFromEditRoutine) {
+          let currentExerciseItems = action.payload.exercise;
+          let currentSelectedItems = state.routine[0].myExercise;
+          let leftOverExerciseItems = _.differenceBy(
+            currentExerciseItems,
+            currentSelectedItems,
+            'exerciseName',
+          );
+          draft.exercise = leftOverExerciseItems;
+        }
       }),
     [ADD_EXERCISE]: (state, action) =>
       produce(state, (draft) => {
@@ -511,6 +525,11 @@ export default handleActions(
         } else {
           draft.routine[0].myExercise = [];
         }
+      }),
+    // EditRoutine을 통해서 들어온 경우 화면 상단에 추가
+    [FROM_EDIT_ADD_SELECTED_ITEM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.selectedItems = (action.payload.selectedItems);
       }),
     // 화면 상단에 추가
     [ADD_SELECTED_ITEM]: (state, action) =>
@@ -656,7 +675,8 @@ export default handleActions(
     // 북마크, 이름 변경한 루틴 가져오기
     [GET_MY_CHANGENAME_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        draft.selectedPrevItem = action.payload.routine[0];
+        console.log(action.payload.routineName);
+        draft.selectedPrevItem.routineName = action.payload.routineName;
       }),
     // 기간 선택하기
     [SELECT_PERIOD]: (state, action) =>
@@ -733,6 +753,7 @@ const actionCreators = {
   removeExerciseType,
   addSelectedItem,
   removeSelectedItem,
+  fromEditAddSelectedItem,
   openEditor,
   updateSet,
   deleteSet,
