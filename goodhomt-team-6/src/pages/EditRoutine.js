@@ -47,6 +47,9 @@ const EditRoutine = (props) => {
   const editor = useSelector((state) => state.exercise.editor);
   const [idxes, updateIdxes] = useState(null);
   const [reArrangement, setReArrangement] = useState(false);
+  const isFromTodayRoutineDetail = useSelector(
+    (store) => store.exercise.isFromTodayRoutineDetail,
+  );
 
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
@@ -270,14 +273,23 @@ const EditRoutine = (props) => {
       {editCompletion ? (
         <FooterButton
           onClick={() => {
-            const _selectedPrevItem = {
-              ...selectedPrevItem,
-              myExercise: lists,
-            };
-            dispatch(exerciseCreator.addSelectedPrevItem(_selectedPrevItem));
-            dispatch(exerciseCreator.getMyRoutine([_selectedPrevItem]));
-            dispatch(exerciseCreator.setIsFromEditRoutine(true));
-            history.goBack();
+            if (isFromTodayRoutineDetail) {
+              dispatch(
+                exerciseCreator.EditRoutineAPI(routineId, {
+                  myExercise: lists,
+                }),
+              );
+              dispatch(exerciseCreator.setIsFromTodayRoutineDetail(false));
+              history.goBack();
+            } else {
+              const _selectedPrevItem = {
+                ...selectedPrevItem,
+                myExercise: lists,
+              };
+              dispatch(exerciseCreator.addSelectedPrevItem(_selectedPrevItem));
+              dispatch(exerciseCreator.getMyRoutine([_selectedPrevItem]));
+              dispatch(exerciseCreator.setIsFromEditRoutine(true));
+            }
           }}
         >
           설정 완료
