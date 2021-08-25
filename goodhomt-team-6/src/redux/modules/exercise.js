@@ -60,6 +60,7 @@ const initialState = {
   ],
   myTodayRoutine: null,
   isFromEditRoutine: false,
+  isFromTodayRoutineDetail: false,
 };
 
 // actions
@@ -101,10 +102,16 @@ const SET_EDITED_ROUTINE = 'exercise/SET_EDITED_ROUTINE';
 const COUNT_CURRENT_SET_IDX = 'exercise/COUNT_CURRENT_SET_IDX';
 const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
 const SET_IS_FROM_EDIT_ROUTINE = 'exercise/SET_IS_FROM_EDIT_ROUTINE';
+const SET_IS_FROM_TODAY_ROUTINE_DETAIL =
+  'exercise/SET_IS_FROM_TODAY_ROUTINE_DETAIL';
 
 // action creators
 const setIsFromEditRoutine = createAction(
   SET_IS_FROM_EDIT_ROUTINE,
+  (value) => ({ value }),
+);
+const setIsFromTodayRoutineDetail = createAction(
+  SET_IS_FROM_TODAY_ROUTINE_DETAIL,
   (value) => ({ value }),
 );
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
@@ -389,6 +396,7 @@ const getRoutineDetailAPI = (id) => {
     api
       .get(`/routines/${id}`)
       .then((response) => {
+        console.log(response.data.result[0].myExercise);
         dispatch(getMyRoutine(response.data.result));
         logger('루틴 상세 가져오기 성공');
       })
@@ -691,6 +699,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.isFromEditRoutine = action.payload.value;
       }),
+    [SET_IS_FROM_TODAY_ROUTINE_DETAIL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isFromTodayRoutineDetail = action.payload.value;
+      }),
   },
   initialState,
 );
@@ -739,6 +751,7 @@ const actionCreators = {
   countCurrentSetIdx,
   countCurrentExerciseIdx,
   setIsFromEditRoutine,
+  setIsFromTodayRoutineDetail,
 };
 
 export { actionCreators };

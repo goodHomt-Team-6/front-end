@@ -31,15 +31,15 @@ const TodayRoutineDetail = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  // useEffect(() => {
-  //   if (selectedPrevItem.length !== 0) {
-  //     dispatch(exerciseActions.getRoutineDetailAPI(id));
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
       dispatch(exerciseActions.getRoutineDetailAPI(id));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedPrevItem.length !== 0) {
+      // dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [selectedPrevItem]);
 
@@ -69,6 +69,7 @@ const TodayRoutineDetail = (props) => {
           <IconImg
             src={EditIcon}
             onClick={() => {
+              dispatch(exerciseActions.setIsFromTodayRoutineDetail(true));
               history.push('/editroutine');
             }}
           />
