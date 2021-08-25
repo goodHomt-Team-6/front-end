@@ -41,16 +41,16 @@ const RoutineDetail = (props) => {
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
-      // dispatch(exerciseActions.getRoutineDetailAPI(id));
+      dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [routineName]);
 
   useEffect(() => {
-    // dispatch(exerciseActions.getRoutineDetailAPI(id));
+    dispatch(exerciseActions.getRoutineDetailAPI(id));
   }, []);
 
   useEffect(() => {
-    // dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
       dispatch(calendarActions.setIsFromCalendar(false));
