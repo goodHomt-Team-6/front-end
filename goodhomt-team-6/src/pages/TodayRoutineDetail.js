@@ -5,13 +5,11 @@ import BookmarkLine from '../img/bookmark_line.svg';
 import routineDelete from '../img/routine_delete.svg';
 import EditIcon from '../img/edit_icon.svg';
 import { FooterButton, Text, Icon } from '../shared/Styles';
-import FormExercise from './FormExercise';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import DashBoard from '../components/DashBoard';
 import BookmarkModal from '../components/BookmarkModal';
 import logger from '../shared/Logger';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
@@ -25,7 +23,6 @@ const TodayRoutineDetail = (props) => {
     (store) => store.exercise.selectedPrevItem,
   );
   const id = selectedPrevItem.id;
-  const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
 
   const [showModal, setShowModal] = useState(false);
@@ -99,6 +96,8 @@ const TodayRoutineDetail = (props) => {
                     type="contents"
                     minWidth="80px"
                     padding="0 0 0 20px"
+                    fontWeight="600"
+                    fontSize="1.1em"
                     onClick={() => {
                       closeRow();
                     }}
@@ -112,7 +111,7 @@ const TodayRoutineDetail = (props) => {
                           type="contents"
                           fontSize="1.1em"
                           minWidth="80px"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.setCount}세트`
@@ -123,7 +122,7 @@ const TodayRoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="center"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.weight}kg`
@@ -134,7 +133,7 @@ const TodayRoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="right"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.count}회`
@@ -151,21 +150,82 @@ const TodayRoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
-                    {list.exerciseName}
-                  </Text>
-                  <Text type="contents">
-                    {list &&
-                      list.set !== [] &&
-                      list.set.filter((set) => set.type === 'exercise').length}
-                    세트
-                  </Text>
-                  <Text type="contents">
-                    {list && list.set === [] ? null : list.set[0].weight}kg
-                  </Text>
-                  <Text type="contents" padding="0 20px 0 0">
-                    {list && list.set === [] ? null : list.set[0].count}회
-                  </Text>
+                  {openedRow === null ? (
+                    <>
+                      <div
+                        style={{
+                          minWidth: '120px',
+                        }}
+                      >
+                        <Text
+                          type="contents"
+                          margin="1em 10px 1em 20px"
+                          padding="0 10px 0 0"
+                          fontWeight="600"
+                          fontSize="1.1em"
+                          bgColor="rgba(74, 64, 255, 0.2)"
+                          lineHeight="1.2em"
+                          style={{
+                            display: 'inline-block',
+                          }}
+                        >
+                          {list.exerciseName}
+                        </Text>
+                      </div>
+                      <Text type="contents">
+                        {list &&
+                          list.set !== [] &&
+                          list.set.filter((set) => set.type === 'exercise')
+                            .length}
+                        세트
+                      </Text>
+                      <Text type="contents">
+                        {list && list.set === [] ? null : list.set[0].weight}kg
+                      </Text>
+                      <Text type="contents" padding="0 20px 0 0">
+                        {list && list.set === [] ? null : list.set[0].count}회
+                      </Text>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        style={{
+                          minWidth: '120px',
+                        }}
+                      >
+                        <Text
+                          type="contents"
+                          margin="1em 10px 1em 20px"
+                          padding="0 10px 0 0"
+                          fontWeight="600"
+                          fontSize="1.1em"
+                          color="#848484"
+                          style={{
+                            display: 'inline-block',
+                          }}
+                        >
+                          {list.exerciseName}
+                        </Text>
+                      </div>
+                      <Text type="contents" color="#848484">
+                        {list &&
+                          list.set !== [] &&
+                          list.set.filter((set) => set.type === 'exercise')
+                            .length}
+                        세트
+                      </Text>
+                      <Text type="contents" color="#848484">
+                        {list && list.set === [] ? null : list.set[0].weight}kg
+                      </Text>
+                      <Text
+                        type="contents"
+                        padding="0 20px 0 0"
+                        color="#848484"
+                      >
+                        {list && list.set === [] ? null : list.set[0].count}회
+                      </Text>
+                    </>
+                  )}
                 </List>
               ),
             )}
@@ -274,6 +334,7 @@ const List = styled.div`
   }
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  align-items: center;
 `;
 
 const IconWrapper = styled.div`
@@ -303,10 +364,4 @@ const Selected = styled.div`
   margin: 20px 16px 0px 0px;
   width: 60px;
   background-color: #fff;
-`;
-
-const CloseBtn = styled.img`
-  &:hover {
-    cursor: pointer;
-  }
 `;
