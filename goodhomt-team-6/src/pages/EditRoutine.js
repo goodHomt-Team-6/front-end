@@ -48,6 +48,10 @@ const EditRoutine = (props) => {
   const [idxes, updateIdxes] = useState(null);
   const [reArrangement, setReArrangement] = useState(false);
 
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
+
   // 모든 운동의 첫 세트의 횟수가 0이 아니면 설정 완료 버튼 활성화 (무게는 무중량 운동일수도 있으므로 제외.)
   const [editCompletion, setEditCompletion] = useState(false);
   const [checkCompletion, setCheckCompletion] = useState(false);
@@ -135,129 +139,130 @@ const EditRoutine = (props) => {
       </OptionCont>
       {!reArrangement ? (
         <Container>
-          {lists && lists.map((list, listIdx) =>
-            listIdx === parseInt(openedRow) ? (
-              <OpenList id={listIdx} key={listIdx}>
-                <Text
-                  type="contents"
-                  width="100%"
-                  padding="20px 0 20px 20px"
-                  margin="0"
-                  onClick={() => {
-                    closeRow();
-                  }}
-                >
-                  {list.exerciseName}
-                </Text>
-                {list.set.map((set, setIdx) => (
-                  <DataRow
-                    key={setIdx}
+          {lists &&
+            lists.map((list, listIdx) =>
+              listIdx === parseInt(openedRow) ? (
+                <OpenList id={listIdx} key={listIdx}>
+                  <Text
+                    type="contents"
+                    width="100%"
+                    padding="20px 0 20px 20px"
+                    margin="0"
                     onClick={() => {
-                      dispatch(exerciseCreator.openEditor(true));
-                      updateIdxes({ listIdx: listIdx, setIdx: setIdx });
-                      set.type === 'exercise'
-                        ? setIsExercise(true)
-                        : setIsExercise(false);
+                      closeRow();
                     }}
                   >
-                    {list.set.length != 1 && (
-                      <img
-                        src={closeButton}
-                        width="13"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(
-                            exerciseCreator.deleteSet({
-                              listIdx: listIdx,
-                              setIdx: setIdx,
-                            }),
-                          );
-                        }}
-                      />
-                    )}
-                    <Text
-                      type="contents"
-                      fontSize="1.1em"
-                      minWidth="80px"
-                      color="#848484"
-                    >
-                      {set.type === 'exercise' ? `${set.setCount}세트` : '휴식'}
-                    </Text>
-                    <Text
-                      type="contents"
-                      fontSize="1.1em"
-                      minWidth="80px"
-                      textAlign="center"
-                      color="#848484"
-                    >
-                      {set.type === 'exercise'
-                        ? `${set.weight}kg`
-                        : `${set.minutes}분`}
-                    </Text>
-                    <Text
-                      type="contents"
-                      fontSize="1.1em"
-                      minWidth="80px"
-                      textAlign="right"
-                      color="#848484"
-                    >
-                      {set.type === 'exercise'
-                        ? `${set.count}회`
-                        : `${set.seconds}초`}
-                    </Text>
-                  </DataRow>
-                ))}
-                <ButtonCont>
-                  <ButtonWrap>
-                    <RadioInput
-                      type="radio"
-                      name={`exercise_${listIdx}`}
-                      defaultChecked
-                    />
-                    <RadioP
-                      className="list"
+                    {list.exerciseName}
+                  </Text>
+                  {list.set.map((set, setIdx) => (
+                    <DataRow
+                      key={setIdx}
                       onClick={() => {
-                        clickSet(listIdx);
-                        logger(listIdx);
+                        dispatch(exerciseCreator.openEditor(true));
+                        updateIdxes({ listIdx: listIdx, setIdx: setIdx });
+                        set.type === 'exercise'
+                          ? setIsExercise(true)
+                          : setIsExercise(false);
                       }}
                     >
-                      세트
-                    </RadioP>
-                  </ButtonWrap>
-                  <ButtonWrap>
-                    <RadioInput type="radio" name={`exercise_${listIdx}`} />
-                    <RadioP
-                      className="list"
-                      onClick={() =>
-                        clickBreak(listIdx)}
-                    >
-                      휴식
-                    </RadioP>
-                  </ButtonWrap>
-                </ButtonCont>
-              </OpenList>
-            ) : (
-              <List
-                id={listIdx}
-                key={listIdx}
-                onClick={(e) => {
-                  openRow(e);
-                }}
-              >
-                <Text type="contents" minWidth="80px" padding="0 0 0 20px">
-                  {list.exerciseName}
-                </Text>
-                <Text type="contents">
-                  {list.set.filter((set) => set.type === 'exercise').length}
-                  세트
-                </Text>
-                <Text type="contents">{list.set[0].weight}kg</Text>
-                <Text type="contents" padding="0 20px 0 0">
-                  {list.set[0].count}회
-                </Text>
-              </List>
-            ),
-          )}
+                      {list.set.length != 1 && (
+                        <img
+                          src={closeButton}
+                          width="13"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(
+                              exerciseCreator.deleteSet({
+                                listIdx: listIdx,
+                                setIdx: setIdx,
+                              }),
+                            );
+                          }}
+                        />
+                      )}
+                      <Text
+                        type="contents"
+                        fontSize="1.1em"
+                        minWidth="80px"
+                        color="#848484"
+                      >
+                        {set.type === 'exercise'
+                          ? `${set.setCount}세트`
+                          : '휴식'}
+                      </Text>
+                      <Text
+                        type="contents"
+                        fontSize="1.1em"
+                        minWidth="80px"
+                        textAlign="center"
+                        color="#848484"
+                      >
+                        {set.type === 'exercise'
+                          ? `${set.weight}kg`
+                          : `${set.minutes}분`}
+                      </Text>
+                      <Text
+                        type="contents"
+                        fontSize="1.1em"
+                        minWidth="80px"
+                        textAlign="right"
+                        color="#848484"
+                      >
+                        {set.type === 'exercise'
+                          ? `${set.count}회`
+                          : `${set.seconds}초`}
+                      </Text>
+                    </DataRow>
+                  ))}
+                  <ButtonCont>
+                    <ButtonWrap>
+                      <RadioInput
+                        type="radio"
+                        name={`exercise_${listIdx}`}
+                        defaultChecked
+                      />
+                      <RadioP
+                        className="list"
+                        onClick={() => {
+                          clickSet(listIdx);
+                        }}
+                      >
+                        세트
+                      </RadioP>
+                    </ButtonWrap>
+                    <ButtonWrap>
+                      <RadioInput type="radio" name={`exercise_${listIdx}`} />
+                      <RadioP
+                        className="list"
+                        onClick={() => clickBreak(listIdx)}
+                      >
+                        휴식
+                      </RadioP>
+                    </ButtonWrap>
+                  </ButtonCont>
+                </OpenList>
+              ) : (
+                <List
+                  id={listIdx}
+                  key={listIdx}
+                  onClick={(e) => {
+                    openRow(e);
+                  }}
+                >
+                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
+                    {list.exerciseName}
+                  </Text>
+                  <Text type="contents">
+                    {list.set.filter((set) => set.type === 'exercise').length}
+                    세트
+                  </Text>
+                  <Text type="contents">{list.set[0].weight}kg</Text>
+                  <Text type="contents" padding="0 20px 0 0">
+                    {list.set[0].count}회
+                  </Text>
+                </List>
+              ),
+            )}
         </Container>
       ) : (
         <FormExerciseDnd></FormExerciseDnd>
@@ -265,10 +270,11 @@ const EditRoutine = (props) => {
       {editCompletion ? (
         <FooterButton
           onClick={() => {
-            const routine = {
+            const _selectedPrevItem = {
+              ...selectedPrevItem,
               myExercise: lists,
             };
-            dispatch(exerciseCreator.EditRoutineAPI(routineId, routine));
+            dispatch(exerciseCreator.addSelectedPrevItem(_selectedPrevItem));
             history.goBack();
           }}
         >

@@ -19,9 +19,7 @@ import moment from 'moment';
 const RoutineDetail = (props) => {
   const dispatch = useDispatch();
   const getDate = moment().format('YYYYMMDD');
-  const routine = useSelector(
-    (store) => store.exercise.routine[0],
-  );
+  const routine = useSelector((store) => store.exercise.routine[0]);
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
   );
@@ -41,22 +39,21 @@ const RoutineDetail = (props) => {
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
-      // dispatch(exerciseActions.getRoutineDetailAPI(id));
+      dispatch(exerciseActions.getRoutineDetailAPI(id));
     }
   }, [routineName]);
 
   useEffect(() => {
-    // dispatch(exerciseActions.getRoutineDetailAPI(id));
+    dispatch(exerciseActions.getRoutineDetailAPI(id));
   }, []);
 
   useEffect(() => {
-    // dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
+    dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
     return () => {
       dispatch(calendarActions.setIsCalendarChallengeData(false));
       dispatch(calendarActions.setIsFromCalendar(false));
     };
   }, []);
-
 
   const openRow = (e) => {
     const target = e.currentTarget.id;
@@ -172,7 +169,8 @@ const RoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list && list.set !== [] &&
+                    {list &&
+                      list.set !== [] &&
                       list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
@@ -192,8 +190,9 @@ const RoutineDetail = (props) => {
           <FooterButton
             onClick={() => {
               if (
-                (myTodayRoutine !== null && myTodayRoutine[0]?.isCompleted === true) ||
-                myTodayRoutine !== null && myTodayRoutine.length !== 0
+                (myTodayRoutine !== null &&
+                  myTodayRoutine[0]?.isCompleted === true) ||
+                (myTodayRoutine !== null && myTodayRoutine.length !== 0)
               ) {
                 setShowConfirmModal(true);
               } else {
@@ -246,6 +245,8 @@ const IconImg = styled.img`
 const Wrapper = styled.div`
   background-color: #f7f7fa;
 `;
+
+const innerHeight = window.innerHeight - 356;
 
 const ListContainer = styled.div`
   padding: 20px;

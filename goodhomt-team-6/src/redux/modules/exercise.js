@@ -361,7 +361,6 @@ const getBookmarkRoutineAPI = () => {
 
 // 루틴 수정하기 (EditRoutine컴포넌트에서 적용)
 const EditRoutineAPI = (routineId, routine) => {
-  console.log(routineId, routine);
   return function (dispatch, getState, { history }) {
     api
       .put(`/routines/${routineId}`, routine)
