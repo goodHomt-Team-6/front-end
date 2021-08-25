@@ -275,6 +275,8 @@ const EditRoutine = (props) => {
               myExercise: lists,
             };
             dispatch(exerciseCreator.addSelectedPrevItem(_selectedPrevItem));
+            dispatch(exerciseCreator.getMyRoutine([_selectedPrevItem]));
+            dispatch(exerciseCreator.setIsFromEditRoutine(true));
             history.goBack();
           }}
         >

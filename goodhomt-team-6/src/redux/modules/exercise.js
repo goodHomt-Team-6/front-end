@@ -59,6 +59,7 @@ const initialState = {
     },
   ],
   myTodayRoutine: null,
+  isFromEditRoutine: false,
 };
 
 // actions
@@ -99,8 +100,13 @@ const SET_EDITED_ROUTINE = 'exercise/SET_EDITED_ROUTINE';
 
 const COUNT_CURRENT_SET_IDX = 'exercise/COUNT_CURRENT_SET_IDX';
 const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
+const SET_IS_FROM_EDIT_ROUTINE = 'exercise/SET_IS_FROM_EDIT_ROUTINE';
 
 // action creators
+const setIsFromEditRoutine = createAction(
+  SET_IS_FROM_EDIT_ROUTINE,
+  (value) => ({ value }),
+);
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
 const addBreak = createAction(ADD_BREAK, (listIdx) => ({ listIdx }));
 const openRow = createAction(OPEN_ROW, (idx) => ({ idx }));
@@ -681,6 +687,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.currentExerciseIdx = action.payload.count;
       }),
+    [SET_IS_FROM_EDIT_ROUTINE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isFromEditRoutine = action.payload.value;
+      }),
   },
   initialState,
 );
@@ -728,6 +738,7 @@ const actionCreators = {
   initializeSectedItems,
   countCurrentSetIdx,
   countCurrentExerciseIdx,
+  setIsFromEditRoutine,
 };
 
 export { actionCreators };
