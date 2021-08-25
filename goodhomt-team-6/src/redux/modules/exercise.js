@@ -674,7 +674,6 @@ export default handleActions(
     // 북마크, 이름 변경한 루틴 가져오기
     [GET_MY_CHANGENAME_ROUTINE]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.routineName);
         draft.selectedPrevItem.routineName = action.payload.routineName;
       }),
     // 기간 선택하기
