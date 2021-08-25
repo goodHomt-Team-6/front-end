@@ -59,7 +59,7 @@ const initialState = {
       categoryName: '기타',
     },
   ],
-  myTodayRoutine: null,
+  myTodayRoutine: [],
   isFromEditRoutine: false,
   isFromTodayRoutineDetail: false,
 };
@@ -399,7 +399,6 @@ const getRoutineDetailAPI = (id) => {
     api
       .get(`/routines/${id}`)
       .then((response) => {
-        console.log(response.data.result[0].myExercise);
         dispatch(getMyRoutine(response.data.result));
         logger('루틴 상세 가져오기 성공');
       })
