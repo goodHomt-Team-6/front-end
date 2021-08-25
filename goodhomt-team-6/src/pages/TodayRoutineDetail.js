@@ -16,13 +16,14 @@ import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
 
-
 // 오늘 추가한 루틴 상세 컴포넌트 - 루틴 상세 확인하고 운동 시작으로 이동
 const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
   const routine = useSelector((store) => store.exercise.routine[0]);
 
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const id = selectedPrevItem.id;
   const routineName = selectedPrevItem.routineName;
   const openedRow = useSelector((state) => state.exercise.openedRow);
@@ -69,20 +70,20 @@ const TodayRoutineDetail = (props) => {
             src={EditIcon}
             onClick={() => {
               history.push('/editroutine');
-            }} />
+            }}
+          />
 
           {/* 북마크 모달 */}
           <IconImg
             src={BookmarkLine}
             onClick={() => {
               setShowModal(true);
-            }} />
+            }}
+          />
         </IconWrapper>
       </HeaderWrapper>
 
-      {showModal ?
-        <BookmarkModal setShowModal={setShowModal} />
-        : null}
+      {showModal ? <BookmarkModal setShowModal={setShowModal} /> : null}
 
       <BodyWrapper>
         {/* 대시보드 */}
@@ -153,7 +154,8 @@ const TodayRoutineDetail = (props) => {
                     {list.exerciseName}
                   </Text>
                   <Text type="contents">
-                    {list && list.set !== [] &&
+                    {list &&
+                      list.set !== [] &&
                       list.set.filter((set) => set.type === 'exercise').length}
                     세트
                   </Text>
@@ -172,21 +174,20 @@ const TodayRoutineDetail = (props) => {
             onClick={() => {
               dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
               history.replace('/');
-            }}>
-            <Icon
-              src={routineDelete}
-              width="20px"
-              margin="0px 5px 0px 0px" />
-            <Text
-              margin="0px"
-              type="contents"
-            >삭제
+            }}
+          >
+            <Icon src={routineDelete} width="20px" margin="0px 5px 0px 0px" />
+            <Text margin="0px" type="contents">
+              삭제
             </Text>
           </Selected>
         </ListContainer>
 
         {showShareModal ? (
-          <AddAndDeleteModal message="내 피드에 추가" setShowShareModal={setShowShareModal} />
+          <AddAndDeleteModal
+            message="내 피드에 추가"
+            setShowShareModal={setShowShareModal}
+          />
         ) : null}
 
         {/* 운동시작 버튼 */}
@@ -208,7 +209,6 @@ const TodayRoutineDetail = (props) => {
               운동 시작
             </FooterButton>
           )}
-
         </FooterButtonWrapper>
       </BodyWrapper>
     </>

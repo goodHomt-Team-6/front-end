@@ -265,7 +265,7 @@ const PlayIconCont = styled.div`
 `;
 
 const ListCont = styled.div`
-  height: ${innerHeight * 0.6};
+  height: ${innerHeight * 0.6}px;
   overflow-y: scroll;
 `;
 
