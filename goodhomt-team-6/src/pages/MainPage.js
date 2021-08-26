@@ -138,7 +138,7 @@ const Main = (props) => {
                 <br />
                 안녕하세요 :)
               </TextUser>
-              {/* <TextUserDeco></TextUserDeco> */}
+              <TextUserDeco></TextUserDeco>
             </>
           ) : (
             <LoginCont
