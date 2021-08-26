@@ -28,38 +28,7 @@ const initialState = {
       is_bookmarked: false,
       is_completed: false,
       routineName: null,
-      myExercise: [
-        // {
-        //   exerciseName: '벤치 프레스',
-        //   set: [
-        //     {
-        //       type: 'exercise',
-        //       count: 0,
-        //       weight: 0,
-        //       setCount: 1,
-        //     },
-        //     {
-        //       type: 'break',
-        //       minutes: 0,
-        //       seconds: 0,
-        //     },
-        //   ],
-        // },
-      ],
-    },
-  ],
-  categoryTitle: [
-    {
-      id: 1,
-      categoryName: '상체',
-    },
-    {
-      id: 2,
-      categoryName: '하체',
-    },
-    {
-      id: 3,
-      categoryName: '기타',
+      myExercise: [],
     },
   ],
   myTodayRoutine: [],
@@ -441,7 +410,6 @@ const reArrangeRoutineDetailAPI = (reArrangeDetail) => {
     api
       .patch('/routines/bookmark', reArrangeDetail)
       .then((response) => {
-        // response에 변경된 routineName을 받아서 getRoutineDetailAPI를 호출하지않고 이름만 바꿔줌
         dispatch(getMyChangeNameRoutine(response.data.routineName));
         logger('북마크 설정, 루틴 이름 변경 성공');
       })

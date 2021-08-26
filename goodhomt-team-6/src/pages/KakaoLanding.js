@@ -1,16 +1,19 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as userAction } from '../redux/modules/user';
 // import Spinner from './Spinner';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const KakaoLanding = (props) => {
   const dispatch = useDispatch();
+  const isLoaded = useSelector((store) => store.user.isLoaded);
 
   // 인가코드
   let code = new URL(window.location.href).searchParams.get('code');
 
   React.useEffect(async () => {
     await dispatch(userAction.kakaoLoginAPI(code));
+    dispatch(userAction.isLoaded(true));
   }, []);
 
   // React.useEffect(() => {
@@ -24,7 +27,12 @@ const KakaoLanding = (props) => {
   //   }
   // }, []);
 
-  return <>{/* <Spinner /> */}</>;
+  return (
+    <>
+      {/* 스피너 넣기 */}
+      {isLoaded ? <CircularProgress /> : null}
+    </>
+  );
 };
 
 export default KakaoLanding;

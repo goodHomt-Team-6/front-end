@@ -21,6 +21,7 @@ const initialState = {
   user: { nickname: '굿홈트', userImg: profileImage },
   // is_login: false,
   loginModal: false,
+  isLoaded: false,
 };
 
 // actions
@@ -29,6 +30,7 @@ const GET_USER = 'user/GET_USER';
 const LOG_OUT = 'user/LOG_OUT';
 const CHECK_LOGIN = 'user/CHECK_LOGIN';
 const LOG_IN_MODAL = 'user/LOG_IN_MODAL';
+const IS_LOADED = 'user/LOADED';
 
 // action creators
 const logIn = createAction(LOG_IN, (token) => ({ token }));
@@ -36,6 +38,7 @@ const getUser = createAction(GET_USER, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const checkLogin = createAction(CHECK_LOGIN, (token) => ({ token }));
 const showLoginModal = createAction(LOG_IN_MODAL, (value) => ({ value }));
+const isLoaded = createAction(IS_LOADED, (isLoaded) => ({ isLoaded }));
 
 const kakaoLoginAPI = (code) => {
   return function (dispatch, getState, { history }) {
@@ -53,14 +56,14 @@ const kakaoLoginAPI = (code) => {
             const refreshToken = res.data.loginUser.token.refreshToken;
 
             dispatch(checkLogin(accessToken));
-            cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now()+1296000000) });
+            cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now() + 1296000000) });
 
             // CSRF 공격에 대한 방지책 생각해보기.
             // cookie 보안 관련 방법 더 알아보기.
             // samesite: strict를 하면 왜 쿠키 저장이 안되는지...
             // 만료기한은 어떻게 잡아야할지...
-            cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now()+1296000000) });
-            cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now()+1296000000) });
+            cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now() + 1296000000) });
+            cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now() + 1296000000) });
             // /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
             if (sessionStorage.getItem('redirect_url') === '/exercise') {
               dispatch(exerciseActions.initializeRoutine());
@@ -68,6 +71,7 @@ const kakaoLoginAPI = (code) => {
             // 이전 페이지로 push 해줘야함
             history.push(sessionStorage.getItem('redirect_url'));
             sessionStorage.removeItem('redirect_url');
+            dispatch(isLoaded(false));
           })
           .catch((err) => {
             logger(err);
@@ -96,9 +100,9 @@ const getUpdatedAccessTokenAPI = () => {
         const accessToken = res.data.loginUser.token.accessToken;
         const refreshToken = res.data.loginUser.token.refreshToken;
 
-        cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now()+1296000000) });
-        cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now()+1296000000) });
-        cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now()+1296000000) });
+        cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now() + 1296000000) });
+        cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now() + 1296000000) });
+        cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now() + 1296000000) });
 
         dispatch(checkLogin(cookies.get('homt6_access_token')));
         logger('갱신된 토큰 반환 성공');
@@ -162,6 +166,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.loginModal = action.payload.value;
       }),
+    [IS_LOADED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isLoaded = action.payload.isLoaded;
+      })
   },
   initialState,
 );
@@ -177,6 +185,7 @@ const actionCreators = {
   kakaoLogOut,
   getUpdatedAccessTokenAPI,
   showLoginModal,
+  isLoaded,
 };
 
 export { actionCreators };

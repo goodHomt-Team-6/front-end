@@ -11,11 +11,9 @@ const Category = (props) => {
   const dispatch = useDispatch();
   const [clicked, isClicked] = useState(false);
 
-  const categoryTitle = useSelector((store) => store.exercise.categoryTitle);
   const exerciseAll = useSelector((store) => store.exercise.exercise);
   const categoryItems = useSelector((store) => store.exercise.categoryItems);
   const selectedItems = useSelector((store) => store.exercise.selectedItems);
-  const isFromEditRoutine = useSelector((store) => store.exercise.isFromEditRoutine);
 
   const [clickedCategoryItem, setCategoryItem] = useState(null);
   const [allClicked, setAllClicked] = useState(true);
@@ -234,7 +232,7 @@ const Categories = styled.ul`
   margin: 25px 0px 0px 0px;
   overflow-x: scroll;
   white-space: nowrap;
-   scrollbar-width: none;
+  scrollbar-width: none;
   ::-webkit-scrollbar{
     display: none;
   }
@@ -254,6 +252,7 @@ const CategoryItem = styled.li`
     color: ${Color.navy};
   }
   border-bottom: ${(props) => (props.handle ? '1px solid black' : 'none')};
+  font-weight: ${(props) => (props.handle ? '600' : '400')};
 `;
 
 const ExerciseItem = styled.li`
