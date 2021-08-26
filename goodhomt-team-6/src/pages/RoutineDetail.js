@@ -270,6 +270,7 @@ const RoutineDetail = (props) => {
                 const routine = {
                   routineName: routineName,
                   myExercise: myExercise,
+                  date: moment().format('YYYYMMDD'),
                 };
                 dispatch(exerciseActions.addEditedRoutineAPI(routine));
                 dispatch(exerciseActions.setIsFromEditRoutine(false));

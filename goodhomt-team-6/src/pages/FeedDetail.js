@@ -15,6 +15,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 import _ from 'lodash';
+import moment from 'moment';
 
 // 피드 루틴 상세화면 컴포넌트
 const RoutineDetail = (props) => {
@@ -26,6 +27,7 @@ const RoutineDetail = (props) => {
   const id = selectedPrevItem.id;
   const openedRow = useSelector((state) => state.exercise.openedRow);
   const selectedFeed = useSelector((state) => state.feed.selectedFeed);
+  const _selectedFeed = { ...selectedFeed, date: moment().format('YYYYMMDD') };
   const myTodayRoutine = useSelector((state) => state.exercise.myTodayRoutine);
 
   const [showModal, setShowModal] = useState(false);
@@ -85,42 +87,43 @@ const RoutineDetail = (props) => {
                   >
                     {list.exerciseName}
                   </Text>
-                  {list && list.set.map((set, setIdx) => (
-                    <DataRow key={setIdx}>
-                      <Text
-                        type="contents"
-                        fontSize="1.1em"
-                        minWidth="80px"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.setCount}세트`
-                          : '휴식'}
-                      </Text>
-                      <Text
-                        type="contents"
-                        fontSize="1.1em"
-                        minWidth="80px"
-                        textAlign="center"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.weight}kg`
-                          : `${set.minutes}분`}
-                      </Text>
-                      <Text
-                        type="contents"
-                        fontSize="1.1em"
-                        minWidth="80px"
-                        textAlign="right"
-                        color="#848484"
-                      >
-                        {set.type === 'exercise'
-                          ? `${set.count}회`
-                          : `${set.seconds}초`}
-                      </Text>
-                    </DataRow>
-                  ))}
+                  {list &&
+                    list.set.map((set, setIdx) => (
+                      <DataRow key={setIdx}>
+                        <Text
+                          type="contents"
+                          fontSize="1.1em"
+                          minWidth="80px"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.setCount}세트`
+                            : '휴식'}
+                        </Text>
+                        <Text
+                          type="contents"
+                          fontSize="1.1em"
+                          minWidth="80px"
+                          textAlign="center"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.weight}kg`
+                            : `${set.minutes}분`}
+                        </Text>
+                        <Text
+                          type="contents"
+                          fontSize="1.1em"
+                          minWidth="80px"
+                          textAlign="right"
+                          color="#848484"
+                        >
+                          {set.type === 'exercise'
+                            ? `${set.count}회`
+                            : `${set.seconds}초`}
+                        </Text>
+                      </DataRow>
+                    ))}
                 </OpenList>
               ) : (
                 <List
@@ -131,17 +134,20 @@ const RoutineDetail = (props) => {
                   }}
                 >
                   <Text type="contents" minWidth="80px" padding="0 0 0 20px">
-                    {list !== [] ? (list.exerciseName) : null}
+                    {list !== [] ? list.exerciseName : null}
                   </Text>
                   <Text type="contents">
-                    {list !== [] && list.set !== [] ?
-                      (list.set.filter((set) => set.type === 'exercise').length) : null}
+                    {list !== [] && list.set !== []
+                      ? list.set.filter((set) => set.type === 'exercise').length
+                      : null}
                     세트
                   </Text>
                   {list !== [] && list.set[0].weight === null ? (
                     <Text type="contents">0kg</Text>
                   ) : (
-                    <Text type="contents">{list !== [] ? (list.set[0].weight) : null}kg</Text>
+                    <Text type="contents">
+                      {list !== [] ? list.set[0].weight : null}kg
+                    </Text>
                   )}
                   <Text type="contents" padding="0 20px 0 0">
                     {list !== [] && list.set[0].count}회
@@ -156,12 +162,12 @@ const RoutineDetail = (props) => {
           <FooterButton
             onClick={() => {
               if (myTodayRoutine.length === 0 || myTodayRoutine === null) {
-                dispatch(exerciseActions.addEditedRoutineAPI(selectedFeed));
-              }
-              else {
+                dispatch(exerciseActions.addEditedRoutineAPI(_selectedFeed));
+              } else {
                 setShowModal(true);
               }
-            }}>
+            }}
+          >
             루틴 불러오기
           </FooterButton>
         </FooterButtonWrapper>
