@@ -86,6 +86,7 @@ const AddAndDeleteModal = ({
                   {message}
                 </ConfirmButton>
               ) : setShowLogoutModal ? (
+                // 메인페이지 프로필 사진 클릭 시 뜨는 로그아웃 버튼
                 <ConfirmButton
                   onClick={() => {
                     cookies.remove('homt6_access_token');
