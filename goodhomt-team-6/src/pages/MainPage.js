@@ -110,6 +110,7 @@ const Main = (props) => {
     if (is_login) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, []);
 
@@ -117,6 +118,7 @@ const Main = (props) => {
     if (is_login) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
+      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, [is_login]);
 
