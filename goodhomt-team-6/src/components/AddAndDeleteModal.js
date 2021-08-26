@@ -10,17 +10,30 @@ import logger from '../shared/Logger';
 import { actionCreators as challengeActions } from '../redux/modules/challenge';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 // 피드 추가, 삭제할 때 생성되는 모달 컴포넌트
-const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, setShowShareModal, message }) => {
+const AddAndDeleteModal = ({
+  setShowModal,
+  setShowAddFeedModal,
+  setShowShareModal,
+  message,
+  setShowLogoutModal,
+}) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
   const buttonRef = useRef();
   const [cancel, setCancel] = useState(true);
 
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
-  const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
+  const [routineRename, setRoutineRename] = useState(
+    selectedPrevItem.routineName,
+  );
 
   const selectedFeed = useSelector((store) => store.feed.selectedFeed);
 
@@ -54,7 +67,8 @@ const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, setShowShareModa
                   dispatch(feedActions.deleteFeedAPI(selectedFeed.id));
                 }}
                 ref={buttonRef}
-              >{message}
+              >
+                {message}
               </ConfirmButton>
             </Inner>
           </ModalInner>
@@ -68,7 +82,20 @@ const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, setShowShareModa
                     history.push('/addmyfeed');
                   }}
                   ref={buttonRef}
-                >{message}
+                >
+                  {message}
+                </ConfirmButton>
+              ) : setShowLogoutModal ? (
+                <ConfirmButton
+                  onClick={() => {
+                    cookies.remove('homt6_access_token');
+                    cookies.remove('homt6_refresh_token');
+                    cookies.remove('homt6_is_login');
+                    location.reload();
+                  }}
+                  ref={buttonRef}
+                >
+                  {message}
                 </ConfirmButton>
               ) : (
                 // 피드 화면에서 추가하기 버튼
@@ -77,24 +104,28 @@ const AddAndDeleteModal = ({ setShowModal, setShowAddFeedModal, setShowShareModa
                     history.push('/selectmyfeed');
                   }}
                   ref={buttonRef}
-                >{message}
+                >
+                  {message}
                 </ConfirmButton>
               )}
-
             </Inner>
           </ModalInner>
         )}
 
-
         <ModalInner cancel={cancel}>
-          <Inner >
+          <Inner>
             {/* 취소 버튼 */}
             <ConfirmButton
               onClick={() => {
-                history.replace('/feed');
+                if (setShowLogoutModal) {
+                  setShowLogoutModal(false);
+                } else {
+                  history.replace('/feed');
+                }
               }}
               ref={buttonRef}
-            >취소
+            >
+              취소
             </ConfirmButton>
           </Inner>
         </ModalInner>
@@ -122,7 +153,7 @@ const ModalInner = styled.div`
   z-index: 1000;
   box-sizing: border-box;
   position: relative;
-      background-color: ${(props) => props.cancel ? '#E9E8FF' : '#fff'};
+  background-color: ${(props) => (props.cancel ? '#E9E8FF' : '#fff')};
   width: 90%;
   max-width: 480px;
   top: 80%;
@@ -133,7 +164,6 @@ const ModalInner = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-
 `;
 
 const Inner = styled.div`
@@ -144,7 +174,6 @@ const Inner = styled.div`
   box-sizing: border-box;
   height: 90%;
   width: 95%;
-
 `;
 
 const ConfirmButton = styled.button`
