@@ -4,6 +4,9 @@ import api from '../../shared/Request';
 import logger from '../../shared/Logger';
 import _ from 'lodash';
 import { DraftsRounded, Satellite } from '@material-ui/icons';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 // initial state
 const initialState = {
@@ -131,7 +134,10 @@ const removeSelectedItem = createAction(
   REMOVE_SELECTED_ITEM,
   (selectedItems) => ({ selectedItems }),
 );
-const fromEditAddSelectedItem = createAction(FROM_EDIT_ADD_SELECTED_ITEM, (selectedItems) => ({ selectedItems }));
+const fromEditAddSelectedItem = createAction(
+  FROM_EDIT_ADD_SELECTED_ITEM,
+  (selectedItems) => ({ selectedItems }),
+);
 const addExerciseType = createAction(ADD_EXERCISE_TYPE, (exercise) => ({
   exercise,
 }));
@@ -280,7 +286,13 @@ const getMyTodayRoutineAPI = (todayDate) => {
         logger('나의 오늘 루틴 가져오기 성공');
       })
       .catch((error) => {
-        logger('나의 오늘 루틴 가져오기 실패', error);
+        logger('나의 오늘 루틴 가져오기 실패');
+        if (error.message === 'Request failed with status code 403') {
+          cookies.remove('homt6_access_token');
+          cookies.remove('homt6_refresh_token');
+          cookies.remove('homt6_is_login');
+          location.reload();
+        }
       });
   };
 };
@@ -528,7 +540,7 @@ export default handleActions(
     // EditRoutine을 통해서 들어온 경우 화면 상단에 추가
     [FROM_EDIT_ADD_SELECTED_ITEM]: (state, action) =>
       produce(state, (draft) => {
-        draft.selectedItems = (action.payload.selectedItems);
+        draft.selectedItems = action.payload.selectedItems;
       }),
     // 화면 상단에 추가
     [ADD_SELECTED_ITEM]: (state, action) =>
