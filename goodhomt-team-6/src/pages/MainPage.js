@@ -31,6 +31,7 @@ import Crontab from 'reactjs-crontab';
 import './MainPage.css';
 import Mascort from '../img/mascort_white.svg';
 import DashBoardBase from '../components/DashBoardBase';
+import AddAndDeleteModal from '../components/AddAndDeleteModal';
 
 const cookie = new Cookies();
 
@@ -63,6 +64,7 @@ const Main = (props) => {
   const [completed, isCompleted] = useState(true);
   const [challengeModal, showChallengeModal] = useState(false);
   const tokenCookie = cookie.get('homt6_is_login');
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   // Crontab 적용
   const notiChallengeStart = () => {
@@ -110,7 +112,6 @@ const Main = (props) => {
     if (is_login) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
-      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, []);
 
@@ -118,7 +119,6 @@ const Main = (props) => {
     if (is_login) {
       dispatch(exerciseActions.getMyTodayRoutineAPI(getDate));
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
-      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, [is_login]);
 
@@ -132,7 +132,16 @@ const Main = (props) => {
             height="40px"
             margin="0px 15px 0px 0px"
             src={userImg}
+            _onClick={() => {
+              setShowLogoutModal(true);
+            }}
           ></Image>
+          {showLogoutModal && (
+            <AddAndDeleteModal
+              message="로그 아웃"
+              setShowLogoutModal={setShowLogoutModal}
+            />
+          )}
           {is_login ? (
             <>
               <TextUser>
