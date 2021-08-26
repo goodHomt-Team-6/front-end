@@ -190,7 +190,7 @@ const AddMyFeed = (props) => {
 
           <Text type="contents">Routine name</Text>
           <TextInput
-            placeholder={selectedPrevItem.routineName}
+            placeholder="루틴 이름을 작성해주세요."
             onChange={onChangeRoutinename}
             value={writeroutinename || ''}
           ></TextInput>

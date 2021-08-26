@@ -17,6 +17,8 @@ import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
 import Delete from '../img/more_button_delete.svg';
 import CloseButton from '../img/close-button.svg';
+import Scroll from '../img/scroll_button.svg';
+
 import NavBar from '../components/NavBar';
 import FeedItem from '../components/FeedItem';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
@@ -66,10 +68,14 @@ const Feed = () => {
     }
   }, [isSearchError]);
 
+
   // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
     let startTime = new Date(createdAt);
     let nowTime = Date.now();
+    if (parseInt(startTime - nowTime) > -60000) {
+      return <Moment format="방금 전">{startTime}</Moment>;
+    }
     if (parseInt(startTime - nowTime) < -86400000) {
       return <Moment format="MMM D일">{startTime}</Moment>;
     }
@@ -210,28 +216,44 @@ const Feed = () => {
                     {/* 좋아요 */}
                     <LikeWrapper>
                       {item.isLiked === 1 ? (
-                        <IconBtn
-                          src={LikeSolid}
-                          onClick={() => {
-                            dispatch(feedActions.likeAPI(item.id));
-                          }}
-                        />
+                        <>
+                          <Icon
+                            width="15px"
+                            src={LikeSolid}
+                            onClick={() => {
+                              dispatch(feedActions.likeAPI(item.id));
+                            }}
+                          />
+                          <Text
+                            type="contents"
+                            fontSize="0.9em"
+                            margin="0px 0px 0px 6px"
+                            color="#black"
+                            fontWeight="500"
+                          >
+                            {item.totalLike}
+                          </Text>
+                        </>
                       ) : (
-                        <IconBtn
-                          src={LikeLine}
-                          onClick={() => {
-                            dispatch(feedActions.likeAPI(item.id));
-                          }}
-                        />
+                        <>
+                          <Icon
+                            width="15px"
+                            src={LikeLine}
+                            onClick={() => {
+                              dispatch(feedActions.likeAPI(item.id));
+                            }}
+                          />
+                          <Text
+                            type="contents"
+                            fontSize="0.9em"
+                            margin="0px 0px 0px 6px"
+                            color="#999999"
+                            fontWeight="500"
+                          >
+                            {item.totalLike}
+                          </Text>
+                        </>
                       )}
-                      <Text
-                        type="contents"
-                        margin="0px 0px 0px 6px"
-                        color="#999999"
-                        fontWeight="500"
-                      >
-                        {item.totalLike}
-                      </Text>
                     </LikeWrapper>
                   </UserContainer>
 
@@ -336,6 +358,7 @@ const Feed = () => {
                       {/* 삭제 버튼 */}
                       {item && item.userId === userId ? (
                         <Icon
+                          width="3.5px"
                           margin="0px 5px 0px 0px"
                           src={Delete}
                           onClick={() => {
@@ -345,15 +368,29 @@ const Feed = () => {
                         />
                       ) : null}
                     </TextBox>
-                    <Text type="contents" margin="0px" fontSize="14px">
+
+                    <Text
+                      type="contents"
+                      width="95%"
+                      color="black"
+                      margin="4px 0px 0px 0px"
+                      fontSize="13px">
                       {item.description}
                     </Text>
+
                   </TextWrapper>
                 </Card>
               ))}
           </FeedCont>
         </FeedContainer>
       </FeedWrapper>
+
+      {/* <ScrollBtn
+        src={Scroll}
+        onClick={() => {
+          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        }}
+      ></ScrollBtn> */}
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
@@ -550,6 +587,7 @@ const TextWrapper = styled.div`
 const TextBox = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const Time = styled.span`
@@ -566,7 +604,7 @@ const CommentText = styled.div`
 `;
 
 const KeywordBox = styled.div`
-  width: 50%;
+  width: auto;
   display: flex;
   flex-flow: row wrap;
 `;
@@ -606,4 +644,18 @@ const CloseBtn = styled.img`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const ScrollBtn = styled.img`
+  position: fixed;
+  bottom: 6rem;
+  right: 20px;
+  color: white;
+  font-size: 30px;
+  width: 67px;
+  height: 67px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  z-index: 1000;
 `;

@@ -13,6 +13,7 @@ import logger from '../shared/Logger';
 import { history } from '../redux/configureStore';
 import Header from '../components/Header';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
+import ErrorModal from '../components/ErrorModal';
 
 // 오늘 추가한 루틴 상세 컴포넌트 - 루틴 상세 확인하고 운동 시작으로 이동
 const TodayRoutineDetail = (props) => {
@@ -27,6 +28,7 @@ const TodayRoutineDetail = (props) => {
 
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     if (selectedPrevItem.length !== 0) {
@@ -233,8 +235,9 @@ const TodayRoutineDetail = (props) => {
           {/* 삭제버튼 */}
           <Selected
             onClick={() => {
-              dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
-              history.replace('/');
+              setShowDeleteModal(true);
+              // dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
+              // history.replace('/');
             }}
           >
             <Icon src={routineDelete} width="20px" margin="0px 5px 0px 0px" />
@@ -244,10 +247,12 @@ const TodayRoutineDetail = (props) => {
           </Selected>
         </ListContainer>
 
-        {showShareModal ? (
-          <AddAndDeleteModal
-            message="내 피드에 추가"
-            setShowShareModal={setShowShareModal}
+        {showDeleteModal ? (
+          <ErrorModal
+            message="루틴을 삭제하시겠습니까?"
+            buttonMessage="삭제"
+            setShowDeleteModal={setShowDeleteModal}
+            id={id}
           />
         ) : null}
 

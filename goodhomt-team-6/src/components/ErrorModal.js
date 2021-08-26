@@ -12,7 +12,7 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 
 // 검색어 키워드 없을 시에 생성되는 모달 컴포넌트(삭제시에 확인 모달로도 활용할 예정)
-const ErrorModal = ({ message, buttonMessage, setShowErrorModal, buttonLink }) => {
+const ErrorModal = ({ id, message, buttonMessage, setShowDeleteModal, setShowErrorModal, buttonLink }) => {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -31,6 +31,10 @@ const ErrorModal = ({ message, buttonMessage, setShowErrorModal, buttonLink }) =
     if (e.target === modalRef.current || buttonRef.current) {
       if (setShowErrorModal) {
         setShowErrorModal(false);
+        return;
+      }
+      if (setShowDeleteModal) {
+        setShowDeleteModal(false);
         return;
       }
     }
@@ -64,43 +68,29 @@ const ErrorModal = ({ message, buttonMessage, setShowErrorModal, buttonLink }) =
             </ConfirmButton>
           </Inner>
         </ModalInner>
-      ) : (null
-        // <ModalInner>
-        //   <PurpleAcc></PurpleAcc>
-        //   <Inner>
-        //     <MascortIcon src={Mascort} borderRadius="0" />
-        //     {isNickname ? (
-        //       <Text
-        //         type="contents"
-        //         color="black"
-        //         fontSize="18px"
-        //         margin="10px 0 10px 0"
-        //       >
-        //         사용가능한 닉네임입니다.
-        //       </Text>
-        //     ) : (
-        //       <Text
-        //         type="contents"
-        //         color="black"
-        //         fontSize="18px"
-        //         margin="10px 0 10px 0"
-        //       >
-        //         중복된 닉네임이 존재합니다.
-        //       </Text>
-        //     )}
+      ) : (
+        <ModalInner>
+          <PurpleAcc></PurpleAcc>
+          <Inner>
+            <MascortIcon src={Mascort} borderRadius="0" />
+            <Text
+              type="contents"
+              color="black"
+              fontSize="18px"
+              margin="10px 0 10px 0"
+            >
+              {message}
+            </Text>
 
-        //     {/* 저장버튼 */}
-        //     {isNickname ? (
-        //       <ConfirmButton onClick={closeModal} ref={buttonRef}>
-        //         확인
-        //       </ConfirmButton>
-        //     ) : (
-        //       <ConfirmButton onClick={CheckFailcloseModal} ref={buttonRef}>
-        //         확인
-        //       </ConfirmButton>
-        //     )}
-        //   </Inner>
-        // </ModalInner>
+            {/* 삭제버튼 */}
+            <ConfirmButton onClick={() => {
+              dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
+              history.replace('/');
+            }} ref={buttonRef}>
+              {buttonMessage}
+            </ConfirmButton>
+          </Inner>
+        </ModalInner>
       )}
     </ModalWrapper>
   );

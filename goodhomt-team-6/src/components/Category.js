@@ -172,7 +172,6 @@ const Category = (props) => {
                     };
                     dispatch(exerciseActions.addExerciseType(exercise));
                     dispatch(exerciseActions.addSelectedItem(e));
-                    console.log(e);
                   }}
                 >
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>

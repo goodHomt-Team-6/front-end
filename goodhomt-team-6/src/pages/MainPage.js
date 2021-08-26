@@ -216,7 +216,7 @@ const Main = (props) => {
                     tasks={tasks}
                     timeZone="Asia/Seoul"
                     dashboard={{ hidden: true }}
-                    // if true, dashboard is hidden
+                  // if true, dashboard is hidden
                   />
                   <ChallengeBox
                     status={myFirstChallenge.Challenge.progressStatus}
@@ -618,8 +618,8 @@ const AddBtn = styled.img`
   right: 20px;
   color: white;
   font-size: 30px;
-  width: 70px;
-  height: 70px;
+  width: 67px;
+  height: 67px;
   border-radius: 50%;
   cursor: pointer;
   border: none;
