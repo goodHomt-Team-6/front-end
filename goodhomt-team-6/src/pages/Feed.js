@@ -122,7 +122,7 @@ const Feed = () => {
             <SearchInput
               visible={visible}
               value={searchInput}
-              placeholder="검색어를 입력해주세요."
+              placeholder="키워드를 입력해주세요."
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}

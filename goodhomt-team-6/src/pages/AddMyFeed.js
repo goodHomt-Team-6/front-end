@@ -89,6 +89,17 @@ const AddMyFeed = (props) => {
       {/* 헤더 */}
       <Header message="Feed" />
 
+      <Text
+        type="contents"
+        fontSize="14px"
+        padding="0px 1.5rem 1rem 1.5rem"
+        margin="0px"
+        bgColor="#f7f7fa"
+      >
+        루틴 제목과 설명을 입력해주세요 :)
+      </Text>
+
+
       {/* 나의 오늘 운동 루틴 가져오기 */}
       <CategoryList>
         <TodayExerciseWrapper>
@@ -272,7 +283,7 @@ const TodayExerciseWrapper = styled.div`
   border-bottom: 1px solid ${Color.lightGray};
   line-height: 48px;
   margin: 0px;
-  padding: 28px 0px;
+  padding: 1rem 0px 28px 0px;
   font-size: 1rem;
   &:hover,
   &:active {
@@ -346,6 +357,7 @@ const ElTextarea = styled.textarea`
   &:active {
     outline: none;
   }
+  word-spacing: -0.2em;
 `;
 
 const NicknameCont = styled.div`
