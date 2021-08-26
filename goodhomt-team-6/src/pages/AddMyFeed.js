@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 import Header from '../components/Header';
-import Cookies from 'universal-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { Image, Text, FooterButton, Icon } from '../shared/Styles';
+import { history } from '../redux/configureStore';
+import { Text, FooterButton, Icon } from '../shared/Styles';
+import { actionCreators as feedActions } from '../redux/modules/feed';
 import NextArrow from '../img/next_arrow_icon.svg';
 import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
-import { actionCreators as feedActions } from '../redux/modules/feed';
-import { history } from '../redux/configureStore';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
-import { actionCreators as userActions } from '../redux/modules/user';
-import logger from '../shared/Logger';
 
 // 피드에 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {

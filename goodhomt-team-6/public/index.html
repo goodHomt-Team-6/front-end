@@ -141,6 +141,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- 서비스워커 코드 -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
@@ -165,6 +166,7 @@
         console.log('Service Worker is not supported by browser.');
       }
     </script>
+    <!-- 서비스워커 코드 끝 -->
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

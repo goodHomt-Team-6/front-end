@@ -149,7 +149,7 @@ const Main = (props) => {
                 dispatch(userActions.showLoginModal(true));
               }}
             >
-              <Text type="contents" margin="0">
+              <Text fontSize="0.9em" type="contents" margin="0">
                 LogIn
               </Text>
             </LoginCont>
@@ -688,21 +688,22 @@ const TextUserDeco = styled.div`
   width: 44px;
   height: 16px;
   position: relative;
-  right: 85px;
+  right: 80px;
   bottom: 10px;
   opacity: 30%;
 `;
 
 const LoginCont = styled.div`
   border-radius: 17px;
-  height: 24px;
+  height: 22px;
+  line-height: 1.4;
   background-color: #000;
   color: #fff;
   padding: 5px 12px;
 `;
 
 const RoutineTextBox = styled.div`
-  display: flex;
+  display: flex; 
 `;
 
 const NotiBorder = styled.div`
@@ -710,7 +711,7 @@ const NotiBorder = styled.div`
   border: 2px solid #234e70;
   position: fixed;
   bottom: 90px;
-  left: calc(50% - 35vw);
+  left: calc(50 % - 35vw);
   z-index: 999999;
   border-radius: 10px;
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

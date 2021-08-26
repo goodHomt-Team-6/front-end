@@ -58,7 +58,7 @@ const DropDown = (props) => {
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={handleClick}
-          style={{ fontSize: "18px" }}>
+          style={{ fontSize: "16px", padding: "6px 8px 6px 0px" }}>
           {selectName}
         </Button>
       </ButtonWrapper>
