@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as userAction } from '../redux/modules/user';
-// import Spinner from './Spinner';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Spinner from '../shared/Spinner';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 
 const KakaoLanding = (props) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const KakaoLanding = (props) => {
   return (
     <>
       {/* 스피너 넣기 */}
-      {isLoaded ? <CircularProgress /> : null}
+      {isLoaded ? <Spinner /> : null}
     </>
   );
 };

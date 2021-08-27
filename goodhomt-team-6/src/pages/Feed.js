@@ -18,6 +18,7 @@ import LikeSolid from '../img/like_solid.svg';
 import Delete from '../img/more_button_delete.svg';
 import CloseButton from '../img/close-button.svg';
 import Scroll from '../img/scroll_button.svg';
+import './Feed.css';
 
 import NavBar from '../components/NavBar';
 import FeedItem from '../components/FeedItem';
@@ -28,6 +29,7 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
 import ErrorModal from '../components/ErrorModal';
 import DashBoardBase from '../components/DashBoardBase';
+import _ from "lodash";
 
 // 피드 페이지 컴포넌트
 const Feed = () => {
@@ -38,6 +40,8 @@ const Feed = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [visible, setVisible] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [clickSearch, isClickSearch] = useState(false);
+  const [clickKeyword, setClickKeyword] = useState('');
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
@@ -45,6 +49,7 @@ const Feed = () => {
   const userImg = useSelector((store) => store.user.user.userImg);
   const is_login = useSelector((store) => store.user?.is_login);
   const isSearchError = useSelector((store) => store.feed.isSearchError);
+  const keyword = useSelector((store) => store.feed.keyword);
 
   useEffect(() => {
     if (is_login) {
@@ -62,12 +67,19 @@ const Feed = () => {
   useEffect(() => {
     if (isSearchError) {
       setShowErrorModal(true);
+      dispatch(feedActions.initializeKeyword());
     } else {
       setSearchKeyword('');
+      dispatch(feedActions.initializeKeyword());
       return;
     }
   }, [isSearchError]);
 
+  useEffect(() => {
+    if (searchInput === '') {
+      dispatch(feedActions.initializeKeyword());
+    }
+  }, [searchInput]);
 
   // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
@@ -83,6 +95,15 @@ const Feed = () => {
       return <Moment fromNow>{startTime}</Moment>;
     }
   };
+
+  // 검색 디바운스
+  const debounce = _.debounce(() => {
+    dispatch(feedActions.addKeyword(searchInput));
+    if (keyword !== []) {
+      dispatch(feedActions.getKeywordSearchAPI(searchInput, userId));
+    }
+  }, 500);
+  const debounceOnchange = React.useCallback(debounce, [searchInput]);
 
   return (
     <Container>
@@ -101,15 +122,15 @@ const Feed = () => {
 
         <IconWrapper>
           {/* 검색한 키워드 보여주기 */}
-          {searchKeyword !== '' ? (
+          {clickKeyword !== '' ? (
             <SelectedWrapper visible={visible}>
               <Selected>
-                <ExerciseName>{searchKeyword}</ExerciseName>
+                <ExerciseName>{clickKeyword}</ExerciseName>
                 <CloseBtn
                   src={CloseButton}
                   width="10"
                   onClick={() => {
-                    setSearchKeyword('');
+                    setClickKeyword('');
                     dispatch(feedActions.getFeedAllAPI(userId));
                   }}
                 />
@@ -125,6 +146,7 @@ const Feed = () => {
               placeholder="키워드를 입력해주세요."
               onChange={(e) => {
                 setSearchInput(e.target.value);
+                debounceOnchange(e.target.value);
               }}
             />
           </SearchWrapper>
@@ -135,14 +157,17 @@ const Feed = () => {
             onClick={() => {
               setSearchInput('');
               if (visible) {
+                isClickSearch(false);
                 setVisible(false);
                 dispatch(feedActions.getFeedSearchAPI(searchInput, userId));
                 setSearchKeyword(searchInput);
               } else {
                 if (searchKeyword === '') {
                   setVisible(true);
+                  isClickSearch(true);
                 } else {
                   setVisible(true);
+                  isClickSearch(true);
                   setSearchKeyword('');
                 }
               }
@@ -180,223 +205,240 @@ const Feed = () => {
           setShowErrorModal={setShowErrorModal} />
       ) : null}
 
-      {/* 피드 목록 */}
-      <FeedWrapper>
-        <FeedContainer>
-          <FeedCont>
-            {feed &&
-              feed.map((item, idx) => (
-                <Card key={idx}>
-                  {/* 유저 정보 */}
-                  <UserContainer>
-                    <UserBox>
-                      <Image
-                        width="34px"
-                        height="34px"
-                        margin="0px 15px 0px 0px"
-                        src={item.User.img}
-                      />
-                      <InfoBox>
-                        {userName && (
+      {/* 검색한 키워드 목록 */}
+      {clickSearch ? (
+        <SearchBox>
+          {keyword &&
+            keyword.map((item, idx) => (
+              <TextCont key={idx}
+                onClick={() => {
+                  dispatch(feedActions.getFeedSearchAPI(item.exerciseName, userId));
+                  isClickSearch(false);
+                  dispatch(feedActions.initializeKeyword());
+                  setVisible(false);
+                  setClickKeyword(item.exerciseName);
+                }}
+              >
+                <Text>
+                  {item.exerciseName}
+                </Text>
+              </TextCont>
+            ))
+          }
+        </SearchBox>
+      ) : (
+        // 피드 목록
+        <FeedWrapper>
+          <FeedContainer>
+            <FeedCont>
+              {feed &&
+                feed.map((item, idx) => (
+                  <Card key={idx}>
+                    {/* 유저 정보 */}
+                    <UserContainer>
+                      <UserBox>
+                        <Image
+                          width="34px"
+                          height="34px"
+                          margin="0px 15px 0px 0px"
+                          src={item.User.img}
+                        />
+                        <InfoBox>
+                          {userName && (
+                            <Text
+                              type="label"
+                              fontSize="14px"
+                              color="black"
+                              fontWeight="600"
+                            >
+                              {item.communityNickname}
+                            </Text>
+                          )}
+                          <Text type="label" fontSize="12px">
+                            {displayCreatedAt(item.createdAt)}
+                          </Text>
+                        </InfoBox>
+                      </UserBox>
+
+                      {/* 좋아요 */}
+                      <LikeWrapper>
+                        {item.isLiked === 1 ? (
+                          <>
+                            <Icon
+                              width="15px"
+                              src={LikeSolid}
+                              onClick={() => {
+                                dispatch(feedActions.likeAPI(item.id));
+                              }}
+                            />
+                            <Text
+                              type="contents"
+                              fontSize="0.9em"
+                              margin="0px 0px 0px 6px"
+                              color="#black"
+                              fontWeight="500"
+                            >
+                              {item.totalLike}
+                            </Text>
+                          </>
+                        ) : (
+                          <>
+                            <Icon
+                              width="15px"
+                              src={LikeLine}
+                              onClick={() => {
+                                dispatch(feedActions.likeAPI(item.id));
+                              }}
+                            />
+                            <Text
+                              type="contents"
+                              fontSize="0.9em"
+                              margin="0px 0px 0px 6px"
+                              color="#999999"
+                              fontWeight="500"
+                            >
+                              {item.totalLike}
+                            </Text>
+                          </>
+                        )}
+                      </LikeWrapper>
+                    </UserContainer>
+
+                    {/* 피드 게시 운동 정보 */}
+                    <TodayMainBox
+                      onClick={() => {
+                        const selected = feed.filter((select) => select.id == item.id);
+                        dispatch(
+                          exerciseActions.addSelectedPrevItem(selected[0]),
+                        );
+                        dispatch(exerciseActions.initializeRoutine());
+                        history.push(`/feed/${item.id}`);
+                      }}
+                    >
+                      <TodayWrapper>
+                        <Enrolled>{item.myExercise.length}</Enrolled>
+                        <TextItem>{item.routineName}</TextItem>
+                      </TodayWrapper>
+                      <TodayTypeContainer>
+                        <TypeWrapper>
                           <Text
                             type="label"
                             fontSize="14px"
+                            fontWeight="600"
                             color="black"
+                            opacity="54%"
+                          >
+                            종목
+                          </Text>
+                          <TextItem>
+                            {item.myExercise[0].exerciseName} 외{' '}
+                            {item.myExercise.length - 1}개
+                          </TextItem>
+                        </TypeWrapper>
+                        <Div />
+                        <TypeWrapper>
+                          <Text
+                            type="label"
+                            fontSize="14px"
+                            fontWeight="600"
+                            color="black"
+                            opacity="54%"
+                          >
+                            운동시간
+                          </Text>
+                          <TextItem>
+                            {Math.floor(item.routineTime / 60) < 10 ? (
+                              <Time>
+                                {'0' + Math.floor(item.routineTime / 60)}:
+                              </Time>
+                            ) : (
+                              <Time>{Math.floor(item.routineTime / 60)}:</Time>
+                            )}
+                            {item.routineTime % 60 < 10 ? (
+                              <Time>{'0' + (item.routineTime % 60)}</Time>
+                            ) : (
+                              <Time>{item.routineTime % 60}</Time>
+                            )}
+                          </TextItem>
+                        </TypeWrapper>
+                      </TodayTypeContainer>
+                    </TodayMainBox>
+
+                    {/* 운동 정보 텍스트 */}
+                    <TextWrapper>
+                      <TextBox>
+                        <CommentText>
+                          <Text
+                            type="contents"
+                            margin="0px 8px 0px 0px"
+                            fontSize="14px"
                             fontWeight="600"
                           >
-                            {item.communityNickname}
+                            {item.routineName}
                           </Text>
-                        )}
-                        <Text type="label" fontSize="12px">
-                          {displayCreatedAt(item.createdAt)}
-                        </Text>
-                      </InfoBox>
-                    </UserBox>
 
-                    {/* 좋아요 */}
-                    <LikeWrapper>
-                      {item.isLiked === 1 ? (
-                        <>
+                          {/* 키워드 */}
+                          <KeywordBox>
+                            {item.myExercise.map((i, idx) => (
+                              <Text
+                                key={idx}
+                                type="contents"
+                                margin="0px 6px 0px 0px"
+                                color="#4A40FF"
+                                fontSize="14px"
+                                fontWeight="600"
+                                onClick={() => {
+                                  if (visible) {
+                                    setVisible(false);
+                                    setSearchKeyword(i.exerciseName);
+                                  } else {
+                                    setSearchKeyword(i.exerciseName);
+                                  }
+                                  dispatch(feedActions.getFeedSearchAPI(i.exerciseName, userId));
+                                }}>
+                                #{i.exerciseName}
+                              </Text>
+                            ))}
+                          </KeywordBox>
+                        </CommentText>
+
+                        {/* 삭제 버튼 */}
+                        {item && item.userId === userId ? (
                           <Icon
-                            width="15px"
-                            src={LikeSolid}
+                            width="3.5px"
+                            margin="0px 5px 0px 0px"
+                            src={Delete}
                             onClick={() => {
-                              dispatch(feedActions.likeAPI(item.id));
+                              setShowModal(true);
+                              dispatch(feedActions.selectFeed(item.id));
                             }}
                           />
-                          <Text
-                            type="contents"
-                            fontSize="0.9em"
-                            margin="0px 0px 0px 6px"
-                            color="#black"
-                            fontWeight="500"
-                          >
-                            {item.totalLike}
-                          </Text>
-                        </>
-                      ) : (
-                        <>
-                          <Icon
-                            width="15px"
-                            src={LikeLine}
-                            onClick={() => {
-                              dispatch(feedActions.likeAPI(item.id));
-                            }}
-                          />
-                          <Text
-                            type="contents"
-                            fontSize="0.9em"
-                            margin="0px 0px 0px 6px"
-                            color="#999999"
-                            fontWeight="500"
-                          >
-                            {item.totalLike}
-                          </Text>
-                        </>
-                      )}
-                    </LikeWrapper>
-                  </UserContainer>
+                        ) : null}
+                      </TextBox>
 
-                  {/* 피드 게시 운동 정보 */}
-                  <TodayMainBox
-                    onClick={() => {
-                      const selected = feed.filter((select) => select.id == item.id);
-                      dispatch(
-                        exerciseActions.addSelectedPrevItem(selected[0]),
-                      );
-                      dispatch(exerciseActions.initializeRoutine());
-                      history.push(`/feed/${item.id}`);
-                    }}
-                  >
-                    <TodayWrapper>
-                      <Enrolled>{item.myExercise.length}</Enrolled>
-                      <TextItem>{item.routineName}</TextItem>
-                    </TodayWrapper>
-                    <TodayTypeContainer>
-                      <TypeWrapper>
-                        <Text
-                          type="label"
-                          fontSize="14px"
-                          fontWeight="600"
-                          color="black"
-                          opacity="54%"
-                        >
-                          종목
-                        </Text>
-                        <TextItem>
-                          {item.myExercise[0].exerciseName} 외{' '}
-                          {item.myExercise.length - 1}개
-                        </TextItem>
-                      </TypeWrapper>
-                      <Div />
-                      <TypeWrapper>
-                        <Text
-                          type="label"
-                          fontSize="14px"
-                          fontWeight="600"
-                          color="black"
-                          opacity="54%"
-                        >
-                          운동시간
-                        </Text>
-                        <TextItem>
-                          {Math.floor(item.routineTime / 60) < 10 ? (
-                            <Time>
-                              {'0' + Math.floor(item.routineTime / 60)}:
-                            </Time>
-                          ) : (
-                            <Time>{Math.floor(item.routineTime / 60)}:</Time>
-                          )}
-                          {item.routineTime % 60 < 10 ? (
-                            <Time>{'0' + (item.routineTime % 60)}</Time>
-                          ) : (
-                            <Time>{item.routineTime % 60}</Time>
-                          )}
-                        </TextItem>
-                      </TypeWrapper>
-                    </TodayTypeContainer>
-                  </TodayMainBox>
+                      <Text
+                        type="contents"
+                        width="95%"
+                        color="black"
+                        margin="4px 0px 0px 0px"
+                        fontSize="13px">
+                        {item.description}
+                      </Text>
 
-                  {/* 운동 정보 텍스트 */}
-                  <TextWrapper>
-                    <TextBox>
-                      <CommentText>
-                        <Text
-                          type="contents"
-                          margin="0px 8px 0px 0px"
-                          fontSize="14px"
-                          fontWeight="600"
-                        >
-                          {item.routineName}
-                        </Text>
+                    </TextWrapper>
+                  </Card>
+                ))}
+            </FeedCont>
+          </FeedContainer >
+        </FeedWrapper >
+      )}
 
-                        {/* 키워드 */}
-                        <KeywordBox>
-                          {item.myExercise.map((i, idx) => (
-                            <Text
-                              key={idx}
-                              type="contents"
-                              margin="0px 6px 0px 0px"
-                              color="#4A40FF"
-                              fontSize="14px"
-                              fontWeight="600"
-                              onClick={() => {
-                                if (visible) {
-                                  setVisible(false);
-                                  setSearchKeyword(i.exerciseName);
-                                } else {
-                                  setSearchKeyword(i.exerciseName);
-                                }
-                                dispatch(feedActions.getFeedSearchAPI(i.exerciseName, userId));
-                              }}>
-                              #{i.exerciseName}
-                            </Text>
-                          ))}
-                        </KeywordBox>
-                      </CommentText>
-
-                      {/* 삭제 버튼 */}
-                      {item && item.userId === userId ? (
-                        <Icon
-                          width="3.5px"
-                          margin="0px 5px 0px 0px"
-                          src={Delete}
-                          onClick={() => {
-                            setShowModal(true);
-                            dispatch(feedActions.selectFeed(item.id));
-                          }}
-                        />
-                      ) : null}
-                    </TextBox>
-
-                    <Text
-                      type="contents"
-                      width="95%"
-                      color="black"
-                      margin="4px 0px 0px 0px"
-                      fontSize="13px">
-                      {item.description}
-                    </Text>
-
-                  </TextWrapper>
-                </Card>
-              ))}
-          </FeedCont>
-        </FeedContainer>
-      </FeedWrapper>
-
-      {/* <ScrollBtn
-        src={Scroll}
-        onClick={() => {
-          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        }}
-      ></ScrollBtn> */}
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
         <NavBar />
       </NavBarWrapper>
-    </Container>
+    </Container >
   );
 };
 
@@ -435,8 +477,11 @@ const SearchWrapper = styled.div`
   border-bottom: 1px solid black;
   margin: 0px;
   padding: 0px;
-  width: ${(props) => (props.visible ? '100%' : '0px')};
+  width: ${(props) => (props.visible ? '120%' : '0px')};
   /* transition: all 0.4s cubic-bezier(0.6, -0.5, 0.2, 0.1); */
+  background-color: ${Color.bgIvory};
+  position: relative;
+  z-index: 1000;
 `;
 
 const SearchInput = styled.input`
@@ -444,7 +489,7 @@ const SearchInput = styled.input`
   padding: 0px;
   height: 48px;
   border: none;
-  width: ${(props) => (props.visible ? '100%' : '0px')};
+  width: ${(props) => (props.visible ? '100vw' : '0px')};
   background-color: ${Color.bgIvory};
   &:focus,
   &:active {
@@ -658,4 +703,15 @@ const ScrollBtn = styled.img`
   cursor: pointer;
   border: none;
   z-index: 1000;
+`;
+
+const SearchBox = styled.div`
+  background-color: ${Color.bgIvory};
+`;
+
+const TextCont = styled.div`
+  list-style: none;
+  margin: 0px 1.5rem;
+  padding: 1rem 0px;
+  border-bottom: 1px solid #999999;
 `;

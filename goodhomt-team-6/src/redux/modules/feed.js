@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import api from '../../shared/Request';
 import logger from '../../shared/Logger';
+import _ from "lodash";
 
 // initialState
 const initialState = {
@@ -13,6 +14,8 @@ const initialState = {
   savedDescription: '',
   isDoubleChecked: false,
   isSearchError: false,
+  keyword: [],
+  keywordInput: '',
 };
 
 // actions
@@ -27,6 +30,9 @@ const SAVE_DESCRIPTION = 'community/SAVE_DESCRIPTION';
 const INITIALIZE_WRITTEN_FEED = 'community/INITIALIZE_WRITTEN_FEED';
 const IS_DOUBLE_CHECKED = 'community/IS_DOUBLE_CHECKED';
 const IS_SEARCH_ERROR = 'community/IS_SEARCH_ERROR';
+const GET_KEYWORD = 'community/GET_KEYWORD';
+const INITIALIZE_KEYWORD = 'community/INITIALIZE_KEYWORD';
+const ADD_KEYWORD = 'community/ADD_KEYWORD';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
@@ -40,6 +46,9 @@ const saveDescription = createAction(SAVE_DESCRIPTION, (description) => ({ descr
 const initializeWrittenFeed = createAction(INITIALIZE_WRITTEN_FEED, () => ({}));
 const isDoubleChecked = createAction(IS_DOUBLE_CHECKED, (isDoubleChecked) => ({ isDoubleChecked }));
 const isSearchError = createAction(IS_SEARCH_ERROR, (isSearchError) => ({ isSearchError }));
+const getKeyword = createAction(GET_KEYWORD, (feed) => ({ feed }));
+const initializeKeyword = createAction(INITIALIZE_KEYWORD, () => ({}));
+const addKeyword = createAction(ADD_KEYWORD, (keywordInput) => ({ keywordInput }));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -85,6 +94,22 @@ const getFeedSearchAPI = (keyword, userId) => {
       });
   };
 };
+
+// 키워드로 가져오기(검색어API 사용)
+const getKeywordSearchAPI = (keyword, userId) => {
+  return function (dispatch, getState, { history }) {
+    api
+      .get(`/community?exerciseName=${keyword}&userId=${userId}`)
+      .then((response) => {
+        dispatch(getKeyword(response.data.result));
+        logger('검색 키워드 가져오기 성공');
+      })
+      .catch((error) => {
+        logger('검색 키워드 가져오기 실패', error);
+      });
+  };
+};
+
 
 // 피드 상세 가져오기
 const getFeedDetailAPI = (routineId) => {
@@ -204,6 +229,27 @@ export default handleActions(
     [IS_SEARCH_ERROR]: (state, action) =>
       produce(state, (draft) => {
         draft.isSearchError = action.payload.isSearchError;
+      }),
+    [GET_KEYWORD]: (state, action) =>
+      produce(state, (draft) => {
+        // feed로 가져온 배열에서 키워드만 찾아서 넣어줄 것
+        if (state.keywordInput === '') {
+          draft.keyword = [];
+        } else {
+          const findA = action.payload.feed.map((i) => i.myExercise);
+          const findB = _.flatten(findA, true);
+          const findC = _.uniqBy(findB, "exerciseName");
+          const keywordArr = findC.filter((i) => i.exerciseName.includes(state.keywordInput));
+          draft.keyword = keywordArr;
+        }
+      }),
+    [INITIALIZE_KEYWORD]: (state, action) =>
+      produce(state, (draft) => {
+        draft.keyword = [];
+      }),
+    [ADD_KEYWORD]: (state, action) =>
+      produce(state, (draft) => {
+        draft.keywordInput = action.payload.keywordInput;
       })
   },
   initialState
@@ -219,6 +265,7 @@ const actionCreators = {
   deleteFeedAPI,
   likeAPI,
   checkNicknameAPI,
+  getKeywordSearchAPI,
   selectFeed,
   saveNickname,
   saveRoutinename,
@@ -226,6 +273,8 @@ const actionCreators = {
   initializeWrittenFeed,
   isDoubleChecked,
   isSearchError,
+  initializeKeyword,
+  addKeyword,
 };
 
 export { actionCreators };
