@@ -24,6 +24,7 @@ import SelectMyFeed from '../pages/SelectMyFeed';
 import FeedRoutineDetail from '../pages/FeedRoutineDetail';
 import Calendar from '../pages/Calendar';
 import Challenge from '../pages/Challenge';
+import Tutorial from '../pages/Tutorial';
 import ErrorBoundary from './ErrorBoundary';
 
 const cookie = new Cookies();
@@ -68,6 +69,7 @@ const App = (props) => {
             component={FeedRoutineDetail}
           />
           <Route path="/calendar" exact component={Calendar} />
+          <Route path="/tutorial" exact component={Tutorial} />
         </Switch>
       </ConnectedRouter>
     </ErrorBoundary>
