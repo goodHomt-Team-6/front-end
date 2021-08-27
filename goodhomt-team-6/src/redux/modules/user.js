@@ -51,23 +51,38 @@ const kakaoLoginAPI = (code) => {
           .then((res) => {
             const accessToken = res.data.loginUser.token.accessToken;
             const refreshToken = res.data.loginUser.token.refreshToken;
+            const decoded = jwt_decode(accessToken);
 
             dispatch(checkLogin(accessToken));
-            cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now()+1296000000) });
+            cookies.set('homt6_is_login', 'true', {
+              path: '/',
+              expires: new Date(Date.now() + 1296000000),
+            });
 
             // CSRF 공격에 대한 방지책 생각해보기.
             // cookie 보안 관련 방법 더 알아보기.
             // samesite: strict를 하면 왜 쿠키 저장이 안되는지...
             // 만료기한은 어떻게 잡아야할지...
-            cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now()+1296000000) });
-            cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now()+1296000000) });
-            // /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
-            if (sessionStorage.getItem('redirect_url') === '/exercise') {
-              dispatch(exerciseActions.initializeRoutine());
+            cookies.set('homt6_access_token', accessToken, {
+              path: '/',
+              expires: new Date(Date.now() + 1296000000),
+            });
+            cookies.set('homt6_refresh_token', refreshToken, {
+              path: '/',
+              expires: new Date(Date.now() + 1296000000),
+            });
+            // 튜토리얼 이미지 보여주기
+            if (decoded.finishTutorial === false) {
+              history.push('/tutorial');
+            } else {
+              // /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
+              if (sessionStorage.getItem('redirect_url') === '/exercise') {
+                dispatch(exerciseActions.initializeRoutine());
+              }
+              // 이전 페이지로 push 해줘야함
+              history.push(sessionStorage.getItem('redirect_url'));
+              sessionStorage.removeItem('redirect_url');
             }
-            // 이전 페이지로 push 해줘야함
-            history.push(sessionStorage.getItem('redirect_url'));
-            sessionStorage.removeItem('redirect_url');
           })
           .catch((err) => {
             logger(err);
@@ -96,9 +111,18 @@ const getUpdatedAccessTokenAPI = () => {
         const accessToken = res.data.loginUser.token.accessToken;
         const refreshToken = res.data.loginUser.token.refreshToken;
 
-        cookies.set('homt6_is_login', 'true', { path: '/', expires: new Date(Date.now()+1296000000) });
-        cookies.set('homt6_access_token', accessToken, { path: '/', expires: new Date(Date.now()+1296000000) });
-        cookies.set('homt6_refresh_token', refreshToken, { path: '/', expires: new Date(Date.now()+1296000000) });
+        cookies.set('homt6_is_login', 'true', {
+          path: '/',
+          expires: new Date(Date.now() + 1296000000),
+        });
+        cookies.set('homt6_access_token', accessToken, {
+          path: '/',
+          expires: new Date(Date.now() + 1296000000),
+        });
+        cookies.set('homt6_refresh_token', refreshToken, {
+          path: '/',
+          expires: new Date(Date.now() + 1296000000),
+        });
 
         dispatch(checkLogin(cookies.get('homt6_access_token')));
         logger('갱신된 토큰 반환 성공');
@@ -129,6 +153,18 @@ const kakaoLogOut = (code) => {
 const logOutAPI = () => {
   return function (dispatch, getState, { history }) {
     dispatch(logOut());
+  };
+};
+
+const setTutorialAPI = () => {
+  return function (dispatch, getState, { history }) {
+    api
+      .put('/auth/tutorial', { finishTutorial: true })
+      .then((res) => {})
+      .catch((err) => {
+        logger('튜토리얼 세팅 실패');
+        logger(err);
+      });
   };
 };
 
@@ -177,6 +213,7 @@ const actionCreators = {
   kakaoLogOut,
   getUpdatedAccessTokenAPI,
   showLoginModal,
+  setTutorialAPI,
 };
 
 export { actionCreators };

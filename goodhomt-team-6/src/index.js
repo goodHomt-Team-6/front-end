@@ -5,8 +5,8 @@ import App from './shared/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './redux/configureStore';
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
+// import * as Sentry from '@sentry/react';
+// import { Integrations } from '@sentry/tracing';
 
 // Sentry.init({
 //   dsn: 'https://d0b1b68449034d6aaadc9f6951afcb14@o969955.ingest.sentry.io/5921092',
