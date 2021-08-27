@@ -16,6 +16,7 @@ const initialState = {
   isSearchError: false,
   keyword: [],
   keywordInput: '',
+  isKeyword: false,
 };
 
 // actions
@@ -33,6 +34,7 @@ const IS_SEARCH_ERROR = 'community/IS_SEARCH_ERROR';
 const GET_KEYWORD = 'community/GET_KEYWORD';
 const INITIALIZE_KEYWORD = 'community/INITIALIZE_KEYWORD';
 const ADD_KEYWORD = 'community/ADD_KEYWORD';
+const INITIALIZE_KEYWORD_INPUT = 'community/INITIALIZE_KEYWORD_INPUT';
 
 // action creators
 const getFeed = createAction(GET_FEED, (feed) => ({ feed }));
@@ -49,6 +51,7 @@ const isSearchError = createAction(IS_SEARCH_ERROR, (isSearchError) => ({ isSear
 const getKeyword = createAction(GET_KEYWORD, (feed) => ({ feed }));
 const initializeKeyword = createAction(INITIALIZE_KEYWORD, () => ({}));
 const addKeyword = createAction(ADD_KEYWORD, (keywordInput) => ({ keywordInput }));
+const initializeKeywordInput = createAction(INITIALIZE_KEYWORD_INPUT, () => ({}));
 
 // 피드 추가하기
 const addFeedAPI = (routine) => {
@@ -250,6 +253,10 @@ export default handleActions(
     [ADD_KEYWORD]: (state, action) =>
       produce(state, (draft) => {
         draft.keywordInput = action.payload.keywordInput;
+      }),
+    [INITIALIZE_KEYWORD_INPUT]: (state, action) =>
+      produce(state, (draft) => {
+        draft.keywordInput = '';
       })
   },
   initialState
@@ -275,6 +282,7 @@ const actionCreators = {
   isSearchError,
   initializeKeyword,
   addKeyword,
+  initializeKeywordInput,
 };
 
 export { actionCreators };

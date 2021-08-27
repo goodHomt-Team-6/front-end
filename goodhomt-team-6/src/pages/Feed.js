@@ -70,7 +70,6 @@ const Feed = () => {
       dispatch(feedActions.initializeKeyword());
     } else {
       setSearchKeyword('');
-      dispatch(feedActions.initializeKeyword());
       return;
     }
   }, [isSearchError]);
@@ -78,6 +77,7 @@ const Feed = () => {
   useEffect(() => {
     if (searchInput === '') {
       dispatch(feedActions.initializeKeyword());
+      dispatch(feedActions.initializeKeywordInput());
     }
   }, [searchInput]);
 
@@ -99,10 +99,13 @@ const Feed = () => {
   // 키워리 검색 처리
   const debounce = _.debounce(() => {
     dispatch(feedActions.addKeyword(searchInput));
-    if (keyword !== []) {
+    if (searchInput !== '') {
       dispatch(feedActions.getKeywordSearchAPI(searchInput, userId));
+    } else {
+      dispatch(feedActions.initializeKeyword());
+      dispatch(feedActions.initializeKeywordInput());
     }
-  }, 500);
+  }, 400);
   const debounceOnchange = React.useCallback(debounce, [searchInput]);
 
   return (
@@ -208,7 +211,7 @@ const Feed = () => {
       {/* 검색한 키워드 목록 */}
       {clickSearch ? (
         <SearchBox>
-          {keyword &&
+          {keyword && keyword !== [] ? (
             keyword.map((item, idx) => (
               <TextCont key={idx}
                 onClick={() => {
@@ -224,7 +227,13 @@ const Feed = () => {
                 </Text>
               </TextCont>
             ))
-          }
+          ) : (
+            <TextCont>
+              <Text>
+                키워드를 찾을 수 없습니다.
+              </Text>
+            </TextCont>
+          )}
         </SearchBox>
       ) : (
         // 피드 목록
