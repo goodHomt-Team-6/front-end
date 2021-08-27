@@ -60,7 +60,7 @@
       "type": "image/png"
     },
     {
-      "src": "/icons/favicon-512x512.png",
+      "src": "/icons/mstile-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
