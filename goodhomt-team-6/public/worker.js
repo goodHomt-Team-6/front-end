@@ -1,5 +1,3 @@
-// import logger from '../src/shared/Logger';
-
 // var CACHE_NAME = 'pwa-task-manager';
 // var urlsToCache = ['/'];
 // // Install a service worker
@@ -7,7 +5,7 @@
 //   // Perform install steps
 //   event.waitUntil(
 //     caches.open(CACHE_NAME).then(function (cache) {
-//       logger('Opened cache');
+//       console.log('Opened cache');
 //       return cache.addAll(urlsToCache);
 //     }),
 //   );
