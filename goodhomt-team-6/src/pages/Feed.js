@@ -17,7 +17,7 @@ import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
 import Delete from '../img/more_button_delete.svg';
 import CloseButton from '../img/close-button.svg';
-import Scroll from '../img/scroll_button.svg';
+import nullUserImg from '../img/no_profile-image.jpg';
 import './Feed.css';
 
 import NavBar from '../components/NavBar';
@@ -96,7 +96,7 @@ const Feed = () => {
     }
   };
 
-  // 검색 디바운스
+  // 키워리 검색 처리
   const debounce = _.debounce(() => {
     dispatch(feedActions.addKeyword(searchInput));
     if (keyword !== []) {
@@ -237,12 +237,21 @@ const Feed = () => {
                     {/* 유저 정보 */}
                     <UserContainer>
                       <UserBox>
-                        <Image
-                          width="34px"
-                          height="34px"
-                          margin="0px 15px 0px 0px"
-                          src={item.User.img}
-                        />
+                        {item.User.img === null ? (
+                          <Image
+                            width="34px"
+                            height="34px"
+                            margin="0px 15px 0px 0px"
+                            src={nullUserImg}
+                          />
+                        ) : (
+                          <Image
+                            width="34px"
+                            height="34px"
+                            margin="0px 15px 0px 0px"
+                            src={item.User.img}
+                          />)}
+
                         <InfoBox>
                           {userName && (
                             <Text

@@ -23,6 +23,7 @@ import CompletedBtn from '../img/completed_icon.svg';
 import BadRating from '../img/rating_bad_big.svg';
 import GoodRating from '../img/rating_good_big.svg';
 import NormalRating from '../img/rating_soso_big.svg';
+import nullUserImg from '../img/no_profile-image.jpg';
 import ChallengeBox from '../components/MainChallengeBox';
 import ChallengeModal from '../components/ChallengeModal';
 import LoginModal from '../components/LoginModal';
@@ -127,15 +128,28 @@ const Main = (props) => {
       {/* 유저 프로필 */}
       <UserWrapper>
         <InfoBox>
-          <Image
-            width="40px"
-            height="40px"
-            margin="0px 15px 0px 0px"
-            src={userImg}
-            _onClick={() => {
-              setShowLogoutModal(true);
-            }}
-          ></Image>
+          {userImg === null ? (
+            <Image
+              width="40px"
+              height="40px"
+              margin="0px 15px 0px 0px"
+              src={nullUserImg}
+              _onClick={() => {
+                setShowLogoutModal(true);
+              }}
+            ></Image>
+          ) : (
+            <Image
+              width="40px"
+              height="40px"
+              margin="0px 15px 0px 0px"
+              src={userImg}
+              _onClick={() => {
+                setShowLogoutModal(true);
+              }}
+            ></Image>
+          )}
+
           {showLogoutModal && (
             <AddAndDeleteModal
               message="로그 아웃"
