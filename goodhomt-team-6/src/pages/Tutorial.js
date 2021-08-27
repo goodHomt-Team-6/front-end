@@ -31,13 +31,17 @@ const Tutorial = (props) => {
           <StartCont
             onClick={() => {
               dispatch(userAction.setTutorialAPI());
-              // /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
-              if (sessionStorage.getItem('redirect_url') === '/exercise') {
-                dispatch(exerciseActions.initializeRoutine());
+              if (sessionStorage.getItem('redirect_url')) {
+                // /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
+                if (sessionStorage.getItem('redirect_url') === '/exercise') {
+                  dispatch(exerciseActions.initializeRoutine());
+                }
+                // 이전 페이지로 push 해줘야함
+                history.push(sessionStorage.getItem('redirect_url'));
+                sessionStorage.removeItem('redirect_url');
+              } else {
+                history.push('/');
               }
-              // 이전 페이지로 push 해줘야함
-              history.push(sessionStorage.getItem('redirect_url'));
-              sessionStorage.removeItem('redirect_url');
             }}
           >
             <Image
