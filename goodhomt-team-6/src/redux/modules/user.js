@@ -91,13 +91,13 @@ const kakaoLoginAPI = (code) => {
           .catch((err) => {
             logger(err);
             window.alert('로그인에 실패하였습니다.');
-            history.replace('/login');
+            history.replace('/');
           });
       })
       .catch((err) => {
         logger('소셜로그인 에러', err);
         window.alert('로그인에 실패하였습니다.');
-        history.replace('/login');
+        history.replace('/');
       });
   };
 };
@@ -164,7 +164,7 @@ const setTutorialAPI = () => {
   return function (dispatch, getState, { history }) {
     api
       .put('/auth/tutorial', { finishTutorial: true })
-      .then((res) => { })
+      .then((res) => {})
       .catch((err) => {
         logger('튜토리얼 세팅 실패');
         logger(err);
@@ -205,7 +205,7 @@ export default handleActions(
     [IS_LOADED]: (state, action) =>
       produce(state, (draft) => {
         draft.isLoaded = action.payload.isLoaded;
-      })
+      }),
   },
   initialState,
 );
