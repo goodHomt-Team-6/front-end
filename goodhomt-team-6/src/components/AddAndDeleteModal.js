@@ -21,6 +21,7 @@ const AddAndDeleteModal = ({
   setShowShareModal,
   message,
   setShowLogoutModal,
+  id
 }) => {
   const dispatch = useDispatch();
 
@@ -35,7 +36,7 @@ const AddAndDeleteModal = ({
     selectedPrevItem.routineName,
   );
 
-  const selectedFeed = useSelector((store) => store.feed.selectedFeed);
+  // const selectedFeed = useSelector((store) => store.feed.selectedFeed);
 
   const closeModal = (e) => {
     if (e.target === modalRef.current || buttonRef.current) {
@@ -64,7 +65,7 @@ const AddAndDeleteModal = ({
               <ConfirmButton
                 onClick={() => {
                   history.replace('/feed');
-                  dispatch(feedActions.deleteFeedAPI(selectedFeed.id));
+                  dispatch(feedActions.deleteFeedAPI(id));
                 }}
                 ref={buttonRef}
               >

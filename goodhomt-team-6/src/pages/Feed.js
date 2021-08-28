@@ -42,6 +42,7 @@ const Feed = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [clickSearch, isClickSearch] = useState(false);
   const [clickKeyword, setClickKeyword] = useState('');
+  const [clickFeedId, setClickFeedId] = useState('');
 
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
@@ -145,7 +146,8 @@ const Feed = () => {
           ) : null}
 
           {/* 운동 종목 키워드 검색 */}
-          <SearchWrapper visible={visible}>
+          <SearchWrapper
+            visible={visible}>
             <SearchInput
               visible={visible}
               value={searchInput}
@@ -194,6 +196,7 @@ const Feed = () => {
         <AddAndDeleteModal
           message="피드 삭제"
           setShowModal={setShowModal}
+          id={clickFeedId}
         />
       ) : null}
 
@@ -432,7 +435,8 @@ const Feed = () => {
                             src={Delete}
                             onClick={() => {
                               setShowModal(true);
-                              dispatch(feedActions.selectFeed(item.id));
+                              setClickFeedId(item.id);
+                              // dispatch(feedActions.selectFeed(item.id));
                             }}
                           />
                         ) : null}
