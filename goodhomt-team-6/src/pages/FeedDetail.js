@@ -81,6 +81,8 @@ const RoutineDetail = (props) => {
                     type="contents"
                     minWidth="80px"
                     padding="0 0 0 20px"
+                    fontWeight="600"
+                    fontSize="1.1em"
                     onClick={() => {
                       closeRow();
                     }}
@@ -94,7 +96,7 @@ const RoutineDetail = (props) => {
                           type="contents"
                           fontSize="1.1em"
                           minWidth="80px"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.setCount}세트`
@@ -105,7 +107,7 @@ const RoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="center"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.weight}kg`
@@ -116,7 +118,7 @@ const RoutineDetail = (props) => {
                           fontSize="1.1em"
                           minWidth="80px"
                           textAlign="right"
-                          color="#848484"
+                          color="#000"
                         >
                           {set.type === 'exercise'
                             ? `${set.count}회`
@@ -133,25 +135,82 @@ const RoutineDetail = (props) => {
                     openRow(e);
                   }}
                 >
-                  <Text type="contents" minWidth="80px" padding="0 0 0 20px">
-                    {list !== [] ? list.exerciseName : null}
-                  </Text>
-                  <Text type="contents">
-                    {list !== [] && list.set !== []
-                      ? list.set.filter((set) => set.type === 'exercise').length
-                      : null}
-                    세트
-                  </Text>
-                  {list !== [] && list.set[0].weight === null ? (
-                    <Text type="contents">0kg</Text>
+                  {openedRow === null ? (
+                    <>
+                      <div
+                        style={{
+                          minWidth: '120px',
+                        }}
+                      >
+                        <Text
+                          type="contents"
+                          margin="1em 10px 1em 20px"
+                          padding="0 10px 0 0"
+                          fontWeight="600"
+                          fontSize="1.1em"
+                          bgColor="rgba(74, 64, 255, 0.2)"
+                          lineHeight="1.2em"
+                          style={{
+                            display: 'inline-block',
+                          }}
+                        >
+                          {list.exerciseName}
+                        </Text>
+                      </div>
+                      <Text type="contents">
+                        {list &&
+                          list.set !== [] &&
+                          list.set.filter((set) => set.type === 'exercise')
+                            .length}
+                        세트
+                      </Text>
+                      <Text type="contents">
+                        {list && list.set === [] ? null : list.set[0].weight}kg
+                      </Text>
+                      <Text type="contents" padding="0 20px 0 0">
+                        {list && list.set === [] ? null : list.set[0].count}회
+                      </Text>
+                    </>
                   ) : (
-                    <Text type="contents">
-                      {list !== [] ? list.set[0].weight : null}kg
-                    </Text>
+                    <>
+                      <div
+                        style={{
+                          minWidth: '120px',
+                        }}
+                      >
+                        <Text
+                          type="contents"
+                          margin="1em 10px 1em 20px"
+                          padding="0 10px 0 0"
+                          fontWeight="600"
+                          fontSize="1.1em"
+                          color="#848484"
+                          style={{
+                            display: 'inline-block',
+                          }}
+                        >
+                          {list.exerciseName}
+                        </Text>
+                      </div>
+                      <Text type="contents" color="#848484">
+                        {list &&
+                          list.set !== [] &&
+                          list.set.filter((set) => set.type === 'exercise')
+                            .length}
+                        세트
+                      </Text>
+                      <Text type="contents" color="#848484">
+                        {list && list.set === [] ? null : list.set[0].weight}kg
+                      </Text>
+                      <Text
+                        type="contents"
+                        padding="0 20px 0 0"
+                        color="#848484"
+                      >
+                        {list && list.set === [] ? null : list.set[0].count}회
+                      </Text>
+                    </>
                   )}
-                  <Text type="contents" padding="0 20px 0 0">
-                    {list !== [] && list.set[0].count}회
-                  </Text>
                 </List>
               ),
             )}

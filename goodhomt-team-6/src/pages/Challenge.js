@@ -39,7 +39,6 @@ const Challenge = () => {
           <CategoryList>
             <ChallengeItem />
           </CategoryList>
-          {/* )} */}
         </InboxWrapper>
       </Wrapper>
 
