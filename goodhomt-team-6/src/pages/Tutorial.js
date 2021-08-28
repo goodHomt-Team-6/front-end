@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Image } from '../shared/Styles';
-import Tutorial1 from '../img/tutorial1.jpg';
-import Tutorial2 from '../img/tutorial2.jpg';
-import Tutorial3 from '../img/tutorial3.jpg';
+import Tutorial1 from '../img/tutorial1.svg';
+import Tutorial2 from '../img/tutorial2.svg';
+import Tutorial3 from '../img/tutorial3.svg';
 import TutorialStart from '../img/tutorial_start.svg';
 import { actionCreators as userAction } from '../redux/modules/user';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
