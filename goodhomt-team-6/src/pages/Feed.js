@@ -414,6 +414,7 @@ const Feed = () => {
                                     setSearchKeyword(i.exerciseName);
                                   } else {
                                     setSearchKeyword(i.exerciseName);
+                                    setClickKeyword(i.exerciseName);
                                   }
                                   dispatch(feedActions.getFeedSearchAPI(i.exerciseName, userId));
                                 }}>
