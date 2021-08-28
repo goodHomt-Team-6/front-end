@@ -14,6 +14,9 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MoreBtn from '../img/more_button.svg';
 import '../components/RoutineItem.css';
 import Header from '../components/Header';
+import ratingGood from '../img/rating_good.svg';
+import ratingBad from '../img/rating_bad.svg';
+import ratingSoso from '../img/rating_soso.svg';
 
 // 이전 목록 불러오기 페이지 컴포넌트
 const MyPastRoutines = (props) => {
@@ -21,6 +24,7 @@ const MyPastRoutines = (props) => {
   const [bookmarked, setBookmarked] = useState(false);
   // 선택한거 리덕스에 넣기 위한 작업
   const [clicked, setClicked] = useState([]);
+  const [completed, isCompleted] = useState(true);
 
   const myRoutines = useSelector((store) => store.exercise.routine);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
@@ -94,18 +98,29 @@ const MyPastRoutines = (props) => {
                 className="list"
                 value={routine.id}
               >
-                <TimeBox>
-                  {Math.floor(routine.routineTime / 60) < 10 ? (
-                    <Time>{'0' + Math.floor(routine.routineTime / 60)}:</Time>
-                  ) : (
-                    <Time>{Math.floor(routine.routineTime / 60)}:</Time>
-                  )}
-                  {routine.routineTime % 60 < 10 ? (
-                    <Time>{'0' + (routine.routineTime % 60)}</Time>
-                  ) : (
-                    <Time>{routine.routineTime % 60}</Time>
-                  )}
-                </TimeBox>
+                <TodayExerciseWrapper>
+                  {routine.isCompleted === true &&
+                    routine.rating === 'soso' && (
+                      <TimeBox
+                        src={ratingSoso}
+                        completed={completed}
+                      ></TimeBox>
+                    )}
+                  {routine.isCompleted === true &&
+                    routine.rating === 'bad' && (
+                      <TimeBox
+                        src={ratingBad}
+                        completed={completed}
+                      ></TimeBox>
+                    )}
+                  {routine.isCompleted === true &&
+                    routine.rating === 'good' && (
+                      <TimeBox
+                        src={ratingGood}
+                        completed={completed}
+                      ></TimeBox>
+                    )}
+                </TodayExerciseWrapper>
 
                 {myRoutines && (
                   <RoutineInfo>
@@ -115,13 +130,26 @@ const MyPastRoutines = (props) => {
                       )}
                       <RoutineName>{routine.routineName}</RoutineName>
                     </InfoBox>
-                    {routine.createdAt && (
+                    <InfoTimeBox>
+                      {routine.createdAt && (
+                        <WorkoutDate>
+                          {routine.createdAt.substring(5, 7)}.
+                          {routine.createdAt.substring(8, 10)}
+                        </WorkoutDate>
+                      )}
                       <WorkoutDate>
-                        {routine.createdAt.substring(0, 4)}.
-                        {routine.createdAt.substring(5, 7)}.
-                        {routine.createdAt.substring(8, 10)}
+                        {Math.floor(routine.routineTime / 60) < 10 ? (
+                          <Time>{'0' + Math.floor(routine.routineTime / 60)}:</Time>
+                        ) : (
+                          <Time>{Math.floor(routine.routineTime / 60)}:</Time>
+                        )}
+                        {routine.routineTime % 60 < 10 ? (
+                          <Time>{'0' + (routine.routineTime % 60)}</Time>
+                        ) : (
+                          <Time>{routine.routineTime % 60}</Time>
+                        )}
                       </WorkoutDate>
-                    )}
+                    </InfoTimeBox>
                   </RoutineInfo>
                 )}
               </RadioBox>
@@ -213,10 +241,15 @@ const TimeBox = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
+  background-image: url('${(props) => props.src}');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const Time = styled.span`
-  line-height: 45px;
+  /* line-height: 45px; */
+  font-size: 14px;
 `;
 
 const RoutineInfo = styled.div`
@@ -232,6 +265,7 @@ const RoutineName = styled.span`
 const WorkoutDate = styled.span`
   font-size: 14px;
   line-height: 24px;
+  margin-right: 8px;
 `;
 
 const GoBackButton = styled.div`
@@ -262,5 +296,14 @@ const InfoBox = styled.div`
 const MoreIcon = styled.img``;
 
 const DivBox = styled.div`
+  display: flex;
+`;
+
+const TodayExerciseWrapper = styled.div`
+`;
+
+const InfoTimeBox = styled.div`
+  margin: 0px;
+  padding: 0px;
   display: flex;
 `;

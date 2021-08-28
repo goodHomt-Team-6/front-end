@@ -27,6 +27,8 @@ const MyPastRoutines = (props) => {
   const [clicked, setClicked] = useState([]);
 
   const myRoutines = useSelector((store) => store.exercise.routine);
+  // 완료한 운동만 보여주도록 가공
+  const completedMyRoutines = myRoutines && myRoutines.filter((item) => item.rating !== null);
   const selectPeriod = useSelector((store) => store.exercise.selectPeriod);
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
@@ -89,7 +91,7 @@ const MyPastRoutines = (props) => {
       {/* 나의 지난 루틴 목록 */}
       <CategoryList>
         {myRoutines && myRoutines.length > 0
-          ? myRoutines.map((routine, idx) => (
+          ? completedMyRoutines.map((routine, idx) => (
             <div key={idx}>
               <RadioInput
                 id={routine.createdAt}
@@ -99,7 +101,7 @@ const MyPastRoutines = (props) => {
                 value={routine.id}
                 onChange={(e) => {
                   const { value } = e.target;
-                  const selected = myRoutines.filter((select) => select.id == value);
+                  const selected = completedMyRoutines.filter((select) => select.id == value);
                   setClicked(selected[0]);
                 }}
               />
@@ -131,6 +133,7 @@ const MyPastRoutines = (props) => {
                       ></TimeBox>
                     )}
                 </TodayExerciseWrapper>
+
                 {myRoutines && (
                   <RoutineInfo>
                     <InfoBox>
