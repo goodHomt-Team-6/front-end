@@ -26,10 +26,10 @@ const StopWatchCont = ({ timeStop, setResultTime }) => {
     <Text
       type="contents"
       color="#9e9ea0"
-      fontSize="40px"
+      fontSize="50px"
       fontWeight="bold"
       margin="0"
-      lineHeight="40px"
+      lineHeight="50px"
     >
       {parseInt(time / 60) < 10
         ? `0${parseInt(time / 60)}`
@@ -40,10 +40,10 @@ const StopWatchCont = ({ timeStop, setResultTime }) => {
     <Text
       type="contents"
       color="#B4AFFF"
-      fontSize="40px"
+      fontSize="50px"
       fontWeight="bold"
       margin="0"
-      lineHeight="40px"
+      lineHeight="50px"
     >
       {parseInt(time / 60) < 10
         ? `0${parseInt(time / 60)}`

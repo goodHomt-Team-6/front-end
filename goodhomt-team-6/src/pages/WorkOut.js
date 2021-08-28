@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { Button, Input, Text, Image, FooterButton } from '../shared/Styles';
 import { history } from '../redux/configureStore';
-import StopWatch from '../img/stopwatch.svg';
 import TimeStop from '../img/time_stop.svg';
 import TimeStart from '../img/time_start.svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +16,7 @@ import exercise, {
   actionCreators as exerciseActions,
 } from '../redux/modules/exercise';
 import StopWatchCont from '../components/StopWatchCont';
+import './Workout.css';
 
 const WorkOut = (props) => {
   const dispatch = useDispatch();
@@ -35,7 +35,13 @@ const WorkOut = (props) => {
     (state) => state.challenge.challengeDetail?.challenge?.id,
   );
   const currentSetIdx = useSelector((state) => state.exercise.currentSetIdx);
-  const isEditTodayRoutineDetail = useSelector((state) => state.exercise.isEditTodayRoutineDetail);
+  const isEditTodayRoutineDetail = useSelector(
+    (state) => state.exercise.isEditTodayRoutineDetail,
+  );
+  let listcheckblack = useRef(null);
+  const rotateOutVerAnimation = () => {
+    listcheckblack.current.classList.add('rotate-out-ver');
+  };
 
   const completeSet = (length) => {
     // 세트 체크를 모두 완료하면 다음 종목으로 넘어가야함.
@@ -51,7 +57,10 @@ const WorkOut = (props) => {
   // 휴식이 시작되고 휴식 시간이 끝나면 자동으로 다음 세트로 넘어감
   const handleBreakTime = (setLength, breakTime) => {
     setTimeout(() => {
-      completeSet(setLength);
+      rotateOutVerAnimation();
+      setTimeout(() => {
+        completeSet(setLength);
+      }, 500);
     }, (breakTime + 1) * 1000);
   };
 
@@ -72,10 +81,57 @@ const WorkOut = (props) => {
 
       <Container>
         <TimeCont>
-          <Image src={StopWatch} width="18px" height="20px"></Image>
-          {routine.routineName && (
-            <Text type="contents" color="#fff" fontSize="14px" margin="0">
-              {routine.routineName}
+          {currentExerciseIdx < routine.myExercise.length ? (
+            isEditTodayRoutineDetail ? (
+              editedRoutine.myExercise[currentExerciseIdx].set[currentSetIdx]
+                .setCount ? (
+                <Text
+                  type="contents"
+                  color="#fff"
+                  fontSize="17px"
+                  margin="0"
+                  lineHeight="30px"
+                  textAlign="center"
+                >
+                  {`${editedRoutine.myExercise[currentExerciseIdx].exerciseName}`}
+                  <br />
+                  {`${editedRoutine.myExercise[currentExerciseIdx].set[currentSetIdx].setCount}세트 진행중`}
+                </Text>
+              ) : (
+                <Text type="contents" color="#fff" fontSize="18px" margin="0">
+                  휴식중...
+                </Text>
+              )
+            ) : routine.myExercise[currentExerciseIdx].set[currentSetIdx]
+                .setCount ? (
+              <Text
+                type="contents"
+                color="#fff"
+                fontSize="17px"
+                margin="0"
+                lineHeight="30px"
+                textAlign="center"
+              >
+                {`${routine.myExercise[currentExerciseIdx].exerciseName}`}
+                <br />
+                {`${routine.myExercise[currentExerciseIdx].set[currentSetIdx].setCount}세트 진행중!`}
+              </Text>
+            ) : (
+              <Text type="contents" color="#fff" fontSize="18px" margin="0">
+                휴식중...
+              </Text>
+            )
+          ) : (
+            <Text
+              type="contents"
+              color="#fff"
+              fontSize="16px"
+              margin="0"
+              textAlign="center"
+            >
+              운동 끝!
+              <br />
+              오늘의 루틴을 완료하셨습니다.
             </Text>
           )}
           {currentExerciseIdx < routine.myExercise.length ? (
@@ -140,7 +196,11 @@ const WorkOut = (props) => {
                     <ListBody>
                       {list.exerciseName}
                       <ListCheck>
-                        <Image src={CompletedCheck} width="24px" height="24px" />
+                        <Image
+                          src={CompletedCheck}
+                          width="24px"
+                          height="24px"
+                        />
                       </ListCheck>
                     </ListBody>
                   </List>
@@ -159,8 +219,12 @@ const WorkOut = (props) => {
                           {set.weight}kg - {set.count}회
                           {currentSetIdx === setIdx ? (
                             <ListCheckBlack
+                              ref={listcheckblack}
                               onClick={() => {
-                                completeSet(list.set.length);
+                                setTimeout(() => {
+                                  completeSet(list.set.length);
+                                }, 500);
+                                rotateOutVerAnimation();
                               }}
                             >
                               <Image src={Check} width="24px" height="24px" />
@@ -179,7 +243,10 @@ const WorkOut = (props) => {
                         </ExerciseListBody>
                       </ExerciseList>
                     ) : (
-                      <ExerciseList key={setIdx} style={{ position: 'relative' }}>
+                      <ExerciseList
+                        key={setIdx}
+                        style={{ position: 'relative' }}
+                      >
                         <ListHead>휴식</ListHead>
                         <ExerciseListBody>
                           {set.seconds < 10
@@ -192,7 +259,7 @@ const WorkOut = (props) => {
                             )}
                           {currentSetIdx === setIdx ? (
                             <>
-                              <ListCheckBlack>
+                              <ListCheckBlack ref={listcheckblack}>
                                 <Image src={Check} width="24px" height="24px" />
                               </ListCheckBlack>
                               <ProgressBarCont
@@ -237,7 +304,11 @@ const WorkOut = (props) => {
                     <ListBody>
                       {list.exerciseName}
                       <ListCheck>
-                        <Image src={CompletedCheck} width="24px" height="24px" />
+                        <Image
+                          src={CompletedCheck}
+                          width="24px"
+                          height="24px"
+                        />
                       </ListCheck>
                     </ListBody>
                   </List>
@@ -256,8 +327,12 @@ const WorkOut = (props) => {
                           {set.weight}kg - {set.count}회
                           {currentSetIdx === setIdx ? (
                             <ListCheckBlack
+                              ref={listcheckblack}
                               onClick={() => {
-                                completeSet(list.set.length);
+                                setTimeout(() => {
+                                  completeSet(list.set.length);
+                                }, 500);
+                                rotateOutVerAnimation();
                               }}
                             >
                               <Image src={Check} width="24px" height="24px" />
@@ -276,7 +351,10 @@ const WorkOut = (props) => {
                         </ExerciseListBody>
                       </ExerciseList>
                     ) : (
-                      <ExerciseList key={setIdx} style={{ position: 'relative' }}>
+                      <ExerciseList
+                        key={setIdx}
+                        style={{ position: 'relative' }}
+                      >
                         <ListHead>휴식</ListHead>
                         <ExerciseListBody>
                           {set.seconds < 10
@@ -289,7 +367,7 @@ const WorkOut = (props) => {
                             )}
                           {currentSetIdx === setIdx ? (
                             <>
-                              <ListCheckBlack>
+                              <ListCheckBlack ref={listcheckblack}>
                                 <Image src={Check} width="24px" height="24px" />
                               </ListCheckBlack>
                               <ProgressBarCont

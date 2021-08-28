@@ -159,11 +159,10 @@ const Main = (props) => {
           {is_login ? (
             <>
               <TextUser>
-                {userName} 님,
+                <TextUserDeco>{userName}</TextUserDeco> 님,
                 <br />
                 안녕하세요 :)
               </TextUser>
-              <TextUserDeco></TextUserDeco>
             </>
           ) : (
             <LoginCont
@@ -241,7 +240,7 @@ const Main = (props) => {
                     tasks={tasks}
                     timeZone="Asia/Seoul"
                     dashboard={{ hidden: true }}
-                  // if true, dashboard is hidden
+                    // if true, dashboard is hidden
                   />
                   <ChallengeBox
                     status={myFirstChallenge.Challenge.progressStatus}
@@ -702,18 +701,10 @@ const RoutineBoxDiv = styled.div`
   display: flex;
 `;
 
-const DashBoardDiv = styled.div`
-  display: flex;
-`;
-
-const TextUserDeco = styled.div`
-  background-color: #4a40ff;
-  width: 44px;
-  height: 16px;
-  position: relative;
-  right: 80px;
-  bottom: 10px;
-  opacity: 30%;
+const TextUserDeco = styled.span`
+  background-color: rgba(74, 64, 255, 0.3);
+  padding-right: 10px;
+  font-weight: 600;
 `;
 
 const LoginCont = styled.div`
@@ -726,7 +717,7 @@ const LoginCont = styled.div`
 `;
 
 const RoutineTextBox = styled.div`
-  display: flex; 
+  display: flex;
 `;
 
 const NotiBorder = styled.div`
