@@ -236,8 +236,6 @@ const TodayRoutineDetail = (props) => {
           <Selected
             onClick={() => {
               setShowDeleteModal(true);
-              // dispatch(exerciseActions.deleteMyTodayRoutineAPI(id));
-              // history.replace('/');
             }}
           >
             <Icon src={routineDelete} width="20px" margin="0px 5px 0px 0px" />
@@ -253,6 +251,13 @@ const TodayRoutineDetail = (props) => {
             buttonMessage="삭제"
             setShowDeleteModal={setShowDeleteModal}
             id={id}
+          />
+        ) : null}
+
+        {showShareModal ? (
+          <AddAndDeleteModal
+            message="내 피드에 추가"
+            setShowShareModal={setShowShareModal}
           />
         ) : null}
 

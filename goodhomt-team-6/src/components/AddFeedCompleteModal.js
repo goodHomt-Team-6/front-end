@@ -10,7 +10,7 @@ import { FooterButton, Input, Text } from '../shared/Styles';
 import BookmarkSolid from '../img/bookmark_solid.svg';
 import Mascort from '../img/mascort_blue.svg';
 
-// 피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
+// (피드추가)피드 업로드 완료 버튼 클릭시 모달 생성 컴포넌트
 const AddFeedCompleteModal = ({
   setNickname,
   message,
