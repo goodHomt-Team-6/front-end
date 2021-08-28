@@ -350,6 +350,7 @@ const EditRoutine = (props) => {
                 }),
               );
               dispatch(exerciseCreator.setIsFromTodayRoutineDetail(false));
+              dispatch(exerciseCreator.setIsEditTodayRoutineDetail(true));
               history.goBack();
             } else {
               const _selectedPrevItem = {
@@ -359,6 +360,7 @@ const EditRoutine = (props) => {
               dispatch(exerciseCreator.addSelectedPrevItem(_selectedPrevItem));
               dispatch(exerciseCreator.getMyRoutine([_selectedPrevItem]));
               dispatch(exerciseCreator.setIsFromEditRoutine(true));
+              history.goBack();
             }
           }}
         >

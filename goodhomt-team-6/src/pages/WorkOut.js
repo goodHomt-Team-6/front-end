@@ -22,9 +22,12 @@ const WorkOut = (props) => {
   const dispatch = useDispatch();
 
   const [timeStop, setTimeStop] = useState(true);
-  // const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
-  // 수정된 루틴을 시작시키려면 routine[0]를 routine으로 사용하도록 변경해주어야할 것 같음 (경준님체크요청)
-  const routine = useSelector((state) => state.exercise.routine[0]);
+  const [exerciseResultModal, showExerciseResultModal] = useState(false);
+  const [resultTime, setResultTime] = useState(0);
+
+  const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
+  // 수정된 루틴을 시작시키려면 routine[0]를 사용하도록해야함
+  const editedRoutine = useSelector((state) => state.exercise.routine[0]);
   const currentExerciseIdx = useSelector(
     (state) => state.exercise.currentExerciseIdx,
   );
@@ -32,8 +35,7 @@ const WorkOut = (props) => {
     (state) => state.challenge.challengeDetail?.challenge?.id,
   );
   const currentSetIdx = useSelector((state) => state.exercise.currentSetIdx);
-  const [exerciseResultModal, showExerciseResultModal] = useState(false);
-  const [resultTime, setResultTime] = useState(0);
+  const isEditTodayRoutineDetail = useSelector((state) => state.exercise.isEditTodayRoutineDetail);
 
   const completeSet = (length) => {
     // 세트 체크를 모두 완료하면 다음 종목으로 넘어가야함.
@@ -123,85 +125,48 @@ const WorkOut = (props) => {
             </CompleteButton>
           )}
         </TimeCont>
-        <ListCont>
-          {routine.myExercise.map((list, listIdx) => (
-            <React.Fragment key={listIdx}>
-              {listIdx === currentExerciseIdx ? (
-                <List>
-                  <ListHead>{listIdx + 1}</ListHead>
-                  <ListBody>{list.exerciseName}</ListBody>
-                </List>
-              ) : listIdx < currentExerciseIdx ? (
-                <List bgColor="#ECECF3">
-                  <ListHead>{listIdx + 1}</ListHead>
-                  <ListBody>
-                    {list.exerciseName}
-                    <ListCheck>
-                      <Image src={CompletedCheck} width="24px" height="24px" />
-                    </ListCheck>
-                  </ListBody>
-                </List>
-              ) : (
-                <List bgColor="#ECECF3">
-                  <ListHead>{listIdx + 1}</ListHead>
-                  <ListBody>{list.exerciseName}</ListBody>
-                </List>
-              )}
-              {listIdx === currentExerciseIdx &&
-                list.set.map((set, setIdx) =>
-                  set.type === 'exercise' ? (
-                    <ExerciseList key={setIdx}>
-                      <ListHead>SET{set.setCount}</ListHead>
-                      <ExerciseListBody>
-                        {set.weight}kg - {set.count}회
-                        {currentSetIdx === setIdx ? (
-                          <ListCheckBlack
-                            onClick={() => {
-                              completeSet(list.set.length);
-                            }}
-                          >
-                            <Image src={Check} width="24px" height="24px" />
-                          </ListCheckBlack>
-                        ) : (
-                          currentSetIdx > setIdx && (
-                            <ListCheck>
-                              <Image
-                                src={CompletedCheck}
-                                width="24px"
-                                height="24px"
-                              />
-                            </ListCheck>
-                          )
-                        )}
-                      </ExerciseListBody>
-                    </ExerciseList>
-                  ) : (
-                    <ExerciseList key={setIdx} style={{ position: 'relative' }}>
-                      <ListHead>휴식</ListHead>
-                      <ExerciseListBody>
-                        {set.seconds < 10
-                          ? `0${set.minutes}:0${set.seconds}`
-                          : `0${set.minutes}:${set.seconds}`}
-                        {currentSetIdx === setIdx &&
-                          handleBreakTime(
-                            list.set.length,
-                            set.minutes * 60 + set.seconds,
-                          )}
-                        {currentSetIdx === setIdx ? (
-                          <>
-                            <ListCheckBlack>
+        {isEditTodayRoutineDetail ? (
+          <ListCont>
+            {editedRoutine.myExercise.map((list, listIdx) => (
+              <React.Fragment key={listIdx}>
+                {listIdx === currentExerciseIdx ? (
+                  <List>
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>{list.exerciseName}</ListBody>
+                  </List>
+                ) : listIdx < currentExerciseIdx ? (
+                  <List bgColor="#ECECF3">
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>
+                      {list.exerciseName}
+                      <ListCheck>
+                        <Image src={CompletedCheck} width="24px" height="24px" />
+                      </ListCheck>
+                    </ListBody>
+                  </List>
+                ) : (
+                  <List bgColor="#ECECF3">
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>{list.exerciseName}</ListBody>
+                  </List>
+                )}
+                {listIdx === currentExerciseIdx &&
+                  list.set.map((set, setIdx) =>
+                    set.type === 'exercise' ? (
+                      <ExerciseList key={setIdx}>
+                        <ListHead>SET{set.setCount}</ListHead>
+                        <ExerciseListBody>
+                          {set.weight}kg - {set.count}회
+                          {currentSetIdx === setIdx ? (
+                            <ListCheckBlack
+                              onClick={() => {
+                                completeSet(list.set.length);
+                              }}
+                            >
                               <Image src={Check} width="24px" height="24px" />
                             </ListCheckBlack>
-                            <ProgressBarCont
-                              currentSetIdx={currentSetIdx}
-                              setIdx={setIdx}
-                              minutes={set.minutes}
-                              seconds={set.seconds}
-                            />
-                          </>
-                        ) : (
-                          currentSetIdx > setIdx && (
-                            <>
+                          ) : (
+                            currentSetIdx > setIdx && (
                               <ListCheck>
                                 <Image
                                   src={CompletedCheck}
@@ -209,16 +174,153 @@ const WorkOut = (props) => {
                                   height="24px"
                                 />
                               </ListCheck>
+                            )
+                          )}
+                        </ExerciseListBody>
+                      </ExerciseList>
+                    ) : (
+                      <ExerciseList key={setIdx} style={{ position: 'relative' }}>
+                        <ListHead>휴식</ListHead>
+                        <ExerciseListBody>
+                          {set.seconds < 10
+                            ? `0${set.minutes}:0${set.seconds}`
+                            : `0${set.minutes}:${set.seconds}`}
+                          {currentSetIdx === setIdx &&
+                            handleBreakTime(
+                              list.set.length,
+                              set.minutes * 60 + set.seconds,
+                            )}
+                          {currentSetIdx === setIdx ? (
+                            <>
+                              <ListCheckBlack>
+                                <Image src={Check} width="24px" height="24px" />
+                              </ListCheckBlack>
+                              <ProgressBarCont
+                                currentSetIdx={currentSetIdx}
+                                setIdx={setIdx}
+                                minutes={set.minutes}
+                                seconds={set.seconds}
+                              />
                             </>
-                          )
-                        )}
-                      </ExerciseListBody>
-                    </ExerciseList>
-                  ),
+                          ) : (
+                            currentSetIdx > setIdx && (
+                              <>
+                                <ListCheck>
+                                  <Image
+                                    src={CompletedCheck}
+                                    width="24px"
+                                    height="24px"
+                                  />
+                                </ListCheck>
+                              </>
+                            )
+                          )}
+                        </ExerciseListBody>
+                      </ExerciseList>
+                    ),
+                  )}
+              </React.Fragment>
+            ))}
+          </ListCont>
+        ) : (
+          <ListCont>
+            {routine.myExercise.map((list, listIdx) => (
+              <React.Fragment key={listIdx}>
+                {listIdx === currentExerciseIdx ? (
+                  <List>
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>{list.exerciseName}</ListBody>
+                  </List>
+                ) : listIdx < currentExerciseIdx ? (
+                  <List bgColor="#ECECF3">
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>
+                      {list.exerciseName}
+                      <ListCheck>
+                        <Image src={CompletedCheck} width="24px" height="24px" />
+                      </ListCheck>
+                    </ListBody>
+                  </List>
+                ) : (
+                  <List bgColor="#ECECF3">
+                    <ListHead>{listIdx + 1}</ListHead>
+                    <ListBody>{list.exerciseName}</ListBody>
+                  </List>
                 )}
-            </React.Fragment>
-          ))}
-        </ListCont>
+                {listIdx === currentExerciseIdx &&
+                  list.set.map((set, setIdx) =>
+                    set.type === 'exercise' ? (
+                      <ExerciseList key={setIdx}>
+                        <ListHead>SET{set.setCount}</ListHead>
+                        <ExerciseListBody>
+                          {set.weight}kg - {set.count}회
+                          {currentSetIdx === setIdx ? (
+                            <ListCheckBlack
+                              onClick={() => {
+                                completeSet(list.set.length);
+                              }}
+                            >
+                              <Image src={Check} width="24px" height="24px" />
+                            </ListCheckBlack>
+                          ) : (
+                            currentSetIdx > setIdx && (
+                              <ListCheck>
+                                <Image
+                                  src={CompletedCheck}
+                                  width="24px"
+                                  height="24px"
+                                />
+                              </ListCheck>
+                            )
+                          )}
+                        </ExerciseListBody>
+                      </ExerciseList>
+                    ) : (
+                      <ExerciseList key={setIdx} style={{ position: 'relative' }}>
+                        <ListHead>휴식</ListHead>
+                        <ExerciseListBody>
+                          {set.seconds < 10
+                            ? `0${set.minutes}:0${set.seconds}`
+                            : `0${set.minutes}:${set.seconds}`}
+                          {currentSetIdx === setIdx &&
+                            handleBreakTime(
+                              list.set.length,
+                              set.minutes * 60 + set.seconds,
+                            )}
+                          {currentSetIdx === setIdx ? (
+                            <>
+                              <ListCheckBlack>
+                                <Image src={Check} width="24px" height="24px" />
+                              </ListCheckBlack>
+                              <ProgressBarCont
+                                currentSetIdx={currentSetIdx}
+                                setIdx={setIdx}
+                                minutes={set.minutes}
+                                seconds={set.seconds}
+                              />
+                            </>
+                          ) : (
+                            currentSetIdx > setIdx && (
+                              <>
+                                <ListCheck>
+                                  <Image
+                                    src={CompletedCheck}
+                                    width="24px"
+                                    height="24px"
+                                  />
+                                </ListCheck>
+                              </>
+                            )
+                          )}
+                        </ExerciseListBody>
+                      </ExerciseList>
+                    ),
+                  )}
+              </React.Fragment>
+            ))}
+          </ListCont>
+        )}
+
         {exerciseResultModal && (
           <ExerciseResultModal
             exerciseLength={routine.myExercise.length}

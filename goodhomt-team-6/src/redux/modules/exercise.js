@@ -34,6 +34,7 @@ const initialState = {
   myTodayRoutine: [],
   isFromEditRoutine: false,
   isFromTodayRoutineDetail: false,
+  isEditTodayRoutineDetail: false,
 };
 
 // actions
@@ -78,6 +79,7 @@ const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
 const SET_IS_FROM_EDIT_ROUTINE = 'exercise/SET_IS_FROM_EDIT_ROUTINE';
 const SET_IS_FROM_TODAY_ROUTINE_DETAIL =
   'exercise/SET_IS_FROM_TODAY_ROUTINE_DETAIL';
+const SET_IS_EDIT_TODAY_ROUTINE_DETAIL = 'exercise/SET_IS_EDIT_TODAY_ROUTINE_DETAIL';
 
 // action creators
 const setIsFromEditRoutine = createAction(
@@ -86,6 +88,10 @@ const setIsFromEditRoutine = createAction(
 );
 const setIsFromTodayRoutineDetail = createAction(
   SET_IS_FROM_TODAY_ROUTINE_DETAIL,
+  (value) => ({ value }),
+);
+const setIsEditTodayRoutineDetail = createAction(
+  SET_IS_EDIT_TODAY_ROUTINE_DETAIL,
   (value) => ({ value }),
 );
 const addSet = createAction(ADD_SET, (listIdx) => ({ listIdx }));
@@ -702,6 +708,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.isFromTodayRoutineDetail = action.payload.value;
       }),
+    [SET_IS_EDIT_TODAY_ROUTINE_DETAIL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.isEditTodayRoutineDetail = action.payload.value;
+      }),
   },
   initialState,
 );
@@ -752,6 +762,7 @@ const actionCreators = {
   countCurrentExerciseIdx,
   setIsFromEditRoutine,
   setIsFromTodayRoutineDetail,
+  setIsEditTodayRoutineDetail,
 };
 
 export { actionCreators };

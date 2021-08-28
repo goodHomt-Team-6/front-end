@@ -107,7 +107,7 @@ const Feed = () => {
       dispatch(feedActions.initializeKeywordInput());
     }
   }, 400);
-  const debounceOnchange = React.useCallback(debounce, [searchInput]);
+  const debounceOnchange = useCallback(debounce, [searchInput]);
 
   return (
     <Container>
@@ -216,31 +216,33 @@ const Feed = () => {
 
       {/* 검색한 키워드 목록 */}
       {clickSearch ? (
-        <SearchBox>
-          {keyword && keyword !== [] ? (
-            keyword.map((item, idx) => (
-              <TextCont key={idx}
-                onClick={() => {
-                  dispatch(feedActions.getFeedSearchAPI(item.exerciseName, userId));
-                  isClickSearch(false);
-                  dispatch(feedActions.initializeKeyword());
-                  setVisible(false);
-                  setClickKeyword(item.exerciseName);
-                }}
-              >
+        <SearchCont>
+          <SearchBox>
+            {keyword && keyword !== [] ? (
+              keyword.map((item, idx) => (
+                <TextCont key={idx}
+                  onClick={() => {
+                    dispatch(feedActions.getFeedSearchAPI(item.exerciseName, userId));
+                    isClickSearch(false);
+                    dispatch(feedActions.initializeKeyword());
+                    setVisible(false);
+                    setClickKeyword(item.exerciseName);
+                  }}
+                >
+                  <Text>
+                    {item.exerciseName}
+                  </Text>
+                </TextCont>
+              ))
+            ) : (
+              <TextCont>
                 <Text>
-                  {item.exerciseName}
+                  키워드를 찾을 수 없습니다.
                 </Text>
               </TextCont>
-            ))
-          ) : (
-            <TextCont>
-              <Text>
-                키워드를 찾을 수 없습니다.
-              </Text>
-            </TextCont>
-          )}
-        </SearchBox>
+            )}
+          </SearchBox>
+        </SearchCont>
       ) : (
         // 피드 목록
         <FeedWrapper>
@@ -740,4 +742,9 @@ const TextCont = styled.div`
   margin: 0px 1.5rem;
   padding: 1rem 0px;
   border-bottom: 1px solid #999999;
+`;
+
+const SearchCont = styled.div`
+  background-color: ${Color.bgIvory};
+  height: ${innerHeight + 20}px;
 `;
