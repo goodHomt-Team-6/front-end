@@ -14,7 +14,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-// 피드 추가, 삭제할 때 생성되는 모달 컴포넌트
+// 피드 추가, 삭제, 공유하기 버튼 클릭시 생성되는 모달 컴포넌트
 const AddAndDeleteModal = ({
   setShowModal,
   setShowAddFeedModal,

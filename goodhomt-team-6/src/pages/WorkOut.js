@@ -20,8 +20,11 @@ import StopWatchCont from '../components/StopWatchCont';
 
 const WorkOut = (props) => {
   const dispatch = useDispatch();
+
   const [timeStop, setTimeStop] = useState(true);
-  const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
+  // const routine = useSelector((state) => state.exercise.myTodayRoutine[0]);
+  // 수정된 루틴을 시작시키려면 routine[0]를 routine으로 사용하도록 변경해주어야할 것 같음 (경준님체크요청)
+  const routine = useSelector((state) => state.exercise.routine[0]);
   const currentExerciseIdx = useSelector(
     (state) => state.exercise.currentExerciseIdx,
   );

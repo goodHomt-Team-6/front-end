@@ -119,6 +119,9 @@ const Feed = () => {
           fontWeight="bold"
           margin="0"
           bgColor="#F7F7FA"
+          onClick={() => {
+            location.reload();
+          }}
         >
           Feed
         </Text>
@@ -322,7 +325,7 @@ const Feed = () => {
                       </LikeWrapper>
                     </UserContainer>
 
-                    {/* 피드 게시 운동 정보 */}
+                    {/* 피드 대시보드 */}
                     <TodayMainBox
                       onClick={() => {
                         const selected = feed.filter((select) => select.id == item.id);

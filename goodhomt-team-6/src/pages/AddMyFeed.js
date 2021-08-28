@@ -12,11 +12,14 @@ import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
 
-// 피드에 나의 루틴 추가하기 페이지
+// 피드 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {
   const dispatch = useDispatch();
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
+  );
+  const routine = useSelector(
+    (store) => store.exercise.routine[0],
   );
   const user = useSelector((store) => store.user.user);
   const communityNickname = useSelector(
@@ -68,9 +71,9 @@ const AddMyFeed = (props) => {
     routineName: writeroutinename,
     communityNickname: nickname,
     description: description,
-    isBookmarked: selectedPrevItem.isBookmarked,
-    routineTime: selectedPrevItem.routineTime,
-    myExercise: selectedPrevItem.myExercise,
+    isBookmarked: routine.isBookmarked,
+    routineTime: routine.routineTime,
+    myExercise: routine.myExercise,
     userImg: userImg,
   };
 
@@ -78,9 +81,9 @@ const AddMyFeed = (props) => {
     routineName: writeroutinename,
     communityNickname: communityNickname,
     description: description,
-    isBookmarked: selectedPrevItem.isBookmarked,
-    routineTime: selectedPrevItem.routineTime,
-    myExercise: selectedPrevItem.myExercise,
+    isBookmarked: routine.isBookmarked,
+    routineTime: routine.routineTime,
+    myExercise: routine.myExercise,
     userImg: userImg,
   };
 
@@ -103,50 +106,50 @@ const AddMyFeed = (props) => {
       {/* 나의 오늘 운동 루틴 가져오기 */}
       <CategoryList>
         <TodayExerciseWrapper>
-          {selectedPrevItem &&
-            selectedPrevItem.rating === 'soso' &&
+          {routine &&
+            routine.rating === 'soso' &&
             (<TimeBox
               src={ratingSoso}
             >
             </TimeBox>)
           }
-          {selectedPrevItem &&
-            selectedPrevItem.rating === 'bad' &&
+          {routine &&
+            routine.rating === 'bad' &&
             (<TimeBox
               src={ratingBad}
             >
             </TimeBox>)
           }
-          {selectedPrevItem &&
-            selectedPrevItem.rating === 'good' && (
+          {routine &&
+            routine.rating === 'good' && (
               <TimeBox
                 src={ratingGood}>
               </TimeBox>
             )}
 
           <RoutineBox>
-            <RoutineName>{selectedPrevItem.routineName}</RoutineName>
+            <RoutineName>{routine.routineName}</RoutineName>
             <TextWrapper>
               <WorkoutDate>
-                {selectedPrevItem.createdAt.substring(5, 7)}.
-                {selectedPrevItem.createdAt.substring(8, 10)}
+                {routine.createdAt.substring(5, 7)}.
+                {routine.createdAt.substring(8, 10)}
               </WorkoutDate>
               <WorkoutDate>
-                {Math.floor(selectedPrevItem.routineTime / 60) < 10 ? (
+                {Math.floor(routine.routineTime / 60) < 10 ? (
                   <Time>
-                    {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
+                    {'0' + Math.floor(routine.routineTime / 60)}:
                   </Time>
                 ) : (
                   <Time>
-                    {Math.floor(selectedPrevItem.routineTime / 60)}:
+                    {Math.floor(routine.routineTime / 60)}:
                   </Time>)
                 }
-                {(selectedPrevItem.routineTime % 60) < 10 ? (
+                {(routine.routineTime % 60) < 10 ? (
                   <Time>
-                    {'0' + selectedPrevItem.routineTime % 60}
+                    {'0' + routine.routineTime % 60}
                   </Time>
                 ) : (<Time>
-                  {selectedPrevItem.routineTime % 60}
+                  {routine.routineTime % 60}
                 </Time>)}
               </WorkoutDate>
             </TextWrapper>
@@ -196,7 +199,10 @@ const AddMyFeed = (props) => {
             />
           ) : null}
 
-          <Text type="contents">Routine name</Text>
+          <Text
+            type="contents"
+          >Routine name
+          </Text>
           <TextInput
             placeholder="루틴 이름을 작성해주세요."
             onChange={onChangeRoutinename}

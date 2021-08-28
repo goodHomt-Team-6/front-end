@@ -18,14 +18,10 @@ import Header from '../components/Header';
 const TodayRoutineDetail = (props) => {
   const dispatch = useDispatch();
 
-  const selectedPrevItem = useSelector(
-    (store) => store.exercise.selectedPrevItem,
-  );
+  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const routine = useSelector((store) => store.exercise.routine[0]);
   const id = selectedPrevItem.id;
-  const myTodayRoutine = useSelector((store) => store.exercise.myTodayroutine);
-  const myRoutine = useSelector((store) => store.exercise.routine);
   const routineName = selectedPrevItem.routineName;
-  const myExercise = selectedPrevItem.myExercise;
   const openedRow = useSelector((state) => state.exercise.openedRow);
 
   const [showModal, setShowModal] = useState(false);
@@ -65,8 +61,8 @@ const TodayRoutineDetail = (props) => {
         <DashBoard />
 
         <ListContainer>
-          {selectedPrevItem &&
-            selectedPrevItem.myExercise.map((list, listIdx) =>
+          {routine &&
+            routine.myExercise.map((list, listIdx) =>
               listIdx === parseInt(openedRow) ? (
                 <OpenList id={listIdx} key={listIdx}>
                   <Text

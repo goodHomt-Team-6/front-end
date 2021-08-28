@@ -56,7 +56,7 @@ const RoutineDetail = (props) => {
     <>
       <HeaderWrapper>
         {/* 뒤로가기 */}
-        <Header message="Routine" />
+        <Header message="Feed" />
       </HeaderWrapper>
 
       {showModal ? (

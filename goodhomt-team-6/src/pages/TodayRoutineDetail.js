@@ -63,8 +63,8 @@ const TodayRoutineDetail = (props) => {
       <HeaderWrapper>
         <Header toMain message="Main"></Header>
 
-        {/* 루틴  수정 */}
         <IconWrapper>
+          {/* 루틴  수정 */}
           <IconImg
             src={EditIcon}
             onClick={() => {

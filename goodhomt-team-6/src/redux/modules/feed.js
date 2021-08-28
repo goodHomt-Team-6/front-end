@@ -121,6 +121,7 @@ const getFeedDetailAPI = (routineId) => {
       .get(`/community/${routineId}`)
       .then((response) => {
         dispatch(getSelectedFeed(response.data.result));
+        console.log(response.data.result);
         logger('커뮤니티 피드 상세 가져오기 성공');
       })
       .catch((error) => {
