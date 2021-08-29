@@ -1,0 +1,29 @@
+.rotate-out-ver {
+	-webkit-animation: rotate-out-ver 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: rotate-out-ver 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+@-webkit-keyframes rotate-out-ver {
+  0% {
+    -webkit-transform: rotateY(360deg);
+            transform: rotateY(360deg);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+    opacity: 0;
+  }
+}
+@keyframes rotate-out-ver {
+  0% {
+    -webkit-transform: rotateY(360deg);
+            transform: rotateY(360deg);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+    opacity: 0;
+  }
+}

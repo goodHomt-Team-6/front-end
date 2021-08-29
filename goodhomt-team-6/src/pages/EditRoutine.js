@@ -129,8 +129,7 @@ const EditRoutine = (props) => {
             history.push('/exercise');
             dispatch(exerciseCreator.setIsFromEditRoutine(true));
             dispatch(exerciseCreator.fromEditAddSelectedItem(lists));
-          }
-          }
+          }}
         ></Image>
         <Image
           src={ReArrangementBlack}
@@ -235,7 +234,7 @@ const EditRoutine = (props) => {
                           clickSet(listIdx);
                         }}
                       >
-                        세트
+                        세트 추가
                       </RadioP>
                     </ButtonWrap>
                     <ButtonWrap>
@@ -244,7 +243,7 @@ const EditRoutine = (props) => {
                         className="list"
                         onClick={() => clickBreak(listIdx)}
                       >
-                        휴식
+                        휴식 추가
                       </RadioP>
                     </ButtonWrap>
                   </ButtonCont>
