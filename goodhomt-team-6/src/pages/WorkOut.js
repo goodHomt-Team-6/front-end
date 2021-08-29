@@ -40,7 +40,9 @@ const WorkOut = (props) => {
   );
   let listcheckblack = useRef(null);
   const rotateOutVerAnimation = () => {
-    listcheckblack.current.classList.add('rotate-out-ver');
+    if (listcheckblack) {
+      listcheckblack?.current?.classList.add('rotate-out-ver');
+    }
   };
 
   const completeSet = (length) => {

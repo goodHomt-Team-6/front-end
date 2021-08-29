@@ -12,8 +12,6 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import Cookies from 'universal-cookie';
 
-const cookies = new Cookies();
-
 // 피드 추가, 삭제, 공유하기 버튼 클릭시 생성되는 모달 컴포넌트
 const AddAndDeleteModal = ({
   setShowModal,
@@ -21,10 +19,10 @@ const AddAndDeleteModal = ({
   setShowShareModal,
   message,
   setShowLogoutModal,
-  id
+  id,
 }) => {
   const dispatch = useDispatch();
-
+  const cookies = new Cookies();
   const modalRef = useRef();
   const buttonRef = useRef();
   const [cancel, setCancel] = useState(true);
@@ -90,10 +88,12 @@ const AddAndDeleteModal = ({
                 // 메인페이지 프로필 사진 클릭 시 뜨는 로그아웃 버튼
                 <ConfirmButton
                   onClick={() => {
-                    cookies.remove('homt6_access_token');
-                    cookies.remove('homt6_refresh_token');
-                    cookies.remove('homt6_is_login');
-                    location.reload();
+                    cookies.remove('homt6_access_token', { path: '/' });
+                    cookies.remove('homt6_refresh_token', { path: '/' });
+                    cookies.remove('homt6_is_login', { path: '/' });
+                    if (!cookies.get('homt6_access_token')) {
+                      location.reload();
+                    }
                   }}
                   ref={buttonRef}
                 >
