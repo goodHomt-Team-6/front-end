@@ -55,6 +55,7 @@ const AddMyFeed = (props) => {
       setInnerHeight(window.innerHeight - 267);
     };
     window.addEventListener('resize', detctMobileKeyboard);
+    return window.addEventListener('resize', detctMobileKeyboard);
   }, [activeElement]);
 
   useEffect(() => {

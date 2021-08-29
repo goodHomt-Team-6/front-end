@@ -188,12 +188,23 @@ const WorkOut = (props) => {
             {editedRoutine.myExercise.map((list, listIdx) => (
               <React.Fragment key={listIdx}>
                 {listIdx === currentExerciseIdx ? (
-                  <List>
+                  <List
+                    style={{
+                      borderLeft: '16px solid #4A40FE',
+                      boxShadow:
+                        'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>{list.exerciseName}</ListBody>
                   </List>
                 ) : listIdx < currentExerciseIdx ? (
-                  <List bgColor="#ECECF3">
+                  <List
+                    bgColor="#ECECF3"
+                    style={{
+                      borderLeft: '16px solid #C3BFFC',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>
                       {list.exerciseName}
@@ -207,7 +218,12 @@ const WorkOut = (props) => {
                     </ListBody>
                   </List>
                 ) : (
-                  <List bgColor="#ECECF3">
+                  <List
+                    bgColor="#ECECF3"
+                    style={{
+                      borderLeft: '16px solid #C3BFFC',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>{list.exerciseName}</ListBody>
                   </List>
@@ -296,12 +312,23 @@ const WorkOut = (props) => {
             {routine.myExercise.map((list, listIdx) => (
               <React.Fragment key={listIdx}>
                 {listIdx === currentExerciseIdx ? (
-                  <List>
+                  <List
+                    style={{
+                      borderLeft: '16px solid #4A40FE',
+                      boxShadow:
+                        'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>{list.exerciseName}</ListBody>
                   </List>
                 ) : listIdx < currentExerciseIdx ? (
-                  <List bgColor="#ECECF3">
+                  <List
+                    bgColor="#ECECF3"
+                    style={{
+                      borderLeft: '16px solid #C3BFFC',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>
                       {list.exerciseName}
@@ -315,7 +342,12 @@ const WorkOut = (props) => {
                     </ListBody>
                   </List>
                 ) : (
-                  <List bgColor="#ECECF3">
+                  <List
+                    bgColor="#ECECF3"
+                    style={{
+                      borderLeft: '16px solid #C3BFFC',
+                    }}
+                  >
                     <ListHead>{listIdx + 1}</ListHead>
                     <ListBody>{list.exerciseName}</ListBody>
                   </List>
