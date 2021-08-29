@@ -9,7 +9,9 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 // 대시보드 컴포넌트
 const DashBoard = ({ props }) => {
   const dispatch = useDispatch();
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
   const routine = useSelector((store) => store.exercise.routine[0]);
 
   return (
@@ -18,7 +20,9 @@ const DashBoard = ({ props }) => {
         <TodayWrapper>
           <Enrolled>{selectedPrevItem.myExercise.length}</Enrolled>
           <Wrapper>
-            {selectedPrevItem && selectedPrevItem.isBookmarked ? <IconImg src={BookmarkSolid} /> : null}
+            {selectedPrevItem && selectedPrevItem.isBookmarked ? (
+              <IconImg src={BookmarkSolid} />
+            ) : null}
             <span>{selectedPrevItem.routineName}</span>
           </Wrapper>
         </TodayWrapper>
@@ -30,17 +34,19 @@ const DashBoard = ({ props }) => {
               fontWeight="600"
               color="black"
               opacity="54%"
+              style={{
+                minWidth: '25px',
+              }}
             >
               종목
             </Text>
             <TextItem>
               {selectedPrevItem.myExercise !== [] &&
-                selectedPrevItem.myExercise.length < 2 ? (
-                selectedPrevItem.myExercise[0].exerciseName
-              ) : (
-                `${selectedPrevItem.myExercise[0].exerciseName} 외 ${selectedPrevItem.myExercise.length - 1
-                }개`
-              )}
+              selectedPrevItem.myExercise.length < 2
+                ? selectedPrevItem.myExercise[0].exerciseName
+                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${
+                    selectedPrevItem.myExercise.length - 1
+                  }개`}
             </TextItem>
           </TypeWrapper>
           <Div />
@@ -61,19 +67,14 @@ const DashBoard = ({ props }) => {
                   {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
                 </Time>
               ) : (
-                <Time>
-                  {Math.floor(selectedPrevItem.routineTime / 60)}:
-                </Time>)
-              }
-              {(selectedPrevItem.routineTime % 60) < 10 ? (
-                <Time>
-                  {'0' + selectedPrevItem.routineTime % 60}
-                </Time>
-              ) : (<Time>
-                {selectedPrevItem.routineTime % 60}
-              </Time>)}
+                <Time>{Math.floor(selectedPrevItem.routineTime / 60)}:</Time>
+              )}
+              {selectedPrevItem.routineTime % 60 < 10 ? (
+                <Time>{'0' + (selectedPrevItem.routineTime % 60)}</Time>
+              ) : (
+                <Time>{selectedPrevItem.routineTime % 60}</Time>
+              )}
             </TextItem>
-
           </TypeWrapper>
         </TypeContainer>
       </MainBox>

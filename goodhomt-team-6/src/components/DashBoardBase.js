@@ -2,16 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
 import { Image, Text, Icon } from '../shared/Styles';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { history } from '../redux/configureStore';
 
-import playButton from '../img/play_button.svg';
+import playButton from '../img/play_button_blue.svg';
 import BadRating from '../img/rating_bad_big.svg';
 import GoodRating from '../img/rating_good_big.svg';
 import NormalRating from '../img/rating_soso_big.svg';
+import addButton from '../img/add_exercise_button.svg';
+import Cookies from 'universal-cookie';
+import { actionCreators as userActions } from '../redux/modules/user';
+import { actionCreators as exerciseActions } from '../redux/modules/exercise';
+
+const cookie = new Cookies();
 
 const DashBoardBase = ({ message, exerciseType }) => {
+  const dispatch = useDispatch();
   const myTodayRoutine = useSelector((store) => store.exercise.myTodayRoutine);
+  const tokenCookie = cookie.get('homt6_is_login');
 
   return (
     <>
@@ -39,9 +47,8 @@ const DashBoardBase = ({ message, exerciseType }) => {
                   history.push('/workout');
                 }}
               >
-                <EnrolledOne>{myTodayRoutine.length}</EnrolledOne>
+                <PlayBtnIcon src={playButton} />
                 <DashBoardDiv>
-                  <PlayBtnIcon src={playButton} />
                   <TextItem>{message}</TextItem>
                 </DashBoardDiv>
               </TodayWrapper>
@@ -49,7 +56,18 @@ const DashBoardBase = ({ message, exerciseType }) => {
           </>
         ) : (
           <TodayWrapper>
-            <EnrolledZero>0</EnrolledZero>
+            <AddBtn
+              src={addButton}
+              onClick={() => {
+                if (!tokenCookie) {
+                  sessionStorage.setItem('redirect_url', '/exercise');
+                  dispatch(userActions.showLoginModal(true));
+                } else {
+                  history.push('/exercise');
+                  dispatch(exerciseActions.initializeRoutine());
+                }
+              }}
+            ></AddBtn>
             <DashBoardDiv>
               <TextItem>{message}</TextItem>
             </DashBoardDiv>
@@ -58,8 +76,32 @@ const DashBoardBase = ({ message, exerciseType }) => {
 
         <TodayTypeContainer>
           <TypeWrapper>
-            <Span>종목</Span>
-            <TextItem>{exerciseType}</TextItem>
+            <Span
+              style={{
+                minWidth: '25px',
+                marginRight: '10px',
+              }}
+            >
+              종목
+            </Span>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextItem
+                style={{
+                  textAlign: 'right',
+                }}
+              >
+                {exerciseType.split('외')[0]}
+              </TextItem>
+              {exerciseType.split('외').length > 1 && (
+                <TextItem>{`외 ${exerciseType.split('외')[1]}`}</TextItem>
+              )}
+            </div>
           </TypeWrapper>
           <Div />
           <TypeWrapper>
@@ -71,7 +113,8 @@ const DashBoardBase = ({ message, exerciseType }) => {
                     <WorkoutDate>
                       {Math.floor(myTodayRoutine[0].routineTime / 60) < 10 ? (
                         <Time>
-                          {'0' + Math.floor(myTodayRoutine[0].routineTime / 60)}:
+                          {'0' + Math.floor(myTodayRoutine[0].routineTime / 60)}
+                          :
                         </Time>
                       ) : (
                         <Time>
@@ -154,25 +197,11 @@ const Enrolled = styled.img`
   margin-bottom: 20px;
 `;
 
-const EnrolledZero = styled.span`
-  font-size: 72px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1;
-`;
-
-const EnrolledOne = styled.span`
-  font-size: 72px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1;
-  color: ${Color.mainBlue};
-`;
-
 const TextItem = styled.span`
   color: black;
   font-size: 14px;
   font-weight: 600;
+  word-break: keep-all;
 `;
 
 const Span = styled.span`
@@ -196,8 +225,19 @@ const Time = styled.span`
   font-size: 14px;
 `;
 
-
 const PlayBtnIcon = styled.img`
-  width: 15px;
-  margin-right: 5px;
+  width: 50px;
+  margin-bottom: 20px;
+`;
+
+const AddBtn = styled.img`
+  color: white;
+  font-size: 30px;
+  width: 67px;
+  height: 67px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  z-index: 1000;
+  margin-bottom: 20px;
 `;

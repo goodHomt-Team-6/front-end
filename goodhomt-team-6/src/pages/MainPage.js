@@ -7,7 +7,7 @@ import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import profileImage from '../img/profile-image.svg';
 import formerRoutine from '../img/former_routine_button.svg';
-import addButton from '../img/add_exercise_button.svg';
+
 import calendarIcon from '../img/calendar_main_icon.svg';
 import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
@@ -122,7 +122,6 @@ const Main = (props) => {
       dispatch(challengeActions.getMyChallengesAPI('get_detail'));
     }
   }, [is_login]);
-
   return (
     <>
       {/* 유저 프로필 */}
@@ -134,9 +133,6 @@ const Main = (props) => {
               height="40px"
               margin="0px 15px 0px 0px"
               src={nullUserImg}
-              _onClick={() => {
-                setShowLogoutModal(true);
-              }}
             ></Image>
           ) : (
             <Image
@@ -145,7 +141,9 @@ const Main = (props) => {
               margin="0px 15px 0px 0px"
               src={userImg}
               _onClick={() => {
-                setShowLogoutModal(true);
+                if (is_login) {
+                  setShowLogoutModal(true);
+                }
               }}
             ></Image>
           )}
@@ -323,19 +321,31 @@ const Main = (props) => {
                 <>
                   {myTodayRoutine[0].isCompleted ? (
                     <DashBoardBase
-                      message="오늘의 운동을 완료했습니다!"
-                      exerciseType={myTodayRoutine[0].routineName}
+                      message="오늘의 루틴을 완료했습니다!"
+                      exerciseType={
+                        myTodayRoutine[0].myExercise.length > 1
+                          ? `${
+                              myTodayRoutine[0].myExercise[0].exerciseName
+                            } 외 ${myTodayRoutine[0].myExercise.length - 1} 개`
+                          : `${myTodayRoutine[0].myExercise[0].exerciseName}`
+                      }
                     />
                   ) : (
                     <DashBoardBase
-                      message="오늘의 운동을 시작해보세요!"
-                      exerciseType={myTodayRoutine[0].routineName}
+                      message="오늘의 루틴을 시작해보세요!"
+                      exerciseType={
+                        myTodayRoutine[0].myExercise.length > 1
+                          ? `${
+                              myTodayRoutine[0].myExercise[0].exerciseName
+                            } 외 ${myTodayRoutine[0].myExercise.length - 1}개`
+                          : `${myTodayRoutine[0].myExercise[0].exerciseName}`
+                      }
                     />
                   )}
                 </>
               ) : (
                 <DashBoardBase
-                  message="아직 등록된 운동이 없습니다"
+                  message="버튼을 눌러 루틴을 추가해보세요!"
                   exerciseType="종목없음"
                 />
               )}
@@ -484,21 +494,6 @@ const Main = (props) => {
             </CategoryList>
           </InboxWrapper>
         </Wrapper>
-
-        {myTodayRoutine && myTodayRoutine.length !== 0 ? null : (
-          <AddBtn
-            src={addButton}
-            onClick={() => {
-              if (!tokenCookie) {
-                sessionStorage.setItem('redirect_url', '/exercise');
-                dispatch(userActions.showLoginModal(true));
-              } else {
-                history.push('/exercise');
-                dispatch(exerciseActions.initializeRoutine());
-              }
-            }}
-          ></AddBtn>
-        )}
       </Container>
 
       {/* 고정 하단바 */}
@@ -634,20 +629,6 @@ const CategoryList = styled.ul`
   margin: 0;
   list-style: none;
   box-sizing: border-box;
-`;
-
-const AddBtn = styled.img`
-  position: fixed;
-  bottom: 6rem;
-  right: 20px;
-  color: white;
-  font-size: 30px;
-  width: 67px;
-  height: 67px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  z-index: 1000;
 `;
 
 const TodayExerciseWrapper = styled.div`
