@@ -78,7 +78,7 @@ const DashBoardBase = ({ message, exerciseType }) => {
           <TypeWrapper>
             <Span
               style={{
-                minWidth: '25px',
+                minWidth: '30px',
                 marginRight: '10px',
               }}
             >

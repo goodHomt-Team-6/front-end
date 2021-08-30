@@ -17,6 +17,9 @@ import exercise, {
 } from '../redux/modules/exercise';
 import StopWatchCont from '../components/StopWatchCont';
 import './Workout.css';
+import BuzzerSound from '../sound/buzzer.wav';
+
+const buzzer = new Audio(BuzzerSound);
 
 const WorkOut = (props) => {
   const dispatch = useDispatch();
@@ -60,6 +63,7 @@ const WorkOut = (props) => {
   const handleBreakTime = (setLength, breakTime) => {
     setTimeout(() => {
       rotateOutVerAnimation();
+      buzzer.play();
       setTimeout(() => {
         completeSet(setLength);
       }, 500);
