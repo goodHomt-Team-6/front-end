@@ -49,6 +49,7 @@
     "redux": "^4.1.0",
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "server": "^1.0.34",
     "slick-carousel": "^1.8.1",
