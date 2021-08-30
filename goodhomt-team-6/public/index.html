@@ -14,6 +14,12 @@
       content="gi1srfbk1630htz3fa6ybzsu35t844"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!-- 웹팩에러 캐시 컨트롤 코드 -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-chche, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-chche" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -163,7 +169,7 @@
     <div id="root"></div>
 
     <!-- 서비스워커 코드 -->
-    <!-- <script>
+    <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
           navigator.serviceWorker
@@ -186,7 +192,7 @@
       } else {
         console.log('Service Worker is not supported by browser.');
       }
-    </script> -->
+    </script>
     <!-- 서비스워커 코드 끝 -->
 
     <!--
