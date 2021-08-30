@@ -20,7 +20,6 @@ import './Feed.css';
 import NavBar from '../components/NavBar';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
-import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
 import ErrorModal from '../components/ErrorModal';
 import _ from 'lodash';
@@ -48,13 +47,11 @@ const Feed = () => {
   useEffect(() => {
     if (is_login) {
       dispatch(feedActions.getFeedAllAPI(userId));
-      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, []);
   useEffect(() => {
     if (is_login) {
       dispatch(feedActions.getFeedAllAPI(userId));
-      dispatch(userActions.getUpdatedAccessTokenAPI());
     }
   }, [is_login]);
 
@@ -74,6 +71,16 @@ const Feed = () => {
       dispatch(feedActions.initializeKeywordInput());
     }
   }, [searchInput]);
+
+  // 타겟 부위 내용 뽑아내기
+  const getTargetPart = (myExercise) => {
+    let result = myExercise.reduce((acc, cur) => {
+      if (!acc.includes(cur.Category.categoryName))
+        acc.push(cur.Category.categoryName);
+      return acc;
+    }, []);
+    return result;
+  };
 
   // 업로드 시간 가공
   const displayCreatedAt = (createdAt) => {
@@ -374,19 +381,23 @@ const Feed = () => {
                             color="black"
                             opacity="54%"
                             style={{
-                              minWidth: '25px',
+                              minWidth: '30px',
                             }}
                           >
                             타겟
                             <br />
                             부위
                           </Text>
-                          {
-                            <TextItem>
-                              {item.myExercise[0].exerciseName} 외{' '}
-                              {item.myExercise.length - 1}개
-                            </TextItem>
-                          }
+                          <TextItem>
+                            {getTargetPart(item.myExercise).map(
+                              (categoryName, idx) => {
+                                return idx ===
+                                  getTargetPart(item.myExercise).length - 1
+                                  ? `${categoryName}`
+                                  : `${categoryName}, `;
+                              },
+                            )}
+                          </TextItem>
                         </TypeWrapper>
                         <Div />
                         <TypeWrapper>
