@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import LoginBackground from '../img/login_background.svg';
 import Home from '../img/home.svg';
 import { history } from '../redux/configureStore';
-// import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/browser';
 
 class ErrorBoundary extends Component {
   state = {
@@ -21,9 +21,9 @@ class ErrorBoundary extends Component {
     this.setState({
       error: true,
     });
-    // if (process.env.NODE_ENV === 'production') {
-    //   Sentry.captureException(error, { extra: info });
-    // }
+    if (process.env.NODE_ENV === 'production') {
+      Sentry.captureException(error, { extra: info });
+    }
   }
 
   render() {

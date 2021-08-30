@@ -12,6 +12,7 @@ import BookmarkSolid from '../img/bookmark_solid.svg';
 const BookmarkModal = ({ setShowModal }) => {
   const dispatch = useDispatch();
   const modalRef = useRef();
+
   const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
   const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
 
@@ -31,7 +32,6 @@ const BookmarkModal = ({ setShowModal }) => {
     routineName: routineRename,
     createdAt: selectedPrevItem.createdAt
   };
-
 
   return (
     <ModalWrapper ref={modalRef} onClick={closeModal}>

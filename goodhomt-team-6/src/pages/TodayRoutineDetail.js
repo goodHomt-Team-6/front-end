@@ -239,8 +239,8 @@ const TodayRoutineDetail = (props) => {
             }}
           >
             <Icon src={routineDelete} width="20px" margin="0px 5px 0px 0px" />
-            <Text margin="0px" type="contents">
-              삭제
+            <Text margin="0px" type="contents" >
+              루틴 삭제
             </Text>
           </Selected>
         </ListContainer>
@@ -367,11 +367,11 @@ const Selected = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 9px 0 7px;
   color: black;
   line-height: 32px;
   border-radius: 16px;
   margin: 20px 16px 0px 0px;
-  width: 60px;
+  width: 80px;
   background-color: #fff;
 `;

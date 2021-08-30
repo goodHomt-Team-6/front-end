@@ -195,7 +195,6 @@ const Main = (props) => {
       <Container>
         <Wrapper>
           <InboxWrapper>
-            {/* 대시 보드 - 오늘 등록한 운동 종목 수 */}
             <RegisterWrapper>
               <Text
                 textAlign="left"
@@ -240,7 +239,7 @@ const Main = (props) => {
                     tasks={tasks}
                     timeZone="Asia/Seoul"
                     dashboard={{ hidden: true }}
-                    // if true, dashboard is hidden
+                  // if true, dashboard is hidden
                   />
                   <ChallengeBox
                     status={myFirstChallenge.Challenge.progressStatus}

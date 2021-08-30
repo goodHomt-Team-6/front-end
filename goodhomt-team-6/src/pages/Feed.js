@@ -151,7 +151,7 @@ const Feed = () => {
             <SearchInput
               visible={visible}
               value={searchInput}
-              placeholder="키워드를 입력해주세요."
+              placeholder="운동종목을 입력해주세요."
               onChange={(e) => {
                 setSearchInput(e.target.value);
                 debounceOnchange(e.target.value);
