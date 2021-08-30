@@ -18,6 +18,7 @@ import exercise, {
 import StopWatchCont from '../components/StopWatchCont';
 import './Workout.css';
 import BuzzerSound from '../sound/buzzer.wav';
+import Mascort from '../img/mascort_white.svg';
 
 const buzzer = new Audio(BuzzerSound);
 
@@ -36,6 +37,9 @@ const WorkOut = (props) => {
   );
   const challengeId = useSelector(
     (state) => state.challenge.challengeDetail?.challenge?.id,
+  );
+  const challengeUserCount = useSelector(
+    (state) => state.challenge.challengeDetail?.challenge?.userCount,
   );
   const currentSetIdx = useSelector((state) => state.exercise.currentSetIdx);
   const isEditTodayRoutineDetail = useSelector(
@@ -69,6 +73,14 @@ const WorkOut = (props) => {
       }, 500);
     }, (breakTime + 1) * 1000);
   };
+
+  useEffect(() => {
+    return () => {
+      if (sessionStorage.getItem('is_challenge_workout') === 'true') {
+        sessionStorage.removeItem('is_challenge_workout');
+      }
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -187,8 +199,24 @@ const WorkOut = (props) => {
             </CompleteButton>
           )}
         </TimeCont>
+        {sessionStorage.getItem('is_challenge_workout') === 'true' && (
+          <ExerciseTogetherCont>
+            <Image src={Mascort} width="25px" height="25px" borderRadius="0" />
+            <Text
+              type="contents"
+              margin="0 0 0 20px"
+              fontWeight="bold"
+              fontSize="18px"
+            >
+              {challengeUserCount - 1}
+            </Text>
+            명과 함께 운동중!
+          </ExerciseTogetherCont>
+        )}
         {isEditTodayRoutineDetail ? (
-          <ListCont>
+          <ListCont
+            challengeUserCount={sessionStorage.getItem('is_challenge_workout')}
+          >
             {editedRoutine.myExercise.map((list, listIdx) => (
               <React.Fragment key={listIdx}>
                 {listIdx === currentExerciseIdx ? (
@@ -312,7 +340,9 @@ const WorkOut = (props) => {
             ))}
           </ListCont>
         ) : (
-          <ListCont>
+          <ListCont
+            challengeUserCount={sessionStorage.getItem('is_challenge_workout')}
+          >
             {routine.myExercise.map((list, listIdx) => (
               <React.Fragment key={listIdx}>
                 {listIdx === currentExerciseIdx ? (
@@ -467,8 +497,6 @@ const GoBackButton = styled.div`
   color: #fff;
 `;
 
-const innerHeight = window.innerHeight;
-
 const TimeCont = styled.div`
   background-color: #000;
   display: flex;
@@ -486,7 +514,8 @@ const PlayIconCont = styled.div`
 `;
 
 const ListCont = styled.div`
-  height: ${innerHeight * 0.6}px;
+  height: ${(props) =>
+    props.challengeUserCount ? innerHeight * 0.6 - 48 : innerHeight * 0.6}px;
   overflow-y: scroll;
 `;
 
@@ -565,4 +594,16 @@ const CompleteButtonInner = styled.div`
   border-radius: 40px;
   background-color: #4a40ff;
   color: white;
+`;
+
+const ExerciseTogetherCont = styled.div`
+  color: #fff;
+  background-color: #4a40ff;
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid #9e9ea0;
+  padding: 10px 0;
+  align-items: flex-end;
 `;

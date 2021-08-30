@@ -79,9 +79,9 @@ const Main = (props) => {
         );
         setTimeout(() => {
           showNotiCont(false);
-        }, 4000);
+        }, 5000);
       }
-    }, 2700);
+    }, 3500);
   };
 
   let tasks;
@@ -209,7 +209,12 @@ const Main = (props) => {
                     isNotiCont && (
                       <NotiBorder ref={notiCont} className="slide-in-bottom">
                         <NotiCont>
-                          <Image src={Mascort} width="25px" height="25px" />
+                          <Image
+                            src={Mascort}
+                            width="25px"
+                            height="25px"
+                            borderRadius="0"
+                          />
                           <Text
                             type="contents"
                             fontSize="18px"
@@ -703,7 +708,8 @@ const NotiBorder = styled.div`
   border: 2px solid #234e70;
   position: fixed;
   bottom: 90px;
-  left: calc(50 % - 35vw);
+  left: calc(15% - 6px);
+  width: 70%;
   z-index: 999999;
   border-radius: 10px;
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -713,7 +719,7 @@ const NotiBorder = styled.div`
 const NotiCont = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
+  width: 100%;
   height: 150px;
   border-radius: 10px;
   background-color: #234e70;
