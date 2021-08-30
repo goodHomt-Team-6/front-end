@@ -93,9 +93,10 @@ const Feed = () => {
   // 키워리 검색 처리
   const debounce = _.debounce(() => {
     dispatch(feedActions.addKeyword(searchInput));
-    if (searchInput !== '') {
+    if (searchInput !== '' && /^[ㄱ-ㅎ|가-힣]+$/) {
       dispatch(feedActions.getKeywordSearchAPI(searchInput, userId));
-    } else {
+    }
+    if (searchInput === '') {
       dispatch(feedActions.initializeKeyword());
       dispatch(feedActions.initializeKeywordInput());
     }
@@ -106,6 +107,7 @@ const Feed = () => {
     <Container>
       <InboxWrapper>
         <Text
+          visible={visible}
           type="contents"
           padding="24px 0 24px 24px"
           fontSize="18px"
@@ -139,7 +141,8 @@ const Feed = () => {
           ) : null}
 
           {/* 운동 종목 키워드 검색 */}
-          <SearchWrapper visible={visible}>
+          <SearchWrapper
+            visible={visible}>
             <SearchInput
               visible={visible}
               value={searchInput}
@@ -507,7 +510,7 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-right: 1.5rem;
-  width: 65%;
+  width: 100%;
 `;
 
 const FeedWrapper = styled.ul`
@@ -525,7 +528,7 @@ const SearchWrapper = styled.div`
   border-bottom: 1px solid black;
   margin: 0px;
   padding: 0px;
-  width: ${(props) => (props.visible ? '120%' : '0px')};
+  width: ${(props) => (props.visible ? '100%' : '0px')};
   /* transition: all 0.4s cubic-bezier(0.6, -0.5, 0.2, 0.1); */
   background-color: ${Color.bgIvory};
   position: relative;
@@ -537,7 +540,7 @@ const SearchInput = styled.input`
   padding: 0px;
   height: 48px;
   border: none;
-  width: ${(props) => (props.visible ? '100vw' : '0px')};
+  width: ${(props) => (props.visible ? '100%' : '0px')};
   background-color: ${Color.bgIvory};
   &:focus,
   &:active {

@@ -8,12 +8,11 @@ const KakaoLanding = (props) => {
   const dispatch = useDispatch();
   const isLoaded = useSelector((store) => store.user.isLoaded);
 
-  // 인가코드
-  let code = new URL(window.location.href).searchParams.get('code');
-
   React.useEffect(async () => {
-    await dispatch(userAction.kakaoLoginAPI(code));
+    // 인가코드
+    let code = new URL(window.location.href).searchParams.get('code');
     dispatch(userAction.isLoaded(true));
+    await dispatch(userAction.kakaoLoginAPI(code));
   }, []);
 
   // React.useEffect(() => {

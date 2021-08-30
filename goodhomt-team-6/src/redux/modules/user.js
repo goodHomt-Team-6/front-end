@@ -164,7 +164,7 @@ const setTutorialAPI = () => {
   return function (dispatch, getState, { history }) {
     api
       .put('/auth/tutorial', { finishTutorial: true })
-      .then((res) => {})
+      .then((res) => { })
       .catch((err) => {
         logger('튜토리얼 세팅 실패');
         logger(err);
