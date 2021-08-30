@@ -35,7 +35,7 @@ const DashBoard = ({ props }) => {
               color="black"
               opacity="54%"
               style={{
-                minWidth: '25px',
+                minWidth: '30px',
               }}
             >
               종목

@@ -11,6 +11,7 @@ import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
+import { actionCreators as userActions } from '../redux/modules/user';
 import logger from '../shared/Logger';
 
 // input, textarea를 클릭했을때 해당 요소를 저장
@@ -227,6 +228,7 @@ const AddMyFeed = (props) => {
               }
               if (communityNickname === null && isDoubleChecked === true) {
                 dispatch(feedActions.addFeedAPI(firstWriteRoutine));
+                dispatch(userActions.getUpdatedAccessTokenAPI());
                 setShowModal(true);
               }
               dispatch(feedActions.initializeWrittenFeed());
@@ -333,7 +335,7 @@ const CheckerBtn = styled.button`
   background-color: transparent;
   width: 25%;
   margin-left: 15px;
-  min-width: 70px;
+  min-width: 75px;
 `;
 
 const ElTextarea = styled.textarea`

@@ -256,7 +256,7 @@ const FormExercise = (props) => {
                       defaultChecked
                     />
                     <RadioP className="list" onClick={() => clickSet(listIdx)}>
-                      세트
+                      세트 추가
                     </RadioP>
                   </ButtonWrap>
                   <ButtonWrap>
@@ -265,7 +265,7 @@ const FormExercise = (props) => {
                       className="list"
                       onClick={() => clickBreak(listIdx)}
                     >
-                      휴식
+                      휴식 추가
                     </RadioP>
                   </ButtonWrap>
                 </ButtonCont>
