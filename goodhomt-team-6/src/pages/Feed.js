@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Color from '../shared/Color';
-import api from '../shared/Request';
 import logger from '../shared/Logger';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
@@ -10,8 +9,6 @@ import { Image, Text, Icon } from '../shared/Styles';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as exerciseActions } from '../redux/modules/exercise';
-import CategoryItem from '../components/CategoryItem';
-import ChallengeItem from '../components/ChallengeItem';
 import searchIcon from '../img/search-icon.svg';
 import LikeLine from '../img/like_line.svg';
 import LikeSolid from '../img/like_solid.svg';
@@ -21,15 +18,12 @@ import nullUserImg from '../img/no_profile-image.jpg';
 import './Feed.css';
 
 import NavBar from '../components/NavBar';
-import FeedItem from '../components/FeedItem';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
-import Noti from '../img/notification.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
 import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
 import ErrorModal from '../components/ErrorModal';
-import DashBoardBase from '../components/DashBoardBase';
-import _ from "lodash";
+import _ from 'lodash';
 
 // 피드 페이지 컴포넌트
 const Feed = () => {
@@ -47,7 +41,6 @@ const Feed = () => {
   const userId = useSelector((store) => store.user.user.userId);
   const feed = useSelector((store) => store.feed.feed);
   const userName = useSelector((store) => store.user.user.nickname);
-  const userImg = useSelector((store) => store.user.user.userImg);
   const is_login = useSelector((store) => store.user?.is_login);
   const isSearchError = useSelector((store) => store.feed.isSearchError);
   const keyword = useSelector((store) => store.feed.keyword);
@@ -146,12 +139,11 @@ const Feed = () => {
           ) : null}
 
           {/* 운동 종목 키워드 검색 */}
-          <SearchWrapper
-            visible={visible}>
+          <SearchWrapper visible={visible}>
             <SearchInput
               visible={visible}
               value={searchInput}
-              placeholder="운동종목을 입력해주세요."
+              placeholder="운동 종목명을 입력해주세요."
               onChange={(e) => {
                 setSearchInput(e.target.value);
                 debounceOnchange(e.target.value);
@@ -211,7 +203,8 @@ const Feed = () => {
         <ErrorModal
           message="찾으시는 키워드가 없습니다."
           buttonMessage="피드로 돌아가기"
-          setShowErrorModal={setShowErrorModal} />
+          setShowErrorModal={setShowErrorModal}
+        />
       ) : null}
 
       {/* 검색한 키워드 목록 */}
@@ -220,25 +213,24 @@ const Feed = () => {
           <SearchBox>
             {keyword && keyword !== [] ? (
               keyword.map((item, idx) => (
-                <TextCont key={idx}
+                <TextCont
+                  key={idx}
                   onClick={() => {
-                    dispatch(feedActions.getFeedSearchAPI(item.exerciseName, userId));
+                    dispatch(
+                      feedActions.getFeedSearchAPI(item.exerciseName, userId),
+                    );
                     isClickSearch(false);
                     dispatch(feedActions.initializeKeyword());
                     setVisible(false);
                     setClickKeyword(item.exerciseName);
                   }}
                 >
-                  <Text>
-                    {item.exerciseName}
-                  </Text>
+                  <Text>{item.exerciseName}</Text>
                 </TextCont>
               ))
             ) : (
               <TextCont>
-                <Text>
-                  키워드를 찾을 수 없습니다.
-                </Text>
+                <Text>키워드를 찾을 수 없습니다.</Text>
               </TextCont>
             )}
           </SearchBox>
@@ -267,7 +259,8 @@ const Feed = () => {
                             height="34px"
                             margin="0px 15px 0px 0px"
                             src={item.User.img}
-                          />)}
+                          />
+                        )}
 
                         <InfoBox>
                           {userName && (
@@ -333,7 +326,9 @@ const Feed = () => {
                     {/* 피드 대시보드 */}
                     <TodayMainBox
                       onClick={() => {
-                        const selected = feed.filter((select) => select.id == item.id);
+                        const selected = feed.filter(
+                          (select) => select.id == item.id,
+                        );
                         dispatch(
                           exerciseActions.addSelectedPrevItem(selected[0]),
                         );
@@ -342,8 +337,30 @@ const Feed = () => {
                       }}
                     >
                       <TodayWrapper>
-                        <Enrolled>{item.myExercise.length}</Enrolled>
-                        <TextItem>{item.routineName}</TextItem>
+                        <TextItem
+                          style={{
+                            fontSize: '14px',
+                            color: 'black',
+                            fontFamily: 'PoppinsR',
+                            opacity: '54%',
+                            fontWeight: '600',
+                          }}
+                        >
+                          루틴 이름
+                        </TextItem>
+                        <TextItem
+                          style={{
+                            fontSize: '24px',
+                            marginTop: '15px',
+                            color: '#4A40FF',
+                            opacity: '0.8',
+                            borderRadius: '24px',
+                            padding: '5px 15px',
+                            border: '2px solid #4A40FF',
+                          }}
+                        >
+                          {item.routineName}
+                        </TextItem>
                       </TodayWrapper>
                       <TodayTypeContainer>
                         <TypeWrapper>
@@ -353,13 +370,20 @@ const Feed = () => {
                             fontWeight="600"
                             color="black"
                             opacity="54%"
+                            style={{
+                              minWidth: '25px',
+                            }}
                           >
-                            종목
+                            타겟
+                            <br />
+                            부위
                           </Text>
-                          <TextItem>
-                            {item.myExercise[0].exerciseName} 외{' '}
-                            {item.myExercise.length - 1}개
-                          </TextItem>
+                          {
+                            <TextItem>
+                              {item.myExercise[0].exerciseName} 외{' '}
+                              {item.myExercise.length - 1}개
+                            </TextItem>
+                          }
                         </TypeWrapper>
                         <Div />
                         <TypeWrapper>
@@ -394,15 +418,6 @@ const Feed = () => {
                     <TextWrapper>
                       <TextBox>
                         <CommentText>
-                          <Text
-                            type="contents"
-                            margin="0px 8px 0px 0px"
-                            fontSize="14px"
-                            fontWeight="600"
-                          >
-                            {item.routineName}
-                          </Text>
-
                           {/* 키워드 */}
                           <KeywordBox>
                             {item.myExercise.map((i, idx) => (
@@ -421,8 +436,14 @@ const Feed = () => {
                                     setSearchKeyword(i.exerciseName);
                                     setClickKeyword(i.exerciseName);
                                   }
-                                  dispatch(feedActions.getFeedSearchAPI(i.exerciseName, userId));
-                                }}>
+                                  dispatch(
+                                    feedActions.getFeedSearchAPI(
+                                      i.exerciseName,
+                                      userId,
+                                    ),
+                                  );
+                                }}
+                              >
                                 #{i.exerciseName}
                               </Text>
                             ))}
@@ -449,24 +470,23 @@ const Feed = () => {
                         width="95%"
                         color="black"
                         margin="4px 0px 0px 0px"
-                        fontSize="13px">
+                        fontSize="13px"
+                      >
                         {item.description}
                       </Text>
-
                     </TextWrapper>
                   </Card>
                 ))}
             </FeedCont>
-          </FeedContainer >
-        </FeedWrapper >
+          </FeedContainer>
+        </FeedWrapper>
       )}
-
 
       {/* 고정 하단바 */}
       <NavBarWrapper>
         <NavBar />
       </NavBarWrapper>
-    </Container >
+    </Container>
   );
 };
 
@@ -604,14 +624,6 @@ const TypeWrapper = styled.div`
   align-items: center;
   box-sizing: border-box;
   height: 30px;
-`;
-
-const Enrolled = styled.span`
-  font-size: 72px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1;
-  color: ${Color.mainBlue};
 `;
 
 const TodayMainBox = styled.div`

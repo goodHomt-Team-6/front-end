@@ -12,9 +12,12 @@ import BookmarkSolid from '../img/bookmark_solid.svg';
 const BookmarkModal = ({ setShowModal }) => {
   const dispatch = useDispatch();
   const modalRef = useRef();
-
-  const selectedPrevItem = useSelector((store) => store.exercise.selectedPrevItem);
-  const [routineRename, setRoutineRename] = useState(selectedPrevItem.routineName);
+  const selectedPrevItem = useSelector(
+    (store) => store.exercise.selectedPrevItem,
+  );
+  const [routineRename, setRoutineRename] = useState(
+    selectedPrevItem.routineName,
+  );
 
   useEffect(() => {
     dispatch(exerciseActions.getSelectedPrevItem);
@@ -30,7 +33,7 @@ const BookmarkModal = ({ setShowModal }) => {
     id: selectedPrevItem.id,
     isBookmarked: true,
     routineName: routineRename,
-    createdAt: selectedPrevItem.createdAt
+    createdAt: selectedPrevItem.createdAt,
   };
 
   return (
@@ -48,9 +51,12 @@ const BookmarkModal = ({ setShowModal }) => {
             <Div />
             <TextWrapper>
               <Text>날짜</Text>
-              {selectedPrevItem &&
-                <TextValue>{selectedPrevItem.createdAt.substring(5, 7)}.{selectedPrevItem.createdAt.substring(8, 10)}</TextValue>
-              }
+              {selectedPrevItem && (
+                <TextValue>
+                  {selectedPrevItem.createdAt.substring(5, 7)}.
+                  {selectedPrevItem.createdAt.substring(8, 10)}
+                </TextValue>
+              )}
             </TextWrapper>
             <Div />
             <TextWrapper>
@@ -61,17 +67,13 @@ const BookmarkModal = ({ setShowModal }) => {
                     {'0' + Math.floor(selectedPrevItem.routineTime / 60)}:
                   </Time>
                 ) : (
-                  <Time>
-                    {Math.floor(selectedPrevItem.routineTime / 60)}:
-                  </Time>)
-                }
-                {(selectedPrevItem.routineTime % 60) < 10 ? (
-                  <Time>
-                    {'0' + selectedPrevItem.routineTime % 60}
-                  </Time>
-                ) : (<Time>
-                  {selectedPrevItem.routineTime % 60}
-                </Time>)}
+                  <Time>{Math.floor(selectedPrevItem.routineTime / 60)}:</Time>
+                )}
+                {selectedPrevItem.routineTime % 60 < 10 ? (
+                  <Time>{'0' + (selectedPrevItem.routineTime % 60)}</Time>
+                ) : (
+                  <Time>{selectedPrevItem.routineTime % 60}</Time>
+                )}
               </TextValue>
             </TextWrapper>
             <WhiteDiv />
@@ -81,22 +83,24 @@ const BookmarkModal = ({ setShowModal }) => {
             value={routineRename}
             _onChange={(e) => {
               setRoutineRename(e.target.value);
-            }} />
+            }}
+          />
           <Text>저장할 루틴의 이름을 입력해주세요.</Text>
 
           {/* 저장버튼 */}
           <SaveButton
             onClick={() => {
-              dispatch(exerciseActions.reArrangeRoutineDetailAPI(reArrangeDetail));
+              dispatch(
+                exerciseActions.reArrangeRoutineDetailAPI(reArrangeDetail),
+              );
               setShowModal(false);
-            }
-            }>
+            }}
+          >
             저장
           </SaveButton>
         </Inner>
       </ModalInner>
     </ModalWrapper>
-
   );
 };
 
@@ -196,11 +200,10 @@ const SaveButton = styled.button`
   width: 100%;
   border-radius: 50px;
   margin-top: 20px;
-  line-height: 1;
+  line-height: 3;
 `;
 
-const Time = styled.span`
-`;
+const Time = styled.span``;
 
 const PurpleAcc = styled.div`
   position: absolute;
@@ -210,4 +213,3 @@ const PurpleAcc = styled.div`
   top: -14px;
   left: calc(50% - 42px);
 `;
-

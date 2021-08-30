@@ -239,7 +239,7 @@ const TodayRoutineDetail = (props) => {
             }}
           >
             <Icon src={routineDelete} width="20px" margin="0px 5px 0px 0px" />
-            <Text margin="0px" type="contents" >
+            <Text margin="0px" type="contents">
               루틴 삭제
             </Text>
           </Selected>
@@ -372,6 +372,6 @@ const Selected = styled.div`
   line-height: 32px;
   border-radius: 16px;
   margin: 20px 16px 0px 0px;
-  width: 80px;
+  width: 85px;
   background-color: #fff;
 `;

@@ -11,6 +11,10 @@ import ratingGood from '../img/rating_good.svg';
 import ratingBad from '../img/rating_bad.svg';
 import ratingSoso from '../img/rating_soso.svg';
 import AddFeedCompleteModal from '../components/AddFeedCompleteModal';
+import logger from '../shared/Logger';
+
+// input, textarea를 클릭했을때 해당 요소를 저장
+var activeElement = document.activeElement;
 
 // 피드 나의 루틴 추가하기 페이지
 const AddMyFeed = (props) => {
@@ -18,9 +22,7 @@ const AddMyFeed = (props) => {
   const selectedPrevItem = useSelector(
     (store) => store.exercise.selectedPrevItem,
   );
-  const routine = useSelector(
-    (store) => store.exercise.routine[0],
-  );
+  const routine = useSelector((store) => store.exercise.routine[0]);
   const user = useSelector((store) => store.user.user);
   const communityNickname = useSelector(
     (store) => store.user.user.communityNickname,
@@ -37,6 +39,7 @@ const AddMyFeed = (props) => {
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showCheckModal, setShowCheckModal] = useState(false);
+  var [innerHeight, setInnerHeight] = useState(window.innerHeight - 267);
 
   useEffect(() => {
     if (savedNickname !== '' || savedRoutineName !== '') {
@@ -45,6 +48,15 @@ const AddMyFeed = (props) => {
       setDescription(savedDescription);
     }
   }, []);
+
+  // 클릭한 input, textarea 요소가 생기거나 변할때마다 resize 이벤트를 감지해서 useState를 이용해 innerHeight 값을 변경시켜줌
+  useEffect(() => {
+    const detctMobileKeyboard = () => {
+      setInnerHeight(window.innerHeight - 267);
+    };
+    window.addEventListener('resize', detctMobileKeyboard);
+    return window.addEventListener('resize', detctMobileKeyboard);
+  }, [activeElement]);
 
   useEffect(() => {
     if (savedNickname !== '' || savedRoutineName !== '') {
@@ -102,30 +114,18 @@ const AddMyFeed = (props) => {
         루틴 제목과 설명을 입력해주세요 :)
       </Text>
 
-
       {/* 나의 오늘 운동 루틴 가져오기 */}
       <CategoryList>
         <TodayExerciseWrapper>
-          {routine &&
-            routine.rating === 'soso' &&
-            (<TimeBox
-              src={ratingSoso}
-            >
-            </TimeBox>)
-          }
-          {routine &&
-            routine.rating === 'bad' &&
-            (<TimeBox
-              src={ratingBad}
-            >
-            </TimeBox>)
-          }
-          {routine &&
-            routine.rating === 'good' && (
-              <TimeBox
-                src={ratingGood}>
-              </TimeBox>
-            )}
+          {routine && routine.rating === 'soso' && (
+            <TimeBox src={ratingSoso}></TimeBox>
+          )}
+          {routine && routine.rating === 'bad' && (
+            <TimeBox src={ratingBad}></TimeBox>
+          )}
+          {routine && routine.rating === 'good' && (
+            <TimeBox src={ratingGood}></TimeBox>
+          )}
 
           <RoutineBox>
             <RoutineName>{routine.routineName}</RoutineName>
@@ -136,21 +136,15 @@ const AddMyFeed = (props) => {
               </WorkoutDate>
               <WorkoutDate>
                 {Math.floor(routine.routineTime / 60) < 10 ? (
-                  <Time>
-                    {'0' + Math.floor(routine.routineTime / 60)}:
-                  </Time>
+                  <Time>{'0' + Math.floor(routine.routineTime / 60)}:</Time>
                 ) : (
-                  <Time>
-                    {Math.floor(routine.routineTime / 60)}:
-                  </Time>)
-                }
-                {(routine.routineTime % 60) < 10 ? (
-                  <Time>
-                    {'0' + routine.routineTime % 60}
-                  </Time>
-                ) : (<Time>
-                  {routine.routineTime % 60}
-                </Time>)}
+                  <Time>{Math.floor(routine.routineTime / 60)}:</Time>
+                )}
+                {routine.routineTime % 60 < 10 ? (
+                  <Time>{'0' + (routine.routineTime % 60)}</Time>
+                ) : (
+                  <Time>{routine.routineTime % 60}</Time>
+                )}
               </WorkoutDate>
             </TextWrapper>
           </RoutineBox>
@@ -166,7 +160,7 @@ const AddMyFeed = (props) => {
       </CategoryList>
 
       {/* 피드 작성하기 */}
-      <Container>
+      <Container innerHeight={innerHeight}>
         {/* 커뮤니티 닉네임 - 토큰에 닉네임 있는지 없는지 확인 */}
         <TextCont>
           {user && user.communityNickname === null ? (
@@ -199,10 +193,7 @@ const AddMyFeed = (props) => {
             />
           ) : null}
 
-          <Text
-            type="contents"
-          >Routine name
-          </Text>
+          <Text type="contents">Routine name</Text>
           <TextInput
             placeholder="루틴 이름을 작성해주세요."
             onChange={onChangeRoutinename}
@@ -244,9 +235,7 @@ const AddMyFeed = (props) => {
             업로드 하기
           </FooterButton>
         ) : (
-          <FooterButton disabled>
-            업로드하기
-          </FooterButton>
+          <FooterButton disabled>업로드하기</FooterButton>
         )}
       </FooterButtonWrapper>
     </>
@@ -255,11 +244,9 @@ const AddMyFeed = (props) => {
 
 export default AddMyFeed;
 
-const innerHeight = window.innerHeight - 240;
-
 const Container = styled.div`
   padding: 0px 1.5rem;
-  height: ${innerHeight}px;
+  height: ${(props) => props.innerHeight}px;
   overflow-y: scroll;
   background-color: #f7f7fa;
 `;
