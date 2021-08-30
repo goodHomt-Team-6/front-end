@@ -99,6 +99,13 @@ const MyPastRoutines = (props) => {
                 value={routine.id}
               >
                 <TodayExerciseWrapper>
+                  {routine.isCompleted === false && (
+                    <TimeBox>
+                      <Text lineHeight="1" fontSize="0.9em" type="contents">
+                        운동 전
+                      </Text>
+                    </TimeBox>
+                  )}
                   {routine.isCompleted === true &&
                     routine.rating === 'soso' && (
                       <TimeBox

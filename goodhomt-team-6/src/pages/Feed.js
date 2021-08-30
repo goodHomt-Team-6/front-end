@@ -4,7 +4,6 @@ import Color from '../shared/Color';
 import logger from '../shared/Logger';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
-
 import { Image, Text, Icon } from '../shared/Styles';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +15,6 @@ import Delete from '../img/more_button_delete.svg';
 import CloseButton from '../img/close-button.svg';
 import nullUserImg from '../img/no_profile-image.jpg';
 import './Feed.css';
-
 import NavBar from '../components/NavBar';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
@@ -99,17 +97,20 @@ const Feed = () => {
     }
   };
 
-  // 키워리 검색 처리
+  const regexForKorean = /[a-z0-9]|[ [\]{}()<>?|`~!@#$%^&*-_+=,.;:"'\\]/g;
+
+  // 운동 종목 키워드 검색 처리
   const debounce = _.debounce(() => {
     dispatch(feedActions.addKeyword(searchInput));
-    if (searchInput !== '' && /^[ㄱ-ㅎ|가-힣]+$/) {
-      dispatch(feedActions.getKeywordSearchAPI(searchInput, userId));
-    }
+
     if (searchInput === '') {
       dispatch(feedActions.initializeKeyword());
       dispatch(feedActions.initializeKeywordInput());
     }
-  }, 400);
+    if (searchInput !== '' && !regexForKorean.test(searchInput)) {
+      dispatch(feedActions.getKeywordSearchAPI(searchInput, userId));
+    }
+  }, 500);
   const debounceOnchange = useCallback(debounce, [searchInput]);
 
   return (
@@ -171,8 +172,10 @@ const Feed = () => {
               if (visible) {
                 isClickSearch(false);
                 setVisible(false);
-                dispatch(feedActions.getFeedSearchAPI(searchInput, userId));
                 setSearchKeyword(searchInput);
+                if (searchInput !== '') {
+                  dispatch(feedActions.getFeedSearchAPI(searchInput, userId));
+                }
               } else {
                 if (searchKeyword === '') {
                   setVisible(true);
