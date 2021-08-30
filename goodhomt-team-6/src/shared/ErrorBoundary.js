@@ -12,19 +12,19 @@ class ErrorBoundary extends Component {
     error: false,
   };
 
-  // componentDidCatch(error, info) {
-  //   logger('에러가 발생했습니다.');
-  //   logger({
-  //     error,
-  //     info,
-  //   });
-  //   this.setState({
-  //     error: true,
-  //   });
-  //   if (process.env.NODE_ENV === 'production') {
-  //     Sentry.captureException(error, { extra: info });
-  //   }
-  // }
+  componentDidCatch(error, info) {
+    logger('에러가 발생했습니다.');
+    logger({
+      error,
+      info,
+    });
+    this.setState({
+      error: true,
+    });
+    if (process.env.NODE_ENV === 'production') {
+      Sentry.captureException(error, { extra: info });
+    }
+  }
 
   render() {
     if (this.state.error) {

@@ -8,15 +8,15 @@ import store from './redux/configureStore';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 
-// Sentry.init({
-//   dsn: 'https://d0b1b68449034d6aaadc9f6951afcb14@o969955.ingest.sentry.io/5921092',
-//   integrations: [new Integrations.BrowserTracing()],
+Sentry.init({
+  dsn: 'https://d0b1b68449034d6aaadc9f6951afcb14@o969955.ingest.sentry.io/5921092',
+  integrations: [new Integrations.BrowserTracing()],
 
-//   // Set tracesSampleRate to 1.0 to capture 100%
-//   // of transactions for performance monitoring.
-//   // We recommend adjusting this value in production
-//   tracesSampleRate: 1.0,
-// });
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 ReactDOM.render(
   <Provider store={store}>

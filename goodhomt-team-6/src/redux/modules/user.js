@@ -82,9 +82,13 @@ const kakaoLoginAPI = (code) => {
               if (sessionStorage.getItem('redirect_url') === '/exercise') {
                 dispatch(exerciseActions.initializeRoutine());
               }
-              // 이전 페이지로 push 해줘야함
-              history.push(sessionStorage.getItem('redirect_url'));
-              sessionStorage.removeItem('redirect_url');
+
+              if (sessionStorage.getItem('redirect_url')) {
+                history.replace(sessionStorage.getItem('redirect_url'));
+                sessionStorage.removeItem('redirect_url');
+              } else {
+                history.replace('/');
+              }
               dispatch(isLoaded(false));
             }
           })

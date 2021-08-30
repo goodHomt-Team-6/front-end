@@ -20,6 +20,7 @@ import './Feed.css';
 import NavBar from '../components/NavBar';
 import PurePlusButtonBlack from '../img/pure-plus-button-black.svg';
 import { actionCreators as feedActions } from '../redux/modules/feed';
+import { actionCreators as userActions } from '../redux/modules/user';
 import AddAndDeleteModal from '../components/AddAndDeleteModal';
 import ErrorModal from '../components/ErrorModal';
 import _ from 'lodash';
@@ -49,6 +50,7 @@ const Feed = () => {
       dispatch(feedActions.getFeedAllAPI(userId));
     }
   }, []);
+
   useEffect(() => {
     if (is_login) {
       dispatch(feedActions.getFeedAllAPI(userId));

@@ -323,9 +323,8 @@ const Main = (props) => {
                       message="오늘의 루틴을 완료했습니다!"
                       exerciseType={
                         myTodayRoutine[0].myExercise.length > 1
-                          ? `${
-                              myTodayRoutine[0].myExercise[0].exerciseName
-                            } 외 ${myTodayRoutine[0].myExercise.length - 1} 개`
+                          ? `${myTodayRoutine[0].myExercise[0].exerciseName
+                          } 외 ${myTodayRoutine[0].myExercise.length - 1} 개`
                           : `${myTodayRoutine[0].myExercise[0].exerciseName}`
                       }
                     />
@@ -334,9 +333,8 @@ const Main = (props) => {
                       message="오늘의 루틴을 시작해보세요!"
                       exerciseType={
                         myTodayRoutine[0].myExercise.length > 1
-                          ? `${
-                              myTodayRoutine[0].myExercise[0].exerciseName
-                            } 외 ${myTodayRoutine[0].myExercise.length - 1}개`
+                          ? `${myTodayRoutine[0].myExercise[0].exerciseName
+                          } 외 ${myTodayRoutine[0].myExercise.length - 1}개`
                           : `${myTodayRoutine[0].myExercise[0].exerciseName}`
                       }
                     />
