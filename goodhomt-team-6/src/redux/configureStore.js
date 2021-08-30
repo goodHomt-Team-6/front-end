@@ -2,6 +2,9 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 import { connectRouter } from 'connected-react-router';
+import { persistStore } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import Exercise from './modules/exercise';
 import User from './modules/user';
@@ -11,6 +14,12 @@ import Calendar from './modules/calendar';
 
 export const history = createBrowserHistory();
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: [Calendar],
+};
+
 const rootReducer = combineReducers({
   exercise: Exercise,
   user: User,
@@ -19,6 +28,8 @@ const rootReducer = combineReducers({
   calendar: Calendar,
   router: connectRouter(history),
 });
+
+const enhancedReducer = persistReducer(persistConfig, rootReducer);
 
 const middlewares = [thunk.withExtraArgument({ history: history })];
 
@@ -40,6 +51,6 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-let store = (initialStore) => createStore(rootReducer, enhancer);
+let store = (initialStore) => createStore(enhancedReducer, enhancer);
 
 export default store();
