@@ -211,7 +211,7 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60px;
+  width: 65px;
 `;
 
 const Div = styled.div`
