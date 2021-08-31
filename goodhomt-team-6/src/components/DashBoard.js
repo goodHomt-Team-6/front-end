@@ -42,11 +42,10 @@ const DashBoard = ({ props }) => {
             </Text>
             <TextItem>
               {selectedPrevItem.myExercise !== [] &&
-              selectedPrevItem.myExercise.length < 2
+                selectedPrevItem.myExercise.length < 2
                 ? selectedPrevItem.myExercise[0].exerciseName
-                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${
-                    selectedPrevItem.myExercise.length - 1
-                  }개`}
+                : `${selectedPrevItem.myExercise[0].exerciseName} 외 ${selectedPrevItem.myExercise.length - 1
+                }개`}
             </TextItem>
           </TypeWrapper>
           <Div />
@@ -115,7 +114,7 @@ const Enrolled = styled.span`
 const TextItem = styled.span`
   color: black;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const Div = styled.div`

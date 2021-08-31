@@ -127,23 +127,20 @@ const ChallengeDetail = (props) => {
                   >
                     {challenge.challengeDateTime.slice(8, 10) < 12
                       ? `오전 ${challenge.challengeDateTime.slice(
-                          8,
-                          10,
-                        )}:${challenge.challengeDateTime.slice(10, 12)}`
-                      : `오후 ${
-                          challenge.challengeDateTime.slice(8, 10) - 12
-                        }:${challenge.challengeDateTime.slice(10, 12)}`}
+                        8,
+                        10,
+                      )}:${challenge.challengeDateTime.slice(10, 12)}`
+                      : `오후 ${challenge.challengeDateTime.slice(8, 10) - 12
+                      }:${challenge.challengeDateTime.slice(10, 12)}`}
                   </Text>
                   <Text type="contents" fontSize="15px" margin="10px 0 0">
-                    {`${
-                      challenge.challengeDateTime.slice(4, 6) < 10
-                        ? challenge.challengeDateTime.slice(5, 6)
-                        : challenge.challengeDateTime.slice(4, 6)
-                    }/${
-                      challenge.challengeDateTime.slice(6, 8) < 10
+                    {`${challenge.challengeDateTime.slice(4, 6) < 10
+                      ? challenge.challengeDateTime.slice(5, 6)
+                      : challenge.challengeDateTime.slice(4, 6)
+                      }/${challenge.challengeDateTime.slice(6, 8) < 10
                         ? challenge.challengeDateTime.slice(7, 8)
                         : challenge.challengeDateTime.slice(6, 8)
-                    }`}
+                      }`}
                     {` ${parseDay(challenge.challengeDateTime.slice(0, 8))}`}
                   </Text>
                 </Info>
@@ -446,7 +443,7 @@ const UserCountCont = styled.div`
   align-items: center;
   color: #fff;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
   padding: 12px 0;
   border-radius: 22px;
 `;
@@ -493,7 +490,7 @@ const TypeWrapper = styled.div`
 const TextItem = styled.span`
   color: black;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const List = styled.div`

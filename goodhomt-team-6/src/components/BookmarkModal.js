@@ -180,7 +180,7 @@ const Text = styled.span`
   color: black;
   opacity: 54%;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 3px;
 `;
 

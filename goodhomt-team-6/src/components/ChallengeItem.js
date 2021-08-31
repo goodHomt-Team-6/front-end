@@ -62,7 +62,7 @@ const ChallengeItem = () => {
                 type="contents"
                 fontSize="13px"
                 margin="3px 0 0 10px"
-                fontWeight="600"
+                fontWeight="500"
               >
                 {challenge.userCount}명 참가 예정
               </Text>
@@ -70,7 +70,7 @@ const ChallengeItem = () => {
             <Text
               type="contents"
               fontSize="20px"
-              fontWeight="600"
+              fontWeight="500"
               margin="0 0 20px"
             >
               {challenge.challengeName}
@@ -98,7 +98,7 @@ const ChallengeItem = () => {
                 height="24px"
                 borderRadius="0"
               ></Image>
-              <Text type="contents" margin="0 0 0 10px" fontWeight="600">
+              <Text type="contents" margin="0 0 0 10px" fontWeight="500">
                 {`${challenge.challengeDateTime.slice(
                   4,
                   6,
@@ -112,17 +112,16 @@ const ChallengeItem = () => {
               <Text
                 type="contents"
                 margin="0 0 0 10px"
-                fontWeight="600"
+                fontWeight="500"
                 margin="0 0 0 4px"
               >
                 {challenge.challengeDateTime.slice(8, 10) < 13
                   ? `${challenge.challengeDateTime.slice(
-                      8,
-                      10,
-                    )}:${challenge.challengeDateTime.slice(10, 12)}`
-                  : `${
-                      challenge.challengeDateTime.slice(8, 10) - 12
-                    }:${challenge.challengeDateTime.slice(10, 12)}`}
+                    8,
+                    10,
+                  )}:${challenge.challengeDateTime.slice(10, 12)}`
+                  : `${challenge.challengeDateTime.slice(8, 10) - 12
+                  }:${challenge.challengeDateTime.slice(10, 12)}`}
               </Text>
               <Image
                 src={Dumbbell}

@@ -148,5 +148,5 @@ const Title = styled.span`
   font-size: 9px;
   padding-top: 8px;
   opacity: ${(props) => (props.opacity ? props.opacity : '60%')};
-  font-weight: 600;
+  font-weight: 500;
 `;

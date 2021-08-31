@@ -390,7 +390,7 @@ const RoutineBox = styled.div`
 const RoutineName = styled.span`
   font-size: 16px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const WorkoutDate = styled.span`

@@ -121,7 +121,7 @@ const WorkOut = (props) => {
                 </Text>
               )
             ) : routine.myExercise[currentExerciseIdx].set[currentSetIdx]
-                .setCount ? (
+              .setCount ? (
               <Text
                 type="contents"
                 color="#fff"
@@ -529,7 +529,7 @@ const List = styled.div`
 
 const ListHead = styled.div`
   padding: 0 20px;
-  font-weight: 600;
+  font-weight: 500;
   width: 54px;
 `;
 
@@ -602,7 +602,7 @@ const ExerciseTogetherCont = styled.div`
   display: flex;
   justify-content: center;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   border-bottom: 1px solid #9e9ea0;
   padding: 10px 0;
   align-items: flex-end;

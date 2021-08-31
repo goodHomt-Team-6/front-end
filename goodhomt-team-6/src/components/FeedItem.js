@@ -36,7 +36,7 @@ const FeedItem = (props) => {
                     height="34px"
                     margin="0px 15px 0px 0px"
                     src={userImg}
-                    // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
+                  // src={item.userImg} 사용자 이미지 받아오는 거로 변경하기
                   />
                   <InfoBox>
                     {userName && (
@@ -44,7 +44,7 @@ const FeedItem = (props) => {
                         type="label"
                         fontSize="14px"
                         color="black"
-                        fontWeight="600"
+                        fontWeight="500"
                       >
                         {item.communityNickname}
                       </Text>
@@ -101,7 +101,7 @@ const FeedItem = (props) => {
                     <Text
                       type="label"
                       fontSize="14px"
-                      fontWeight="600"
+                      fontWeight="500"
                       color="black"
                       opacity="54%"
                     >
@@ -117,7 +117,7 @@ const FeedItem = (props) => {
                     <Text
                       type="label"
                       fontSize="14px"
-                      fontWeight="600"
+                      fontWeight="500"
                       color="black"
                       opacity="54%"
                     >
@@ -147,7 +147,7 @@ const FeedItem = (props) => {
                       type="contents"
                       margin="0px 8px 0px 0px"
                       fontSize="14px"
-                      fontWeight="600"
+                      fontWeight="500"
                     >
                       {item.routineName}
                     </Text>
@@ -160,7 +160,7 @@ const FeedItem = (props) => {
                         margin="0px 6px 0px 0px"
                         color="#4A40FF"
                         fontSize="14px"
-                        fontWeight="600"
+                        fontWeight="400"
                       >
                         #{i.exerciseName}
                       </Text>
@@ -263,7 +263,7 @@ const TypeWrapper = styled.div`
 
 const Enrolled = styled.span`
   font-size: 72px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 10px;
   line-height: 1;
   color: ${Color.mainBlue};
@@ -285,14 +285,14 @@ const TodayMainBox = styled.div`
 const TextItem = styled.span`
   color: black;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const Span = styled.span`
   color: black;
   opacity: 54%;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const IconBtn = styled.img`

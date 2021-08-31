@@ -615,6 +615,8 @@ const GetFormerRoutine = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50px;
+    font-size: 15px;
+  font-weight: 500;
   padding: 30px 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
     inset 0px 1px 0px rgba(255, 255, 255, 0.1);
@@ -687,7 +689,7 @@ const RoutineBoxDiv = styled.div`
 const TextUserDeco = styled.span`
   background-color: rgba(74, 64, 255, 0.3);
   padding-right: 10px;
-  font-weight: 600;
+  font-weight: 400;
 `;
 
 const LoginCont = styled.div`

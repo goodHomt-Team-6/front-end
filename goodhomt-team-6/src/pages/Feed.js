@@ -665,14 +665,14 @@ const TodayMainBox = styled.div`
 const TextItem = styled.span`
   color: black;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const Span = styled.span`
   color: black;
   opacity: 54%;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const IconBtn = styled.img`

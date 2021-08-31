@@ -199,8 +199,8 @@ const Enrolled = styled.img`
 
 const TextItem = styled.span`
   color: black;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   word-break: keep-all;
 `;
 
@@ -208,7 +208,7 @@ const Span = styled.span`
   color: black;
   opacity: 54%;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const DashBoardDiv = styled.div`

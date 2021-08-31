@@ -72,7 +72,7 @@ const Button = styled.div`
   line-height: 28px;
   text-align: center;
   border-radius: 14px;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12px;
   ${(props) => props.status === 'end' && 'background-color: #000;'}
   ${(props) =>
