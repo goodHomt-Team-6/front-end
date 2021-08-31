@@ -227,7 +227,7 @@ const ConfirmButton = styled.button`
   background-color: #4a40ff;
   color: white;
   text-align: center;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
   border: none;
   height: 40px;

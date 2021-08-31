@@ -276,7 +276,7 @@ const FooterButton = styled.div`
   color: #fff;
   text-align: center;
   line-height: 60px;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
   position: fixed;
   bottom: 0px;

@@ -121,7 +121,7 @@ const RoutineDetail = (props) => {
                     type="contents"
                     minWidth="80px"
                     padding="0 0 0 20px"
-                    fontWeight="600"
+                    fontWeight="500"
                     fontSize="1.1em"
                     onClick={() => {
                       closeRow();
@@ -186,7 +186,7 @@ const RoutineDetail = (props) => {
                           type="contents"
                           margin="1em 10px 1em 20px"
                           padding="0 10px 0 0"
-                          fontWeight="600"
+                          fontWeight="500"
                           fontSize="1.1em"
                           bgColor="rgba(74, 64, 255, 0.2)"
                           lineHeight="1.2em"
@@ -222,7 +222,7 @@ const RoutineDetail = (props) => {
                           type="contents"
                           margin="1em 10px 1em 20px"
                           padding="0 10px 0 0"
-                          fontWeight="600"
+                          fontWeight="500"
                           fontSize="1.1em"
                           color="#848484"
                           style={{

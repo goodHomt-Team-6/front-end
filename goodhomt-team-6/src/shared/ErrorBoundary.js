@@ -35,7 +35,7 @@ class ErrorBoundary extends Component {
             type="contents"
             textAlign="center"
             fontSize="18px"
-            fontWeight="600"
+            fontWeight="500"
           >
             찾으시는 데이터가 없습니다.
           </Text>
@@ -43,7 +43,7 @@ class ErrorBoundary extends Component {
             type="contents"
             textAlign="center"
             fontSize="15px"
-            fontWeight="600"
+            fontWeight="500"
           >
             메인으로 돌아가기
           </Text>

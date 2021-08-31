@@ -252,7 +252,7 @@ const CategoryItem = styled.li`
     color: ${Color.navy};
   }
   border-bottom: ${(props) => (props.handle ? '1px solid black' : 'none')};
-  font-weight: ${(props) => (props.handle ? '600' : '400')};
+  font-weight: ${(props) => (props.handle ? '500' : '400')};
 `;
 
 const ExerciseItem = styled.li`

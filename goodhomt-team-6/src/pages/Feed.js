@@ -287,7 +287,7 @@ const Feed = () => {
                               type="label"
                               fontSize="14px"
                               color="black"
-                              fontWeight="600"
+                              fontWeight="500"
                             >
                               {item.communityNickname}
                             </Text>
@@ -362,7 +362,7 @@ const Feed = () => {
                             color: 'black',
                             fontFamily: 'PoppinsR',
                             opacity: '54%',
-                            fontWeight: '600',
+                            fontWeight: '500',
                           }}
                         >
                           루틴 이름
@@ -386,7 +386,7 @@ const Feed = () => {
                           <Text
                             type="label"
                             fontSize="14px"
-                            fontWeight="600"
+                            fontWeight="500"
                             color="black"
                             opacity="54%"
                             style={{
@@ -413,7 +413,7 @@ const Feed = () => {
                           <Text
                             type="label"
                             fontSize="14px"
-                            fontWeight="600"
+                            fontWeight="500"
                             color="black"
                             opacity="54%"
                           >
@@ -450,7 +450,7 @@ const Feed = () => {
                                 margin="0px 6px 0px 0px"
                                 color="#4A40FF"
                                 fontSize="14px"
-                                fontWeight="600"
+                                fontWeight="500"
                                 onClick={() => {
                                   if (visible) {
                                     setVisible(false);

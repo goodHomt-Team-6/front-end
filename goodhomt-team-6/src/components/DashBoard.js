@@ -31,7 +31,7 @@ const DashBoard = ({ props }) => {
             <Text
               type="label"
               fontSize="14px"
-              fontWeight="600"
+              fontWeight="500"
               color="black"
               opacity="54%"
               style={{
@@ -53,7 +53,7 @@ const DashBoard = ({ props }) => {
             <Text
               type="label"
               fontSize="14px"
-              fontWeight="600"
+              fontWeight="500"
               color="black"
               opacity="54%"
             >

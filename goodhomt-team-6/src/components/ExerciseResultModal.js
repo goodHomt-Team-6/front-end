@@ -291,7 +291,7 @@ const SaveButton = styled.button`
   color: white;
   text-align: center;
   line-height: 60px;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
   border: none;
   height: 40px;

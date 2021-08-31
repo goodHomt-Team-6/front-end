@@ -182,7 +182,7 @@ const FormExercise = (props) => {
                   width="100%"
                   padding="20px 0 0 20px"
                   margin="0"
-                  fontWeight="600"
+                  fontWeight="500"
                   fontSize="1.1em"
                   onClick={() => {
                     closeRow();
@@ -285,7 +285,7 @@ const FormExercise = (props) => {
                       type="contents"
                       minWidth="80px"
                       padding="0 0 0 10px"
-                      fontWeight="600"
+                      fontWeight="500"
                       fontSize="1.1em"
                       color="#000"
                     >
@@ -308,7 +308,7 @@ const FormExercise = (props) => {
                       type="contents"
                       minWidth="80px"
                       padding="0 0 0 20px"
-                      fontWeight="600"
+                      fontWeight="500"
                       fontSize="1.1em"
                       color="#848484"
                     >

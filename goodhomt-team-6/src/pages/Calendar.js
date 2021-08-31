@@ -231,7 +231,7 @@ const Calendar = (props) => {
             type="contents"
             margin="0 0 0 5px"
             fontSize="14px"
-            fontWeight="600"
+            fontWeight="500"
           >
             {moment(today).format('YYYY')}
           </Text>
@@ -406,7 +406,7 @@ const RunningTime = styled.div`
   background-color: #000;
   color: #fff;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
