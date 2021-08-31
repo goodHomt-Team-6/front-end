@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['Exercise', 'Challenge', 'Feed'],
+  whitelist: ['exercise', 'challenge', 'feed'],
 };
 
 const enhancedReducer = persistReducer(persistConfig, rootReducer);
