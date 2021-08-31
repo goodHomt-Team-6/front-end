@@ -130,7 +130,7 @@ const ChallengeItem = () => {
                 margin="0 0 0 20px"
                 borderRadius="0"
               ></Image>
-              <Text type="contents" margin="0 0 0 10px" fontWeight="600">
+              <Text type="contents" margin="0 0 0 10px" fontWeight="500">
                 {challenge.Challenge_Exercises[0].exerciseName}
               </Text>
               <Text

@@ -80,7 +80,7 @@ export default function FormExerciseDnd() {
                             type="contents"
                             minWidth="80px"
                             padding="0 0 0 30px"
-                            fontWeight="600"
+                            fontWeight="500"
                             fontSize="1.1em"
                           >
                             {list.exerciseName}
@@ -113,7 +113,7 @@ export default function FormExerciseDnd() {
                             type="contents"
                             minWidth="80px"
                             padding="0 0 0 30px"
-                            fontWeight="600"
+                            fontWeight="500"
                             fontSize="1.1em"
                           >
                             {list.exerciseName}
