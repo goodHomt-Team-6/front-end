@@ -5,8 +5,13 @@ import App from './shared/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './redux/configureStore';
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+
+const persistor = persistStore(store);
+
+// import * as Sentry from '@sentry/react';
+// import { Integrations } from '@sentry/tracing';
 
 // Sentry.init({
 //   dsn: 'https://d0b1b68449034d6aaadc9f6951afcb14@o969955.ingest.sentry.io/5921092',
@@ -20,7 +25,9 @@ import { Integrations } from '@sentry/tracing';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root'),
 );
