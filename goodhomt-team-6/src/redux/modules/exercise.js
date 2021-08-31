@@ -79,7 +79,8 @@ const COUNT_CURRENT_EXERCISE_IDX = 'exercise/COUNT_CURRENT_EXERCISE_IDX';
 const SET_IS_FROM_EDIT_ROUTINE = 'exercise/SET_IS_FROM_EDIT_ROUTINE';
 const SET_IS_FROM_TODAY_ROUTINE_DETAIL =
   'exercise/SET_IS_FROM_TODAY_ROUTINE_DETAIL';
-const SET_IS_EDIT_TODAY_ROUTINE_DETAIL = 'exercise/SET_IS_EDIT_TODAY_ROUTINE_DETAIL';
+const SET_IS_EDIT_TODAY_ROUTINE_DETAIL =
+  'exercise/SET_IS_EDIT_TODAY_ROUTINE_DETAIL';
 
 // action creators
 const setIsFromEditRoutine = createAction(
@@ -266,6 +267,7 @@ const getMyTodayRoutineAPI = (todayDate) => {
           cookies.remove('homt6_access_token');
           cookies.remove('homt6_refresh_token');
           cookies.remove('homt6_is_login');
+          localStorage.clear();
           location.reload();
         }
       });
