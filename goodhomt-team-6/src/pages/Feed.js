@@ -67,8 +67,8 @@ const Feed = () => {
 
   useEffect(() => {
     if (searchInput === '') {
-      dispatch(feedActions.initializeKeyword());
       dispatch(feedActions.initializeKeywordInput());
+      dispatch(feedActions.initializeKeyword());
     }
   }, [searchInput]);
 
@@ -87,13 +87,16 @@ const Feed = () => {
     let startTime = new Date(createdAt);
     let nowTime = Date.now();
     if (parseInt(startTime - nowTime) > -60000) {
-      return <Moment format="방금 전">{startTime}</Moment>;
+      return <Moment style={{ fontFamily: 'Noto Sans KR' }}
+        format="방금 전">{startTime}</Moment>;
     }
     if (parseInt(startTime - nowTime) < -86400000) {
-      return <Moment format="MMM D일">{startTime}</Moment>;
+      return <Moment style={{ fontFamily: 'Noto Sans KR' }}
+        format="MMM D일">{startTime}</Moment>;
     }
     if (parseInt(startTime - nowTime) > -86400000) {
-      return <Moment fromNow>{startTime}</Moment>;
+      return <Moment style={{ fontFamily: 'Noto Sans KR' }}
+        fromNow>{startTime}</Moment>;
     }
   };
 
@@ -180,6 +183,7 @@ const Feed = () => {
                 if (searchKeyword === '') {
                   setVisible(true);
                   isClickSearch(true);
+                  dispatch(feedActions.initializeKeyword());
                 } else {
                   setVisible(true);
                   isClickSearch(true);
