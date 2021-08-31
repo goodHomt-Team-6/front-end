@@ -14,12 +14,6 @@ import Calendar from './modules/calendar';
 
 export const history = createBrowserHistory();
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: [Calendar],
-};
-
 const rootReducer = combineReducers({
   exercise: Exercise,
   user: User,
@@ -28,6 +22,12 @@ const rootReducer = combineReducers({
   calendar: Calendar,
   router: connectRouter(history),
 });
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['exercise', 'challenge', 'feed'],
+};
 
 const enhancedReducer = persistReducer(persistConfig, rootReducer);
 

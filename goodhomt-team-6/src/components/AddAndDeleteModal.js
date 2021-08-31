@@ -91,6 +91,7 @@ const AddAndDeleteModal = ({
                     cookies.remove('homt6_access_token', { path: '/' });
                     cookies.remove('homt6_refresh_token', { path: '/' });
                     cookies.remove('homt6_is_login', { path: '/' });
+                    localStorage.clear();
                     if (!cookies.get('homt6_access_token')) {
                       location.reload();
                     }
