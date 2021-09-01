@@ -52,12 +52,12 @@ const Main = (props) => {
   const is_login = useSelector((store) => store.user?.is_login);
   const loginModal = useSelector((store) => store.user.loginModal);
   const myFirstChallengeExercises = useSelector(
-    (store) => store.challenge.challengeDetail.challenge?.Challenge_Exercises,
+    (store) => store.challenge.challengeDetail?.challenge?.Challenge_Exercises,
   );
   const [isNotiCont, showNotiCont] = useState(false);
 
   const myFirstChallengeUserCount = useSelector(
-    (store) => store.challenge.challengeDetail.challenge?.userCount,
+    (store) => store.challenge.challengeDetail?.challenge?.userCount,
   );
   const notiCont = useRef(null);
 
@@ -242,7 +242,7 @@ const Main = (props) => {
                     tasks={tasks}
                     timeZone="Asia/Seoul"
                     dashboard={{ hidden: true }}
-                  // if true, dashboard is hidden
+                    // if true, dashboard is hidden
                   />
                   <ChallengeBox
                     status={myFirstChallenge.Challenge.progressStatus}
@@ -328,8 +328,9 @@ const Main = (props) => {
                       message="오늘의 루틴을 완료했습니다!"
                       exerciseType={
                         myTodayRoutine[0].myExercise.length > 1
-                          ? `${myTodayRoutine[0].myExercise[0].exerciseName
-                          } 외 ${myTodayRoutine[0].myExercise.length - 1} 개`
+                          ? `${
+                              myTodayRoutine[0].myExercise[0].exerciseName
+                            } 외 ${myTodayRoutine[0].myExercise.length - 1} 개`
                           : `${myTodayRoutine[0].myExercise[0].exerciseName}`
                       }
                     />
@@ -338,8 +339,9 @@ const Main = (props) => {
                       message="오늘의 루틴을 시작해보세요!"
                       exerciseType={
                         myTodayRoutine[0].myExercise.length > 1
-                          ? `${myTodayRoutine[0].myExercise[0].exerciseName
-                          } 외 ${myTodayRoutine[0].myExercise.length - 1}개`
+                          ? `${
+                              myTodayRoutine[0].myExercise[0].exerciseName
+                            } 외 ${myTodayRoutine[0].myExercise.length - 1}개`
                           : `${myTodayRoutine[0].myExercise[0].exerciseName}`
                       }
                     />
@@ -615,7 +617,7 @@ const GetFormerRoutine = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50px;
-    font-size: 15px;
+  font-size: 15px;
   font-weight: 500;
   padding: 30px 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.1),
