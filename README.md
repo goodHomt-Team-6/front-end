@@ -21,9 +21,9 @@
 
 - PainPoint : 사용자 10명의 해비유저를 심층적으로 인터뷰하였고 앱을 이용하는 사람은 4명이었고, 운동일기 앱을 사용할 때 가장 중요한 점으로 간결한 UI와 편리성을 꼽았고 나머지 6명은 수기로 쓰는 것이 앱으로 사용하는 것보다 편하다고 대답했습니다. 또한 어플기록에서 중요한 점은 기록을 쉽게보고 비교할 수 있는 캘린더, 목표설정에 용이한 기록 데이터 비교, 운동하기 전에 타이머를 통해 휴식 시간 알림과 총 운동시간을 자동 기록할 수 있는 기능을 요청했습니. 이러한 시장의 니즈를 파악하고 이를 충족시킬 웹 페이지 및 앱을 만들어보았습니다.
 
-<img width="850" alt="스크린샷 2021-09-02 오후 10 36 24" src="https://user-images.githubusercontent.com/77391482/131853349-b1cc1105-b19f-401b-ba50-a3c4d32a1c9c.png">
+<img width="650" alt="스크린샷 2021-09-02 오후 10 36 24" src="https://user-images.githubusercontent.com/77391482/131853349-b1cc1105-b19f-401b-ba50-a3c4d32a1c9c.png">
 
-<img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/29696692/131835452-043776ce-36a6-4781-ac08-87a46d122a25.png">
+<img width="650" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/29696692/131835452-043776ce-36a6-4781-ac08-87a46d122a25.png">
 <br>
 
 ## ☝🏻 3. 프로젝트 특징
@@ -63,27 +63,27 @@
 - 운동 종목 선택
 - 세트 설정, 휴식 추가 기능
 - 운동 순서 변경, 운동 추가 기능
-<img src="https://user-images.githubusercontent.com/77391482/131851049-45eed235-218d-43ef-a347-6190de88fe6b.gif">
+<img width="650" src="https://user-images.githubusercontent.com/77391482/131851049-45eed235-218d-43ef-a347-6190de88fe6b.gif">
 
 ### 2️⃣ 운동하기
 - 스탑워치 기능으로 운동 시간 카운팅
 - 휴식은 자동으로 흘러가는 UI 구성
 - 루틴의 모든 세트와 휴식이 끝나면 운동의 만족도 기록
-<img src="https://user-images.githubusercontent.com/77391482/131851302-3064a41f-3bf0-4aaa-9a19-d00f3aa54cf7.gif">
+<img width="650" src="https://user-images.githubusercontent.com/77391482/131851302-3064a41f-3bf0-4aaa-9a19-d00f3aa54cf7.gif">
 
 ### 3️⃣ 피드에 공유하기
 - 나의 운동 기록을 피드에 공유
 - 다른 사람이 공유한 피드를 나의 루틴으로 가져와서 운동하기
-<img src="https://user-images.githubusercontent.com/77391482/131851524-826af4ce-3b01-427f-bbb8-06e2653e2fa4.gif">
+<img width="650" src="https://user-images.githubusercontent.com/77391482/131851524-826af4ce-3b01-427f-bbb8-06e2653e2fa4.gif">
 
 ### 4️⃣ 챌린지로 여러명이서 운동하기
 - 챌린지를 통해 다른 사람들과 같은 시간에 함께 운동하는 기능
-<img src="https://user-images.githubusercontent.com/77391482/131851664-46cbf5c3-38c1-410a-a6eb-d4337e2d1f1a.gif">
+<img width="650" src="https://user-images.githubusercontent.com/77391482/131851664-46cbf5c3-38c1-410a-a6eb-d4337e2d1f1a.gif">
 
 ### 5️⃣ 나의 운동기록 달력에 기록하기
 - 달력을 통해 일일 나의 운동기록과 챌린지 기록 확인
 - 만족스러웠던 루틴을 다시 가져와서 운동 루틴으로 생성해서 운동하기
-<img src="https://user-images.githubusercontent.com/77391482/131851850-8065eb5a-0327-400e-812a-8bd4e930b37d.gif">
+<img width="650" src="https://user-images.githubusercontent.com/77391482/131851850-8065eb5a-0327-400e-812a-8bd4e930b37d.gif">
 <br>
 
 
