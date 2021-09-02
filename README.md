@@ -48,6 +48,16 @@
 <img src="https://images.velog.io/images/uvula6921/post/a97ebc6d-366a-4042-b1ee-f3b706cb5e59/%EC%98%AC%EB%A6%B0%20%EB%B0%A9%20GIF.gif">
 <img src="https://images.velog.io/images/uvula6921/post/8cee216c-efe8-4318-bcef-d4bb36af9d7e/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-07-23%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%209.01.24.png">
 
+
+<img src="https://user-images.githubusercontent.com/77391482/131851049-45eed235-218d-43ef-a347-6190de88fe6b.gif">
+
+
+
+
+
+
+
+
 ## 🚀 핵심 트러블 슈팅
 
 ### 월세 전세 row 삭제하는 X 버튼 클릭 시 2회 발생하는 문제.
