@@ -1,7 +1,7 @@
 # goodHomt
-<img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/77391482/131877409-ece97f39-e3d0-4957-8161-f677f97e9411.png">
-
-## 🏋🏻‍♀️ 개요
+<img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/77391482/131880887-dc0c8bde-d05a-4ea2-8f08-2887387a7167.png">
+<br>
+## 🏋🏻‍♀️ 1. 개요
 
 - 명칭 : goodHomt 굿홈트
 - 개발 인원 : 4명
@@ -18,7 +18,7 @@
 - 협업 툴 : [notion](https://www.notion.so/_6-_goodHomt-24a47662c9b9452882255d64e16d282a)
 <br>
 
-## 👉 프로젝트 배경 및 진행방향
+## 👉 2. 프로젝트 배경 및 진행방향
 
 - PainPoint : 사용자 10명의 해비유저를 심층적으로 인터뷰하였고 앱을 이용하는 사람은 4명이었고, 운동일기 앱을 사용할 때 가장 중요한 점으로 간결한 UI와 편리성을 꼽았고 나머지 6명은 수기로 쓰는 것이 앱으로 사용하는 것보다 편하다고 대답했습니다. 또한 어플기록에서 중요한 점은 기록을 쉽게보고 비교할 수 있는 캘린더, 목표설정에 용이한 기록 데이터 비교, 운동하기 전에 타이머를 통해 휴식 시간 알림과 총 운동시간을 자동 기록할 수 있는 기능을 요청했습니. 이러한 시장의 니즈를 파악하고 이를 충족시킬 웹 페이지 및 앱을 만들어보았습니다.
 
@@ -27,13 +27,13 @@
 <img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/29696692/131835452-043776ce-36a6-4781-ac08-87a46d122a25.png">
 <br>
 
-## ☝🏻 프로젝트 특징
+## ☝🏻 3. 프로젝트 특징
 
 - 배포 : AWS S3, Route 53, CloudFront
 - PWA 기반의 앱을 구글 플레이 스토어에 등록
 <br>
 
-## 💻 사용 패키지
+## 💻 4. 사용 패키지
 
 * **react-redux**
   - 데이터 전역 관리를 위한 리덕스 관리 패키지
@@ -55,7 +55,7 @@
 <br>
 
 
-## 🚀 주요 기능 소개
+## 🚀 5. 주요 기능 소개
 
 ### 1️⃣ 운동 루틴 생성하기
 - 운동 종목 선택
@@ -85,7 +85,7 @@
 <br>
 
 
-## 🚀 핵심 트러블 슈팅
+## 🚀 6. 트러블 슈팅
 
 ### 효율적인 에러 핸들링
 #### 문제 상황
@@ -170,4 +170,23 @@ let leftOverExerciseItems = _.differenceBy(
   'id',
 );
 draft.exercise = leftOverExerciseItems;
+```
+
+### Login 이후 선택한 페이지로 Redirect 경로 설정
+- 최초 로그인을 하지 않은 사용자의 경우 어떤 페이지를 선택해도 로그인 이후에 다시 그 페이지를 기억해서 로그인 이후에 그 페이지로 갈 수 있어야했다. 어떤 경우에는 제대로 경로를 잘 찾아서 가는데 어떤 경우에는 경로를 잘 찾지 못하는 문제가 있었다. Redirect 되는 경로가 설정되어있었으나 2가지 경우에 밖에 대응하지못해서 에러가 났던 문제가 있었다. 그래서 한번 확실하게 Redirect를 못시키는 경우가 없도록 해야했다. 
+
+```jsx
+// /exercise로 갈때는 initializeRoutine 로직이 들어있어서 첫 로그인 하면서 이동할때도 적용
+if (sessionStorage.getItem('redirect_url') === '/exercise') {
+  dispatch(exerciseActions.initializeRoutine());
+}
+
+if (sessionStorage.getItem('redirect_url')) {
+  history.replace(sessionStorage.getItem('redirect_url'));
+  sessionStorage.removeItem('redirect_url');
+} else {
+  history.replace('/');
+}
+dispatch(isLoaded(false));
+}
 ```
