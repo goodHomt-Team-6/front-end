@@ -27,8 +27,8 @@
 ## ☝🏻 프로젝트 특징
 
 - 배포 : AWS S3, Route 53, CloudFront
-- PWA 기반의 앱을 구글 플레이 스토어에 등록 (goodhomt.twa)
-- 
+- PWA 기반의 앱을 구글 플레이 스토어에 등록
+
 
 ## 💻 사용 패키지
 
@@ -48,73 +48,122 @@
   - 웹 스토리지에 reducer state를 저장
 
 
+
 ## 🚀 주요 기능 소개
 
-### 운동 루틴 추가하기
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
-- - 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
+### 운동 루틴 생성하기
+- 운동 종목 선택
+- 세트 설정, 휴식 추가 기능
+- 운동 순서 변경, 운동 추가 기능
 <img src="https://user-images.githubusercontent.com/77391482/131851049-45eed235-218d-43ef-a347-6190de88fe6b.gif">
+
 ### 운동하기
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
+- 스탑워치 기능으로 운동 시간 카운팅
+- 휴식은 자동으로 흘러가는 UI 구성
+- 루틴의 모든 세트와 휴식이 끝나면 운동의 만족도 기록
 <img src="https://user-images.githubusercontent.com/77391482/131851302-3064a41f-3bf0-4aaa-9a19-d00f3aa54cf7.gif">
+
 ### 피드에 공유하기
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
+- 나의 운동 기록을 피드에 공유
+- 다른 사람이 공유한 피드를 나의 루틴으로 가져와서 운동하기
 <img src="https://user-images.githubusercontent.com/77391482/131851524-826af4ce-3b01-427f-bbb8-06e2653e2fa4.gif">
+
 ### 챌린지로 여러명이서 운동하기
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
+- 챌린지를 통해 다른 사람들과 같은 시간에 함께 운동하는 기능
 <img src="https://user-images.githubusercontent.com/77391482/131851664-46cbf5c3-38c1-410a-a6eb-d4337e2d1f1a.gif">
+
 ### 나의 운동기록 달력에 기록하기
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
+- 달력을 통해 일일 나의 운동기록과 챌린지 기록 확인
+- 만족스러웠던 루틴을 다시 가져와서 운동 루틴으로 생성해서 운동하기
 <img src="https://user-images.githubusercontent.com/77391482/131851850-8065eb5a-0327-400e-812a-8bd4e930b37d.gif">
+
+
 
 ## 🚀 핵심 트러블 슈팅
 
-### 월세 전세 row 삭제하는 X 버튼 클릭 시 2회 발생하는 문제.
-- 월세, 전세 row 생성 후 X 버튼으로 row 하나를 삭제하려고 하면 두개가 삭제되는 문제.
-- 첫번째 X 버튼을 누르면 row가 두개 모두 삭제됨.
-- 클릭한 버튼 자체(if (id === "monthly"))를 이용해 분기하니 해결됨.
+### 효율적인 에러 핸들링
+1. 에러가 날 수 있는 상황
+- 운동 루틴을 만들고 메인화면에서 바로 재생버튼을 클릭해 이동
+- 새로고침을 할 경우 흰 화면이 노출되는 문제
 
-- 버튼 클릭 시 2회 발생하는 문제 코드
+1-1. 해결 1 
+- Error Boundary
+- 유저의 에러 이후 상황을 케어
+- 홈으로 가도록 유도하여 redux state를 재정돈
+<img src="https://user-images.githubusercontent.com/77391482/131863006-0a9b687e-5a7b-420e-b3e5-6821d053e1fb.png">
+
+1-2. 해결 2
+- Sentry
+- 에러 상황 모니터링
+- 예측하기 힘든 여러 에러 케이스들을 수집하고 디버깅에 반영
+<img src="https://user-images.githubusercontent.com/77391482/131863630-f6ae8361-230a-4cac-8aee-29c50c3f185c.png">
+
+1-3. 해결 3
+- Redux-persist
+- 로컬 스토리지에 reducer state 저장해 새로고침해도 같은 state를 유지할 수 있게함
+
+
+### 데이터를 재가공해서 사용해 DB최적화
 ```jsx
-// TradeInfo.js
-if (id === "monthly") {
-  ...
-  const remove_row_btn1 = document.getElementsByClassName("remove_row_btn1")[0];
-
-  remove_row_btn1.addEventListener("click", function (event) {
-    // 대충 event.target 을 삭제하는 코드가 있었음...
-    document.getElementById("monthly").disabled = false;
-  });
-}
-```
-
-- remove_tr 함수를 넣어서, row가 한개인지 두개인지에 따라 어떤 부분을 지울것인지 상세하게 정의해둠.
-
-```jsx
-const remove_tr = (target) => {
-  if (document.getElementsByClassName("iNyxMi").length === 1) {
-    const th = document.getElementsByClassName("iNyxMi")[0].parentNode.parentNode.previousSibling;
-    th.removeAttribute("rowspan");
-    const tr = th.parentNode.nextSibling;
-    tr.insertBefore(th, tr.firstChild);
-    tr.previousSibling.remove();
-  } else {
-    target.disabled = true;
-    target.parentNode.remove();
-  }
+const challenge = response.data.result.challenge;
+const routine = {
+  id: challenge.id,
+  routineName: challenge.challengeName,
+  routineTime: challenge.runningTime,
+  rating: null,
+  isBookmarked: false,
+  isCompleted: false,
+  myExercise: challenge.Challenge_Exercises.map((l, idx) => {
+    return { exerciseName: l.exerciseName, set: l.Challenge_Sets };
+  }),
+  createdAt: challenge.createdAt,
 };
+
+dispatch(exerciseActions.addSelectedPrevItem(routine));
 ```
 
-### 캘린더 라이브러리 활용
-- 캘린더 날짜 클릭 시 모달창 닫히도록 구현.
-- onDateChange 값에 여러개의 props를 넘길 수 없음. 애초에 이 캘린더 라이브러리에서 모달기능을 제공하지 않는게 문제.
+### 렌더링 최소화
+- 스탑워치 : 1초씩 증가할 때마다 페이지 리렌더링
+- 숫자 부분만 자식 컴포넌트로 빼서 해당 컴포넌트만 리렌더링되도록 최적화 
+- 
+<img src="https://user-images.githubusercontent.com/77391482/131873717-7e1c8c4c-000f-450b-9495-b962b4a89cbc.gif">
 
 ```jsx
-<DatePickerCalendar
-  date={date}
-  onDateChange={setDate}
-  locale={enGB}
-  />
+const timeRef = useRef(0);
+  const [time, setTime] = useState(0);
+  const timerId = useRef(null);
+  // 스톱워치
+  useEffect(() => {
+    timerId.current = setInterval(() => {
+      if (!timeStop) {
+        timeRef.current += 1;
+        setTime(timeRef.current);
+      } else {
+        clearInterval(timerId.current);
+        setResultTime(timeRef.current);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timerId.current);
+      setResultTime(timeRef.current);
+    };
+  }, [time.current, timeStop]);
+```
+
+### 운동 종목 선택
+- 운동 종목을 클릭하면 해당 카테고리 목록에서 지워주기
+- 자바스크립트의 배열 메소드를 사용했으나, 코드가 길어지는 문제로 lodash 라이브러리로 코드 리팩토링 진행
+
+```jsx
+// 선택한 항목이 있을 경우 운동 항목 걸러서 가져오기
+let currentExerciseItems = action.payload.exercise;
+let currentSelectedItems = state.selectedItems;
+let leftOverExerciseItems = _.differenceBy(
+  currentExerciseItems,
+  currentSelectedItems,
+  'id',
+);
+draft.exercise = leftOverExerciseItems;
 ```
 
 - 생각해낸 아이디어 : 오늘 날짜와 선택한 날짜가 다르면 모달창을 닫아주기.
