@@ -47,9 +47,12 @@
 * **lodash**
   - 명료한 자바스크립트 함수 구현위한 패키지
 * **redux-persist**
-  - 웹 스토리지에 reducer state를 저장
-* **swiper**
-  - 슬라이더를 구현하는 패키지
+  - 웹 스토리지에 reducer state를 저장하는 패키지
+* **slick-carousel**
+  - 슬라이더를 구현위한 패키지
+* **beautiful-dnd**
+  - 드래그앤 드롭 구현위한 패키지
+
   
 <br>
 
@@ -95,7 +98,7 @@
 - Error Boundary
 - 유저의 에러 이후 상황을 케어
 - 홈으로 가도록 유도하여 redux state를 재정돈
-<img width="400" src="https://user-images.githubusercontent.com/77391482/131863006-0a9b687e-5a7b-420e-b3e5-6821d053e1fb.png">
+<img width="250" src="https://user-images.githubusercontent.com/77391482/131863006-0a9b687e-5a7b-420e-b3e5-6821d053e1fb.png">
 
 #### 해결 방안 2
 - Sentry
@@ -161,9 +164,9 @@ const timeRef = useRef(0);
 - redux-persist를 적용 후, 캘린더에 사용한 moment 객체가 로컬 스토리지에 저장되면서 string으로 저장되고 불러와지는 문제 발생
 - JSON 형태로 직렬화하고, 읽은 데이터를 JSON 형태로 역직렬화하여 처음엔 1차 해결 
 - 캘린더 페이지는 api를 호출해서 데이터를 가져오는 페이지이므로, redux-persist blacklist에 캘린더 모듈을 추가해주어서 재차 해결
+<br>
 
-
-### 4) 운동 종목 선택
+### 5) 운동 종목 선택
 - 운동 종목을 클릭하면 해당 카테고리 목록에서 지워주어야 함
 - 자바스크립트의 배열 메소드를 사용했으나, 코드가 길어지는 문제로 lodash 라이브러리로 코드 리팩토링 진행
 
@@ -178,8 +181,8 @@ let leftOverExerciseItems = _.differenceBy(
 );
 draft.exercise = leftOverExerciseItems;
 ```
-
-### 4) Login 이후 선택한 페이지로 Redirect 경로 설정
+<br>
+### 6) Login 이후 선택한 페이지로 Redirect 경로 설정
 - 최초 로그인을 하지 않은 사용자의 경우 어떤 페이지를 선택해도 로그인 이후에 다시 그 페이지를 기억해서 로그인 이후에 그 페이지로 갈 수 있어야했다. 어떤 경우에는 제대로 경로를 잘 찾아서 가는데 어떤 경우에는 경로를 잘 찾지 못하는 문제가 있었다. Redirect 되는 경로가 설정되어있었으나 2가지 경우에 밖에 대응하지못해서 에러가 났던 문제가 있었다. 그래서 한번 확실하게 Redirect를 못시키는 경우가 없도록 해야했다. 
 
 ```jsx
@@ -197,3 +200,4 @@ if (sessionStorage.getItem('redirect_url')) {
 dispatch(isLoaded(false));
 }
 ```
+<br>
