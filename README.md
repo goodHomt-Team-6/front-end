@@ -2,30 +2,32 @@
 
 ## 🏋🏻‍♀️ 개요
 
-- 명칭 : 다방 클론 코딩
+- 명칭 : goodHomt
 - 개발 인원 : 4명
   - Front end: **박경준, 우지음**
   - Back end: **김영록, 이대성**
 - 개발 기간 : 2021.07.23 ~ 2021.08.31
 - 주요 기능
-  - 
+  - 운동 루틴 기록 및 운동하기, 운동 루틴 공유, 챌린지, 운동 기록 캘린더
 - 개발 언어 : JavaScript
 - 개발 라이브러리 : React.js
+- URL : https://goodhomt.com
 - 형상 관리 툴 : git
 - 협업 툴 : [notion](https://www.notion.so/_6-_goodHomt-24a47662c9b9452882255d64e16d282a)
-- 간단 소개 : 리액트 - 운동 루틴 기록 및 운동하기, 운동 루틴 공유, 챌린지, 운동 기록 캘린더
+
+## 👉 프로젝트 배경 및 진행방향
+
+- PainPoint : 사용자 10명의 해비유저를 심층적으로 인터뷰하였고 앱을 이용하는 사람은 4명이었고, 운동일기 앱을 사용할 때 가장 중요한 점으로 간결한 UI와 편리성을 꼽았고 나머지 6명은 수기로 쓰는 것이 앱으로 사용하는 것보다 편하다고 대답했습니다. 또한 어플기록에서 중요한 점은 기록을 쉽게보고 비교할 수 있는 캘린더, 목표설정에 용이한 기록 데이터 비교, 운동하기 전에 타이머를 통해 휴식 시간 알림과 총 운동시간을 자동 기록할 수 있는 기능을 요청했습니. 이러한 시장의 니즈를 파악하고 이를 충족시킬 웹 페이지 및 앱을 만들어보았습니다.
+
+<img width="850" alt="스크린샷 2021-09-02 오후 8 21 51" src="https://user-images.githubusercontent.com/29696692/131835130-311e0ea8-d653-470f-ae7c-46ffb3e5c551.png">
+
+<img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/29696692/131835452-043776ce-36a6-4781-ac08-87a46d122a25.png">
 
 ## ☝🏻 프로젝트 특징
 
-- 프론트엔드와 백엔드를 분리하여 프로젝트 개발
-
-  - 각 파트별로 Repository를 생성 후 작업
-  - 프론트: AWS S3
-  - 백엔드: AWS EC2
-  - 빌드 후, S3와 EC2를 연동
-    - API 명세서에 따라 API호출 및 응답 확인
-  - kakao 지도 api, daum 주소 검색 api 활용
-  - 바닐라 자바스크립트로 직접 만든 이미지 슬라이드
+- 배포 : AWS S3, CloudFront
+- pwa 기반의 앱을 구글 플레이 스토어에 등록 (goodhomt.twa)
+- 
 
 ## 💻 사용 패키지
 
@@ -35,12 +37,12 @@
   - 컴포넌트의 스타일을 설정하는 패키지
 * **axios**
   - 서버 통신을 위한 패키지
-* **connected-react-router, history**
-  - 라우팅 및 페이지 이동을 위한 패키지
-* **react-nice-dates**
-  - 달력 라이브러리 
-
-[배포 사이트](http://dabangclone.s3-website.ap-northeast-2.amazonaws.com/)
+* **prettier, eslint**
+  - 작업자 간 코드 컨벤션 통일을 위한 패키지
+* **sentry**
+  - 클라이언트 버그 리포팅
+* **lodash**
+  - 자바스크립트 유틸리티 패키지
 
 <img src="https://images.velog.io/images/uvula6921/post/44c62413-9689-4568-bb41-0f8f2dacd74d/%EB%B0%A9%EC%98%AC%EB%A6%AC%EA%B8%B0GIF.gif">
 <img src="https://images.velog.io/images/uvula6921/post/a97ebc6d-366a-4042-b1ee-f3b706cb5e59/%EC%98%AC%EB%A6%B0%20%EB%B0%A9%20GIF.gif">
