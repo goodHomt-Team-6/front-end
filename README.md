@@ -1,6 +1,5 @@
 # goodHomt
-<img width="850" alt="스크린샷 2021-09-02 오후 8 24 19" src="https://user-images.githubusercontent.com/77391482/131880887-dc0c8bde-d05a-4ea2-8f08-2887387a7167.png">
-<br>
+
 ## 🏋🏻‍♀️ 1. 개요
 
 - 명칭 : goodHomt 굿홈트
@@ -87,7 +86,7 @@
 
 ## 🚀 6. 트러블 슈팅
 
-### 효율적인 에러 핸들링
+### 1) 효율적인 에러 핸들링
 #### 문제 상황
 - 운동 루틴을 만들고 메인화면에서 바로 재생버튼을 클릭해 이동
 - 새로고침을 할 경우 흰 화면이 노출되는 문제
@@ -107,9 +106,9 @@
 #### 해결 방안 3
 - Redux-persist
 - 로컬 스토리지에 reducer state 저장해 새로고침해도 같은 state를 유지할 수 있게함
+<br>
 
-
-### 데이터를 재가공해서 사용해 DB최적화
+### 2) 데이터를 재가공해서 사용해 DB최적화
 ```jsx
 const challenge = response.data.result.challenge;
 const routine = {
@@ -127,12 +126,12 @@ const routine = {
 
 dispatch(exerciseActions.addSelectedPrevItem(routine));
 ```
-
-### 렌더링 최소화
+<br>
+### 3) 렌더링 최소화
 - 스탑워치 : 1초씩 증가할 때마다 페이지 리렌더링
 - 숫자 부분만 자식 컴포넌트로 빼서 해당 컴포넌트만 리렌더링되도록 최적화 
 - 
-<img width="400" src="https://user-images.githubusercontent.com/77391482/131873717-7e1c8c4c-000f-450b-9495-b962b4a89cbc.gif">
+<img width="250" src="https://user-images.githubusercontent.com/77391482/131873717-7e1c8c4c-000f-450b-9495-b962b4a89cbc.gif">
 
 ```jsx
 const timeRef = useRef(0);
@@ -156,8 +155,16 @@ const timeRef = useRef(0);
   }, [time.current, timeStop]);
 ```
 
-### 운동 종목 선택
-- 운동 종목을 클릭하면 해당 카테고리 목록에서 지워주기
+<br>
+
+### 4) Redux-persist 적용 후 발생한 에러
+- redux-persist를 적용 후, 캘린더에 사용한 moment 객체가 로컬 스토리지에 저장되면서 string으로 저장되고 불러와지는 문제 발생
+- JSON 형태로 직렬화하고, 읽은 데이터를 JSON 형태로 역직렬화하여 처음엔 1차 해결 
+- 캘린더 페이지는 api를 호출해서 데이터를 가져오는 페이지이므로, redux-persist blacklist에 캘린더 모듈을 추가해주어서 재차 해결
+
+
+### 4) 운동 종목 선택
+- 운동 종목을 클릭하면 해당 카테고리 목록에서 지워주어야 함
 - 자바스크립트의 배열 메소드를 사용했으나, 코드가 길어지는 문제로 lodash 라이브러리로 코드 리팩토링 진행
 
 ```jsx
@@ -172,7 +179,7 @@ let leftOverExerciseItems = _.differenceBy(
 draft.exercise = leftOverExerciseItems;
 ```
 
-### Login 이후 선택한 페이지로 Redirect 경로 설정
+### 4) Login 이후 선택한 페이지로 Redirect 경로 설정
 - 최초 로그인을 하지 않은 사용자의 경우 어떤 페이지를 선택해도 로그인 이후에 다시 그 페이지를 기억해서 로그인 이후에 그 페이지로 갈 수 있어야했다. 어떤 경우에는 제대로 경로를 잘 찾아서 가는데 어떤 경우에는 경로를 잘 찾지 못하는 문제가 있었다. Redirect 되는 경로가 설정되어있었으나 2가지 경우에 밖에 대응하지못해서 에러가 났던 문제가 있었다. 그래서 한번 확실하게 Redirect를 못시키는 경우가 없도록 해야했다. 
 
 ```jsx
