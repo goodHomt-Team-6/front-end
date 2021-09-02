@@ -94,20 +94,20 @@
 - 운동 루틴을 만들고 메인화면에서 바로 재생버튼을 클릭해 이동
 - 새로고침을 할 경우 흰 화면이 노출되는 문제
 
-### 1-2) 해결 방안 1 
-- Error Boundary
+### 1-2) 해결 방안 1 - Error Boundary
+
 - 유저의 에러 이후 상황을 케어
 - 홈으로 가도록 유도하여 redux state를 재정돈
 <img width="250" src="https://user-images.githubusercontent.com/77391482/131863006-0a9b687e-5a7b-420e-b3e5-6821d053e1fb.png">
 
-### 1-3) 해결 방안 2
-- Sentry
+### 1-3) 해결 방안 2 - Sentry
+
 - Sentry를 이용해 에러 상황 모니터링
 - 예측하기 힘든 여러 에러 케이스들을 수집하고 디버깅에 반영
 <img src="https://user-images.githubusercontent.com/77391482/131863630-f6ae8361-230a-4cac-8aee-29c50c3f185c.png">
 
-### 1-4) 해결 방안 3
-- Redux-persist
+### 1-4) 해결 방안 3 - Redux-persist
+
 - 위의 2가지 방법 모두 최악의 상황에 대비한 에러처리
 - 더 근본적으로 에러가 안날 수 있는 상황을 찾는 것이 해결책이라고 판단
 - Redux-persist를 사용하여 로컬 스토리지에 reducer state 저장해 새로고침해도 같은 state를 유지할 수 있게함
