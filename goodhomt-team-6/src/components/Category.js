@@ -5,6 +5,8 @@ import { actionCreators as exerciseActions } from '../redux/modules/exercise';
 import { useSelector, useDispatch } from 'react-redux';
 import searchIcon from '../img/search-icon.svg';
 import logger from '../shared/Logger';
+import { Image } from '../shared/Styles';
+import silhouette_dict from '../components/Silhouette';
 
 // 운동 카테고리 컴포넌트
 const Category = (props) => {
@@ -173,6 +175,12 @@ const Category = (props) => {
                   }}
                 >
                   <ItemWrapper>{e.exerciseName}</ItemWrapper>
+                  <Image
+                    src={silhouette_dict[e.exerciseName]}
+                    width="48px"
+                    height="48px"
+                    borderRadius="0"
+                  />
                 </ExerciseItem>
               ))}
         </CategoryList>
@@ -201,6 +209,12 @@ const Category = (props) => {
                 }}
               >
                 <ItemWrapper>{e.exerciseName}</ItemWrapper>
+                <Image
+                  src={silhouette_dict[e.exerciseName]}
+                  width="48px"
+                  height="48px"
+                  borderRadius="0"
+                />
               </ExerciseItem>
             ))}
         </CategoryList>
@@ -233,7 +247,7 @@ const Categories = styled.ul`
   overflow-x: scroll;
   white-space: nowrap;
   scrollbar-width: none;
-  ::-webkit-scrollbar{
+  ::-webkit-scrollbar {
     display: none;
   }
 `;
