@@ -11,7 +11,7 @@
   - 운동 루틴 기록 및 운동하기, 운동 루틴 공유, 챌린지, 운동 기록 캘린더
 - 개발 언어 : JavaScript
 - 개발 라이브러리 : React.js
-- URL : https://goodhomt.com
+- URL : https://goodhomt.com (모바일 최적화 UI)
 - 구글 플레이스토어 : https://play.google.com/store/apps/details?id=com.goodhomt.twa
 - 형상 관리 툴 : git
 - 협업 툴 : [notion](https://www.notion.so/_6-_goodHomt-24a47662c9b9452882255d64e16d282a)
