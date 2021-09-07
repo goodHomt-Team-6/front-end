@@ -144,7 +144,7 @@ dispatch(exerciseActions.addSelectedPrevItem(routine));
 
 ### 3) 리렌더링 최소화
 - 운동 시간 기록을 위한 스탑워치 : 1초씩 증가할 때마다 액션 발생으로 페이지 리렌더링되는 현상 발생
-- 렌더링이 계속 되어야하는 숫자 부분만 자식 컴포넌트로 재구성하여 리렌더링 최소화
+- 렌더링이 계속 되어야하는 숫자 부분의 컴포넌트 계층구조를 재구성하여 리렌더링 최소화
 - 운동 페이지 이탈시에도 스탑워치 렌더링 되는 상황 발생 : 페이지 이탈시 clearInterval을 통해 외부에서 스탑워치가 계속 렌더링을 시도하는 문제 해결
 
 <img width="250" src="https://user-images.githubusercontent.com/77391482/131873717-7e1c8c4c-000f-450b-9495-b962b4a89cbc.gif">
