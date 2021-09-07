@@ -14,7 +14,7 @@
 - URL : https://goodhomt.com (모바일 최적화 UI)
 - 구글 플레이스토어 : https://play.google.com/store/apps/details?id=com.goodhomt.twa
 - 형상 관리 툴 : git
-- 협업 툴 : [notion](https://www.notion.so/_6-_goodHomt-24a47662c9b9452882255d64e16d282a)
+- 협업 툴 : [notion project board](https://www.notion.so/_6-_goodHomt-24a47662c9b9452882255d64e16d282a)
 <br>
 
 ## 👉 2. 프로젝트 배경 및 진행방향
@@ -30,6 +30,9 @@
 
 - 배포 : AWS S3, Route 53, CloudFront
 - PWA 기반의 앱을 구글 플레이 스토어에 등록
+
+![스크린샷 2021-09-02 오후 1 38 1](https://user-images.githubusercontent.com/29696692/132271725-02671ff8-df6c-478c-adc3-ba3fe2da4065.png)
+
 <br>
 
 ## 💻 4. 사용 패키지
@@ -214,3 +217,13 @@ dispatch(isLoaded(false));
 }
 ```
 <br>
+
+## 🚀 7. UI/UX 개선
+
+- goodHomt 앱이 런칭되고 헤비유저들을 직접 만나 심층 인터뷰를 나눴다. 실제 만나서 얘기해본 유저들의 생각은 기획 시에 예상했던 부분과 다른 점이 많았다. 유저들이 필요로 하는 정보와 편하게 생각하는 UI는 따로 있었고, 그러한 부분들을 반영하는 작업을 진행했다. 좀 더 유저친화적인 UI/UX 구성으로 변화를 주었다.
+
+<img width="919" alt="스크린샷 2021-09-07 오전 10 49 20" src="https://user-images.githubusercontent.com/29696692/132272027-9a6c266a-3bff-4ce6-b9b3-a1ef7afe3c0f.png">
+
+- 운동의 횟수와 세트를 결정하는 UI가 사용성을 결정하는 중요한 요소라고 생각했고, 여러 와이어프레임의 시안들 중에 최종적으로 가장 깔끔하면서도 직관적인 UI를 선택해서 최종안으로 결정했다.
+
+<img width="648" alt="스크린샷 2021-09-07 오전 10 51 48" src="https://user-images.githubusercontent.com/29696692/132272198-445058a9-4a3b-4ae9-9962-067bd6257d3c.png">
